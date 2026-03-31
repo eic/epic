@@ -51,7 +51,7 @@
              <constant name="HcalFarForwardZDC_SiPMonTile_length" value= "HcalFarForwardZDC_SiPMonTile_SingleLayerThickness*HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat +
            HcalFarForwardZDC_SiPMonTile_BackplateThickness"/>
            
-           
+           <constant name="SixSeven" value= "67"/>
            <constant name="HcalFarForwardZDC_SiPMonTile_absorber_width" value= "57.6*cm"/>
            <constant name="HcalFarForwardZDC_SiPMonTile_absorber_height" value= "58.8*cm"/>
              
