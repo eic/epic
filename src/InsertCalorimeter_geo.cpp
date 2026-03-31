@@ -83,7 +83,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     */
     double hole_radius_slope = (hole_radii_parameters.second - hole_radii_parameters.first) /
                                (length - backplate_thickness);
-    double hole_radius_at_z = hole_radius_slope * z_pos + hole_radii_parameters.first;
+    double hole_radius_at_z  = hole_radius_slope * z_pos + hole_radii_parameters.first;
 
     double hole_xpos_slope =
         (hole_x_parameters.second - hole_x_parameters.first) / (length - backplate_thickness);

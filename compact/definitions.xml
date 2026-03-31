@@ -624,7 +624,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <comment> Leave 1.9 cm space from the end of mirror to the end of bar box in +z </comment>
-    <constant name="DIRCMirror_thickness"       value="1 * mm"/>
+    <constant name="DIRCMirror_thickness"       value="3 * mm"/>
     <constant name="DIRCBarbox_space_z"         value="1.9*cm"/>
     <constant name="DIRCLens_thickness"         value="12 * mm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
@@ -632,7 +632,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="DIRCBackward_zmax"          value="303*cm"/>
     <constant name="DIRC_thickness"             value="3.1*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
-    <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax - DIRCMirror_thickness - DIRCBarbox_space_z + DIRCLens_thickness + DIRCReadout_length)/2"/>
+    <constant name="DIRC_offset"                value="-44.7525 * cm"/>
     <comment>
       The DIRC_rmin/rmax values are defined at the center of each stave, such that
       the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value.
@@ -663,8 +663,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
-    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 44.0 * cm"/> <!-- 44 cm gap between service gap, includes 28.5 cm oculus -->
-    <constant name="HcalEndcapN_length"   value="65.0*cm"/>
+    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 41.55 * cm"/> <!-- 41.55 cm gap between service gap, includes 28.5 cm oculus -->
+    <constant name="HcalEndcapN_length"   value="67.45*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 14.0 * cm)"/>
