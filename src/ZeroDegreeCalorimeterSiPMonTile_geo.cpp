@@ -31,7 +31,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int ncols_even=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_even_layers");
   int ncols_odd=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_odd_layers");
   
-  double tile=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_SquareSideLength");
+  double tile=desc.constant<double>("HcalFarForwardZDC_SiPMonTile_SquareSideLength");
   
   xml_dim_t pos = detElem.position(); // Position in global coordinates
   xml_dim_t rot = detElem.rotation();
