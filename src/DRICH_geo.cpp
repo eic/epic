@@ -43,9 +43,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   DetElement det(detName, detID);
   sens.setType("tracker");
 
-  // apply any detector type flags set in XML
-  dd4hep::xml::setDetectorTypeFlag(detElem, det);
-
   // Start optical configuration if needed;
 #ifdef WITH_IRT2_SUPPORT
   auto geometry = CherenkovDetectorCollection::Instance();
@@ -333,7 +330,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
   DetElement gasvolDE(det, "gasvol_de", 0);
   gasvolDE.setPlacement(gasvolPV);
-  gasvolDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
 
   // place mother volume (vessel)
   Volume motherVol      = desc.pickMotherVolume(det);
@@ -376,7 +372,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto aerogelPV        = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
-  aerogelDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
 
   // airgap and filter placement and surface properties
   if (!debugOptics) {
@@ -389,7 +384,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
-    airgapDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
 
     auto filterPlacement =
         Translation3D(0., 0., airgapThickness) * // add an air gap
@@ -400,7 +394,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
-    filterDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
 
 #if defined(WITH_IRT2_SUPPORT) || defined(WITH_IRT1_SUPPORT)
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
@@ -545,7 +538,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // properties
     DetElement mirrorDE(det, "mirror_de_" + secName, isec);
     mirrorDE.setPlacement(mirrorPV);
-    mirrorDE.setTypeFlag(det.typeFlag());
     SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf,
                            mirrorVol);
     mirrorSkin.isValid();
@@ -762,7 +754,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                   secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
               pssDE.setPlacement(pssPV);
-              pssDE.setTypeFlag(pssDE.typeFlag()); // make sure type flags are propagated
 
               // sensor surface properties
               if (!debugOptics || debugOpticsMode == 3) {
