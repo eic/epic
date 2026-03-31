@@ -11,7 +11,6 @@
 #include "DD4hep/Printout.h"
 #include "TMath.h"
 #include <XML/Helper.h>
-#include <XML/Utilities.h>
 
 using namespace std;
 using namespace dd4hep;
@@ -30,9 +29,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name + "_assembly");
 
-  // apply any detector type flags set in XML
-  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-
   // Loop over each requested slice from the geometry description
   for (xml_coll_t slice_coll(x_det, _Unicode(slice)); slice_coll; slice_coll++) { // pipes
 
@@ -42,7 +38,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     int pipe_id            = getAttrOrDefault<int>(slice_coll, _Unicode(pipe_id), 0);
     string slice_name      = slice_coll.attr<string>(_Unicode(name));
     DetElement mother      = description.detector(grandmotherName).child(motherName);
-    mother.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     // Get the mother volume
     Volume mother_vol = mother.volume();
@@ -123,7 +118,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     DetElement slice_element(mother, slice_name, pipe_id);
 
     slice_element.setPlacement(disk_placement);
-    slice_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
   }
 
   auto pv_assembly = description.worldVolume().placeVolume(assembly);

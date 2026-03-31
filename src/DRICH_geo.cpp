@@ -19,7 +19,6 @@
 #include "DDRec/Surface.h"
 
 #include <XML/Helper.h>
-#include <XML/Utilities.h>
 
 using namespace dd4hep;
 using namespace dd4hep::rec;
