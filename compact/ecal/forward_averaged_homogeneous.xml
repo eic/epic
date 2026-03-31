@@ -4,13 +4,12 @@
 
 <lccdd>
 
-  <info name="forwardEcal.xml"
-        title="forward ECal 2025 design"
-        author="@akioogawa"
-        url="https://github.com/akioogawa"
-        status="development"
-        version="1.0">
-  <comment/></info>
+  <documentation>
+    Title: forward ECal 2025 design
+    Author: @akioogawa
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
     <documentation>

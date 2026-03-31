@@ -1,12 +1,11 @@
 <lccdd>
 
-  <info name="lfhcal.xml"
-        title="EPIC LFHCAL"
-        author="@FriederikeBock"
-        url="https://github.com/FriederikeBock"
-        status="development"
-        version="1.0"
-  ><comment/></info>
+  <documentation>
+    Title: EPIC LFHCAL
+    Author: @FriederikeBock
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
     <documentation>
