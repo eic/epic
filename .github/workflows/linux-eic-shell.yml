@@ -437,7 +437,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_craterlake]
+        detector_config: [inner_detector]
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
