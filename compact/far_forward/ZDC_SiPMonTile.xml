@@ -40,7 +40,7 @@
              <constant name="HcalFarForwardZDC_SiPMonTile_offset_y" value="0"/>
 
              <constant name="HcalFarForwardZDC_SiPMonTile_width" value= "60*cm"/>
-             <constant name="HcalFarForwardZDC_SiPMonTile_height" value= "60*cm"/>
+             <constant name="HcalFarForwardZDC_SiPMonTile_height" value= "61*cm"/>
 
              <constant name="HcalFarForwardZDC_SiPMonTile_nrows_even_layers" value= "12"/>
              <constant name="HcalFarForwardZDC_SiPMonTile_nrows_odd_layers" value= "11"/>
