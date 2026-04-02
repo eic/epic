@@ -417,7 +417,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       std::string crownName = "CarbonCrown_" + std::to_string(i);
       Volume crownVol(crownName, crownSolid, coronasMat);
       crownVol.setVisAttributes(coronasVis);
-      
+
       // Place crown volume directly in aerogel
       aerogelVol.placeVolume(crownVol, Position(0., 0., 0.));
     }
@@ -443,7 +443,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         std::string segName = "CarbonSegment_" + std::to_string(i) + "_" + std::to_string(p);
         Volume segVol(segName, segmentSolid, coronasMat);
         segVol.setVisAttributes(coronasVis);
-        
+
         // Place segment volume directly in aerogel
         aerogelVol.placeVolume(segVol, Position(0., 0., 0.));
       }
