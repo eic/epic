@@ -345,7 +345,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // ------------------------------------------------------------------------
   Volume aerogelVol;
   PlacedVolume aerogelPV;
-  Volume crownAndSegmentVolume;
   DetElement aerogelDE;
   double structureThickness = aerogelThickness;
   auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * structureThickness) + originFront;
@@ -380,10 +379,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     std::vector<double> innerRadiusTops_half;
     std::vector<double> outerRadiusBottoms_half;
     std::vector<double> outerRadiusTops_half;
-    std::vector<Solid> crownSolids;
-    std::vector<Solid> segmentSolids;
-    Solid crownSolidUnion_half, segmentSolidUnion_half, crownAndSegmentSolid_half;
 
+    // Create and place individual crown volumes
     for (int i = 0; i < numCrowns; i++) {
       double centralRadius = radii[i];
       double rMinBottom, rMinTop, rMaxBottom, rMaxTop;
@@ -417,15 +414,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       outerRadiusTops_half.push_back(rMaxTop);
 
       Cone crownSolid(crownHeight / 2.0, rMinBottom, rMaxBottom, rMinTop, rMaxTop);
-      crownSolids.push_back(crownSolid);
       std::string crownName = "CarbonCrown_" + std::to_string(i);
       Volume crownVol(crownName, crownSolid, coronasMat);
       crownVol.setVisAttributes(coronasVis);
+      
+      // Place crown volume directly in aerogel
+      aerogelVol.placeVolume(crownVol, Position(0., 0., 0.));
     }
-    crownSolidUnion_half = std::accumulate(
-        crownSolids.begin() + 1, crownSolids.end(), crownSolids[0],
-        [](const Solid& a, const Solid& b) { return UnionSolid(a, b, Position(0., 0., 0.)); });
 
+    // Create and place individual segment volumes
     for (int i = 0; i < numCrowns - 1; i++) {
       int N = numSegments[i];
 
@@ -443,23 +440,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
         ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
                                  rMax_Zplus, phiStart, phiEnd);
-        segmentSolids.push_back(segmentSolid);
         std::string segName = "CarbonSegment_" + std::to_string(i) + "_" + std::to_string(p);
         Volume segVol(segName, segmentSolid, coronasMat);
         segVol.setVisAttributes(coronasVis);
+        
+        // Place segment volume directly in aerogel
+        aerogelVol.placeVolume(segVol, Position(0., 0., 0.));
       }
     } //crown
-
-    //A solid Structure of Aerogel Holder
-    segmentSolidUnion_half = std::accumulate(
-        segmentSolids.begin() + 1, segmentSolids.end(), segmentSolids[0],
-        [](const Solid& a, const Solid& b) { return UnionSolid(a, b, Position(0., 0., 0.)); });
-    crownAndSegmentSolid_half = UnionSolid(crownSolidUnion_half, segmentSolidUnion_half);
-
-    std::string crName    = {"_aerogel_struc_"};
-    crownAndSegmentVolume = Volume(detName + crName, crownAndSegmentSolid_half, coronasMat);
-    crownAndSegmentVolume.setVisAttributes(coronasVis);
-    aerogelVol.placeVolume(crownAndSegmentVolume, Position(0., 0., 0.));
   } //trapezoidal
 
   else if (segmentationType == "square") {
