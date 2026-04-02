@@ -347,19 +347,19 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume aerogelPV;
   Volume crownAndSegmentVolume;
   DetElement aerogelDE;
-  double structureThickness = aerogelThickness ;
+  double structureThickness = aerogelThickness;
   auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * structureThickness) + originFront;
-  
+
   Cone aerogelSolid(aerogelThickness / 2.0, radiatorRmin, radiatorRmax,
-                    radiatorRmin + boreDelta * aerogelThickness  / vesselLength, radiatorRmax);
+                    radiatorRmin + boreDelta * aerogelThickness / vesselLength, radiatorRmax);
   auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
-    RotationY(radiatorPitch);    // change polar angle to specified pitch
-  aerogelVol = Volume(detName + "_aerogel", aerogelSolid, aerogelMat);
+                          RotationY(radiatorPitch);    // change polar angle to specified pitch
+  aerogelVol            = Volume(detName + "_aerogel", aerogelSolid, aerogelMat);
   aerogelVol.setVisAttributes(aerogelVis);
   aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   aerogelDE = DetElement(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
-  
+
   if (segmentationType == "trapezoidal") {
     double crownHeight = structureThickness;
     std::vector<int> numSegments;
@@ -368,7 +368,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     while (std::getline(ss, val, ',')) {
       numSegments.push_back(std::stoi(val));
     }
-    
+
     std::vector<double> radii;
     std::stringstream radiiSS(radiiStr);
     std::string radius;
@@ -382,50 +382,49 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     std::vector<double> outerRadiusTops_half;
     std::vector<Solid> crownSolids;
     std::vector<Solid> segmentSolids;
-    Solid crownSolidUnion_half,segmentSolidUnion_half,crownAndSegmentSolid_half;
+    Solid crownSolidUnion_half, segmentSolidUnion_half, crownAndSegmentSolid_half;
 
     for (int i = 0; i < numCrowns; i++) {
       double centralRadius = radii[i];
       double rMinBottom, rMinTop, rMaxBottom, rMaxTop;
 
       if (i == 0) {
-	
-	rMinBottom = radiatorRmin - boreDelta * coronasThickness  / vesselLength;
-	rMinTop    = rMinBottom + snoutDelta *aerogelThickness / snoutLength;
-	rMaxBottom = rMinBottom + boreDelta * coronasThickness / vesselLength;
-	rMaxTop    = rMinTop + boreDelta * coronasThickness / vesselLength;
-        
+
+        rMinBottom = radiatorRmin - boreDelta * coronasThickness / vesselLength;
+        rMinTop    = rMinBottom + snoutDelta * aerogelThickness / snoutLength;
+        rMaxBottom = rMinBottom + boreDelta * coronasThickness / vesselLength;
+        rMaxTop    = rMinTop + boreDelta * coronasThickness / vesselLength;
+
       } else {
-	double innerRadius = centralRadius - coronasThickness / 2.0;
-	double outerRadius = centralRadius + coronasThickness / 2.0;
-	  
-	// FIX PROTRUSION
-	  
-	if (i == numCrowns - 1) {
-	  double safetyMargin = 0.05 * dd4hep::cm;
-	  outerRadius -= safetyMargin;
-	}
-	  
-	rMinBottom = innerRadius;
-	rMinTop    = innerRadius;
-	rMaxBottom = outerRadius;
-	rMaxTop    = outerRadius;
+        double innerRadius = centralRadius - coronasThickness / 2.0;
+        double outerRadius = centralRadius + coronasThickness / 2.0;
+
+        // FIX PROTRUSION
+
+        if (i == numCrowns - 1) {
+          double safetyMargin = 0.05 * dd4hep::cm;
+          outerRadius -= safetyMargin;
+        }
+
+        rMinBottom = innerRadius;
+        rMinTop    = innerRadius;
+        rMaxBottom = outerRadius;
+        rMaxTop    = outerRadius;
       }
       innerRadiusBottoms_half.push_back(rMinBottom);
       innerRadiusTops_half.push_back(rMinTop);
       outerRadiusBottoms_half.push_back(rMaxBottom);
       outerRadiusTops_half.push_back(rMaxTop);
 
-
       Cone crownSolid(crownHeight / 2.0, rMinBottom, rMaxBottom, rMinTop, rMaxTop);
       crownSolids.push_back(crownSolid);
-      std::string crownName = "CarbonCrown_"+ std::to_string(i);
+      std::string crownName = "CarbonCrown_" + std::to_string(i);
       Volume crownVol(crownName, crownSolid, coronasMat);
       crownVol.setVisAttributes(coronasVis);
     }
-    crownSolidUnion_half = std::accumulate( crownSolids.begin() +1, crownSolids.end(), crownSolids[0],
-			     [](const Solid& a, const Solid& b)
-			     { return UnionSolid(a, b, Position(0., 0., 0.)); });
+    crownSolidUnion_half = std::accumulate(
+        crownSolids.begin() + 1, crownSolids.end(), crownSolids[0],
+        [](const Solid& a, const Solid& b) { return UnionSolid(a, b, Position(0., 0., 0.)); });
 
     for (int i = 0; i < numCrowns - 1; i++) {
       int N = numSegments[i];
@@ -434,55 +433,51 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       double rMax_Zminus = innerRadiusBottoms_half[i + 1];
       double rMin_Zplus  = outerRadiusTops_half[i];
       double rMax_Zplus  = innerRadiusTops_half[i + 1];
-	
-        
-      double segmentSpacing      = 2 * M_PI / N;
-      double segmentAngularWidth = coronasThickness / rMin_Zminus; 
-	
-      for (int p = 0; p < N; p++) {
-	double phiStart = p * segmentSpacing;
-	double phiEnd   = phiStart + segmentAngularWidth;
 
-	ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
-				 rMax_Zplus, phiStart, phiEnd);
-	segmentSolids.push_back(segmentSolid);
-	std::string segName =
-	  "CarbonSegment_"+ std::to_string(i) + "_" + std::to_string(p);
-	Volume segVol(segName, segmentSolid, coronasMat);
-	segVol.setVisAttributes(coronasVis);
+      double segmentSpacing      = 2 * M_PI / N;
+      double segmentAngularWidth = coronasThickness / rMin_Zminus;
+
+      for (int p = 0; p < N; p++) {
+        double phiStart = p * segmentSpacing;
+        double phiEnd   = phiStart + segmentAngularWidth;
+
+        ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
+                                 rMax_Zplus, phiStart, phiEnd);
+        segmentSolids.push_back(segmentSolid);
+        std::string segName = "CarbonSegment_" + std::to_string(i) + "_" + std::to_string(p);
+        Volume segVol(segName, segmentSolid, coronasMat);
+        segVol.setVisAttributes(coronasVis);
       }
     } //crown
 
     //A solid Structure of Aerogel Holder
-    segmentSolidUnion_half = std::accumulate(segmentSolids.begin() +1, segmentSolids.end(),segmentSolids[0],
-				     [](const Solid& a, const Solid& b)
-				     { return UnionSolid(a, b, Position(0., 0., 0.)); });
+    segmentSolidUnion_half = std::accumulate(
+        segmentSolids.begin() + 1, segmentSolids.end(), segmentSolids[0],
+        [](const Solid& a, const Solid& b) { return UnionSolid(a, b, Position(0., 0., 0.)); });
     crownAndSegmentSolid_half = UnionSolid(crownSolidUnion_half, segmentSolidUnion_half);
 
-    std::string crName = {"_aerogel_struc_"};
-    crownAndSegmentVolume= Volume(detName + crName, crownAndSegmentSolid_half,
-				  coronasMat);
+    std::string crName    = {"_aerogel_struc_"};
+    crownAndSegmentVolume = Volume(detName + crName, crownAndSegmentSolid_half, coronasMat);
     crownAndSegmentVolume.setVisAttributes(coronasVis);
-    aerogelVol.placeVolume(crownAndSegmentVolume, Position(0.,0.,0.));
-    } //trapezoidal
-  
+    aerogelVol.placeVolume(crownAndSegmentVolume, Position(0., 0., 0.));
+  } //trapezoidal
+
   else if (segmentationType == "square") {
     printout(WARNING, "DRICH_geo", "Square segmentation requested but not implemented yet.");
   } //Square
-  
+
   Cone airgapSolid(airgapThickness / 2.0,
-                   radiatorRmin + boreDelta * structureThickness / vesselLength,
-                   radiatorRmax,
+                   radiatorRmin + boreDelta * structureThickness / vesselLength, radiatorRmax,
                    radiatorRmin + boreDelta * (structureThickness + airgapThickness) / vesselLength,
                    radiatorRmax);
-  Cone filterSolid(
-      filterThickness / 2.0,
-      radiatorRmin + boreDelta * (structureThickness + airgapThickness) / vesselLength,
-      radiatorRmax,
-      radiatorRmin +
-          boreDelta * (structureThickness + airgapThickness + filterThickness) / vesselLength,
-      radiatorRmax);	  
-  
+  Cone filterSolid(filterThickness / 2.0,
+                   radiatorRmin + boreDelta * (structureThickness + airgapThickness) / vesselLength,
+                   radiatorRmax,
+                   radiatorRmin + boreDelta *
+                                      (structureThickness + airgapThickness + filterThickness) /
+                                      vesselLength,
+                   radiatorRmax);
+
   Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
   airgapVol.setVisAttributes(airgapVis);
