@@ -145,7 +145,7 @@
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
-      <type_flags type="DetType_TRACKER + DetType_CALORIMETER + DetType_BARREL + DetType_ELECTROMAGNETIC"/>
+      <type_flags type="DetType_TRACKER + DetType_CALORIMETER + DetType_ELECTROMAGNETIC"/>
       <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
