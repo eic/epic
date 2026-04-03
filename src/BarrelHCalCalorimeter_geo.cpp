@@ -400,6 +400,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         phv1.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
         DetElement sd1 = tile_det.clone(_toString(i_eta, "eta%d ") + _toString(i_phi, "phi%d"));
+        sd1.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
         sd1.setPlacement(phv1);
         sdet.add(sd1);
 
@@ -416,6 +417,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         phv0.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
         DetElement sd0 =
             tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
+        sd0.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
         sd0.setPlacement(phv0);
         sdet.add(sd0);
 
@@ -439,6 +441,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           phv1.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
           DetElement sd1 = tile_det.clone(_toString(i_eta, "eta%d ") + _toString(i_phi, "phi%d"));
+          sd1.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           sd1.setPlacement(phv1);
           sdet.add(sd1);
 
@@ -457,6 +460,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           phv0.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
           DetElement sd0 =
               tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
+          sd0.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           sd0.setPlacement(phv0);
           sdet.add(sd0);
 
@@ -479,6 +483,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           phv1.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
           DetElement sd1 =
               tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
+          sd1.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           sd1.setPlacement(phv1);
           sdet.add(sd1);
 
@@ -494,6 +499,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           phv0.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
           DetElement sd0 = tile_det.clone(_toString(i_eta, "eta%d ") + _toString(i_phi, "phi%d"));
+          sd0.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           sd0.setPlacement(phv0);
           sdet.add(sd0);
         }
