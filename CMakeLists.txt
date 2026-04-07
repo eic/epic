@@ -129,7 +129,8 @@ configure_file(templates/thisepic.sh.in ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
     DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-install(FILES cmake/setup.sh
+configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 
