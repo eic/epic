@@ -1,8 +1,5 @@
 #!/bin/sh
 
-## Error if not the right name (this script is sourced, hence $1)
-if [ "$(basename "$0")" != "setup.sh" ]; then
-        echo "Error: This script has ceased to exist at '$0'."
-        echo "       Please use the version at '@CMAKE_INSTALL_PREFIX@/setup.sh'."
-        return 1
-fi
+echo "Error: This script has ceased to exist at setup.sh."
+echo "       Please use the version at '@CMAKE_INSTALL_PREFIX@/bin/thisepic.sh'."
+return 1
