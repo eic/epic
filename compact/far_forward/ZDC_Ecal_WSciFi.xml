@@ -22,6 +22,7 @@
       type="ZDCEcalScFiCalorimeter"
       vis="ZDC_Ecal_Vis"
       readout="ZDCEcalHits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="ZDCEcal_x_pos" y="ZDCEcal_y_pos" z="ZDCEcal_z_pos"/>
       <rotation x="ZDCEcal_rotateX_angle" y="ZDCEcal_rotateY_angle" z="ZDCEcal_rotateZ_angle"/>
       <dimensions x="ZDCEcal_width" z="ZDCEcal_length"/>
