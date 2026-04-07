@@ -1,0 +1,355 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
+<lccdd>
+  <comment>
+    Main parameters. June 2022 setup with symmetric disk locations.
+    Here to comply with the ACTS translation onion structure we have:
+      - the first disk in the inner tracking assembly,
+      - the second silicon disk in the middle silicon tracking assembly
+      - the and the following 3 disks in the outer silicon tracking assembly
+    in their own tracking assembly.
+  </comment>
+
+  <define>
+    <comment> Main tracker disk setup </comment>
+
+    <comment>
+      EIC-LAS based endcap module stack.
+      The tiled module footprints/types are built in epic/src/TileEndcapTracker_geo.cpp,
+      (module structure: build_tile_prototype. load placement: load_tile_rows)
+      so there are intentionally no local &lt;module&gt; declarations in this file.
+    </comment>
+    <constant name="SiEndcapModuleGlue_thickness"           value="60*um"/>
+    <constant name="SiEndcapModuleFlatSheetCF_thickness"    value="0.15*mm"/>
+    <constant name="SiTrackerSensor_thickness"              value="40*um"/>
+
+    <comment> Global Si endcap variables </comment>
+    <!-- <constant name="SiTrackerEndcapMod_thickness"   value="SiEndcapModuleFlatSheetCF_thickness + SiEndcapModuleGlue_thickness + SiTrackerSensor_thickness" /> -->
+
+    <comment>
+      Per-disk beampipe openings from scripts/beampipe_envelope_circles.py.
+      For reflected N-side layers, hadron_center_x is expressed in the local layer frame.
+    </comment>
+  </define>
+
+  <comment>
+    Inner silicon tracker disks
+  </comment>
+  <define>
+    <constant name="InnerTrackerEndcapPMod1_zmin"   value="InnerTrackerEndcapP_zmin" />
+    <constant name="InnerTrackerEndcapPMod1_rmax"   value="InnerTrackerEndcapP_rmax" />
+    <constant name="InnerTrackerEndcapPLayer1_rmax" value="InnerTrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapPLayer1_zmin" value="InnerTrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="InnerTrackerEndcapNMod1_zmin"   value="InnerTrackerEndcapN_zmin" />
+    <constant name="InnerTrackerEndcapNMod1_rmax"   value="InnerTrackerEndcapN_rmax" />
+    <constant name="InnerTrackerEndcapNLayer1_rmax" value="InnerTrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapNLayer1_zmin" value="InnerTrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_0_ID"
+      name="InnerTrackerEndcapP"
+      type="epic_TileEndcapTracker"
+      readout="TrackerEndcapHitsXY"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <comment>
+        Tile placements default to calibrations/tracking/endcap_tiles.csv in the
+        plugin. Add a local &lt;tile_placements .../&gt; block only if this detector
+        should override that shared default. Module geometry comes from the plugin.
+      </comment>
+      <layer id="1" name="InnerTrackerEndcapP_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="InnerTrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapPLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="InnerTrackerEndcapP_lepton_center_x"
+          lepton_center_y="InnerTrackerEndcapP_lepton_center_y"
+          lepton_radius="InnerTrackerEndcapP_lepton_radius"
+          hadron_center_x="InnerTrackerEndcapP_hadron_center_x"
+          hadron_center_y="InnerTrackerEndcapP_hadron_center_y"
+          hadron_radius="InnerTrackerEndcapP_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_0_ID"
+      name="InnerTrackerEndcapN"
+      type="epic_TileEndcapTracker"
+      readout="TrackerEndcapHitsXY"
+      vis="TrackerVis"
+      reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <layer id="1" name="InnerTrackerEndcapN_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="InnerTrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapNLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="InnerTrackerEndcapN_lepton_center_x"
+          lepton_center_y="InnerTrackerEndcapN_lepton_center_y"
+          lepton_radius="InnerTrackerEndcapN_lepton_radius"
+          hadron_center_x="InnerTrackerEndcapN_hadron_center_x"
+          hadron_center_y="InnerTrackerEndcapN_hadron_center_y"
+          hadron_radius="InnerTrackerEndcapN_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <comment>
+    ## Main endcap disks, split into a middle and outer part
+       to comply with the ACTS translation
+  </comment>
+  <define>
+    <constant name="TrackerEndcapPMod1_zmin"   value="TrackerEndcapPDisk1_zmin" />
+    <constant name="TrackerEndcapPMod1_rmax"   value="TrackerEndcapPDisk1_rmax" />
+    <constant name="TrackerEndcapPLayer1_rmax" value="TrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer1_zmin" value="TrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapPMod2_zmin"   value="TrackerEndcapPDisk2_zmin" />
+    <constant name="TrackerEndcapPMod2_rmax"   value="TrackerEndcapPDisk2_rmax" />
+    <constant name="TrackerEndcapPLayer2_rmax" value="TrackerEndcapPMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer2_zmin" value="TrackerEndcapPMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapPMod3_zmin"   value="TrackerEndcapPDisk3_zmin" />
+    <constant name="TrackerEndcapPMod3_rmax"   value="TrackerEndcapPDisk3_rmax" />
+    <constant name="TrackerEndcapPLayer3_rmax" value="TrackerEndcapPMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer3_zmin" value="TrackerEndcapPMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapPMod4_zmin"   value="TrackerEndcapPDisk4_zmin" />
+    <constant name="TrackerEndcapPMod4_rmax"   value="TrackerEndcapPDisk4_rmax" />
+    <constant name="TrackerEndcapPLayer4_rmax" value="TrackerEndcapPMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer4_zmin" value="TrackerEndcapPMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod1_zmin"   value="TrackerEndcapNDisk1_zmin" />
+    <constant name="TrackerEndcapNMod1_rmax"   value="TrackerEndcapNDisk1_rmax" />
+    <constant name="TrackerEndcapNLayer1_rmax" value="TrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer1_zmin" value="TrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod2_zmin"   value="TrackerEndcapNDisk2_zmin" />
+    <constant name="TrackerEndcapNMod2_rmax"   value="TrackerEndcapNDisk2_rmax" />
+    <constant name="TrackerEndcapNLayer2_rmax" value="TrackerEndcapNMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer2_zmin" value="TrackerEndcapNMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod3_zmin"   value="TrackerEndcapNDisk3_zmin" />
+    <constant name="TrackerEndcapNMod3_rmax"   value="TrackerEndcapNDisk3_rmax" />
+    <constant name="TrackerEndcapNLayer3_rmax" value="TrackerEndcapNMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer3_zmin" value="TrackerEndcapNMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod4_zmin"   value="TrackerEndcapNDisk4_zmin" />
+    <constant name="TrackerEndcapNMod4_rmax"   value="TrackerEndcapNDisk4_rmax" />
+    <constant name="TrackerEndcapNLayer4_rmax" value="TrackerEndcapNMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer4_zmin" value="TrackerEndcapNMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_1_ID"
+      name="MiddleTrackerEndcapP"
+      type="epic_TileEndcapTracker"
+      readout="TrackerEndcapHitsXY"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <layer id="1" name="MiddleTrackerEndcapP_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk1_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk1_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk1_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk1_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk1_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk1_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_1_ID"
+      name="MiddleTrackerEndcapN"
+      type="epic_TileEndcapTracker"
+      readout="TrackerEndcapHitsXY"
+      vis="TrackerVis"
+      reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <layer id="1" name="MiddleTrackerEndcapN_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk1_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk1_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk1_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk1_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk1_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk1_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapP_2_ID"
+      name="OuterTrackerEndcapP"
+      type="epic_TileEndcapTracker"
+      readout="TrackerEndcapHitsXY"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <layer id="2" name="OuterTrackerEndcapP_disk2">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapPLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer2_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk2_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk2_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk2_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk2_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk2_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk2_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="3" name="OuterTrackerEndcapP_disk3">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapPLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer3_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk3_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk3_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk3_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk3_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk3_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk3_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="4" name="OuterTrackerEndcapP_disk4">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapPLayer4_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer4_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk4_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk4_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk4_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk4_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk4_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk4_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_2_ID"
+      name="OuterTrackerEndcapN"
+      type="epic_TileEndcapTracker"
+      readout="TrackerEndcapHitsXY"
+      vis="TrackerVis"
+      reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <layer id="2" name="OuterTrackerEndcapN_disk2">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapNLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer2_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk2_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk2_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk2_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk2_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk2_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk2_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="3" name="OuterTrackerEndcapN_disk3">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapNLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer3_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk3_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk3_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk3_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk3_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk3_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk3_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="4" name="OuterTrackerEndcapN_disk4">
+        <envelope vis="TrackerLayerVis"
+          rmin="0*mm"
+          rmax="TrackerEndcapNLayer4_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer4_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk4_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk4_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk4_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk4_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk4_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk4_hadron_radius" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MiddleTrackerEndcapP"/>
+      <argument value="layer_pattern: str=MiddleTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MiddleTrackerEndcapN"/>
+      <argument value="layer_pattern: str=MiddleTrackerEndcapN_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerTrackerEndcapP"/>
+      <argument value="layer_pattern: str=InnerTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerTrackerEndcapN"/>
+      <argument value="layer_pattern: str=InnerTrackerEndcapN_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterTrackerEndcapP"/>
+      <argument value="layer_pattern: str=OuterTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterTrackerEndcapN"/>
+      <argument value="layer_pattern: str=OuterTrackerEndcapN_layer\d_N"/>
+    </plugin>
+  </plugins>
+
+  <readouts>
+    <readout name="TrackerEndcapHitsXY">
+      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>
