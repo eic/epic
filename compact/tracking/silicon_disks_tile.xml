@@ -157,7 +157,7 @@
           module="Module1" />
       </layer>
     </detector>
-<!-- 
+<!--
     <detector
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
@@ -200,7 +200,7 @@
       <argument value="InnerTrackerEndcapN"/>
       <argument value="layer_pattern: str=InnerTrackerEndcapN_layer\d_N"/>
     </plugin>
-   
+
   </plugins>
 
   <readouts>

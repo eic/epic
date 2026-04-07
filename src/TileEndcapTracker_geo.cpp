@@ -168,8 +168,8 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
          "TrackerSupportVis", false, -1.0, -1.0},
         {description.constant<double>("SiEndcapModuleGlue_thickness"), "SVT_Endcap_Glue",
          "TrackerServiceVis", false, -1.0, -1.0},
-        {description.constant<double>("SiTrackerSensor_thickness"), "Silicon",
-         "TrackerLayerVis", true, -1.0, -1.0},
+        {description.constant<double>("SiTrackerSensor_thickness"), "Silicon", "TrackerLayerVis",
+         true, -1.0, -1.0},
     }};
 
     for (const auto& component : components) {
@@ -237,9 +237,8 @@ bool tile_inside_disk(const TileRow& row, const DiskBoundary& disk) {
     }
   }
 
-  if (disk.has_beampipe_opening &&
-      (rectangle_intersects_opening(disk.lepton_opening) ||
-       rectangle_intersects_opening(disk.hadron_opening))) {
+  if (disk.has_beampipe_opening && (rectangle_intersects_opening(disk.lepton_opening) ||
+                                    rectangle_intersects_opening(disk.hadron_opening))) {
     return false;
   }
   return true;
@@ -260,16 +259,16 @@ Solid build_disk_solid(const string& layer_name, const DiskBoundary& disk) {
   Solid layer_solid                = Tube(0.0, disk.rmax, disk.length / 2.0);
 
   const Tube lepton_hole(0.0, disk.lepton_opening.radius, opening_half_length);
-  const Transform3D lepton_tf(RotationZYX(0.0, 0.0, 0.0),
-                              Position(disk.lepton_opening.center_x, disk.lepton_opening.center_y, 0.0));
-  layer_solid =
-      SubtractionSolid(layer_name + "_minus_lepton", layer_solid, lepton_hole, lepton_tf);
+  const Transform3D lepton_tf(
+      RotationZYX(0.0, 0.0, 0.0),
+      Position(disk.lepton_opening.center_x, disk.lepton_opening.center_y, 0.0));
+  layer_solid = SubtractionSolid(layer_name + "_minus_lepton", layer_solid, lepton_hole, lepton_tf);
 
   const Tube hadron_hole(0.0, disk.hadron_opening.radius, opening_half_length);
-  const Transform3D hadron_tf(RotationZYX(0.0, 0.0, 0.0),
-                              Position(disk.hadron_opening.center_x, disk.hadron_opening.center_y, 0.0));
-  layer_solid =
-      SubtractionSolid(layer_name + "_minus_hadron", layer_solid, hadron_hole, hadron_tf);
+  const Transform3D hadron_tf(
+      RotationZYX(0.0, 0.0, 0.0),
+      Position(disk.hadron_opening.center_x, disk.hadron_opening.center_y, 0.0));
+  layer_solid = SubtractionSolid(layer_name + "_minus_hadron", layer_solid, hadron_hole, hadron_tf);
 
   return layer_solid;
 }
@@ -320,8 +319,7 @@ vector<TileRow> load_tile_rows(const string& file_name,
       for (size_t idx = 0; idx < fields.size(); ++idx) {
         header_index[fields[idx]] = idx;
       }
-      const array<string, 4> required_headers{
-          "disk", "module", "x_min_mm", "y_min_mm"};
+      const array<string, 4> required_headers{"disk", "module", "x_min_mm", "y_min_mm"};
       bool missing_header = false;
       for (const auto& header : required_headers) {
         if (!header_index.count(header)) {
@@ -350,9 +348,9 @@ vector<TileRow> load_tile_rows(const string& file_name,
     row.module_name = get_field("module");
     row.csv_line    = line_number;
     if (row.disk_key.empty()) {
-      printout(WARNING, "TileEndcapTracker",
-               fmt::format("skipping CSV line {} with empty disk key in '{}'", line_number,
-                           file_name));
+      printout(
+          WARNING, "TileEndcapTracker",
+          fmt::format("skipping CSV line {} with empty disk key in '{}'", line_number, file_name));
       continue;
     }
     if (row.module_name.empty()) {
@@ -372,10 +370,10 @@ vector<TileRow> load_tile_rows(const string& file_name,
     try {
       // The CSV carries placement only. Geometry dimensions come from the built-in
       // module template selected by the row's module name.
-      row.x_min  = std::stod(get_field("x_min_mm")) * mm;
-      row.y_min  = std::stod(get_field("y_min_mm")) * mm;
-      row.x_size = module_iter->second.x_size;
-      row.y_size = module_iter->second.y_size;
+      row.x_min       = std::stod(get_field("x_min_mm")) * mm;
+      row.y_min       = std::stod(get_field("y_min_mm")) * mm;
+      row.x_size      = module_iter->second.x_size;
+      row.y_size      = module_iter->second.y_size;
       string dz_value = get_field("dz_mm");
       if (!dz_value.empty()) {
         row.dz = std::stod(dz_value) * mm;
@@ -404,8 +402,8 @@ vector<TileRow> load_tile_rows(const string& file_name,
     }
     if (row.x_size <= 0 || row.y_size <= 0) {
       printout(WARNING, "TileEndcapTracker",
-               fmt::format("skipping CSV line {} with non-positive dimensions in '{}'",
-                           line_number, file_name));
+               fmt::format("skipping CSV line {} with non-positive dimensions in '{}'", line_number,
+                           file_name));
       continue;
     }
     rows.push_back(row);
@@ -419,22 +417,22 @@ vector<TileRow> load_tile_rows(const string& file_name,
 TilePrototype build_tile_prototype(Detector& description, SensitiveDetector& sens,
                                    const ModuleTemplate& module_template) {
   TilePrototype prototype;
-  Material vacuum = description.vacuum();
+  Material vacuum     = description.vacuum();
   const double x_size = module_template.x_size;
   const double y_size = module_template.y_size;
   Box module_solid(x_size / 2.0, y_size / 2.0, module_template.total_thickness / 2.0);
   prototype.volume = Volume(module_template.name, module_solid, vacuum);
   prototype.volume.setVisAttributes(description.visAttributes(module_template.vis));
 
-  double z_position          = -module_template.total_thickness / 2.0;
-  double thickness_so_far    = 0.0;
-  int component_id           = 0;
-  int sensor_id              = 1;
+  double z_position       = -module_template.total_thickness / 2.0;
+  double thickness_so_far = 0.0;
+  int component_id        = 0;
+  int sensor_id           = 1;
   for (const auto& component : module_template.components) {
     double comp_x = component.x_override > 0.0 ? component.x_override : x_size;
     double comp_y = component.y_override > 0.0 ? component.y_override : y_size;
 
-    Material material = description.material(component.material);
+    Material material     = description.material(component.material);
     string component_name = _toString(component_id, "component%d");
     Box comp_solid(comp_x / 2.0, comp_y / 2.0, component.thickness / 2.0);
     Volume component_volume(component_name, comp_solid, material);
@@ -529,18 +527,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_layer(li);
     const int layer_id = x_layer.id();
 
-    xml_comp_t x_env  = x_layer.child(_U(envelope));
+    xml_comp_t x_env = x_layer.child(_U(envelope));
     DiskBoundary disk;
-    disk.layer_id   = layer_id;
-    disk.rmin       = x_env.attr<double>(_Unicode(rmin));
-    disk.rmax       = x_env.attr<double>(_Unicode(rmax));
-    disk.zstart     = x_env.attr<double>(_Unicode(zstart));
-    disk.length     = x_env.attr<double>(_Unicode(length));
-    disk.center_z   = disk.zstart + disk.length / 2.0;
-    disk.vis        = x_env.attr<string>(_Unicode(vis));
-    disk.disk_key = x_layer.hasAttr(_Unicode(name))
-                        ? x_layer.nameStr()
-                        : det_name + "_disk" + std::to_string(layer_id);
+    disk.layer_id = layer_id;
+    disk.rmin     = x_env.attr<double>(_Unicode(rmin));
+    disk.rmax     = x_env.attr<double>(_Unicode(rmax));
+    disk.zstart   = x_env.attr<double>(_Unicode(zstart));
+    disk.length   = x_env.attr<double>(_Unicode(length));
+    disk.center_z = disk.zstart + disk.length / 2.0;
+    disk.vis      = x_env.attr<string>(_Unicode(vis));
+    disk.disk_key = x_layer.hasAttr(_Unicode(name)) ? x_layer.nameStr()
+                                                    : det_name + "_disk" + std::to_string(layer_id);
     xml_comp_t x_beampipe_opening(x_layer.child(_Unicode(beampipe_opening), false));
     if (x_beampipe_opening) {
       // The opening describes the beampipe exclusion in the layer-local x-y plane as
@@ -552,12 +549,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           getAttrOrDefault(x_beampipe_opening, _Unicode(lepton_center_y), 0.0);
       disk.lepton_opening.radius =
           getAttrOrDefault(x_beampipe_opening, _Unicode(lepton_radius), 0.0);
-      disk.hadron_opening.center_x =
-          getAttrOrDefault(x_beampipe_opening, _Unicode(hadron_center_x),
-                           disk.lepton_opening.center_x);
-      disk.hadron_opening.center_y =
-          getAttrOrDefault(x_beampipe_opening, _Unicode(hadron_center_y),
-                           disk.lepton_opening.center_y);
+      disk.hadron_opening.center_x = getAttrOrDefault(x_beampipe_opening, _Unicode(hadron_center_x),
+                                                      disk.lepton_opening.center_x);
+      disk.hadron_opening.center_y = getAttrOrDefault(x_beampipe_opening, _Unicode(hadron_center_y),
+                                                      disk.lepton_opening.center_y);
       disk.hadron_opening.radius =
           getAttrOrDefault(x_beampipe_opening, _Unicode(hadron_radius), disk.lepton_opening.radius);
       if (disk.lepton_opening.radius <= 0.0 || disk.hadron_opening.radius <= 0.0) {
@@ -643,16 +638,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // Convert the CSV rectangle origin into the module center used by DD4hep.
       const double x_center = row.x_min + row.x_size / 2.0;
       const double y_center = row.y_min + row.y_size / 2.0;
-      string module_name = _toString(layer_id, "layer%d") + _toString(mod_num, "_module%d");
+      string module_name    = _toString(layer_id, "layer%d") + _toString(mod_num, "_module%d");
       module_name += reflect ? "_neg" : "_pos";
       DetElement module_element(layer_element, module_name, mod_num);
       // The optional facing column flips the module around local y so the sensor can
       // face either +z or -z within the layer volume.
-      Transform3D module_transform = row.facing_positive_z
-                                         ? Transform3D(RotationZYX(0.0, 0.0, 0.0),
-                                                       Position(x_center, y_center, row.dz))
-                                         : Transform3D(RotationZYX(0.0, M_PI, 0.0),
-                                                       Position(x_center, y_center, row.dz));
+      Transform3D module_transform =
+          row.facing_positive_z
+              ? Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(x_center, y_center, row.dz))
+              : Transform3D(RotationZYX(0.0, M_PI, 0.0), Position(x_center, y_center, row.dz));
       PlacedVolume module_pv = layer_vol.placeVolume(prototype.volume, module_transform);
       module_pv.addPhysVolID("module", mod_num);
       module_element.setPlacement(module_pv);

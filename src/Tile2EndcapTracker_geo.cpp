@@ -69,9 +69,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t trd   = x_mod.trd();
 
     double posY;
-    double y              = trd.y();
-    double x              = trd.x();
-    double m_dz              = trd.dz();
+    double y    = trd.y();
+    double x    = trd.x();
+    double m_dz = trd.dz();
     // double z               = trd.z();
     double total_thickness = 0.;
     xml_coll_t ci(x_mod, _U(module_component));
@@ -81,25 +81,25 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double thickness_so_far = 0.0;
     double y1               = total_thickness / 2e0;
 
-    std::cout<<"module dimension xyz: "<< x/2.0<<"  "<<y/2.0<<"  "<<m_dz/2.0<<endl;
-    Box m_solid(x/2e0, y/2e0, m_dz/2e0);
+    std::cout << "module dimension xyz: " << x / 2.0 << "  " << y / 2.0 << "  " << m_dz / 2.0
+              << endl;
+    Box m_solid(x / 2e0, y / 2e0, m_dz / 2e0);
     Volume m_volume(m_nam, m_solid, vacuum);
 
     // Assembly m_volume(m_nam);
     m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
-
     for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
-      xml_comp_t c     = ci;
-      double c_thick   = c.thickness();
-      auto comp_x     = getAttrOrDefault(c, _Unicode(x), x);
-      auto comp_y     = getAttrOrDefault(c, _Unicode(y), y);
+      xml_comp_t c   = ci;
+      double c_thick = c.thickness();
+      auto comp_x    = getAttrOrDefault(c, _Unicode(x), x);
+      auto comp_y    = getAttrOrDefault(c, _Unicode(y), y);
       // auto comp_height = getAttrOrDefault(c, _Unicode(height), z);
 
       Material c_mat = description.material(c.materialStr());
       string c_name  = _toString(c_id, "component%d");
 
-      Box comp_s1(comp_x/2.0, comp_y/2.0, c_thick / 2e0);
+      Box comp_s1(comp_x / 2.0, comp_y / 2.0, c_thick / 2e0);
       Solid comp_shape = comp_s1;
 
       Volume c_vol(c_name, comp_shape, c_mat);
@@ -118,9 +118,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         ++n_sensor;
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
         Vector3D u(1., 0., 0.);
-        Vector3D v(0. , 1., 0.);
+        Vector3D v(0., 1., 0.);
         Vector3D n(0., 0., 1.);
-        Vector3D o( 0. , 0. , 0. ) ;
+        Vector3D o(0., 0., 0.);
 
         // compute the inner and outer thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor
@@ -132,7 +132,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // if( isStripDetector )
         //  type.setProperty( SurfaceType::Measurement1D , true ) ;
 
-        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n ,o ) ;
+        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n, o);
         volplane_surfaces[m_nam].push_back(surf);
 
         //--------------------------------------------
@@ -157,7 +157,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double layer_length   = l_env.attr<double>(_Unicode(length));
     double layer_zstart   = l_env.attr<double>(_Unicode(zstart));
     double layer_center_z = layer_zstart + layer_length / 2.0;
-    std::cout<<"Tile2 layer rmin/max:"<<layer_rmin<<"  "<<layer_rmax<<std::endl;
+    std::cout << "Tile2 layer rmin/max:" << layer_rmin << "  " << layer_rmax << std::endl;
 
     // printout(INFO,"ROOTGDMLParse","+++ Read geometry from GDML file file:%s",input.c_str());
     // std::cout << "SiTracker Endcap layer " << l_id << " zstart = " << layer_zstart/dd4hep::mm << "mm ( " <<
@@ -185,7 +185,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     auto& layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_element);
-    
+
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
       DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
@@ -193,83 +193,83 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
-      xml_comp_t x_ring    = ri;
+      xml_comp_t x_ring = ri;
       // double r             = x_ring.r();
-      double x             = x_ring.x();
-      double y             = x_ring.y();
+      double x = x_ring.x();
+      double y = x_ring.y();
       // double phi0          = x_ring.phi0(0);
-      double zstart        = x_ring.zstart();
-      double dz            = x_ring.dz(0);
-      int nmodules         = x_ring.nmodules();
-      string m_nam         = x_ring.moduleStr();
-      Volume m_vol         = modules[m_nam];
+      double zstart = x_ring.zstart();
+      double dz     = x_ring.dz(0);
+      int nmodules  = x_ring.nmodules();
+      string m_nam  = x_ring.moduleStr();
+      Volume m_vol  = modules[m_nam];
       // double iphi          = 2 * M_PI / nmodules;
       // double phi           = phi0;
       Placements& sensVols = sensitives[m_nam];
 
       for (int k = 0; k < nmodules; ++k) {
-      // for (int k = 0; k < 2; ++k) {
+        // for (int k = 0; k < 2; ++k) {
 
         string m_base = _toString(l_id, "layer%d") + _toString(mod_num, "_module%d");
         string pos;
-        pos = (reflect) ? "_neg" : "_pos";
-        double flip = (reflect) ? -1.0:1.0;
+        pos         = (reflect) ? "_neg" : "_pos";
+        double flip = (reflect) ? -1.0 : 1.0;
         DetElement r_module(layer_element, m_base + pos, det_id);
-        std::cout<<"layer_vol xyz center:"<<x<<"  "<<y<<"  "<<flip*(zstart + dz)<<std::endl;
-        pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, 0, 0),
-                                                Position(x, y, flip*(zstart + dz))));
+        std::cout << "layer_vol xyz center:" << x << "  " << y << "  " << flip * (zstart + dz)
+                  << std::endl;
+        pv = layer_vol.placeVolume(
+            m_vol, Transform3D(RotationZYX(0, 0, 0), Position(x, y, flip * (zstart + dz))));
         pv.addPhysVolID("module", mod_num);
         r_module.setPlacement(pv);
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
           DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
           auto& comp_elt_params =
-          DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
+              DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
           comp_elt_params.set<string>("axis_definitions", "XYZ");
           comp_elt.setPlacement(sens_pv);
           volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
         }
-      mod_num++;
-      y = -(y >= 0 ? 1 : -1) * (std::abs(y) + 0.5);
-
+        mod_num++;
+        y = -(y >= 0 ? 1 : -1) * (std::abs(y) + 0.5);
       }
 
-        // if (!reflect) {
-        //   DetElement r_module(layer_element, m_base + "_pos", det_id);
-        //   // pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
-        //   pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, 0, 0),
-        //                                                 Position(x, y, zstart + dz)));
-        //   pv.addPhysVolID("module", mod_num);
-        //   r_module.setPlacement(pv);
-        //   for (size_t ic = 0; ic < sensVols.size(); ++ic) {
-        //     PlacedVolume sens_pv = sensVols[ic];
-        //     DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
-        //     auto& comp_elt_params =
-        //         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-        //     comp_elt_params.set<string>("axis_definitions", "XYZ");
-        //     comp_elt.setPlacement(sens_pv);
-        //     volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
-        //   }
-        // } else {
-        //   // pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
-        //   pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, 0, 0),
-        //                                                 Position(x, y, -zstart - dz)));
-        //   pv.addPhysVolID("module", mod_num);
-        //   DetElement r_module(layer_element, m_base + "_neg", det_id);
-        //   r_module.setPlacement(pv);
-        //   for (size_t ic = 0; ic < sensVols.size(); ++ic) {
-        //     PlacedVolume sens_pv = sensVols[ic];
-        //     DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
-        //     auto& comp_elt_params =
-        //         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-        //     comp_elt_params.set<string>("axis_definitions", "XYZ");
-        //     comp_elt.setPlacement(sens_pv);
-        //     volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
-        //   }
-        // }
-        // dz = -dz;
-        // phi += iphi;
-        // ++mod_num;
+      // if (!reflect) {
+      //   DetElement r_module(layer_element, m_base + "_pos", det_id);
+      //   // pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
+      //   pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, 0, 0),
+      //                                                 Position(x, y, zstart + dz)));
+      //   pv.addPhysVolID("module", mod_num);
+      //   r_module.setPlacement(pv);
+      //   for (size_t ic = 0; ic < sensVols.size(); ++ic) {
+      //     PlacedVolume sens_pv = sensVols[ic];
+      //     DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
+      //     auto& comp_elt_params =
+      //         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
+      //     comp_elt_params.set<string>("axis_definitions", "XYZ");
+      //     comp_elt.setPlacement(sens_pv);
+      //     volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+      //   }
+      // } else {
+      //   // pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
+      //   pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, 0, 0),
+      //                                                 Position(x, y, -zstart - dz)));
+      //   pv.addPhysVolID("module", mod_num);
+      //   DetElement r_module(layer_element, m_base + "_neg", det_id);
+      //   r_module.setPlacement(pv);
+      //   for (size_t ic = 0; ic < sensVols.size(); ++ic) {
+      //     PlacedVolume sens_pv = sensVols[ic];
+      //     DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
+      //     auto& comp_elt_params =
+      //         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
+      //     comp_elt_params.set<string>("axis_definitions", "XYZ");
+      //     comp_elt.setPlacement(sens_pv);
+      //     volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+      //   }
+      // }
+      // dz = -dz;
+      // phi += iphi;
+      // ++mod_num;
       // }
     }
   }
