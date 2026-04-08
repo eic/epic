@@ -1,0 +1,32 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 ePIC Collaboration -->
+
+<lccdd>
+
+  <comment>
+  Compact "glue" file to apply silicon tracker misalignment deltas with ddsim.
+
+  Pass this file as an additional --compactFile argument AFTER the main
+  geometry, e.g.:
+
+    ddsim --compactFile epic.xml \
+          calibrations/alignment/silicon_misalignment_compact.xml \
+          --numberOfEvents 100 \
+          --outputFile sim_misaligned.edm4hep.root \
+          ...
+
+  The <plugins><include></include></plugins> mechanism causes DD4hep to call
+  fromXML() on the referenced file. Because that file has a <global_alignment/>
+  root element, DD4hep dispatches it to the DDAlign  global_alignment_XML_reader
+  plugin, which auto-installs the GlobalAlignmentCache and applies the deltas
+  to the in-memory TGeo geometry before Geant4 geometry construction begins.
+
+  To revert to nominal geometry, simply omit this file from --compactFile.
+  </comment>
+
+  <plugins>
+    <!-- Load the misalignment deltas from the DDAlign global_alignment XML. -->
+    <include ref="silicon_misalignment.xml"/>
+  </plugins>
+
+</lccdd>
