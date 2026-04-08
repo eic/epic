@@ -57,7 +57,7 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <comment>
-        Tile placements default to calibrations/tracking/endcap_tiles.csv in the
+        Tile placements default to compact/tracking/SVT_endcap_tiles.csv in the
         plugin. Add a local &lt;tile_placements .../&gt; block only if this detector
         should override that shared default. Module geometry comes from the plugin.
       </comment>

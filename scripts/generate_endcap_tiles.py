@@ -223,7 +223,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output",
-        default="disk_layout/epic/calibrations/tracking/endcap_tiles.csv",
+        default="disk_layout/epic/compact/tracking/SVT_endcap_tiles.csv",
         help="Output CSV path.",
     )
     parser.add_argument(
