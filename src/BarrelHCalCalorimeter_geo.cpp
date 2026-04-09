@@ -134,9 +134,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::vector<double> yposTile;
   std::vector<double> zposTile;
 
-  std::vector<double> xposChimneyTileS;
-  std::vector<double> yposChimneyTileS;
-  std::vector<double> zposChimneyTileS;
+  //std::vector<double> xposChimneyTileS;
+  //std::vector<double> yposChimneyTileS;
+  //std::vector<double> zposChimneyTileS;
 
   for (xml_coll_t i(det_define, _Unicode(matrix)); i; ++i) {
     xml_comp_t x_mtrx = i;
@@ -156,12 +156,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       aptr = &yposTile;
     else if (mtrx_name == "zposTile")
       aptr = &zposTile;
-    else if (mtrx_name == "xposChimneyTileS")
-      aptr = &xposChimneyTileS;
-    else if (mtrx_name == "yposChimneyTileS")
-      aptr = &yposChimneyTileS;
-    else if (mtrx_name == "zposChimneyTileS")
-      aptr = &zposChimneyTileS;
+    //else if (mtrx_name == "xposChimneyTileS")
+    //  aptr = &xposChimneyTileS;
+    //else if (mtrx_name == "yposChimneyTileS")
+    //  aptr = &yposChimneyTileS;
+    //else if (mtrx_name == "zposChimneyTileS")
+    //  aptr = &zposChimneyTileS;
     else {
       printout(WARNING, "BarrelHCalCalorimeter", "unknown <matrix> data!");
       continue;
@@ -282,9 +282,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Loop over the tile solids, create them and add them to the detector volume
 
   Volume Tile[12];
-  Volume ChimneyTile[4];
+  //Volume ChimneyTile[4];
 
-  for (int j = 1; j < 17; j++) {
+  //for (int j = 1; j < 17; j++) {
+  for (int j = 1; j < 13; j++) {
 
     std::string gdmlname;
     std::string solid_name;
@@ -296,13 +297,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       gdmlname   = _toString(j, "tile%d_gdmlfile");
       solid_name = _toString(j, "OuterHCalTile%02d");
 
-    } else {
+    }
+    /*else {
 
       // chimney tiles
 
       gdmlname   = _toString(j - 4, "ctile%d_gdmlfile");
       solid_name = _toString(j - 4, "OuterHCalChimneyTile%02d");
     }
+    */
 
     // tile shape gdml file info
     xml_comp_t x_det_tgdmlfile = x_det.child(gdmlname);
@@ -344,7 +347,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       std::string type = solid_name.substr(0, solid_name.size() - 2);
 
-      if (type == "OuterHCalTile" || type == "OuterHCalChimneyTile") {
+      //if (type == "OuterHCalTile" || type == "OuterHCalChimneyTile") {
+      if (type == "OuterHCalTile" ) {
 
         std::string stnum = solid_name.substr(solid_name.size() - 2, solid_name.size());
         int tnum          = atoi(stnum.c_str()) - 1;
@@ -355,10 +359,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           Tile[11 - tnum] = solidVolume;
 
-        } else if ((tnum > 7) && (type == "OuterHCalChimneyTile")) {
-
-          ChimneyTile[11 - tnum] = solidVolume;
         }
+        //else if ((tnum > 7) && (type == "OuterHCalChimneyTile")) {
+
+        //  ChimneyTile[11 - tnum] = solidVolume;
+        //}
 
       } else
         printout(WARNING, "BarrelHCalCalorimeter", "invalid solid_name, not a tile type?");
@@ -467,7 +472,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         } else {
 
           // chimney sector tile
-
+/*
           PlacedVolume phv1 = BarrelHCAL.placeVolume(
               ChimneyTile[i_eta], i_phi + (12 + tnum) * 320,
               RotationZ(i_phi * increment_angle + increment_offset) *
@@ -486,7 +491,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           sd1.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           sd1.setPlacement(phv1);
           sdet.add(sd1);
-
+*/
           PlacedVolume phv0 = BarrelHCAL.placeVolume(
               Tile[i_eta], i_phi + i_eta * 320,
               RotationZ(i_phi * increment_angle + increment_offset) *
