@@ -18,11 +18,9 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_PCBThickness"                  value="0.16*cm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"              value="0.015*cm"/>
 
-
     <documentation>
       - ZDC N Layers and computed Thickness
     </documentation>
-
 
     <constant name="HcalFarForwardZDC_SiPMonTile_SingleLayerThickness"
     value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness +
