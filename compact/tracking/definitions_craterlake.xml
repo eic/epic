@@ -78,20 +78,21 @@
       z_eval = z_center + SiTrackerEndcapLayer_thickness/2 on +z,
       z_eval = z_center - SiTrackerEndcapLayer_thickness/2 on -z.
       This avoids overlaps when the disk layer thickness is increased.
+      The lepton-side radius constants also carry the current extra 1 cm mother-volume margin.
     </comment>
 
 
     <comment> Inner tracker beampipe openings, hadron side (+z) and reflected electron side (-z) </comment>
     <constant name="InnerTrackerEndcapP_lepton_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapP_lepton_center_y" value="0.0*mm" />
-    <constant name="InnerTrackerEndcapP_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="InnerTrackerEndcapP_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="InnerTrackerEndcapP_hadron_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapP_hadron_center_y" value="0.0*mm" />
     <constant name="InnerTrackerEndcapP_hadron_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
 
     <constant name="InnerTrackerEndcapN_lepton_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapN_lepton_center_y" value="0.0*mm" />
-    <constant name="InnerTrackerEndcapN_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="InnerTrackerEndcapN_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="InnerTrackerEndcapN_hadron_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapN_hadron_center_y" value="0.0*mm" />
     <constant name="InnerTrackerEndcapN_hadron_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
@@ -103,18 +104,18 @@
     <comment> Positive disk openings from the two-circle beampipe helper </comment>
     <constant name="TrackerEndcapPDisk1_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk1_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk1_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk1_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapPDisk1_hadron_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk1_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk1_hadron_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
 
-    <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
+    <constant name="TrackerEndcapPDisk1_zmin"        value="55.0*cm" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="max(abs(TrackerEndcapPDisk1_lepton_center_x) + TrackerEndcapPDisk1_lepton_radius, abs(TrackerEndcapPDisk1_hadron_center_x) + TrackerEndcapPDisk1_hadron_radius)" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapDisk_rmax - 15*mm" />
 
     <constant name="TrackerEndcapPDisk2_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk2_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk2_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk2_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapPDisk2_hadron_center_x" value="-1.440*mm" />
     <constant name="TrackerEndcapPDisk2_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk2_hadron_radius"   value="35.488*mm + Beampipe_bakeout_buffer" />
@@ -124,7 +125,7 @@
 
     <constant name="TrackerEndcapPDisk3_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk3_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk3_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk3_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapPDisk3_hadron_center_x" value="-7.066*mm" />
     <constant name="TrackerEndcapPDisk3_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk3_hadron_radius"   value="41.111*mm + Beampipe_bakeout_buffer" />
@@ -134,7 +135,7 @@
 
     <constant name="TrackerEndcapPDisk4_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk4_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk4_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk4_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapPDisk4_hadron_center_x" value="-12.692*mm" />
     <constant name="TrackerEndcapPDisk4_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk4_hadron_radius"   value="46.734*mm + Beampipe_bakeout_buffer" />
@@ -150,7 +151,7 @@
     <comment> Negative disk openings are in reflected local-layer coordinates </comment>
     <constant name="TrackerEndcapNDisk1_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk1_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk1_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapNDisk1_hadron_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_hadron_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
@@ -160,7 +161,7 @@
 
     <constant name="TrackerEndcapNDisk2_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk2_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk2_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk2_lepton_radius"   value="31.757*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapNDisk2_hadron_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk2_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk2_hadron_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
@@ -170,7 +171,7 @@
 
     <constant name="TrackerEndcapNDisk3_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk3_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk3_lepton_radius"   value="33.5*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk3_lepton_radius"   value="33.5*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapNDisk3_hadron_center_x" value="-21.880*mm" />
     <constant name="TrackerEndcapNDisk3_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk3_hadron_radius"   value="14.285*mm + Beampipe_bakeout_buffer" />
@@ -180,7 +181,7 @@
 
     <constant name="TrackerEndcapNDisk4_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk4_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk4_lepton_radius"   value="33.5*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk4_lepton_radius"   value="33.5*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapNDisk4_hadron_center_x" value="-26.130*mm" />
     <constant name="TrackerEndcapNDisk4_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk4_hadron_radius"   value="14.285*mm + Beampipe_bakeout_buffer" />
@@ -209,12 +210,12 @@
   <comment> See compact/definitions.xml for reserved detector id
     ACTS detector volume needs to be built inside out in terms of R. </comment>
   <detectors>
-    <detector id="VertexSubAssembly_0_ID"
+    <!-- <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="VertexBarrel" />
-    </detector>
+    </detector> -->
     <detector id="TrackerSubAssembly_0_ID"
       name="InnerSiTrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
@@ -222,59 +223,63 @@
       <composite name="InnerTrackerEndcapN"/>
       <composite name="InnerTrackerEndcapP"/>
     </detector>
+    <comment>
+      Keep the ACTS tracker onions ordered from small-R barrels to larger-R endcaps.
+      This lets ACTS build a central barrel gap before the endcap wrappers expand in z.
+    </comment>
     <detector id="TrackerSubAssembly_1_ID"
       name="MiddleSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="SagittaSiBarrel"/>
     </detector>
-      <detector id="TrackerSubAssembly_1_ID"
+    <detector id="TrackerSubAssembly_2_ID"
       name="OuterSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterSiBarrel"/>
     </detector>
-    <detector id="TrackerSubAssembly_2_ID"
+    <detector id="TrackerSubAssembly_3_ID"
       name="MiddleSiEndcapSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="MiddleTrackerEndcapN"/>
       <composite name="MiddleTrackerEndcapP"/>
     </detector>
-    <detector id="TrackerSubAssembly_3_ID"
+    <detector id="TrackerSubAssembly_4_ID"
       name="OuterSiEndcapSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterTrackerEndcapN"/>
       <composite name="OuterTrackerEndcapP"/>
     </detector>
-    <detector id="TrackerSubAssembly_4_ID"
+    <!-- <detector id="TrackerSubAssembly_5_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardMPGD"/>
       <composite name="ForwardMPGD"/>
     </detector>
-    <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_6_ID"
       name="InnerMPGDBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
-    <detector id="TrackerSubAssembly_6_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardTOF"/>
       <composite name="ForwardTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="TrackerSubAssembly_8_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_8_ID"
+    <detector id="TrackerSubAssembly_9_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
@@ -286,7 +291,7 @@
       vis="TrackerSubAssemblyVis">
       <composite name="B0Tracker"/>
       <composite name="B0TrackerCompanion"/>
-    </detector>
+    </detector> -->
   </detectors>
 
   <documentation>

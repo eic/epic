@@ -207,8 +207,10 @@ string resolve_input_file(const string& configured_path) {
 }
 
 // Check whether a tile rectangle fits inside the layer cross-section.
-// For layers with beampipe openings, this rejects any rectangle intersecting
-// either circular exclusion, not just tiles with corners inside the hole.
+// The tiled-disk fallback expects the XML rmin to match the centered lepton
+// beampipe radius, while the shifted hadron opening remains a placement-only
+// cut. Reject any rectangle intersecting either circular exclusion, not just
+// tiles with corners inside the hole.
 bool tile_inside_disk(const TileRow& row, const DiskBoundary& disk) {
   const array<pair<double, double>, 4> corners{{
       {row.x_min, row.y_min},
@@ -245,32 +247,12 @@ bool tile_inside_disk(const TileRow& row, const DiskBoundary& disk) {
 }
 
 // Construct the mother volume solid for one layer.
-// Without a beampipe opening this is the legacy tube. With an opening, build a
-// full disk and subtract the two circular exclusions that approximate the pipes.
-Solid build_disk_solid(const string& layer_name, const DiskBoundary& disk) {
-  if (!disk.has_beampipe_opening) {
-    return Tube(disk.rmin, disk.rmax, disk.length / 2.0);
-  }
-
-  // With explicit beampipe openings, build the layer as a solid disk and subtract the
-  // two cylindrical exclusions. The XML opening constants are expected to be evaluated
-  // at the disk face nearest the IP for thick layers.
-  const double opening_half_length = disk.length;
-  Solid layer_solid                = Tube(0.0, disk.rmax, disk.length / 2.0);
-
-  const Tube lepton_hole(0.0, disk.lepton_opening.radius, opening_half_length);
-  const Transform3D lepton_tf(
-      RotationZYX(0.0, 0.0, 0.0),
-      Position(disk.lepton_opening.center_x, disk.lepton_opening.center_y, 0.0));
-  layer_solid = SubtractionSolid(layer_name + "_minus_lepton", layer_solid, lepton_hole, lepton_tf);
-
-  const Tube hadron_hole(0.0, disk.hadron_opening.radius, opening_half_length);
-  const Transform3D hadron_tf(
-      RotationZYX(0.0, 0.0, 0.0),
-      Position(disk.hadron_opening.center_x, disk.hadron_opening.center_y, 0.0));
-  layer_solid = SubtractionSolid(layer_name + "_minus_hadron", layer_solid, hadron_hole, hadron_tf);
-
-  return layer_solid;
+// Without a beampipe opening this is the legacy tube. With an opening, keep an
+// ACTS-friendly centered annulus using the XML rmin/rmax values, where rmin is
+// expected to be the centered lepton beampipe radius; the shifted hadron
+// opening stays in the placement filtering only.
+Solid build_disk_solid(const string&, const DiskBoundary& disk) {
+  return Tube(disk.rmin, disk.rmax, disk.length / 2.0);
 }
 
 // Ensure the placed module thickness fits within the XML layer thickness.
@@ -541,7 +523,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_beampipe_opening(x_layer.child(_Unicode(beampipe_opening), false));
     if (x_beampipe_opening) {
       // The opening describes the beampipe exclusion in the layer-local x-y plane as
-      // two circles: the centered lepton pipe and the shifted hadron pipe.
+      // two circles: the centered lepton pipe and the shifted hadron pipe. The
+      // fallback mother solid uses the XML rmin, which should match the lepton
+      // radius; both circles remain active for placement rejection.
       disk.has_beampipe_opening = true;
       disk.lepton_opening.center_x =
           getAttrOrDefault(x_beampipe_opening, _Unicode(lepton_center_x), 0.0);
@@ -560,6 +544,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                  fmt::format("detector '{}' disk '{}' has non-positive beampipe opening radii",
                              det_name, disk.disk_key));
         std::_Exit(EXIT_FAILURE);
+      }
+      if (std::abs(disk.rmin - disk.lepton_opening.radius) > 1e-9) {
+        printout(WARNING, "TileEndcapTracker",
+                 fmt::format("detector '{}' disk '{}' uses rmin={} mm but lepton_radius={} mm; "
+                             "the mother annulus follows rmin, so these should match",
+                             det_name, disk.disk_key, disk.rmin / mm,
+                             disk.lepton_opening.radius / mm));
       }
     }
     string layer_name = det_name + string("_layer") + to_string(layer_id);

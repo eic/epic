@@ -28,6 +28,9 @@
 
     <comment>
       Per-disk beampipe openings from scripts/beampipe_envelope_circles.py.
+      The tiled mother volume uses the centered lepton beampipe radius as its
+      annulus inner radius. The explicit lepton/hadron openings are still carried
+      here for placement rejection, with the hadron circle handled only in the plugin.
       For reflected N-side layers, hadron_center_x is expressed in the local layer frame.
     </comment>
   </define>
@@ -63,17 +66,17 @@
       </comment>
       <layer id="1" name="InnerTrackerEndcapP_disk1">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="InnerTrackerEndcap_active_rmin"
           rmax="InnerTrackerEndcapPLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapPLayer1_zmin" />
         <beampipe_opening
           lepton_center_x="InnerTrackerEndcapP_lepton_center_x"
           lepton_center_y="InnerTrackerEndcapP_lepton_center_y"
-          lepton_radius="InnerTrackerEndcapP_lepton_radius"
+          lepton_radius="InnerTrackerEndcap_active_rmin"
           hadron_center_x="InnerTrackerEndcapP_hadron_center_x"
           hadron_center_y="InnerTrackerEndcapP_hadron_center_y"
-          hadron_radius="InnerTrackerEndcapP_hadron_radius" />
+          hadron_radius="InnerTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -88,17 +91,17 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="InnerTrackerEndcap_active_rmin"
           rmax="InnerTrackerEndcapNLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapNLayer1_zmin" />
         <beampipe_opening
           lepton_center_x="InnerTrackerEndcapN_lepton_center_x"
           lepton_center_y="InnerTrackerEndcapN_lepton_center_y"
-          lepton_radius="InnerTrackerEndcapN_lepton_radius"
+          lepton_radius="InnerTrackerEndcap_active_rmin"
           hadron_center_x="InnerTrackerEndcapN_hadron_center_x"
           hadron_center_y="InnerTrackerEndcapN_hadron_center_y"
-          hadron_radius="InnerTrackerEndcapN_hadron_radius" />
+          hadron_radius="InnerTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -150,6 +153,19 @@
     <constant name="TrackerEndcapNLayer4_rmax" value="TrackerEndcapNMod4_rmax + 1*um" />
     <constant name="TrackerEndcapNLayer4_zmin" value="TrackerEndcapNMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
 
+    <comment>
+      ACTS-safe reduced annulus workflow for the tiled endcaps:
+        - keep the inner tiled disk at the surviving active tile edge so the beam-pipe opening does not drop the tangent tiles
+        - keep the mother annulus at the active tile inner edge, not the idealized beampipe scalar cutoff
+        - this prevents ACTS from creating zero-width radial gaps while wrapping the inner containers
+        - the inner disk active edge comes from the first surviving InnerTrackerEndcap tile rows
+        - the middle disk active edge comes from the first surviving MiddleTrackerEndcap tile rows
+        - the outer disks share a common active edge from the first surviving OuterTrackerEndcap tile rows
+    </comment>
+    <constant name="InnerTrackerEndcap_active_rmin"  value="37.0*mm" />
+    <constant name="MiddleTrackerEndcap_active_rmin" value="54.45*mm" />
+    <constant name="OuterTrackerEndcap_active_rmin"  value="47.0*mm" />
+
   </define>
   <detectors>
     <detector
@@ -162,17 +178,17 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <layer id="1" name="MiddleTrackerEndcapP_disk1">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="MiddleTrackerEndcap_active_rmin"
           rmax="TrackerEndcapPLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer1_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapPDisk1_lepton_center_x"
           lepton_center_y="TrackerEndcapPDisk1_lepton_center_y"
-          lepton_radius="TrackerEndcapPDisk1_lepton_radius"
+          lepton_radius="MiddleTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapPDisk1_hadron_center_x"
           hadron_center_y="TrackerEndcapPDisk1_hadron_center_y"
-          hadron_radius="TrackerEndcapPDisk1_hadron_radius" />
+          hadron_radius="MiddleTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -187,17 +203,17 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <layer id="1" name="MiddleTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="MiddleTrackerEndcap_active_rmin"
           rmax="TrackerEndcapNLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer1_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapNDisk1_lepton_center_x"
           lepton_center_y="TrackerEndcapNDisk1_lepton_center_y"
-          lepton_radius="TrackerEndcapNDisk1_lepton_radius"
+          lepton_radius="MiddleTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapNDisk1_hadron_center_x"
           hadron_center_y="TrackerEndcapNDisk1_hadron_center_y"
-          hadron_radius="TrackerEndcapNDisk1_hadron_radius" />
+          hadron_radius="MiddleTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -212,49 +228,49 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <layer id="2" name="OuterTrackerEndcapP_disk2">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="OuterTrackerEndcap_active_rmin"
           rmax="TrackerEndcapPLayer2_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer2_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapPDisk2_lepton_center_x"
           lepton_center_y="TrackerEndcapPDisk2_lepton_center_y"
-          lepton_radius="TrackerEndcapPDisk2_lepton_radius"
+          lepton_radius="OuterTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapPDisk2_hadron_center_x"
           hadron_center_y="TrackerEndcapPDisk2_hadron_center_y"
-          hadron_radius="TrackerEndcapPDisk2_hadron_radius" />
+          hadron_radius="OuterTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
       <layer id="3" name="OuterTrackerEndcapP_disk3">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="OuterTrackerEndcap_active_rmin"
           rmax="TrackerEndcapPLayer3_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer3_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapPDisk3_lepton_center_x"
           lepton_center_y="TrackerEndcapPDisk3_lepton_center_y"
-          lepton_radius="TrackerEndcapPDisk3_lepton_radius"
+          lepton_radius="OuterTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapPDisk3_hadron_center_x"
           hadron_center_y="TrackerEndcapPDisk3_hadron_center_y"
-          hadron_radius="TrackerEndcapPDisk3_hadron_radius" />
+          hadron_radius="OuterTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
       <layer id="4" name="OuterTrackerEndcapP_disk4">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="OuterTrackerEndcap_active_rmin"
           rmax="TrackerEndcapPLayer4_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer4_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapPDisk4_lepton_center_x"
           lepton_center_y="TrackerEndcapPDisk4_lepton_center_y"
-          lepton_radius="TrackerEndcapPDisk4_lepton_radius"
+          lepton_radius="OuterTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapPDisk4_hadron_center_x"
           hadron_center_y="TrackerEndcapPDisk4_hadron_center_y"
-          hadron_radius="TrackerEndcapPDisk4_hadron_radius" />
+          hadron_radius="OuterTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
       </layer>
@@ -269,49 +285,49 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <layer id="2" name="OuterTrackerEndcapN_disk2">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="OuterTrackerEndcap_active_rmin"
           rmax="TrackerEndcapNLayer2_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer2_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapNDisk2_lepton_center_x"
           lepton_center_y="TrackerEndcapNDisk2_lepton_center_y"
-          lepton_radius="TrackerEndcapNDisk2_lepton_radius"
+          lepton_radius="OuterTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapNDisk2_hadron_center_x"
           hadron_center_y="TrackerEndcapNDisk2_hadron_center_y"
-          hadron_radius="TrackerEndcapNDisk2_hadron_radius" />
+          hadron_radius="OuterTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
       <layer id="3" name="OuterTrackerEndcapN_disk3">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="OuterTrackerEndcap_active_rmin"
           rmax="TrackerEndcapNLayer3_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer3_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapNDisk3_lepton_center_x"
           lepton_center_y="TrackerEndcapNDisk3_lepton_center_y"
-          lepton_radius="TrackerEndcapNDisk3_lepton_radius"
+          lepton_radius="OuterTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapNDisk3_hadron_center_x"
           hadron_center_y="TrackerEndcapNDisk3_hadron_center_y"
-          hadron_radius="TrackerEndcapNDisk3_hadron_radius" />
+          hadron_radius="OuterTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
       <layer id="4" name="OuterTrackerEndcapN_disk4">
         <envelope vis="TrackerLayerVis"
-          rmin="0*mm"
+          rmin="OuterTrackerEndcap_active_rmin"
           rmax="TrackerEndcapNLayer4_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer4_zmin" />
         <beampipe_opening
           lepton_center_x="TrackerEndcapNDisk4_lepton_center_x"
           lepton_center_y="TrackerEndcapNDisk4_lepton_center_y"
-          lepton_radius="TrackerEndcapNDisk4_lepton_radius"
+          lepton_radius="OuterTrackerEndcap_active_rmin"
           hadron_center_x="TrackerEndcapNDisk4_hadron_center_x"
           hadron_center_y="TrackerEndcapNDisk4_hadron_center_y"
-          hadron_radius="TrackerEndcapNDisk4_hadron_radius" />
+          hadron_radius="OuterTrackerEndcap_active_rmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
       </layer>
