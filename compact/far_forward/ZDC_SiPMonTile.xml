@@ -76,7 +76,7 @@
       ### SiPM-on-tile Zero-Degree Calorimeter Hcal
 
       Each of the layers includes air gaps (front and back of each layer),
-      ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
+      ESR foil (front and back of scintillator), and a PCB.
 
     </documentation>
     <detector
