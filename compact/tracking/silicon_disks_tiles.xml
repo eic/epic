@@ -55,7 +55,7 @@
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
       type="epic_TileEndcapTracker"
-      readout="TrackerEndcapHitsXY"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -85,7 +85,7 @@
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
       type="epic_TileEndcapTracker"
-      readout="TrackerEndcapHitsXY"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -172,7 +172,7 @@
       id="TrackerEndcapP_1_ID"
       name="MiddleTrackerEndcapP"
       type="epic_TileEndcapTracker"
-      readout="TrackerEndcapHitsXY"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -197,7 +197,7 @@
       id="TrackerEndcapN_1_ID"
       name="MiddleTrackerEndcapN"
       type="epic_TileEndcapTracker"
-      readout="TrackerEndcapHitsXY"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -222,7 +222,7 @@
       id="TrackerEndcapP_2_ID"
       name="OuterTrackerEndcapP"
       type="epic_TileEndcapTracker"
-      readout="TrackerEndcapHitsXY"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -279,7 +279,7 @@
       id="TrackerEndcapN_2_ID"
       name="OuterTrackerEndcapN"
       type="epic_TileEndcapTracker"
-      readout="TrackerEndcapHitsXY"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -362,7 +362,7 @@
   </plugins>
 
   <readouts>
-    <readout name="TrackerEndcapHitsXY">
+    <readout name="TrackerEndcapHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
     </readout>
