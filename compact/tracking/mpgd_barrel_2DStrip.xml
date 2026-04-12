@@ -11,7 +11,7 @@
 
   <define>
     <comment>
-      Inner MPGD tracking layer = CyMBaL
+      Inner MPGD tracking layer (= CyMBaL)
       Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
     </comment>
     <constant name="InnerMPGDBarrel_2DStrip"                value="1"/>
@@ -57,8 +57,8 @@
     <constant name="rmin2Sensor" value="MMDriftCuGround_thickness + MMDriftKapton_thickness + MMDriftCuElectrode_thickness + MMGasGap_thickness / 2" />
     <constant name="MMInnerSensor_R" value="MMInnerSection_R + rmin2Sensor" />
     <constant name="MMOuterSensor_R" value="MMOuterSection_R + rmin2Sensor" />
-    <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSensor_R" />
-    <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSensor_R" />
+    <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSection_R" />
+    <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSection_R" />
   </define>
 
   <detectors>
@@ -74,7 +74,7 @@
         width="MMModuleWidth"
         length="MMModuleLength"/>
 
-      <module name="InnerMPGDBarrel_Mod1" vis="TrackerLayerVis" >
+      <module name="InnerMPGDBarrelModule" vis="TrackerLayerVis" >
         <comment> Models describe the overlapping of staves along phi, either (I) via  offsets or (II) via distinct radii ("rmin1/2"). Solution (II) is only partially implemented: would require FOUR distinct "radius" in the readout segmentation. Note that in any case "rsensor" must be set equal the "radius" of the corresponding segmentation and is used internally to double-check the consistency between the stack of "module_component" and the segmentation "radius". </comment>
         <model name="MMInnerSection" rmin1="MMInnerSection_R" rmin2="MMInnerSection_R" offset="MMRadial_offset" rsensor="MMInnerSensor_R"/>
         <model name="MMOuterSection" rmin1="MMOuterSection_R" rmin2="MMOuterSection_R" offset="MMRadial_offset" rsensor="MMOuterSensor_R"/>
@@ -85,11 +85,11 @@
         <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
-        <module_component name="InnerRadiator" thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="3" vis="TrackerMPGDGasVis"/>
-        <module_component name="pStripThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="1" vis="TrackerMPGDGasVis"/>
-        <module_component name="pixelThinGap"  thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="0" vis="TrackerMPGDGasVis"/>
-        <module_component name="nStripThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="2" vis="TrackerMPGDGasVis"/>
-        <module_component name="OuterRadiator" thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="4" vis="TrackerMPGDGasVis"/>
+        <module_component name="InnerRadiator"    thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="3" vis="TrackerMPGDGasVis"/>
+        <module_component name="pStripThinGap"    thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="1" vis="TrackerMPGDGasVis"/>
+        <module_component name="ReferenceThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="0" vis="TrackerMPGDGasVis"/>
+        <module_component name="nStripThinGap"    thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="2" vis="TrackerMPGDGasVis"/>
+        <module_component name="OuterRadiator"    thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="4" vis="TrackerMPGDGasVis"/>
         <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" vis="TrackerVis"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" vis="TrackerMPGDGasVis"/>
@@ -101,7 +101,7 @@
         <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerMPGDVis"/> <!-- Instead of "TrackerSupportVis" in order to highligh frames -->
       </module>
 
-      <layer module="InnerMPGDBarrel_Mod1" id="1" vis="InvisibleWithDaughters">
+      <layer module="InnerMPGDBarrelModule" id="0" vis="InvisibleWithDaughters">
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer_rmin"
           outer_r="InnerMPGDBarrelLayer_rmax"
