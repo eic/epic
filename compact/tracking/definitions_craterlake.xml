@@ -70,7 +70,7 @@
 
     <comment> Main parameters for the silicon disks </comment>
     <comment>  5cm thickness per endcap including room for corrugation and support structures.   </comment>
-    <constant name="SiTrackerEndcapLayer_thickness" value="50*mm" />
+    <constant name="SiTrackerEndcapLayer_thickness" value="10*mm" />
     <comment> Scalar inner cutoffs are derived from the two-circle beampipe opening plus the bakeout buffer </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
     <comment>
