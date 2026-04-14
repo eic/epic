@@ -136,10 +136,10 @@
     <constant name="EndcapTOF_Module_overlap_design"   value="-1.5*mm"/>
     <constant name="EndcapTOF_Module_spacing_design"   value="0*mm"/>
     <constant name="EndcapTOF_Board_spacing_design"    value="0.2*mm"/>
-    <constant name="EndcapTOF_Sensor_width_design"     value="16.4*mm"/>
+    <constant name="EndcapTOF_Sensor_width_design"     value="17*mm"/>
     <constant name="EndcapTOF_Sensor_y_offset"         value="6*mm"/>
-    <constant name="EndcapTOF_Sensor_length_design"    value="16.4*mm"/>
-    <constant name="EndcapTOF_Sensor_gap"              value="1*mm"/>
+    <constant name="EndcapTOF_Sensor_length_design"    value="17*mm"/>
+    <constant name="EndcapTOF_Sensor_gap"              value="0.1*mm"/>
     <constant name="EndcapTOF_CFoam_width_design"      value="EndcapTOF_Sensor_width_design-5.0*mm"/>
     <constant name="EndcapTOF_CHoneycomb_width_design" value="EndcapTOF_Module_width_design-EndcapTOF_CFoam_width_design"/>
     <constant name="EndcapTOF_CoolingTube_width_design" value="0.75*cm"/>
@@ -681,7 +681,7 @@
 
   <readouts>
     <readout name="TOFEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.53*mm" grid_size_y="0.5*mm" offset_y="0.25*mm" offset_x="0.265*mm"/>
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" offset_y="0.25*mm" offset_x="0.25*mm"/>
       <id>system:8,layer:4,module:2,idx:5,idy:5,ids:6,x:36:-12,y:-16</id>
     </readout>
   </readouts>
