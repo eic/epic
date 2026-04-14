@@ -193,7 +193,7 @@
       it could be set equal the its pitch.
       </comment>
       <segmentation type="MultiSegmentation" key="strip">
-	<segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
         <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="MPGDOuterBarrelPitch" grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" offset_u="MPGDOuterBarrelPitch/2" />
         <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="MPGDOuterBarrelPitch" grid_angle="pi*rad/4" offset_v="MPGDOuterBarrelPitch/2" />
         <segmentation name="BotRad"  type="CartesianGridUV" key_value="3" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
