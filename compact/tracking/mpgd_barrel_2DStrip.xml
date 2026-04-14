@@ -12,7 +12,14 @@
   <define>
     <comment>
       Inner MPGD tracking layer (=CyMBaL) with realistic pitch
-      Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
+      Note: MPGDs come in two distinct flavours: pixel and 2DStrip, each tagged
+      with a distinctive setting of the "InnerMPGDBarrel_2DStrip" constant.
+      - 2DStrip is meant for the Multiple Sensitive Volume implementation of
+      the strip digitization in EICrecon's "MPGDTrackerDigi".
+      - Two of the Sensitive Volumes, '(p|n)ThinGap", have a meaningful
+      Segmentation, with a pitch corresponding to that of the actual detector.
+      - The other three Volumes are Helpers, used only temporarily in the
+      production of MC data.
     </comment>
     <constant name="InnerMPGDBarrel_2DStrip"                value="1"/>
 
@@ -131,7 +138,9 @@
 
   <readouts>
     <readout name="MPGDBarrelHits">
-      <comment> 768 strips in phi yield a segmentation of 2pi/8/768 ~= 1mrad. Which in turn, yields ~160 um in resolution.
+      <comment> The Segmentation of the Helper Volumes is arbitrary to some
+      extent. Here, it is set equal to the detector's resolution. Alternatively
+      it could be set equal the its pitch.
       </comment>
       <segmentation type="MultiSegmentation" key="sensor">
         <segmentation name="Inner" type="MultiSegmentation" key_value="0" key="strip">

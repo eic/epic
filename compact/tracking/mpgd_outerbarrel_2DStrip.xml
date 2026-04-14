@@ -12,7 +12,14 @@
 <define>
     <comment>
       Outer MPGD tracking layer with realistic pitch
-      Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
+      Note: MPGDs come in two distinct flavours: pixel and 2DStrip, each tagged
+      with a distinctive setting of the "InnerMPGDBarrel_2DStrip" constant.
+      - 2DStrip is meant for the Multiple Sensitive Volume implementation of
+      the strip digitization in EICrecon's "MPGDTrackerDigi".
+      - Two of the Sensitive Volumes, '(p|n)ThinGap", have a meaningful
+      Segmentation, with a pitch corresponding to that of the actual detector.
+      - The other three Volumes are Helpers, used only temporarily in the
+      production of MC data.
     </comment>
     <constant name="MPGDOuterBarrel_2DStrip"               value="1"/>
 
@@ -181,9 +188,12 @@
 
   <readouts>
     <readout name="OuterMPGDBarrelHits">
+      <comment> The Segmentation of the Helper Volumes is arbitrary to some
+      extent. Here, it is set equal to the detector's resolution. Alternatively
+      it could be set equal the its pitch.
+      </comment>
       <segmentation type="MultiSegmentation" key="strip">
-        <comment> Strip segmentations ("strip" field !=0) are not used at simulation time but only in digitization at reconstruction time, see digitization class, "MPGDTrackerDigi". </comment>
-        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+	<segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
         <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="MPGDOuterBarrelPitch" grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" offset_u="MPGDOuterBarrelPitch/2" />
         <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="MPGDOuterBarrelPitch" grid_angle="pi*rad/4" offset_v="MPGDOuterBarrelPitch/2" />
         <segmentation name="BotRad"  type="CartesianGridUV" key_value="3" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
