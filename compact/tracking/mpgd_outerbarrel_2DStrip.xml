@@ -190,15 +190,15 @@
   <readouts>
     <readout name="OuterMPGDBarrelHits">
       <comment>
-	Each of the 5 Sensitive Volumes has a distinct segmentation tag, the
-	X-reference being done in the detector builder.
-	The grid_size's of the Helper Volumes (reference and radiators) are
-	arbitrary, to some extent.
-	Here, they are set equal to the detector's resolution. They may,
-	eventually, be set equal to its pitch.
+        Each of the 5 Sensitive Volumes has a distinct segmentation tag, the
+        X-reference being done in the detector builder.
+        The grid_size's of the Helper Volumes (reference and radiators) are
+        arbitrary, to some extent.
+        Here, they are set equal to the detector's resolution. They may,
+        eventually, be set equal to its pitch.
       </comment>
       <segmentation type="MultiSegmentation" key="strip">
-	<segmentation name="Reference"   type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="Reference"   type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
         <segmentation name="UStrips"     type="CartesianGridUV" key_value="1" grid_size_u="MPGDOuterBarrelPitch" grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" offset_u="MPGDOuterBarrelPitch/2" />
         <segmentation name="VStrips"     type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="MPGDOuterBarrelPitch" grid_angle="pi*rad/4" offset_v="MPGDOuterBarrelPitch/2" />
         <segmentation name="BotRadiator" type="CartesianGridUV" key_value="3" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />

@@ -140,12 +140,12 @@
   <readouts>
     <readout name="MPGDBarrelHits">
       <comment>
-	Each of the 5 Sensitive Volumes has a distinct segmentation tag, the
-	X-reference being done in the detector builder.
-	The grid_size's of the Helper Volumes (reference and radiators) are
-	arbitrary, to some extent.
-	Here, they are set equal to the detector's resolution. They may,
-	eventually, be set equal to its pitch.
+        Each of the 5 Sensitive Volumes has a distinct segmentation tag, the
+        X-reference being done in the detector builder.
+        The grid_size's of the Helper Volumes (reference and radiators) are
+        arbitrary, to some extent.
+        Here, they are set equal to the detector's resolution. They may,
+        eventually, be set equal to its pitch.
       </comment>
       <segmentation type="MultiSegmentation" key="sensor">
         <segmentation name="Inner" type="MultiSegmentation" key_value="0" key="strip">
