@@ -23,8 +23,10 @@
 
   <comment>
     This volume is used by the *Geant4TVUserParticleHandler* (default in the latest npsim)
+
+    Set `connected="true"` to make it visible in a geometry display
   </comment>
-  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true" vis="VisibleBlue">
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="false" vis="VisibleBlue">
     <comment>
       We first build a tube using the legacy parameters and add a ion beamline extrusion
     </comment>
