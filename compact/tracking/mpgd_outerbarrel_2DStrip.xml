@@ -6,13 +6,21 @@
   Title: Micro-Pattern Gas Detector Planar Barrel Layer
   Author: @ybedfer
   Status: development
-  Version: 1.1
+  Version: 1.2
 </documentation>
 
 <define>
     <comment>
-      Outer MPGD tracking layer
-      Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
+      Outer MPGD tracking layer with realistic pitch
+      Note: MPGDs come in two distinct flavours: pixel and 2DStrip, each tagged
+      with a distinctive setting of the "InnerMPGDBarrel_2DStrip" constant.
+      - 2DStrip is meant for the Multiple Sensitive Volume implementation of
+      the strip digitization in EICrecon's "MPGDTrackerDigi".
+      - Two of the Sensitive Volumes, "(U|V)StripsThinGap", have a meaningful
+      Segmentation, with a pitch corresponding to that of the actual detector.
+      - The other three Sensitive Volumes are Helpers, used only in the
+      processing of MC data. The particulars of their segmentation are
+      disregarded by "MPGDTrackerDigi".
     </comment>
     <constant name="MPGDOuterBarrel_2DStrip"               value="1"/>
 
@@ -28,7 +36,6 @@
     <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space" />
     <constant name="MPGDOuterBarrelModule_roffset"                 value="0.5*cm" />
     <constant name="MPGDOuterBarrelModule_width"                   value="360*mm"/>
-    <constant name="MPGDOuterBarrel_length"                        value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
     <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="0.5*(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)"/>
     <constant name="MPGDOuterBarrelModule_PCB_offset"              value="110*mm"/>
@@ -48,6 +55,10 @@
     <comment> 2DStrip: Multiple Sensitive Volumes. => Subdivide DriftGap: 3 thin slices (pixel and (p|n)strips) at the centre, enclosed by 2 thick radiators. </comment>
     <constant name="RWELLThinGap_thickness"                      value="10*um"/>
     <constant name="RWELLThickGap_thickness" value="(MPGDOuterBarrelDriftGap_thickness - RWELLThinGap_thickness * 3) / 2"/>
+    <comment> Strip layout: Pitch and  #channels are taken from CM of 2025 @ Frascati. </comment>
+    <comment> #channels is used by the MPGD factory to set up the digitization configuration. </comment>
+    <constant name="MPGDOuterBarrelPitch"                        value = "800*um" />
+    <constant name="MPGDOuterBarrelnStrips"                      value = "1792" />
   </define>
 
    <detectors>
@@ -60,11 +71,11 @@
 
     <module name="MPGDOuterBarrelModule" vis="TrackerVis">
 
-        <module_component name="OuterRadiator" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="3" />
-        <module_component name="pStripThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="1" />
-        <module_component name="pixelThinGap"  material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="0" />
-        <module_component name="nStripThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="2" />
-        <module_component name="InnerRadiator" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="4" />
+        <module_component name="BotRadiator"      material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="3" />
+        <module_component name="UStripsThinGap"   material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="1" />
+        <module_component name="ReferenceThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="0" />
+        <module_component name="VStripsThinGap"   material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="2" />
+        <module_component name="TopRadiator"      material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="4" />
 
         <module_component name="WindowGasGap"
                material="Ar90IsoButane"
@@ -178,13 +189,20 @@
 
   <readouts>
     <readout name="OuterMPGDBarrelHits">
+      <comment>
+        Each of the 5 Sensitive Volumes has a distinct segmentation tag, the
+        X-reference being done in the detector builder.
+        The grid_size's of the Helper Volumes (reference and radiators) are
+        arbitrary, to some extent.
+        Here, they are set equal to the detector's resolution. They may,
+        eventually, be set equal to its pitch.
+      </comment>
       <segmentation type="MultiSegmentation" key="strip">
-        <comment> Strip segmentations ("strip" field !=0) are not used at simulation time but only in digitization at reconstruction time, see digitization class, "MPGDTrackerDigi". </comment>
-        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
-        <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" />
-        <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4"/>
-        <segmentation name="BotRad"  type="CartesianGridUV" key_value="3" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
-        <segmentation name="TopRad"  type="CartesianGridUV" key_value="4" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="Reference"   type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="UStrips"     type="CartesianGridUV" key_value="1" grid_size_u="MPGDOuterBarrelPitch" grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" offset_u="MPGDOuterBarrelPitch/2" />
+        <segmentation name="VStrips"     type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="MPGDOuterBarrelPitch" grid_angle="pi*rad/4" offset_v="MPGDOuterBarrelPitch/2" />
+        <segmentation name="BotRadiator" type="CartesianGridUV" key_value="3" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="TopRadiator" type="CartesianGridUV" key_value="4" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
       </segmentation>
       <id>system:8,layer:4,module:12,sensor:2,strip:28:4,u:-16,v:-16</id>
     </readout>
