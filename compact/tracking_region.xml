@@ -1,0 +1,36 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 - 2026 Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Zhenyu Ye, Dmitry Kalinkin -->
+
+<lccdd>
+
+  <comment>
+    These are used by ddsim, the region where we store all secondaries
+
+    For now they are forced to be symmetric, and we cover up to the start of the backward ECAL.
+    (this means in the forward region we stop in the middle of the RICH).
+  </comment>
+
+  <define>
+
+    <comment>
+      These constants are used directly by the *Geant4TCUserParticleHandler* (default in ddsim)
+    </comment>
+    <constant name="tracker_region_rmax"   value="EcalBarrel_rmin"/>
+    <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
+    <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
+
+  </define>
+
+  <comment>
+    This volume is used by the *Geant4TCUserParticleHandler* (default in the latest npsim)
+  </comment>
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true" vis="VisibleBlue">
+    <comment>
+      We first build a tube using the legacy parameters
+    </comment>
+    <shape type="Tube" rmin="0*cm" rmax="tracker_region_rmax" dz="(tracker_region_zmax - tracker_region_zmin) / 2" />
+    <position x="0" y="0" z="(tracker_region_zmax + tracker_region_zmin) / 2" />
+    <rotation x="0" y="0" z="0" />
+  </parallelworld_volume>
+
+</lccdd>
