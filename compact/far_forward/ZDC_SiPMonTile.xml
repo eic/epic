@@ -23,7 +23,7 @@
     </documentation>
 
     <constant name="HcalFarForwardZDC_SiPMonTile_SingleLayerThickness"
-    value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness +
+              value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness +
              HcalFarForwardZDC_SiPMonTile_PolystyreneThickness +
              HcalFarForwardZDC_SiPMonTile_PCBThickness+HcalFarForwardZDC_SiPMonTile_ESRFoilThickness*2+
              2*HcalFarForwardZDC_SiPMonTile_AirThickness"
