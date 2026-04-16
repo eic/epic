@@ -137,9 +137,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // the user this is no longer the case, let's forbid the use of the
   // corresponding (and a few more) tags.
   const int nInvalids                     = 4;
-  const xml::Tag_t unvalidTags[nInvalids] = {_U(phi_tilt), _U(nphi), _U(rc), _U(dr)};
+  const xml::Tag_t invalidTags[nInvalids] = {_U(phi_tilt), _U(nphi), _U(rc), _U(dr)};
   for (int uv = 0; uv < nInvalids; uv++) {
-    if (x_barrel.hasChild(unvalidTags[uv])) {
+    if (x_barrel.hasChild(invalidTags[uv])) {
       const string tag = _U(nphi);
       printout(ERROR, "MPGDCylinderBarrelTracker",
                "Layer \"%s\": Invalid property \"%s\" in \"rphi_layout\"", m_nam.c_str(),
