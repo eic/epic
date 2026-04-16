@@ -22,13 +22,17 @@
   </define>
 
   <comment>
-    This volume is used by the *Geant4TCUserParticleHandler* (default in the latest npsim)
+    This volume is used by the *Geant4TVUserParticleHandler* (default in the latest npsim)
   </comment>
   <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true" vis="VisibleBlue">
     <comment>
-      We first build a tube using the legacy parameters
+      We first build a tube using the legacy parameters and add a ion beamline extrusion
     </comment>
-    <shape type="Tube" rmin="0*cm" rmax="tracker_region_rmax" dz="(tracker_region_zmax - tracker_region_zmin) / 2" />
+    <shape type="BooleanShape" operation="Union">
+      <shape type="Tube" rmin="0*cm" rmax="tracker_region_rmax" dz="(tracker_region_zmax - tracker_region_zmin) / 2" />
+      <shape type="Tube" rmin="0*cm" rmax="1 * cm" dz="10 * m" />
+      <rotation x="0" y="ionCrossingAngle" z="0" />
+    </shape>
     <position x="0" y="0" z="(tracker_region_zmax + tracker_region_zmin) / 2" />
     <rotation x="0" y="0" z="0" />
   </parallelworld_volume>
