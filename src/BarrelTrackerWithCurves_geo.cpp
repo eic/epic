@@ -29,6 +29,8 @@ used to set the sensitive surface.
 This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface where the axis is displaced 
 from the beam line. Therefore the curved surface is modelled as a series of flat segments.
 
+Unlike in BarrelTrackerWithFrame, the position of components (related to the centre of the stave) must now be given in the xml files.
+
 17 April 2026. Sam Henry 
 
 */
