@@ -19,7 +19,7 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"              value="0.015*cm"/>
 
     <documentation>
-      - ZDC N Layers and computed Thickness
+      - ZDC N Layers and computed thickness
     </documentation>
 
     <constant name="HcalFarForwardZDC_SiPMonTile_SingleLayerThickness"
