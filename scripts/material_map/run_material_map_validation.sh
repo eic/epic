@@ -11,8 +11,8 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="pr/fix_dist_and_1D_macro"
-ACTS_URL="https://github.com/veprbl/acts/raw/"
+ACTS_VERSION="v44.4.0"
+ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
   "Examples/Scripts/Python/material_mapping.py"
@@ -55,6 +55,7 @@ EOF
 done
 curl --location https://github.com/acts-project/acts/pull/4931.diff | patch -p1
 curl --location https://github.com/acts-project/acts/pull/5046.diff | patch -p1
+curl --location https://github.com/acts-project/acts/pull/5359.diff | patch -p1
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
