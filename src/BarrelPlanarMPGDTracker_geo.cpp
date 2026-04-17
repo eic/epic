@@ -319,7 +319,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   }
 
   double phi0     = x_layout.phi0();     // starting phi of first module
-  double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
+  double phi_tilt = x_layout.phi_tilt(); // Phi tilt of module
   double rc       = x_layout.rc();       // Radius of the module
   int nphi        = x_layout.nphi();     // Number of modules in phi
   double rphi_dr  = x_layout.dr();       // The delta radius of every other module
