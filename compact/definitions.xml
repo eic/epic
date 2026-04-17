@@ -723,15 +723,4 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="FluxBarrel_length"       value="FluxBarrelForward_zmax + FluxBarrelBackward_zmax"/>
     <constant name="FluxBarrel_offset"       value="(FluxBarrelForward_zmax - FluxBarrelBackward_zmax)/2.0"/>
 
-    <comment>
-      These are used by ddsim, the region where we store all secondaries
-
-      For now they are forced to be symmetric, and we cover up to the start of the backward ECAL.
-      (this means in the forward region we stop in the middle of the RICH).
-    </comment>
-
-    <constant name="tracker_region_rmax"   value="EcalBarrel_rmin"/>
-    <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
-    <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
-
   </define>
