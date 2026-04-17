@@ -19,6 +19,21 @@
 #include <array>
 #include "DD4hepDetectorHelper.h"
 
+/* 
+This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels
+
+A curved component (identified by the word "Curved" in the name) is a segment of a cylinder. This is constructed by a series of flat segments
+The number of segments is set in the xml file, together with the radius, anglular range, length, thickness, and the inner and outer thicknesses
+used to set the sensitive surface.
+
+This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface where the axis is displaced 
+from the beam line. Therefore the curved surface is modelled as a series of flat segments.
+
+17 April 2026. Sam Henry 
+
+*/
+
+
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
@@ -201,7 +216,6 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e, Sens
             double midX = 0.5*(Xp[i] + Xp[i+1]);
             double midZ = 0.5*(Zp[i] + Zp[i+1]);
             Box seg_box ((segwidth/2) * ((c_rmin - x_comp.thickness()/2)/c_rmin), x_comp.length()/2, x_comp.thickness()/2);
-//            Trd1 seg_box( (segwidth/2) * ((c_rmin - x_comp.thickness()/2)/c_rmin), (segwidth/2) * ((c_rmin + x_comp.thickness()/2)/c_rmin), x_comp.length()/2, x_comp.thickness()/2);
             string seg_nam = c_nam + "." + _toString(i);
             Volume seg_vol(seg_nam, seg_box, description.material(x_comp.materialStr()));
 
