@@ -6,13 +6,21 @@
   Title: Micro Pattern Gas Detectors Cylindrical Barrel Layer
   Author: @ybedfer
   Status: development
-  Version: 2.1
+  Version: 2.2
 </documentation>
 
   <define>
     <comment>
-      Inner MPGD tracking layer (= CyMBaL)
-      Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
+      Inner MPGD tracking layer (=CyMBaL) with realistic pitch
+      Note: MPGDs come in two distinct flavours: pixel and 2DStrip, each tagged
+      with a distinctive setting of the "InnerMPGDBarrel_2DStrip" constant.
+      - 2DStrip is meant for the Multiple Sensitive Volume implementation of
+      the strip digitization in EICrecon's "MPGDTrackerDigi".
+      - Two of the Sensitive Volumes, '(phi|Z)StripThinGap", have a meaningful
+      Segmentation, with a pitch corresponding to that of the actual detector.
+      - The other three Sensitive Volumes are Helpers, used only in the
+      processing of MC data. The particulars of their segmentation are
+      disregarded by "MPGDTrackerDigi".
     </comment>
     <constant name="InnerMPGDBarrel_2DStrip"                value="1"/>
 
@@ -55,10 +63,17 @@
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin"/>
     <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSection_R + MMRadial_offset / 2 + 1*cm"/>
     <constant name="rmin2Sensor" value="MMDriftCuGround_thickness + MMDriftKapton_thickness + MMDriftCuElectrode_thickness + MMGasGap_thickness / 2" />
+    <comment> "MMModuleWidth" is to be understood as the width at the inner wall. Width expands as one moves away from it. </comment>
     <constant name="MMInnerSensor_R" value="MMInnerSection_R + rmin2Sensor" />
     <constant name="MMOuterSensor_R" value="MMOuterSection_R + rmin2Sensor" />
     <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSection_R" />
     <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSection_R" />
+    <comment> Strip layout: Pitch is derived from size and # of strips, assuming sensitive area to fill all available space. </comment>
+    <constant name="MMnStripsPhi"    value = "512" />
+    <constant name="MMInnerPitchPhi" value = "MMInnerAperture/MMnStripsPhi" />
+    <constant name="MMOuterPitchPhi" value = "MMOuterAperture/MMnStripsPhi" />
+    <constant name="MMnStripsZ"      value = "512" />
+    <constant name="MMPitchZ"        value = "MMModuleLength/MMnStripsZ" />
   </define>
 
   <detectors>
@@ -82,14 +97,14 @@
         <frame name="MMOutwardFrame" material="CarbonFiber" width="MMOutwardFrameWidth" vis="TrackerServiceVis" />
         <service name="MMInnerService" material="Kapton" thickness="MMInnerService_thickness" vis="TrackerServiceVis" /> <comment> This includes cables => Kapton as a material is overoptimistic. </comment>
         <comment> Going from the inside (sensitive) side to the readout side </comment>
-        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
-        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
+        <module_component name="DriftCuGround"    thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
+        <module_component name="DriftKapton"      thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
-        <module_component name="InnerRadiator"    thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="3" vis="TrackerMPGDGasVis"/>
-        <module_component name="pStripThinGap"    thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="1" vis="TrackerMPGDGasVis"/>
+        <module_component name="BotRadiator"      thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="3" vis="TrackerMPGDGasVis"/>
+        <module_component name="phiStripThinGap"  thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="1" vis="TrackerMPGDGasVis"/>
         <module_component name="ReferenceThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="0" vis="TrackerMPGDGasVis"/>
-        <module_component name="nStripThinGap"    thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="2" vis="TrackerMPGDGasVis"/>
-        <module_component name="OuterRadiator"    thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="4" vis="TrackerMPGDGasVis"/>
+        <module_component name="ZStripThinGap"    thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="2" vis="TrackerMPGDGasVis"/>
+        <module_component name="TopRadiator"      thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="4" vis="TrackerMPGDGasVis"/>
         <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" vis="TrackerVis"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" vis="TrackerMPGDGasVis"/>
@@ -124,22 +139,28 @@
 
   <readouts>
     <readout name="MPGDBarrelHits">
-      <comment> 768 strips in phi yield a segmentation of 2pi/8/768 ~= 1mrad. Which in turn, yields ~160 um in resolution.
+      <comment>
+        Each of the 5 Sensitive Volumes has a distinct segmentation tag, the
+        X-reference being done in the detector builder.
+        The grid_size's of the Helper Volumes (reference and radiators) are
+        arbitrary, to some extent.
+        Here, they are set equal to the detector's resolution. They may,
+        eventually, be set equal to its pitch.
       </comment>
       <segmentation type="MultiSegmentation" key="sensor">
         <segmentation name="Inner" type="MultiSegmentation" key_value="0" key="strip">
-          <segmentation name="InnerPix" type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R" />
-          <segmentation name="InnerPhi" type="CylindricalGridPhiZ" key_value="1" grid_size_phi="1*mrad"          grid_size_z="MMModuleLength"    radius="MMInnerSensor_R - MMThinGap_thickness" />
-          <segmentation name="InnerZ"   type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMInnerAperture" grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R + MMThinGap_thickness" />
-          <segmentation name="InnerBot" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
-          <segmentation name="InnerTop" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
+          <segmentation name="InnerRef"   type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R" />
+          <segmentation name="InnerPhi"    type="CylindricalGridPhiZ" key_value="1" grid_size_phi="MMInnerPitchPhi" grid_size_z="MMModuleLength"    radius="MMInnerSensor_R - MMThinGap_thickness" offset_phi="MMInnerPitchPhi/2" />
+          <segmentation name="InnerZ"      type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMInnerAperture" grid_size_z="MMPitchZ"          radius="MMInnerSensor_R + MMThinGap_thickness" offset_z="MMPitchZ/2" />
+          <segmentation name="InnerBotRad" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
+          <segmentation name="InnerTopRad" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
         </segmentation>
         <segmentation name="Outer" type="MultiSegmentation" key_value="1" key="strip">
           <segmentation name="OuterPix" type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R" />
-          <segmentation name="OuterPhi" type="CylindricalGridPhiZ" key_value="1" grid_size_phi="1*mrad"          grid_size_z="MMModuleLength"    radius="MMOuterSensor_R - MMThinGap_thickness" />
-          <segmentation name="OuterZ"   type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMOuterAperture" grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R + MMThinGap_thickness" />
-          <segmentation name="OuterTop" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
-          <segmentation name="OuterBot" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
+          <segmentation name="OuterPhi"    type="CylindricalGridPhiZ" key_value="1" grid_size_phi="MMOuterPitchPhi" grid_size_z="MMModuleLength"    radius="MMOuterSensor_R - MMThinGap_thickness" offset_phi="MMOuterPitchPhi/2" />
+          <segmentation name="OuterZ"      type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMOuterAperture" grid_size_z="MMPitchZ"          radius="MMOuterSensor_R + MMThinGap_thickness" offset_z="MMPitchZ/2" />
+          <segmentation name="OuterBotRad" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
+          <segmentation name="OuterTopRad" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
         </segmentation>
       </segmentation>
       <id>system:8,layer:4,module:12,sensor:2,strip:28:4,phi:-16,z:-16</id>

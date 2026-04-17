@@ -5,6 +5,7 @@
 #include "DD4hep/Printout.h"
 #include "GeometryHelpers.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 #include <algorithm>
 #include <iostream>
 #include <math.h>
@@ -114,6 +115,9 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   int detID               = detElem.id();
   DetElement det(detName, detID);
   sens.setType("calorimeter");
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
 
   // assembly
   Assembly assembly(detName);
