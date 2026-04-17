@@ -560,7 +560,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v18
+      uses: dawidd6/action-download-artifact@v20
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -628,7 +628,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v18
+      uses: dawidd6/action-download-artifact@v20
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -681,7 +681,7 @@ jobs:
       with:
         path: artifacts/
     - uses: actions/jekyll-build-pages@v1
-    - uses: actions/upload-pages-artifact@v4
+    - uses: actions/upload-pages-artifact@v5
       with:
         retention-days: 7
 
@@ -699,7 +699,7 @@ jobs:
     steps:
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v5
 
   cancel-container:
     if: cancelled() || failure()
