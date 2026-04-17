@@ -53,9 +53,17 @@ EOF
     fi
   fi
 done
-curl --location https://github.com/acts-project/acts/pull/4931.diff | patch -p1
-curl --location https://github.com/acts-project/acts/pull/5046.diff | patch -p1
-curl --location https://github.com/acts-project/acts/pull/5359.diff | patch -p1
+function patch_acts() {
+  local url="$1"
+  local file="$(basename "$1")"
+  if [ ! -e "$file" ]; then
+    wget "$url"
+    patch -p1 --forward --input-file="$file"
+  fi
+}
+patch_acts https://github.com/acts-project/acts/pull/4931.diff
+patch_acts https://github.com/acts-project/acts/pull/5046.diff
+patch_acts https://github.com/acts-project/acts/pull/5359.diff
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
