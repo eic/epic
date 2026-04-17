@@ -22,6 +22,7 @@
   </limits>
 
   <regions>
+    <region name="EcalEndcapPRegion"/>
   </regions>
 
   <display>
@@ -37,7 +38,8 @@
     <detector id="EcalEndcapP_ID"
       name="EcalEndcapP"
       type="epic_ForwardEcal"
-      readout="EcalEndcapPHits">
+      readout="EcalEndcapPHits"
+      region="EcalEndcapPRegion">
       <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="EcalEndcapP_length"/>
