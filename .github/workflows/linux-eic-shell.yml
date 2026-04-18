@@ -793,8 +793,9 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         echo "### Capybara summary for PR ${{ github.event.pull_request.number }}" >> capybara_${{ github.event.pull_request.number }}.md
-        find _site/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-          "- [%f](https://eicrecon.epic-eic.org/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md
+        [ -d _site/pr/${{ github.event.pull_request.number }}/capybara/ ] && \
+          find _site/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
+            "- [%f](https://eicrecon.epic-eic.org/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md || true
         echo "<sup><sub>Last updated $(TZ=America/New_York date -Iminutes) ${{github.event.pull_request.head.sha}}</sub></sup>" >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create capybara step summary
       if: ${{ github.event_name == 'pull_request' }}
@@ -825,6 +826,7 @@ jobs:
     steps:
     - name: Deploy to GitHub Pages
       id: deployment
+      continue-on-error: true
       uses: actions/deploy-pages@v5
     - name: Find capybara comment
       if: ${{ github.event_name == 'pull_request' }}
