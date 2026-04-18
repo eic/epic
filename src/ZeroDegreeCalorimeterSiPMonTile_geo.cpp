@@ -24,15 +24,15 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double height = dim.y(); // Size along y-axis
   double length = dim.z(); // Size along z-axis
 
-  xml_comp_t abs_dims = detElem.child("absorber_dimensions");
+  xml_comp_t abs_dims    = detElem.child("absorber_dimensions");
   double absorber_width  = abs_dims.attr<double>("width");
   double absorber_height = abs_dims.attr<double>("height");
 
   xml_comp_t scint_layout = detElem.child("scintillator_layout");
-  int nrows_even = scint_layout.attr<int>("nrows_even_layers");
-  int nrows_odd  = scint_layout.attr<int>("nrows_odd_layers");
-  int ncols_even = scint_layout.attr<int>("ncols_even_layers");
-  int ncols_odd  = scint_layout.attr<int>("ncols_odd_layers");
+  int nrows_even          = scint_layout.attr<int>("nrows_even_layers");
+  int nrows_odd           = scint_layout.attr<int>("nrows_odd_layers");
+  int ncols_even          = scint_layout.attr<int>("ncols_even_layers");
+  int ncols_odd           = scint_layout.attr<int>("ncols_odd_layers");
 
   double tile = scint_layout.attr<double>("tile_side_length");
 
