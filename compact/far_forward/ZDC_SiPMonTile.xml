@@ -44,13 +44,28 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_nrows_odd_layers" value= "11"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_ncols_even_layers" value= "11"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_ncols_odd_layers" value= "11"/>
-
+    
+    <scintillator_layout
+        nrows_even_layers="HcalFarForwardZDC_SiPMonTile_nrows_even_layers"
+        nrows_odd_layers="HcalFarForwardZDC_SiPMonTile_nrows_odd_layers"
+        ncols_even_layers="HcalFarForwardZDC_SiPMonTile_ncols_even_layers"
+        ncols_odd_layers="HcalFarForwardZDC_SiPMonTile_ncols_odd_layers"
+        tile_side_length="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
+    />
+    
     <constant name="HcalFarForwardZDC_SiPMonTile_length" value= "HcalFarForwardZDC_SiPMonTile_SingleLayerThickness*HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat +
            HcalFarForwardZDC_SiPMonTile_BackplateThickness"/>
 
     <constant name="HcalFarForwardZDC_SiPMonTile_absorber_width" value= "57.6*cm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_absorber_height" value= "58.8*cm"/>
 
+    <absorber_dimensions
+        width="HcalFarForwardZDC_SiPMonTile_absorber_width"
+        height="HcalFarForwardZDC_SiPMonTile_absorber_height"/>
+    
+    
+      
+    
     <constant name="HcalFarForwardZDC_SiPMonTile_rotateX_angle" value="0*deg"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_rotateY_angle" value="ionCrossingAngle"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_rotateZ_angle" value="0*deg"/>

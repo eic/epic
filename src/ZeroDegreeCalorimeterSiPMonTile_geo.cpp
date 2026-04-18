@@ -24,15 +24,17 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double height = dim.y(); // Size along y-axis
   double length = dim.z(); // Size along z-axis
 
-  double absorber_width  = desc.constant<double>("HcalFarForwardZDC_SiPMonTile_absorber_width");
-  double absorber_height = desc.constant<double>("HcalFarForwardZDC_SiPMonTile_absorber_height");
+  xml_comp_t abs_dims = detElem.child("absorber_dimensions");
+  double absorber_width  = abs_dims.attr<double>("width");
+  double absorber_height = abs_dims.attr<double>("height");
 
-  int nrows_even = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_nrows_even_layers");
-  int nrows_odd  = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_nrows_odd_layers");
-  int ncols_even = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_even_layers");
-  int ncols_odd  = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_odd_layers");
+  xml_comp_t scint_layout = detElem.child("scintillator_layout");
+  int nrows_even = scint_layout.attr<int>("nrows_even_layers");
+  int nrows_odd  = scint_layout.attr<int>("nrows_odd_layers");
+  int ncols_even = scint_layout.attr<int>("ncols_even_layers");
+  int ncols_odd  = scint_layout.attr<int>("ncols_odd_layers");
 
-  double tile = desc.constant<double>("HcalFarForwardZDC_SiPMonTile_SquareSideLength");
+  double tile = scint_layout.attr<double>("tile_side_length");
 
   xml_dim_t pos = detElem.position(); // Position in global coordinates
   xml_dim_t rot = detElem.rotation();
