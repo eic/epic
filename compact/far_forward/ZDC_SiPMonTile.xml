@@ -43,8 +43,8 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_nrows_even_layers" value= "12"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_nrows_odd_layers" value= "11"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_ncols_even_layers" value= "11"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_ncols_odd_layers" value= "11"/>
-    
+    <constant name="HcalFarForwardZDC_SiPMonTile_ncols_odd_layers" value= "11"/>    
+
     <constant name="HcalFarForwardZDC_SiPMonTile_length" value= "HcalFarForwardZDC_SiPMonTile_SingleLayerThickness*HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat +
            HcalFarForwardZDC_SiPMonTile_BackplateThickness"/>
 
