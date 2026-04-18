@@ -42,7 +42,7 @@ using ROOT::Math::XYVector;
  *  but a single XML <module> and a single <layer>.
  *
  * - Two distinct versions of ".xml" are covered:
- *  I) Single Sensitive Volume (which name is then "GasGap"): "eicrecon" is to
+ *  I) Single Sensitive Volume (which name is then "DriftGap"): "eicrecon" is to
  *   be executed while setting bit 0x1 of option "MPGD:SiFactoryPattern".
  * II) Multiple Sensitive Volume: Bit 0x1 of above-mentioned option not set.
  *
@@ -405,8 +405,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double comp_rmin        = stave_rmin;
     double thickness_so_far = 0;
     // Pattern of Multiple Sensitive Volumes
-    // - The "GasGap" may be subdivided into SUBVOLUMES (this order to have one
-    //  sensitive component per strip coordinate (and accessorily, some extras).
+    // - The "DriftGap" may be subdivided into SUBVOLUMES (this in order to
+    //  have one sensitive component per strip coordinate (and accessorily,
+    //  some extras).
     int nSensitives = 0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci) {
       xml_comp_t x_comp     = mci;
@@ -426,7 +427,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         }
         pv.addPhysVolID("sensor", sensor_number);
         // StripID. Single Sensitive Volume?
-        if (c_nam == "GasGap") {
+        if (c_nam == "DriftGap") {
           if (nSensitives != 0) {
             sensitiveVolumeSet = -1;
             break;
@@ -488,7 +489,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     } //end of module component loop
     if (sensitiveVolumeSet < 0 || sensitiveVolumeSet != nSensitives) {
       printout(ERROR, "MPGDCylinderBarrelTracker",
-               "Invalid set of Sensitive Volumes: it's either one (named \"GasGap\") or 5");
+               "Invalid set of Sensitive Volumes: it's either one (named \"DriftGap\") or 5");
       throw runtime_error("Logics error in building modules.");
     }
   } //end of stave model loop
