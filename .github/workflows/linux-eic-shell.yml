@@ -771,6 +771,8 @@ jobs:
         path: artifacts/
     - name: Build jekyll page
       uses: actions/jekyll-build-pages@v1
+    - name: Fix _site permissions
+      run: sudo chown -R $(id -u):$(id -g) _site/
     - name: Copy GitHub Pages staging content
       run: |
         for dir in artifacts/github-pages-staging-*/; do
@@ -782,8 +784,7 @@ jobs:
         echo "### PRs" >> _site/pr/index.md
         find _site/pr -mindepth 1 -maxdepth 1 -type d -printf "- [%f](%f/index.md)\n" | sort >> _site/pr/index.md
     - name: List content to publish
-      run:
-        find _site/
+      run: find _site/
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v5
       with:
