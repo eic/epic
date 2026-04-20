@@ -47,7 +47,7 @@
     <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 2*mm" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness" value="1.3*cm" />
+    <constant name="SiBarrelLayer_thickness" value="1.4*cm" />
     <constant name="SiBarrelMod1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
     <constant name="SiBarrelMod2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rc - SiBarrelLayer_thickness / 2" />
@@ -79,19 +79,21 @@
 
 <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
 <constant name="SiBarrelSiliconCurveRadius" value="90.035*mm" />
-<constant name="SiBarrelSiliconSpace" value="0.2*mm"/>
+<constant name="SiBarrelSiliconSpace1" value="0.815*mm"/>
+<constant name="SiBarrelSiliconSpace2" value="0.791*mm"/>
+
 <constant name="SiBarrelSiliconCurveHeight1" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave1_width/2)^2)" />
 <constant name="SiBarrelSiliconCurveHeight2" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave2_width/2)^2)" />
-<constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight1 - SiBarrelMod1Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace" />
-<constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight2 - SiBarrelMod2Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace" />
-<constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight1 + SiBarrelMod1Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace" />
-<constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight2 + SiBarrelMod2Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace" />
+<constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight1 - SiBarrelMod1Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace1" />
+<constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight2 - SiBarrelMod2Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace2" />
+<constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight1 + SiBarrelMod1Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace1" />
+<constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight2 + SiBarrelMod2Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace2" />
 <constant name="SiBarrelSiliconCurveHalfAngle1" value="asin(0.5*SiBarrelStave1_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconCurveHalfAngle2" value="asin(0.5*SiBarrelStave2_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconGapHalfAngle" value="atan(0.5*SiBarrelSiliconGap_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrel_ShortThickness" value="0.5*SiBarrelSensorMod_thickness" />
-<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod1Service_thickness + SiBarrelMod1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace + SiBarrelSiliconCurveHeight1"  />
-<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod2Service_thickness + SiBarrelMod2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod1Service_thickness + SiBarrelMod1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace1 + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod2Service_thickness + SiBarrelMod2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace2 + SiBarrelSiliconCurveHeight1"  />
 
 
   </define>
