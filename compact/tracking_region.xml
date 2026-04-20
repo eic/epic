@@ -19,6 +19,13 @@
     <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
     <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
 
+    <comment>
+      Additional constants for the purpose of defining the additional extrusion
+    </comment>
+    <constant name="tracker_region_forward_extrusion_zmax"   value="38 * m"/>
+    <constant name="tracker_region_forward_extrusion_rmax"   value="15 * cm"/>
+    <constant name="tracker_region_forward_extrusion_rot_y"  value="ionCrossingAngle"/>
+
   </define>
 
   <comment>
@@ -26,14 +33,17 @@
 
     Set `connected="true"` to make it visible in a geometry display
   </comment>
-  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="false" vis="VisibleBlue">
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true" vis="VisibleBlue">
     <comment>
       We first build a tube using the legacy parameters and add a ion beamline extrusion
     </comment>
     <shape type="BooleanShape" operation="Union">
-      <shape type="Tube" rmin="0*cm" rmax="tracker_region_rmax" dz="(tracker_region_zmax - tracker_region_zmin) / 2" />
-      <shape type="Tube" rmin="0*cm" rmax="1 * cm" dz="10 * m" />
-      <rotation x="0" y="ionCrossingAngle" z="0" />
+      <shape type="Tube" rmin="0 * cm" rmax="tracker_region_rmax" dz="(tracker_region_zmax - tracker_region_zmin) / 2" />
+      <shape type="Tube" rmin="0 * cm" rmax="tracker_region_forward_extrusion_rmax" dz="tracker_region_forward_extrusion_zmax / 2" />
+      <rotation x="0" y="tracker_region_forward_extrusion_rot_y" z="0" />
+      <position x="sin(tracker_region_forward_extrusion_rot_y) * tracker_region_forward_extrusion_zmax / 2"
+                y="0"
+                z="cos(tracker_region_forward_extrusion_rot_y) * tracker_region_forward_extrusion_zmax / 2" />
     </shape>
     <position x="0" y="0" z="(tracker_region_zmax + tracker_region_zmin) / 2" />
     <rotation x="0" y="0" z="0" />
