@@ -734,7 +734,7 @@ jobs:
         run: |
          echo "### Capybara summary for main" >> publishing_docs/capybara/index.md
          find publishing_docs/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-           "- [%f](https://eicrecon.epic-eic.org/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
+           "- [%f](https://eic.github.io/epic/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
       - name: Create capybara step summary (this PR)
         if: github.ref_name == 'main'
         run: |
@@ -796,7 +796,7 @@ jobs:
         echo "### Capybara summary for PR ${{ github.event.pull_request.number }}" >> capybara_${{ github.event.pull_request.number }}.md
         [ -d _site/pr/${{ github.event.pull_request.number }}/capybara/ ] && \
           find _site/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-            "- [%f](https://eicrecon.epic-eic.org/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md || true
+            "- [%f](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md || true
         echo "<sup><sub>Last updated $(TZ=America/New_York date -Iminutes) ${{github.event.pull_request.head.sha}}</sub></sup>" >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create capybara step summary
       if: ${{ github.event_name == 'pull_request' }}
