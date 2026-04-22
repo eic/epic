@@ -47,7 +47,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
 
   Assembly assembly(det_name);
-  assembly.setVisAttributes(description.invisible());
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
   // dimensions of the modules (2x2 sensors)

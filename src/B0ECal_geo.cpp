@@ -42,6 +42,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // assembly
   Assembly detVol(detName);
+  detVol.setAttributes(desc, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   xml_dim_t pos = x_det.position();
   xml_dim_t rot = x_det.rotation();

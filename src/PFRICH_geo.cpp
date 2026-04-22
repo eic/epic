@@ -133,6 +133,8 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto vesselGasName = detElem.attr<std::string>(_Unicode(gas));
   auto vesselGas     = description.material(vesselGasName);
   Volume pfRICH_volume(detName, pfRICH_volume_shape, vesselGas);
+  pfRICH_volume.setAttributes(description, detElem.regionStr(), detElem.limitsStr(),
+                              detElem.visStr());
   auto gasvolVis = description.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
   pfRICH_volume.setVisAttributes(gasvolVis);
 

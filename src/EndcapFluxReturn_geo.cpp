@@ -21,6 +21,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e,
   xml_comp_t x_pos     = x_det.position();
   dd4hep::Assembly assembly(det_name);
   dd4hep::DetElement sdet(det_name, det_id);
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   dd4hep::PlacedVolume pv;
 
   double disksGap = 0.0;

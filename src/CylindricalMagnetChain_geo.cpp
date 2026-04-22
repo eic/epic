@@ -25,6 +25,7 @@ static Ref_t create_magnet(Detector& description, xml_h e, SensitiveDetector /* 
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   Material m_Iron = description.material("Iron");
   string vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "FFMagnetVis");
 
