@@ -121,6 +121,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
   // assembly
   Assembly assembly(detName);
+  assembly.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
 
   // module placement
   xml::Component plm = detElem.child(_Unicode(placements));
