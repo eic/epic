@@ -32,7 +32,7 @@
   </comment>
   <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="false" vis="VisibleBlue">
     <comment>
-      We first build a tube using the legacy parameters and add a ion beamline extrusion
+      We first build a tube using the legacy parameters and add an ion beamline extrusion
     </comment>
     <shape type="BooleanShape" operation="Union">
       <shape type="Tube" rmin="0 * cm" rmax="tracker_region_rmax" dz="(tracker_region_zmax - tracker_region_zmin) / 2" />
