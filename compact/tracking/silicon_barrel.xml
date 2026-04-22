@@ -47,7 +47,7 @@
     <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 2*mm" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness" value="1.4*cm" />
+    <constant name="SiBarrelLayer_thickness" value="1.6*cm" />
     <constant name="SiBarrelMod1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
     <constant name="SiBarrelMod2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rc - SiBarrelLayer_thickness / 2" />
@@ -275,7 +275,7 @@
              length="SiBarrelSingleModule1_length"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-          <position x="0" y="-SiBarrel1_Module2_Position" z="SiBarrelUpperCurveAxis1" />
+          <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
         <module_component name="CurvedSi1L"
@@ -290,7 +290,7 @@
           length="SiBarrelSingleModule1_length"
           thickness="SiBarrelSensorMod_thickness"
           vis="TrackerLayerVis">
-          <position x="0" y="-SiBarrel1_Module2_Position" z="SiBarrelUpperCurveAxis1" />
+          <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
         <module_component name="CurvedSi3R"
@@ -305,7 +305,7 @@
              length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module2_Position - SiBarrel1_Length_Trim/2" z="SiBarrelUpperCurveAxis1" />
+          <position x="0" y="SiBarrel1_Module3_Position - SiBarrel1_Length_Trim/2" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
         <module_component name="CurvedSi3L"
@@ -320,7 +320,7 @@
           length="SiBarrelSingleModule1_length  - SiBarrel1_Length_Trim"
           thickness="SiBarrelSensorMod_thickness"
           vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module2_Position  - SiBarrel1_Length_Trim" z="SiBarrelUpperCurveAxis1" />
+          <position x="0" y="SiBarrel1_Module3_Position  - SiBarrel1_Length_Trim" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
         <module_component name="CurvedSi1C"
@@ -333,7 +333,7 @@
              length="SiBarrelSingleModule1_length"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-             <position x="0" y="-SiBarrel1_Module2_Position" z="SiBarrelUpperCurveAxis1" />
+             <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
          <module_component name="CurvedSi3C"
@@ -346,7 +346,7 @@
              length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module2_Position - SiBarrel1_Length_Trim/2" z="SiBarrelUpperCurveAxis1" />
+        <position x="0" y="SiBarrel1_Module3_Position - SiBarrel1_Length_Trim/2" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
       </module>
