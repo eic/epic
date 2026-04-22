@@ -40,7 +40,7 @@
       <rotation x="0" y="tracker_region_forward_extrusion_rot_y" z="0" />
       <position x="sin(tracker_region_forward_extrusion_rot_y) * tracker_region_forward_extrusion_zmax / 2"
                 y="0"
-                z="cos(tracker_region_forward_extrusion_rot_y) * tracker_region_forward_extrusion_zmax / 2" />
+                z="cos(tracker_region_forward_extrusion_rot_y) * tracker_region_forward_extrusion_zmax / 2 - (tracker_region_zmax + tracker_region_zmin) / 2" />
     </shape>
     <position x="0" y="0" z="(tracker_region_zmax + tracker_region_zmin) / 2" />
     <rotation x="0" y="0" z="0" />
