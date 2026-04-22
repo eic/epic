@@ -27,7 +27,7 @@
       <dimensions x="ZDC_1stSilicon_x" y="ZDC_1stSilicon_y" z="ZDC_1stSilicon_z"/>
       <layer nlayer="1" gapspace="ZDC_Si_Air_thickness">
         <slice name="silicon" material="Silicon" thickness="ZDC_pixel_thickness" vis="AnlRed"  sensitive="true"/>
-        <slice name="glue"  material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"  material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"   material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
 

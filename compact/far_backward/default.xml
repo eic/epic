@@ -4,6 +4,7 @@
 <lccdd>
 
   <include ref="magnets.xml"/>
+  <include ref="beamline_electron.xml"/>
 
   <!-- Scattered electron taggers -->
   <include ref="taggers.xml"/>

@@ -49,6 +49,11 @@ std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_
     const double phimax = getAttrOrDefault(
         x_child, _Unicode(phimax), getAttrOrDefault(x_support, _Unicode(phimax), 360.0 * deg));
     solid = Tube(rmin, rmin + thickness, length / 2, phimin, phimax);
+  } else if (type == "Box") {
+    const double box_x = getAttrOrDefault(x_child, _U(x), x_support.x());
+    const double box_y = getAttrOrDefault(x_child, _U(y), x_support.y());
+    const double box_z = getAttrOrDefault(x_child, _U(z), x_support.z());
+    solid              = Box(box_x / 2.0, box_y / 2.0, box_z / 2.0);
   }
   // A disk is a cylinder, constructed differently
   else if (type == "Disk") {
@@ -127,6 +132,16 @@ std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_
       }
       solid = Polycone(phimin, deltaphi, v_rmin, v_rmax, v_z);
     }
+  } else if (type == "Disk") {
+    const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
+    const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
+    const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
+    const double phimin    = getAttrOrDefault(
+        x_child, _Unicode(phimin), getAttrOrDefault(x_support, _Unicode(phimin), 0.0 * deg));
+    const double phimax = getAttrOrDefault(
+        x_child, _Unicode(phimax), getAttrOrDefault(x_support, _Unicode(phimax), 360.0 * deg));
+    pos3D = pos3D + Position(0, 0, -x_support.thickness() / 2 + thickness / 2 + offset);
+    solid = Tube(rmin, rmax, thickness / 2, phimin, phimax);
   } else {
     printout(ERROR, x_det.nameStr(), "Unknown support type: %s", type.c_str());
     std::exit(1);
@@ -145,6 +160,114 @@ std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_
   }
   return {vol, tr};
 }
+
+// Function to create a subtraction of multiple shapes
+std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xml_det_t& x_det,
+                                                 const xml_comp_t& x_subtraction) {
+
+  // Try generic multi-shape schema: <shape role="base"> + N x <shape role="hole">
+  Solid baseSolid;
+  bool baseSet           = false;
+  bool haveGenericShapes = false;
+  std::vector<std::pair<Solid, Transform3D>> holes;
+
+  for (xml_coll_t s{x_subtraction, _U(shape)}; s; ++s) {
+    haveGenericShapes = true;
+    xml_comp_t x_s    = s;
+
+    // Build solid for this child
+    auto [v, tr_unused] = build_shape(descr, x_det, x_s, x_s);
+    Solid sld           = v.solid();
+
+    // Relative transform (default identity) for this child
+    xml_dim_t x_pos(x_s.child(_U(position), false));
+    xml_dim_t x_rot(x_s.child(_U(rotation), false));
+    Position pos{0, 0, 0};
+    Rotation3D rot;
+    if (x_rot)
+      rot = RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+    if (x_pos)
+      pos = Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
+    Transform3D tr_rel(rot, pos);
+
+    const std::string role = getAttrOrDefault<std::string>(x_s, _Unicode(role), "hole");
+    if (role == "base" || role == "primary") {
+      baseSolid = sld;
+      baseSet   = true;
+    } else {
+      holes.emplace_back(sld, tr_rel);
+    }
+  }
+
+  // Backward compatibility: if no generic <shape> elements, use <shape1>/<shape2>
+  if (!haveGenericShapes) {
+    xml_comp_t x_shape1 = x_subtraction.child(_Unicode(shape1));
+    xml_comp_t x_shape2 = x_subtraction.child(_Unicode(shape2));
+    if (!x_shape1 || !x_shape2) {
+      printout(ERROR, x_det.nameStr(),
+               "Subtraction %s: expected shape1/shape2 or generic <shape> children.",
+               x_subtraction.nameStr().c_str());
+      std::exit(1);
+    }
+    auto [vol1, tr1_unused] = build_shape(descr, x_det, x_shape1, x_shape1);
+    auto [vol2, tr2_unused] = build_shape(descr, x_det, x_shape2, x_shape2);
+    baseSolid               = vol1.solid();
+    baseSet                 = true;
+
+    // Relative transform for shape2
+    xml_dim_t x_pos2(x_shape2.child(_U(position), false));
+    xml_dim_t x_rot2(x_shape2.child(_U(rotation), false));
+    Position pos2{0, 0, 0};
+    Rotation3D rot2;
+    if (x_rot2)
+      rot2 = RotationZYX(x_rot2.z(0), x_rot2.y(0), x_rot2.x(0));
+    if (x_pos2)
+      pos2 = Position(x_pos2.x(0), x_pos2.y(0), x_pos2.z(0));
+    holes.emplace_back(vol2.solid(), Transform3D(rot2, pos2));
+  }
+
+  if (!baseSet) {
+    printout(ERROR, x_det.nameStr(), "Subtraction %s: no base shape found (role=\"base\").",
+             x_subtraction.nameStr().c_str());
+    std::exit(1);
+  }
+
+  // Chain subtractions: base − hole1 − hole2 − ...
+  Solid current = baseSolid;
+  for (auto& h : holes) {
+    current = SubtractionSolid(current, h.first, h.second);
+  }
+
+  // Create the resulting volume
+  Material mat =
+      descr.material(getAttrOrDefault<std::string>(x_subtraction, _Unicode(material), "Air"));
+  std::string vol_name =
+      getAttrOrDefault<std::string>(x_subtraction, _Unicode(name), "subtraction_vol");
+  Volume vol{vol_name, current, mat};
+
+  // Overall placement of the resulting volume
+  xml_dim_t x_pos(x_subtraction.child(_U(position), false));
+  xml_dim_t x_rot(x_subtraction.child(_U(rotation), false));
+  Position pos3D{0, 0, 0};
+  Rotation3D rot3D;
+  if (x_rot)
+    rot3D = RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+  if (x_pos)
+    pos3D = Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
+  Transform3D tr(rot3D, pos3D);
+
+  // Set visualization if specified
+  if (x_subtraction.hasAttr(_U(vis))) {
+    vol.setVisAttributes(descr.visAttributes(x_subtraction.visStr()));
+  }
+
+  // Debug output
+  printout(DEBUG, "SupportServiceMaterial", "Created subtraction volume: %s (holes=%d)",
+           vol_name.c_str(), int(holes.size()));
+
+  return {vol, tr};
+}
+
 std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_t& x_det,
                                            const xml_comp_t& x_support, const double offset = 0) {
   return build_shape(descr, x_det, x_support, x_support, offset);
@@ -169,9 +292,14 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
 
   // Loop over the supports
   for (xml_coll_t su{x_det, _U(support)}; su; ++su) {
-    xml_comp_t x_sup         = su;
+    xml_comp_t x_sup   = su;
+    const double rot_z = getAttrOrDefault(x_sup, _U(phi0), 0.);
+    RotationZ rot(rot_z);
+    Transform3D tr_rot(
+        rot, Position(0, 0, 0)); // additional rotation of the module after position offset
+
     auto [vol, tr]           = build_shape(description, x_det, x_sup);
-    [[maybe_unused]] auto pv = assembly.placeVolume(vol, tr);
+    [[maybe_unused]] auto pv = assembly.placeVolume(vol, tr_rot * tr);
     // Loop over support components, if any
     double cumulative_thickness = 0;
     for (xml_coll_t com{x_sup, _U(component)}; com; ++com) {
@@ -180,6 +308,12 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
       vol.placeVolume(cvol, ctr);
       cumulative_thickness += x_com.thickness();
     }
+  }
+  // Loop over any subtraction volumes
+  for (xml_coll_t sub{x_det, _Unicode(subtraction)}; sub; ++sub) {
+    xml_comp_t x_sub = sub;
+    auto [vol, tr]   = build_subtraction(description, x_det, x_sub);
+    assembly.placeVolume(vol, tr);
   }
 
   // final placement

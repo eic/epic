@@ -2,13 +2,12 @@
 <!-- Copyright (C) 2024 Sylvester Joosten -->
 <lccdd>
 
-  <info name="bic_default"
-        title="Default ePIC BIC configuration with 4 AstroPix layers"
-        author="@sly2j"
-        url="https://github.com/sly2j"
-        status="development"
-        version="1.0"
-  ><comment/></info>
+  <documentation>
+    Title: Default ePIC BIC configuration with 4 AstroPix layers
+    Author: @sly2j
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
     <constant name="EcalBarrel_enable_staves_1" value="1"/>

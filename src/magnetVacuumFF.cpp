@@ -241,8 +241,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     double specialGapLength = sqrt(pow(z_beg[0] - endOfCentralBeamPipe_z, 2) +
                                    pow(x_beg[0] - endOfCentralBeamPipe_x, 2)) -
                               0.1;
-    double specialGap_z = 0.5 * specialGapLength * cos(crossingAngle) + endOfCentralBeamPipe_z;
-    double specialGap_x = 0.5 * specialGapLength * sin(crossingAngle) + endOfCentralBeamPipe_x;
+    double specialGap_z     = 0.5 * specialGapLength * cos(crossingAngle) + endOfCentralBeamPipe_z;
+    double specialGap_x     = 0.5 * specialGapLength * sin(crossingAngle) + endOfCentralBeamPipe_x;
 
     std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets);
 

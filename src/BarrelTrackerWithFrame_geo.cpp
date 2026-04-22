@@ -132,9 +132,14 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     double total_thickness = 0;
 
     // Compute module total thickness from components
+    // add pos z to allow several components being placed at the same z without double-counting the total thickness.
     xml_coll_t ci(x_mod, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      total_thickness += xml_comp_t(ci).thickness();
+      xml_comp_t x_pos = xml_comp_t(ci).position(false);
+      double mod_z_off = 0;
+      if (x_pos)
+        mod_z_off = x_pos.z(0);
+      total_thickness += xml_comp_t(ci).thickness() + mod_z_off;
     }
     // the module assembly volume
     Assembly m_vol(m_nam);
@@ -194,12 +199,20 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());
+      // Calculate thickness_so_far before setting sensitive surface so it can be used to calculate inner and outer thicknesses correctly
+      thickness_sum += x_comp.thickness();
+      thickness_so_far += x_comp.thickness();
+      // apply relative offsets in z-position used to stack components side-by-side
+      if (x_pos) {
+        thickness_sum += x_pos.z(0);
+        thickness_so_far += x_pos.z(0);
+      }
       if (x_comp.isSensitive()) {
         pv.addPhysVolID("sensor", sensor_number++);
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
-        module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
-                                     total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
+        module_thicknesses[m_nam] = {thickness_so_far - x_comp.thickness() / 2.0,
+                                     total_thickness - thickness_so_far + x_comp.thickness() / 2.0};
 
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
         Vector3D u(-1., 0., 0.);
@@ -221,13 +234,6 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
         volplane_surfaces[m_nam].push_back(surf);
 
         //--------------------------------------------
-      }
-      thickness_sum += x_comp.thickness();
-      thickness_so_far += x_comp.thickness();
-      // apply relative offsets in z-position used to stack components side-by-side
-      if (x_pos) {
-        thickness_sum += x_pos.z(0);
-        thickness_so_far += x_pos.z(0);
       }
     }
   }

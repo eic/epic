@@ -11,16 +11,15 @@ jobs:
   check-geometry-configs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v5
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
       with:
-        name: build-gcc-fast-eic-shell
+        name: build-gcc-nightly-fast-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{inputs.detector_configs}}"
