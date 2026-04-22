@@ -11,8 +11,8 @@ jobs:
   convert-to-tgeo:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v6
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -20,7 +20,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{inputs.detector_configs}}"
@@ -29,7 +28,7 @@ jobs:
             geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
             echo "::endgroup::" ;
           done
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v7
       with:
         name: tgeo
         path: "*.root"

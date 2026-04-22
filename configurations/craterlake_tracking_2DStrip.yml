@@ -1,0 +1,21 @@
+features:
+  beampipe:
+  fields:
+    marco:
+  tracking:
+    definitions_craterlake:
+    vertex_barrel:
+    vertex_barrel_support:
+    silicon_barrel:
+    mpgd_barrel_2DStrip:
+    support_service_craterlake:
+    mpgd_outerbarrel_2DStrip:
+    mpgd_forward_endcap:
+    mpgd_backward_endcap:
+    silicon_disks:
+    tof_barrel:
+    tof_endcap:
+  far_forward:
+    default:
+  far_backward:
+    default:

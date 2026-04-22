@@ -1086,6 +1086,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Assembly assembly(detName);
   PlacedVolume phv;
 
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
+
   int moduleIDx = -1;
   int moduleIDy = -1;
 
@@ -1162,8 +1165,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   Volume motherVol = desc.pickMotherVolume(det);
   phv              = env_vol.placeVolume(assembly);
-  phv              = motherVol.placeVolume(env_vol,
-                                           Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
+  phv = motherVol.placeVolume(env_vol,
+                              Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);
 
