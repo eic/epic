@@ -312,6 +312,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // volumes
   Volume vesselVol(detName, vesselSolid, vesselMat);
   Volume gasvolVol(detName + "_gas", gasvolSolid, gasvolMat);
+  vesselVol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
   vesselVol.setVisAttributes(vesselVis);
   gasvolVol.setVisAttributes(gasvolVis);
 

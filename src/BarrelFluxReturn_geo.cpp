@@ -19,7 +19,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e,
   dd4hep::Material air = description.air();
   Tube env_solid(x_dim.rmin(), x_dim.rmax(), x_dim.z() / 2.0);
   Volume env_vol(x_det.nameStr() + "_env", env_solid, air);
-  env_vol.setVisAttributes(description.visAttributes(x_det.visStr()));
+  env_vol.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   // Create volume map
   std::map<std::string, dd4hep::Volume> volumes_by_name;
