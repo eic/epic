@@ -5,9 +5,6 @@
 
   <comment>
     These are used by ddsim, the region where we store all secondaries
-
-    For now they are forced to be symmetric, and we cover up to the start of the backward ECAL.
-    (this means in the forward region we stop in the middle of the RICH).
   </comment>
 
   <define>
