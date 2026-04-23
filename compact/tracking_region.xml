@@ -19,7 +19,7 @@
     <comment>
       Additional constants for the purpose of defining the additional extrusion
     </comment>
-    <constant name="tracker_region_forward_extrusion_zmax"   value="38 * m"/>
+    <constant name="tracker_region_forward_extrusion_zmax"   value="36 * m"/>
     <constant name="tracker_region_forward_extrusion_rmax"   value="15 * cm"/>
     <constant name="tracker_region_forward_extrusion_rot_y"  value="ionCrossingAngle"/>
 
