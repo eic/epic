@@ -200,6 +200,14 @@ jobs:
       # NOTE: This list of detector configurations must be kept in sync with the configurations linked in README.md.
       detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
 
+  celeritas:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/celeritas.yml
+    with:
+      detector_configs: '["epic_craterlake_no_bhcal"]'
+
   dump-constants:
     runs-on: ubuntu-latest
     needs: build
