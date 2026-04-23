@@ -30,7 +30,7 @@
 
     Set `connected="true"` to make it visible in a geometry display
   </comment>
-  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="false" vis="VisibleBlue">
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="false" vis="BlueVis">
     <comment>
       We first build a tube using the legacy parameters and add an ion beamline extrusion
     </comment>
