@@ -63,6 +63,13 @@
 
   </define>
 
+  <limits>
+  </limits>
+
+  <regions>
+    <region name="EcalEndcapNRegion"/>
+  </regions>
+
   <detectors>
 
     <documentation level="10">
@@ -72,7 +79,8 @@
         id="EcalEndcapN_ID"
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
-        readout="EcalEndcapNHits">
+        readout="EcalEndcapNHits"
+        region="EcalEndcapNRegion">
       <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_envelope_length / 2.)"/>
       <rotation x="0" y="0." z="0"/>

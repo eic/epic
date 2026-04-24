@@ -112,6 +112,7 @@
   </limits>
 
   <regions>
+    <region name="EcalBarrelRegion"/>
   </regions>
 
   <display>
@@ -138,6 +139,7 @@
       type="epic_EcalBarrelImaging"
       readout="EcalBarrelImagingHits"
       calorimeterType="EM_BARREL"
+      region="EcalBarrelRegion"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
       <type_flags type="DetType_TRACKER + DetType_CALORIMETER + DetType_BARREL + DetType_ELECTROMAGNETIC"/>
