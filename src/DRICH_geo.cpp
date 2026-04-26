@@ -1,22 +1,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022, 2023 Christopher Dilks, Junhuai Xu
+// Copyright (C) 2022 - 2026 Christopher Dilks, Junhuai Xu, Luisa Occhiuto
 
-//==========================================================================
-//  dRICH: Dual Ring Imaging Cherenkov Detector
-//--------------------------------------------------------------------------
-//
-// Author: Christopher Dilks (Duke University)
-//
 // - Design Adapted from Standalone Fun4all and GEMC implementations
 //   [ Evaristo Cisbani, Cristiano Fanelli, Alessio Del Dotto, et al. ]
-//
-//==========================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
+#include <numeric>
+#include <sstream>
+#include <vector>
 
 #include <XML/Helper.h>
 
@@ -80,21 +75,27 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto radiatorRmax       = radiatorElem.attr<double>(_Unicode(rmax));
   auto radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
   auto radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
-
   // - aerogel
   auto aerogelElem      = radiatorElem.child(_Unicode(aerogel));
   auto aerogelMatName   = aerogelElem.attr<std::string>(_Unicode(material));
   auto aerogelMat       = desc.material(aerogelMatName);
   auto aerogelVis       = desc.visAttributes(aerogelElem.attr<std::string>(_Unicode(vis)));
   auto aerogelThickness = aerogelElem.attr<double>(_Unicode(thickness));
-
+  // - aerogel structure
+  auto coronasElem      = radiatorElem.child(_Unicode(coronas));
+  auto coronasMat       = desc.material(coronasElem.attr<std::string>(_Unicode(material)));
+  auto coronasVis       = desc.visAttributes(coronasElem.attr<std::string>(_Unicode(vis)));
+  auto coronasThickness = coronasElem.attr<double>(_Unicode(thickness));
+  int numCrowns         = coronasElem.attr<int>(_Unicode(num));
+  auto segmentationType = coronasElem.attr<std::string>("segmentation");
+  auto segmentsStr      = coronasElem.attr<std::string>(_Unicode(num_segments));
+  auto radiiStr         = coronasElem.attr<std::string>(_Unicode(radii));
   // - filter
   auto filterElem      = radiatorElem.child(_Unicode(filter));
   auto filterMatName   = filterElem.attr<std::string>(_Unicode(material));
   auto filterMat       = desc.material(filterMatName);
   auto filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   auto filterThickness = filterElem.attr<double>(_Unicode(thickness));
-
   // - airgap between filter and aerogel
   auto airgapElem      = radiatorElem.child(_Unicode(airgap));
   auto airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material)));
@@ -340,38 +341,135 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // BUILD RADIATOR ====================================================================
 
   // solid and volume: create aerogel and filter
-  Cone aerogelSolid(aerogelThickness / 2, radiatorRmin, radiatorRmax,
-                    radiatorRmin + boreDelta * aerogelThickness / vesselLength,
-                    radiatorRmax + snoutDelta * aerogelThickness / snoutLength);
-  Cone airgapSolid(airgapThickness / 2, radiatorRmin + boreDelta * aerogelThickness / vesselLength,
-                   radiatorRmax + snoutDelta * aerogelThickness / snoutLength,
-                   radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
-                   radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength);
-  Cone filterSolid(
-      filterThickness / 2,
-      radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
-      radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
-      radiatorRmin +
-          boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
-      radiatorRmax +
-          snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
 
-  Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
-  Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
-  Volume filterVol(detName + "_filter", filterSolid, filterMat);
-  aerogelVol.setVisAttributes(aerogelVis);
-  airgapVol.setVisAttributes(airgapVis);
-  filterVol.setVisAttributes(filterVis);
+  // ------------------------------------------------------------------------
+  Volume aerogelVol;
+  PlacedVolume aerogelPV;
+  DetElement aerogelDE;
+  double structureThickness = aerogelThickness;
+  auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * structureThickness) + originFront;
 
-  // aerogel placement and surface properties
-  // TODO [low-priority]: define skin properties for aerogel and filter
-  // FIXME: radiatorPitch might not be working correctly (not yet used)
-  auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
+  Cone aerogelSolid(aerogelThickness / 2.0, radiatorRmin, radiatorRmax,
+                    radiatorRmin + boreDelta * aerogelThickness / vesselLength, radiatorRmax);
   auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
                           RotationY(radiatorPitch);    // change polar angle to specified pitch
-  auto aerogelPV        = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
-  DetElement aerogelDE(det, "aerogel_de", 0);
+  aerogelVol            = Volume(detName + "_aerogel", aerogelSolid, aerogelMat);
+  aerogelVol.setVisAttributes(aerogelVis);
+  aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+  aerogelDE = DetElement(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
+
+  if (segmentationType == "trapezoidal") {
+    double crownHeight = structureThickness;
+    std::vector<int> numSegments;
+    std::stringstream ss(segmentsStr);
+    std::string val;
+    while (std::getline(ss, val, ',')) {
+      numSegments.push_back(std::stoi(val));
+    }
+
+    std::vector<double> radii;
+    std::stringstream radiiSS(radiiStr);
+    std::string radius;
+
+    while (std::getline(radiiSS, radius, ',')) {
+      radii.push_back(std::stod(radius));
+    }
+    std::vector<double> innerRadiusBottoms_half;
+    std::vector<double> innerRadiusTops_half;
+    std::vector<double> outerRadiusBottoms_half;
+    std::vector<double> outerRadiusTops_half;
+
+    // Create and place individual crown volumes
+    for (int i = 0; i < numCrowns; i++) {
+      double centralRadius = radii[i];
+      double rMinBottom, rMinTop, rMaxBottom, rMaxTop;
+
+      if (i == 0) {
+
+        rMinBottom = radiatorRmin - boreDelta * coronasThickness / vesselLength;
+        rMinTop    = rMinBottom + snoutDelta * aerogelThickness / snoutLength;
+        rMaxBottom = rMinBottom + boreDelta * coronasThickness / vesselLength;
+        rMaxTop    = rMinTop + boreDelta * coronasThickness / vesselLength;
+
+      } else {
+        double innerRadius = centralRadius - coronasThickness / 2.0;
+        double outerRadius = centralRadius + coronasThickness / 2.0;
+
+        // FIX PROTRUSION
+
+        if (i == numCrowns - 1) {
+          double safetyMargin = 0.05 * dd4hep::cm;
+          outerRadius -= safetyMargin;
+        }
+
+        rMinBottom = innerRadius;
+        rMinTop    = innerRadius;
+        rMaxBottom = outerRadius;
+        rMaxTop    = outerRadius;
+      }
+      innerRadiusBottoms_half.push_back(rMinBottom);
+      innerRadiusTops_half.push_back(rMinTop);
+      outerRadiusBottoms_half.push_back(rMaxBottom);
+      outerRadiusTops_half.push_back(rMaxTop);
+
+      Cone crownSolid(crownHeight / 2.0, rMinBottom, rMaxBottom, rMinTop, rMaxTop);
+      std::string crownName = "CarbonCrown_" + std::to_string(i);
+      Volume crownVol(crownName, crownSolid, coronasMat);
+      crownVol.setVisAttributes(coronasVis);
+
+      // Place crown volume directly in aerogel
+      aerogelVol.placeVolume(crownVol, Position(0., 0., 0.));
+    }
+
+    // Create and place individual segment volumes
+    for (int i = 0; i < numCrowns - 1; i++) {
+      int N = numSegments[i];
+
+      double rMin_Zminus = outerRadiusBottoms_half[i];
+      double rMax_Zminus = innerRadiusBottoms_half[i + 1];
+      double rMin_Zplus  = outerRadiusTops_half[i];
+      double rMax_Zplus  = innerRadiusTops_half[i + 1];
+
+      double segmentSpacing      = 2 * M_PI / N;
+      double segmentAngularWidth = coronasThickness / rMin_Zminus;
+
+      for (int p = 0; p < N; p++) {
+        double phiStart = p * segmentSpacing;
+        double phiEnd   = phiStart + segmentAngularWidth;
+
+        ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
+                                 rMax_Zplus, phiStart, phiEnd);
+        std::string segName = "CarbonSegment_" + std::to_string(i) + "_" + std::to_string(p);
+        Volume segVol(segName, segmentSolid, coronasMat);
+        segVol.setVisAttributes(coronasVis);
+
+        // Place segment volume directly in aerogel
+        aerogelVol.placeVolume(segVol, Position(0., 0., 0.));
+      }
+    } //crown
+  } //trapezoidal
+
+  else if (segmentationType == "square") {
+    printout(WARNING, "DRICH_geo", "Square segmentation requested but not implemented yet.");
+  } //Square
+
+  Cone airgapSolid(airgapThickness / 2.0,
+                   radiatorRmin + boreDelta * structureThickness / vesselLength, radiatorRmax,
+                   radiatorRmin + boreDelta * (structureThickness + airgapThickness) / vesselLength,
+                   radiatorRmax);
+  Cone filterSolid(filterThickness / 2.0,
+                   radiatorRmin + boreDelta * (structureThickness + airgapThickness) / vesselLength,
+                   radiatorRmax,
+                   radiatorRmin + boreDelta *
+                                      (structureThickness + airgapThickness + filterThickness) /
+                                      vesselLength,
+                   radiatorRmax);
+
+  Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
+  Volume filterVol(detName + "_filter", filterSolid, filterMat);
+  airgapVol.setVisAttributes(airgapVis);
+  filterVol.setVisAttributes(filterVis);
 
   // airgap and filter placement and surface properties
   if (!debugOptics) {
@@ -380,7 +478,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         Translation3D(radiatorPos) * // re-center to originFront
         RotationY(radiatorPitch) *   // change polar angle
         Translation3D(0., 0.,
-                      (aerogelThickness + airgapThickness) / 2.); // move to aerogel backplane
+                      (structureThickness + airgapThickness) / 2.); // move to aerogel backplane
     auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
@@ -390,7 +488,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         Translation3D(radiatorPos) *             // re-center to originFront
         RotationY(radiatorPitch) *               // change polar angle
         Translation3D(0., 0.,
-                      (aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
+                      (structureThickness + filterThickness) / 2.); // move to aerogel backplane
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
@@ -868,9 +966,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               addVecToMap("pos", sensorPos);
               addVecToMap("normX", sensorNormX);
               addVecToMap("normY", sensorNormY);
-              printout(VERBOSE, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
+              printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
               for (auto kv : pssVarMap->variantParameters)
-                printout(VERBOSE, "DRICH_geo", "    %s: %f", kv.first.c_str(),
+                printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
                          pssVarMap->get<double>(kv.first));
 #endif
               printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
