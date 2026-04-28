@@ -56,6 +56,7 @@
     <constant name="ForwardTOFRegion_maxR"        value="60.5*cm" />
     <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"        value="2.0*cm" />
+    <constant name="ForwardTOF_gap"               value="1*mm" />
     <constant name="ForwardTOF_length"            value="min(ForwardTOFRegion_length, 2.*cm)"/>
     <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 

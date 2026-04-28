@@ -333,12 +333,22 @@
         </module_component>
       </module>
 
+      <layer id="5" front="true" name="FrontGap">
+      <envelope vis="InvisibleNoDaughters"
+        rmin="ForwardTOFLayer_rmin"
+        rmax="ForwardTOFLayer_rmax"
+        zstart="ForwardTOF_zmin - ForwardTOF_gap"
+        thickness="ForwardTOF_gap"
+        xoffset="0"
+      />
+      </layer>
+
       <layer id="1" front="true" name="Front">
 
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-        zstart="ForwardTOF_zmin"
+        zstack="true"
         xoffset="-EndcapTOF_Board_spacing/2"
       />
 
@@ -658,6 +668,16 @@
                   <board nsensors="3"/>
                 </row>
         </layout>
+      </layer>
+
+      <layer id="6" front="false" name="BackGap">
+      <envelope vis="InvisibleNoDaughters"
+        rmin="ForwardTOFLayer_rmin"
+        rmax="ForwardTOFLayer_rmax"
+        zstack="true"
+        thickness="ForwardTOF_gap"
+        xoffset="0"
+      />
       </layer>
 
 
