@@ -5,7 +5,7 @@
   <fields>
     <field type="epic_FieldMapB" name="GlobalSolenoid" field_type="magnetic" coord_type="BrBz"
            field_map="fieldmaps/MARCO_v.7.6.2.2.11_1.7T_Magnetic_Field_Map_2024_05_02_rad_coords_cm_T.BMap.covfie"
-           url="https://github.com/eic/epic-data/raw/5a853e4e19f2072db725f1c96a97b2f7198c6a4b/MARCO_v.7.6.2.2.11_1.7T_Magnetic_Field_Map_2024_05_02_rad_coords_cm_T.BMap.covfie"
+           url="https://github.com/eic/epic-data/raw/4d6becf98579fbcee8812407e3198d337ea241f2/MARCO_v.7.6.2.2.11_1.7T_Magnetic_Field_Map_2024_05_02_rad_coords_cm_T.BMap.covfie"
            cache="$DETECTOR_CACHE:/opt/detector"
            scale="1.0">
     </field>
