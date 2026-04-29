@@ -25,6 +25,7 @@
 #include <covfie/core/algebra/affine.hpp>
 #include <covfie/core/backend/primitive/array.hpp>
 #include <covfie/core/backend/transformer/affine.hpp>
+#include <covfie/core/backend/transformer/clamp.hpp>
 #include <covfie/core/backend/transformer/nearest_neighbour.hpp>
 #include <covfie/core/backend/transformer/strided.hpp>
 #include <covfie/core/field.hpp>
@@ -40,14 +41,17 @@
 
 namespace po = boost::program_options;
 
-// Field types matching FieldMapB.cpp (linear ≡ nearest_neighbour on disk)
-using fieldBrBz_t = covfie::field<
-    covfie::backend::affine<covfie::backend::nearest_neighbour<covfie::backend::strided<
-        covfie::vector::size2, covfie::backend::array<covfie::vector::float2>>>>>;
+// Field types for writing. Both nearest_neighbour and linear are transparent on
+// disk (write_binary delegates directly, no header written). The writer uses
+// nearest_neighbour so that affine gets a float input type; the reader in
+// FieldMapB.cpp uses linear for interpolation. Binary format is affine<clamp<strided>>.
+using fieldBrBz_t = covfie::field<covfie::backend::affine<
+    covfie::backend::nearest_neighbour<covfie::backend::clamp<covfie::backend::strided<
+        covfie::vector::size2, covfie::backend::array<covfie::vector::float2>>>>>>;
 
-using fieldBxByBz_t = covfie::field<
-    covfie::backend::affine<covfie::backend::nearest_neighbour<covfie::backend::strided<
-        covfie::vector::size3, covfie::backend::array<covfie::vector::float3>>>>>;
+using fieldBxByBz_t = covfie::field<covfie::backend::affine<
+    covfie::backend::nearest_neighbour<covfie::backend::clamp<covfie::backend::strided<
+        covfie::vector::size3, covfie::backend::array<covfie::vector::float3>>>>>>;
 
 // Coordinates in the text field maps are in cm.
 // DD4hep's internal length unit is cm (dd4hep::cm == 1.0), so the affine
@@ -71,7 +75,8 @@ void convert_BrBz(const std::string& input_file, const std::string& output_file,
   fieldBrBz_t field(covfie::make_parameter_pack(
       fieldBrBz_t::backend_t::configuration_t(scaling * translation),
       fieldBrBz_t::backend_t::backend_t::configuration_t{},
-      fieldBrBz_t::backend_t::backend_t::backend_t::configuration_t{nr, nz}));
+      fieldBrBz_t::backend_t::backend_t::backend_t::configuration_t{{0UL, 0UL}, {nr - 1, nz - 1}},
+      fieldBrBz_t::backend_t::backend_t::backend_t::backend_t::configuration_t{nr, nz}));
   fieldBrBz_t::view_t fv(field);
 
   std::ifstream f(input_file);
@@ -117,7 +122,9 @@ void convert_BxByBz(const std::string& input_file, const std::string& output_fil
   fieldBxByBz_t field(covfie::make_parameter_pack(
       fieldBxByBz_t::backend_t::configuration_t(scaling * translation),
       fieldBxByBz_t::backend_t::backend_t::configuration_t{},
-      fieldBxByBz_t::backend_t::backend_t::backend_t::configuration_t{nx, ny, nz}));
+      fieldBxByBz_t::backend_t::backend_t::backend_t::configuration_t{{0UL, 0UL, 0UL},
+                                                                      {nx - 1, ny - 1, nz - 1}},
+      fieldBxByBz_t::backend_t::backend_t::backend_t::backend_t::configuration_t{nx, ny, nz}));
   fieldBxByBz_t::view_t fv(field);
 
   std::ifstream f(input_file);
