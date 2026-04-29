@@ -46,7 +46,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
-find_package(covfie REQUIRED)
+find_package(covfie 0.15 REQUIRED)
 find_package(Boost COMPONENTS program_options)
 find_package(IRT2 2.1.1)
 
