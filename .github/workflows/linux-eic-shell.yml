@@ -62,7 +62,7 @@ jobs:
           # Used for material map generation
           - CC: gcc
             CXX: g++
-            release: 25.09.0-stable
+            release: 26.01.0-stable
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
