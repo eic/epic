@@ -9,6 +9,7 @@
 #include <covfie/core/algebra/affine.hpp>
 #include <covfie/core/backend/primitive/array.hpp>
 #include <covfie/core/backend/transformer/affine.hpp>
+#include <covfie/core/backend/transformer/clamp.hpp>
 #include <covfie/core/backend/transformer/linear.hpp>
 #include <covfie/core/backend/transformer/morton.hpp>
 #include <covfie/core/backend/transformer/strided.hpp>
@@ -31,20 +32,20 @@ namespace fs = std::filesystem;
 #include "FileLoaderHelper.h"
 
 // Strided (default, matches on-disk file format)
-using fieldBrBz_strided_t =
-    covfie::field<covfie::backend::affine<covfie::backend::linear<covfie::backend::strided<
-        covfie::vector::size2, covfie::backend::array<covfie::vector::float2>>>>>;
-using fieldBxByBz_strided_t =
-    covfie::field<covfie::backend::affine<covfie::backend::linear<covfie::backend::strided<
-        covfie::vector::size3, covfie::backend::array<covfie::vector::float3>>>>>;
+using fieldBrBz_strided_t = covfie::field<
+    covfie::backend::affine<covfie::backend::linear<covfie::backend::clamp<covfie::backend::strided<
+        covfie::vector::size2, covfie::backend::array<covfie::vector::float2>>>>>>;
+using fieldBxByBz_strided_t = covfie::field<
+    covfie::backend::affine<covfie::backend::linear<covfie::backend::clamp<covfie::backend::strided<
+        covfie::vector::size3, covfie::backend::array<covfie::vector::float3>>>>>>;
 
 // Morton (space-filling curve layout for improved cache locality)
-using fieldBrBz_morton_t =
-    covfie::field<covfie::backend::affine<covfie::backend::linear<covfie::backend::morton<
-        covfie::vector::size2, covfie::backend::array<covfie::vector::float2>>>>>;
-using fieldBxByBz_morton_t =
-    covfie::field<covfie::backend::affine<covfie::backend::linear<covfie::backend::morton<
-        covfie::vector::size3, covfie::backend::array<covfie::vector::float3>>>>>;
+using fieldBrBz_morton_t = covfie::field<
+    covfie::backend::affine<covfie::backend::linear<covfie::backend::clamp<covfie::backend::morton<
+        covfie::vector::size2, covfie::backend::array<covfie::vector::float2>>>>>>;
+using fieldBxByBz_morton_t = covfie::field<
+    covfie::backend::affine<covfie::backend::linear<covfie::backend::clamp<covfie::backend::morton<
+        covfie::vector::size3, covfie::backend::array<covfie::vector::float3>>>>>>;
 
 // Variant types (monostate = not yet loaded)
 using fieldBrBz_t   = std::variant<std::monostate, fieldBrBz_strided_t, fieldBrBz_morton_t>;
@@ -175,8 +176,8 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale) {
   auto extract_bounds = [&](auto& f) {
     using T = std::decay_t<decltype(f)>;
     if constexpr (!std::is_same_v<T, std::monostate>) {
-      const auto& mat         = f.backend().get_configuration();
-      const auto& sizes       = f.backend().get_backend().get_backend().get_configuration();
+      const auto& mat   = f.backend().get_configuration();
+      const auto& sizes = f.backend().get_backend().get_backend().get_backend().get_configuration();
       constexpr std::size_t N = std::decay_t<decltype(sizes)>::dimensions;
       for (std::size_t i = 0; i < N; ++i) {
         bmin[i] = -mat(i, N) / mat(i, i);
