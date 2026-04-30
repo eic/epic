@@ -14,9 +14,9 @@
 //   def create_detector(description, xml_element, sens) -> dd4hep.DetElement
 //
 // Python module search path:
-//   The directory containing this plugin's compact XML (or $PYTHONPATH) is used.
-//   Optionally add a "pythonpath" attribute to the <detector> element to prepend
-//   an additional search directory.
+//   Python uses its normal module search path (for example, as configured by
+//   sys.path / $PYTHONPATH). Optionally add a "pythonpath" attribute to the
+//   <detector> element to prepend an additional search directory.
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
