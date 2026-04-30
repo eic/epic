@@ -56,6 +56,41 @@ static std::string expand_env(const std::string& input) {
   return out;
 }
 
+/// Escape a C++ string into a Python single-quoted string literal.
+/// Handles backslashes, quotes, newlines, and non-printable bytes.
+static std::string py_str(const std::string& value) {
+  std::string result = "'";
+  for (unsigned char c : value) {
+    switch (c) {
+    case '\\':
+      result += "\\\\";
+      break;
+    case '\'':
+      result += "\\'";
+      break;
+    case '\n':
+      result += "\\n";
+      break;
+    case '\r':
+      result += "\\r";
+      break;
+    case '\t':
+      result += "\\t";
+      break;
+    default:
+      if (c < 0x20 || c == 0x7f) {
+        char buf[8];
+        snprintf(buf, sizeof(buf), "\\x%02x", c);
+        result += buf;
+      } else {
+        result += static_cast<char>(c);
+      }
+    }
+  }
+  result += "'";
+  return result;
+}
+
 static Ref_t create_python_detector(Detector& description, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det  = e;
   std::string mod  = x_det.attr<std::string>(dd4hep::xml::Strng_t("module"));
@@ -75,15 +110,15 @@ static Ref_t create_python_detector(Detector& description, xml_h e, SensitiveDet
   std::ostringstream script;
   script << "import importlib.util, sys, cppyy\n";
   if (!pypath.empty()) {
-    script << "if '" << pypath << "' not in sys.path:\n"
-           << "    sys.path.insert(0, '" << pypath << "')\n";
+    script << "if " << py_str(pypath) << " not in sys.path:\n"
+           << "    sys.path.insert(0, " << py_str(pypath) << ")\n";
   }
-  script << "_m    = importlib.import_module('" << mod << "')\n"
+  script << "_m    = importlib.import_module(" << py_str(mod) << ")\n"
          << "_desc = cppyy.bind_object(" << desc_addr << ", 'dd4hep::Detector')\n"
          << "_xml  = cppyy.bind_object(" << xml_addr << ", 'dd4hep::xml::Handle_t')\n"
          << "_sens = cppyy.bind_object(" << sens_addr << ", 'dd4hep::SensitiveDetector')\n"
          << "try:\n"
-         << "    _res = _m." << func << "(_desc, _xml, _sens)\n"
+         << "    _res = getattr(_m, " << py_str(func) << ")(_desc, _xml, _sens)\n"
          << "except Exception:\n"
          << "    import traceback; traceback.print_exc()\n"
          << "    raise\n"
