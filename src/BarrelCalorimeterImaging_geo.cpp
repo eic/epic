@@ -318,64 +318,151 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
         // Place in xy_layout
         if (x_stave.hasChild(_Unicode(xy_layout))) {
-          auto module_str         = x_stave.moduleStr();
-          auto& module_volume     = volumes[module_str];
-          auto& module_sensitives = sensitives[module_str];
+          auto chip_str         = x_stave.moduleStr();
+          auto& chip_volume     = volumes[chip_str];
+          auto& chip_sensitives = sensitives[chip_str];
 
-          // Get layout grid pitch
+          // Get layout grid pitch and optional module grouping
           xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
           auto dx                = x_xy_layout.attr<double>(_Unicode(dx));
           auto dy                = x_xy_layout.attr<double>(_Unicode(dy));
 
-          // Default to filling
+          // Number of chips per module group (default 1 = no grouping)
+          int n_chips_per_module = getAttrOrDefault<int>(x_stave, _Unicode(module_repeat), 1);
+
           auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
-          auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules",
-                   stave_name.c_str(), nx, ny);
 
-          // Default to centered
+          // Default to centered x
           auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
-          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(ny - 1) * dy / 2.);
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
-                   stave_name.c_str(), x0, y0);
 
-          // Place modules using parameterised placement (G4PVParameterised), reducing
-          // N individual G4PVPlacement objects to one parameterised volume. Only a
-          // 1D layout (nx == 1) along the stave Y axis is supported; nx > 1 requires
-          // a 2D parameterisation with a different module-ID encoding.
+          // Only 1D layout (nx == 1) is supported
           if (nx != 1) {
             except("BarrelCalorimeterImaging",
                    "xy_layout with nx=%d is not supported; only nx=1 is implemented "
                    "(stave %s, layer %d)",
                    nx, stave_name.c_str(), layer_num);
           }
-          // With G4PVParameterised the copy number (0..ny-1) IS the module ID.
-          // physVolID is set only on the first (anchor) placement with value 0;
-          // all copies share that ID and use their copy number as the actual module ID.
-          int i_module = 0;
-          PlacedVolume first_pv =
-              stave_volume.paramVolume1D(Transform3D(Position(x0, y0, 0)), module_volume,
-                                         static_cast<size_t>(ny), Transform3D(Position(0, dy, 0)));
-          auto& placements = first_pv.data()->params->placements;
-          for (auto i_y = 0; i_y < ny; ++i_y, ++i_module) {
-            PlacedVolume module_physvol = placements[i_y];
-            std::string module_name     = _toString(i_module, "module%d");
-            DetElement module_element(stave_element, module_name, i_module);
-            if (i_y == 0) {
-              module_physvol.addPhysVolID("module", 0);
+
+          if (n_chips_per_module == 1) {
+            // ── Ungrouped mode: one paramVolume1D of all chips along stave ──
+            // The parameterization copy number (0..ny-1) is the module ID (chip=0 implicitly).
+            auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny),
+                                            static_cast<int>(floor(2. * stave_dim_y / dy)));
+            auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(y0), -(ny - 1) * dy / 2.);
+            printout(DEBUG, "BarrelCalorimeterImaging",
+                     "Stave %s layout with %d by %d modules (ungrouped)", stave_name.c_str(), nx,
+                     ny);
+            int i_module          = 0;
+            PlacedVolume first_pv = stave_volume.paramVolume1D(Transform3D(Position(x0, y0, 0)),
+                                                               chip_volume, static_cast<size_t>(ny),
+                                                               Transform3D(Position(0, dy, 0)));
+            auto& placements      = first_pv.data()->params->placements;
+            for (auto i_y = 0; i_y < ny; ++i_y, ++i_module) {
+              PlacedVolume module_physvol = placements[i_y];
+              std::string module_name     = _toString(i_module, "module%d");
+              DetElement module_element(stave_element, module_name, i_module);
+              if (i_y == 0) {
+                module_physvol.addPhysVolID("module", 0);
+              }
+              module_element.setPlacement(module_physvol);
+              for (auto& sensitive_physvol : chip_sensitives) {
+                DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
+                                             i_module);
+                sensitive_element.setPlacement(sensitive_physvol);
+                auto& sensitive_element_params =
+                    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+                        sensitive_element);
+                sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
+              }
             }
-            module_element.setPlacement(module_physvol);
-            for (auto& sensitive_physvol : module_sensitives) {
-              DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                           i_module);
-              sensitive_element.setPlacement(sensitive_physvol);
-              auto& sensitive_element_params =
-                  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-                      sensitive_element);
-              sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
+          } else {
+            // ── Grouped mode: module_repeat chips per module, n_modules modules ──
+            // module_dy is the module-to-module pitch (module_length + module_margin);
+            // ny is the explicit module count (required when module grouping is active).
+            double module_dy = x_xy_layout.attr<double>(_Unicode(module_dy));
+            int n_modules    = getAttrOrDefault<int>(
+                x_xy_layout, _Unicode(ny), static_cast<int>(floor(2. * stave_dim_y / module_dy)));
+            printout(DEBUG, "BarrelCalorimeterImaging",
+                     "Stave %s: %d modules of %d chips, module_pitch=%f mm", stave_name.c_str(),
+                     n_modules, n_chips_per_module, module_dy / dd4hep::mm);
+
+            // module_length = space occupied by chips inside one module (no inter-module margin)
+            double module_length     = n_chips_per_module * dy;
+            double chip_y0_in_module = -(n_chips_per_module - 1) * dy / 2.;
+
+            // Sanity checks
+            if (module_dy < module_length - 1e-6) {
+              except(
+                  "BarrelCalorimeterImaging",
+                  "module_dy (%.3f mm) is less than module_length (%.3f mm): chips would overlap "
+                  "(stave %s, layer %d)",
+                  module_dy / dd4hep::mm, module_length / dd4hep::mm, stave_name.c_str(),
+                  layer_num);
+            }
+            double occupied_length = (n_modules - 1) * module_dy + module_length;
+            if (occupied_length > 2. * stave_dim_y + 1e-6) {
+              except("BarrelCalorimeterImaging",
+                     "Modules do not fit in stave: %d modules occupy %.3f mm > stave "
+                     "length %.3f mm (stave %s, layer %d)",
+                     n_modules, occupied_length / dd4hep::mm, 2. * stave_dim_y / dd4hep::mm,
+                     stave_name.c_str(), layer_num);
+            }
+
+            // Build a Nitrogen-filled Box volume with a single chip-group Assembly daughter.
+            // TGeo requires paramVolume1D template volumes to have exactly 1 daughter.
+            std::string chip_grp_name   = stave_name + "_chip_group";
+            std::string module_vol_name = stave_name + "_module";
+            Assembly chip_group(chip_grp_name);
+            Box module_shape(stave_dim_x, module_length / 2., stave_dim_z);
+            Volume module_volume(module_vol_name, module_shape, desc.material("Nitrogen"));
+            module_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
+                                        x_stave.visStr());
+
+            // Place chips inside the chip-group assembly and collect placed volumes.
+            std::vector<PlacedVolume> chip_placements;
+            for (int i_c = 0; i_c < n_chips_per_module; ++i_c) {
+              double chip_y   = chip_y0_in_module + i_c * dy;
+              PlacedVolume pv = chip_group.placeVolume(chip_volume, Position(x0, chip_y, 0));
+              pv.addPhysVolID("chip", i_c);
+              chip_placements.push_back(pv);
+            }
+            // Single daughter of module Box → satisfies paramVolume1D constraint.
+            module_volume.placeVolume(chip_group);
+
+            // Place modules along the stave using a 1D parametrised volume.
+            // Module copy number (0..n_modules-1) IS the module ID.
+            double module_y0 = -(n_modules - 1) * module_dy / 2.;
+            printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s: %d modules starting at y=%f mm",
+                     stave_name.c_str(), n_modules, module_y0 / dd4hep::mm);
+            PlacedVolume first_module_pv = stave_volume.paramVolume1D(
+                Transform3D(Position(0, module_y0, 0)), module_volume,
+                static_cast<size_t>(n_modules), Transform3D(Position(0, module_dy, 0)));
+            first_module_pv.addPhysVolID("module", 0);
+            auto& module_placements = first_module_pv.data()->params->placements;
+
+            // Build DetElement tree: stave → module_N → chip_M
+            for (int i_mod = 0; i_mod < n_modules; ++i_mod) {
+              PlacedVolume module_physvol = module_placements[i_mod];
+              DetElement module_element(stave_element, _toString(i_mod, "module%d"), i_mod);
+              module_element.setPlacement(module_physvol);
+
+              for (int i_c = 0; i_c < n_chips_per_module; ++i_c) {
+                int chip_id = i_mod * n_chips_per_module + i_c;
+                DetElement chip_element(module_element, _toString(i_c, "chip%d"), i_c);
+                chip_element.setPlacement(chip_placements[i_c]);
+                for (auto& sensitive_physvol : chip_sensitives) {
+                  DetElement sensitive_element(chip_element, sensitive_physvol.volume().name(),
+                                               chip_id);
+                  sensitive_element.setPlacement(sensitive_physvol);
+                  auto& sensitive_element_params =
+                      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+                          sensitive_element);
+                  sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
+                }
+              }
             }
           }
-          slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
+          slice_pos_z += module_thicknesses[chip_str][0] + module_thicknesses[chip_str][1];
         }
 
         // Loop over the slices for this stave
