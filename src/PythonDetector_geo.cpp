@@ -23,6 +23,7 @@
 #include "TPython.h"
 
 #include <cstdint>
+#include <cstdlib>
 #include <sstream>
 #include <string>
 
