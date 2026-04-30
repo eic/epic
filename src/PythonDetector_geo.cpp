@@ -81,8 +81,11 @@ static Ref_t create_python_detector(Detector& description, xml_h e, SensitiveDet
          << "_desc = cppyy.bind_object(" << desc_addr << ", 'dd4hep::Detector')\n"
          << "_xml  = cppyy.bind_object(" << xml_addr << ", 'dd4hep::xml::Handle_t')\n"
          << "_sens = cppyy.bind_object(" << sens_addr << ", 'dd4hep::SensitiveDetector')\n"
-         << "_res  = _m." << func
-         << "(_desc, _xml, _sens)\n"
+         << "try:\n"
+         << "    _res = _m." << func << "(_desc, _xml, _sens)\n"
+         << "except Exception:\n"
+         << "    import traceback; traceback.print_exc()\n"
+         << "    raise\n"
          // Swap the result into the global C++ DetElement so C++ can retrieve it.
          << "cppyy.gbl.ROOT.Internal.SwapWithObjAtAddr['dd4hep::DetElement']("
          << "_res, " << result_addr << ")\n";

@@ -19,23 +19,6 @@ from epic_geo_helpers import *  # noqa: F401,F403
 
 
 def create_detector(description, xml_element, sens):
-    """
-    Create a simple disk detector (layered endcap).
-
-    Parameters
-    ----------
-    description : dd4hep::Detector &
-    xml_element : dd4hep::xml::Handle_t  (the <detector> node)
-    """
-    try:
-        return _create_detector_impl(description, xml_element, sens)
-    except Exception:
-        import traceback
-        traceback.print_exc()
-        raise
-
-
-def _create_detector_impl(description, xml_element, sens):
     x_det    = xml_det_t(xml_element)
     air      = description.air()
     det_name = x_det.nameStr()
