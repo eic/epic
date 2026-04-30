@@ -365,8 +365,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
             }
             module_element.setPlacement(module_physvol);
             for (auto& sensitive_physvol : module_sensitives) {
-              DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                           i_y);
+              DetElement sensitive_element(module_element, sensitive_physvol.volume().name(), i_y);
               sensitive_element.setPlacement(sensitive_physvol);
               auto& sensitive_element_params =
                   DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
