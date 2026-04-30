@@ -352,22 +352,21 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           // With G4PVParameterised the copy number (0..ny-1) IS the module ID.
           // physVolID is set only on the first (anchor) placement with value 0;
           // all copies share that ID and use their copy number as the actual module ID.
-          int i_module = 0;
           PlacedVolume first_pv =
               stave_volume.paramVolume1D(Transform3D(Position(x0, y0, 0)), module_volume,
                                          static_cast<size_t>(ny), Transform3D(Position(0, dy, 0)));
           auto& placements = first_pv.data()->params->placements;
-          for (auto i_y = 0; i_y < ny; ++i_y, ++i_module) {
+          for (auto i_y = 0; i_y < ny; ++i_y) {
             PlacedVolume module_physvol = placements[i_y];
-            std::string module_name     = _toString(i_module, "module%d");
-            DetElement module_element(stave_element, module_name, i_module);
+            std::string module_name     = _toString(i_y, "module%d");
+            DetElement module_element(stave_element, module_name, i_y);
             if (i_y == 0) {
               module_physvol.addPhysVolID("module", 0);
             }
             module_element.setPlacement(module_physvol);
             for (auto& sensitive_physvol : module_sensitives) {
               DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                           i_module);
+                                           i_y);
               sensitive_element.setPlacement(sensitive_physvol);
               auto& sensitive_element_params =
                   DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
