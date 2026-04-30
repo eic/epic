@@ -34,23 +34,23 @@ using namespace dd4hep;
 static dd4hep::DetElement _epic_python_det_result;
 
 // Expand ${VAR} environment variable references in a string path.
-static std::string expand_env(const std::string& s) {
+static std::string expand_env(const std::string& input) {
   std::string out;
-  for (std::size_t i = 0; i < s.size();) {
-    if (s[i] == '$' && i + 1 < s.size() && s[i + 1] == '{') {
-      std::size_t end = s.find('}', i + 2);
+  for (std::size_t i = 0; i < input.size();) {
+    if (input[i] == '$' && i + 1 < input.size() && input[i + 1] == '{') {
+      std::size_t end = input.find('}', i + 2);
       if (end != std::string::npos) {
-        std::string var = s.substr(i + 2, end - i - 2);
+        std::string var = input.substr(i + 2, end - i - 2);
         const char* val = std::getenv(var.c_str());
         if (val)
           out += val;
         else
-          out += s.substr(i, end - i + 1);
+          out += input.substr(i, end - i + 1);
         i = end + 1;
         continue;
       }
     }
-    out += s[i++];
+    out += input[i++];
   }
   return out;
 }
