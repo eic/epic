@@ -573,7 +573,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v20
+      uses: dawidd6/action-download-artifact@v21
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -642,7 +642,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v20
+      uses: dawidd6/action-download-artifact@v21
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -693,7 +693,7 @@ jobs:
     steps:
       - name: Download capybara artifact (other PRs)
         id: download_capybara
-        uses: dawidd6/action-download-artifact@v20
+        uses: dawidd6/action-download-artifact@v21
         if: github.event.pull_request.number != matrix.pr
         with:
           commit: ${{ matrix.head_sha }}
@@ -724,7 +724,7 @@ jobs:
       # - If we run this on the main branch, we have to download from this pipeline with download-artifact.
       - name: Download capybara artifact (in PR)
         id: download_capybara
-        uses: dawidd6/action-download-artifact@v20
+        uses: dawidd6/action-download-artifact@v21
         if: github.ref_name != 'main'
         with:
           branch: main
