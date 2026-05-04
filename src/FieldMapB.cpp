@@ -245,9 +245,9 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
 
     // convert Br Bz to Bx By Bz and rotate field
     const float phi = atan2(p.y(), p.x());
-    auto B          = fieldRot.has_value()
-                          ? fieldRot.value() * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz)
-                          : ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
+    auto B = fieldRot.has_value()
+                 ? fieldRot.value() * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz)
+                 : ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
     field[0] += B.x();
     field[1] += B.y();
     field[2] += B.z();

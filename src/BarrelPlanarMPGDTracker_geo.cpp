@@ -36,10 +36,13 @@ using namespace dd4hep::rec;
  *   and surrounds the rectangular perimeter)
  * - Detector is setup as a "tracker" so we can use the hits
  *
- * - Two distinct versions of ".xml" are covered:
- *  I) Single Sensitive Volume (which name is then "DriftGap"): "eicrecon" is to
- *   be executed while setting bit 0x2 of option "MPGD:SiFactoryPattern".
- * II) Multiple Sensitive Volume: Bit 0x2 of above-mentioned option not set.
+ * - Two distinct versions of XML are covered:
+ *  I) Multiple Sensitive Volume (fileName typically tagged "_2DStrip"),
+ * II) Single Sensitive Volume (which single volume is then named "DriftGap").
+ *   The XMLs have a distinctive setting of the <constant>
+ *        "MPGDOuterBarrel_2DStrip",
+ *   which "eicrecon" bases itself on to determine which version is in force.
+ *   This can still be overridden by option "MPGD:SiFactoryPattern".
  *
  */
 static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
@@ -138,8 +141,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   int nSensitives = 0;
   for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
     xml_comp_t x_comp     = mci;
-    string c_nam          = _toString(ncomponents, "component%d");
-    string comp_name      = x_comp.nameStr();
+    string c_nam          = x_comp.nameStr();
     double comp_thickness = x_comp.thickness();
     double box_width      = x_comp.width();
     double box_length     = x_comp.length();
@@ -157,23 +159,23 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     // FIXME: these module names are hard coded for now. Should find
     // a way to set an attribute via the module tag to flag what components
     // need to have frame thickness subtracted.
-    bool isDriftGap = comp_name == "DriftGap" ||
-                      /* */ comp_name.find("ThinGap") != std::string::npos ||
-                      /* */ comp_name.find("Radiator") != std::string::npos;
-    if (isDriftGap || comp_name == "WindowGasGap") {
+    bool isDriftGap = c_nam == "DriftGap" ||
+                      /* */ c_nam.find("ThinGap") != std::string::npos ||
+                      /* */ c_nam.find("Radiator") != std::string::npos;
+    if (isDriftGap || c_nam == "WindowGasGap") {
       box_width            = x_comp.width() - 2.0 * frame_width;
       box_length           = x_comp.length() - 2.0 * frame_width;
       max_component_width  = box_width;
       max_component_length = box_length;
       gas_thickness += comp_thickness;
       c_box = {box_width / 2, box_length / 2, comp_thickness / 2};
-      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "gas: %s", comp_name.c_str());
+      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "gas: %s", c_nam.c_str());
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_width: %f", box_width);
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_length: %f", box_length);
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_thickness: %f", comp_thickness);
     } else {
       c_box = {x_comp.width() / 2, x_comp.length() / 2, comp_thickness / 2};
-      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "Not gas: %s", comp_name.c_str());
+      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "Not gas: %s", c_nam.c_str());
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_width: %f", x_comp.width());
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_length: %f", x_comp.length());
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_thickness: %f", comp_thickness);
@@ -197,7 +199,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       }
       pv.addPhysVolID("sensor", sensor_number);
       // StripID. Single Sensitive Volume?
-      if (comp_name == "DriftGap") {
+      if (c_nam == "DriftGap") {
         if (nSensitives != 0) {
           sensitiveVolumeSet = -1;
           break;
@@ -319,7 +321,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   }
 
   double phi0     = x_layout.phi0();     // starting phi of first module
-  double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
+  double phi_tilt = x_layout.phi_tilt(); // Phi tilt of module
   double rc       = x_layout.rc();       // Radius of the module
   int nphi        = x_layout.nphi();     // Number of modules in phi
   double rphi_dr  = x_layout.dr();       // The delta radius of every other module

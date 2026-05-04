@@ -73,6 +73,7 @@
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
         readout="EcalEndcapNHits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_envelope_length / 2.)"/>
       <rotation x="0" y="0." z="0"/>
       <placements>
