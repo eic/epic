@@ -19,6 +19,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include <fmt/core.h>
@@ -93,6 +94,29 @@ struct TilePrototype {
   vector<VolPlane> surfaces;
 };
 
+// Layer-local corrugated carbon frame configuration from:
+// <frame type="corrugated" material="..." thickness="..." h="..."
+//        theta="..." d="..." y0="..." z_center_offset="..." vis="..."/>
+// The frame is an insensitive layer support component. It reuses the same
+// DiskBoundary as the tiled modules, so XML users do not duplicate disk geometry.
+struct CorrugatedFrameConfig {
+  string name{"frame"};
+  string material{"CarbonFiber"};
+  string vis{"TrackerSupportVis"};
+  double thickness{0.2 * mm};
+  double height{4.2 * mm};
+  double theta{36.0 * degree};
+  double half_pitch{15.8 * mm};
+  double y0{0.0};
+  double z_center_offset{0.0};
+};
+
+// Axis-aligned y footprint used to require full containment in the disk x-y cross-section.
+struct FrameFootprint {
+  double y_min{0.0};
+  double y_max{0.0};
+};
+
 // Trim whitespace around CSV fields and free-form text values.
 string trim(string value) {
   auto not_space = [](unsigned char ch) { return !std::isspace(ch); };
@@ -150,6 +174,7 @@ bool parse_facing(const string& value, bool& facing_positive_z) {
   return false;
 }
 
+// to do: add RSU structure, as well as detailed of the module.
 // Build the small set of supported tiled-disk module types.
 map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   // Workflow note:
@@ -178,7 +203,7 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     }
     return module_template;
   };
-
+  // hard-coded EIC-LAS module size.
   map<string, ModuleTemplate> module_templates;
   module_templates.emplace("EIC_LAS_6RSU", build("EIC_LAS_6RSU", 130.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_5RSU", build("EIC_LAS_5RSU", 105.0 * mm, 30.0 * mm));
@@ -244,6 +269,207 @@ bool tile_inside_disk(const TileRow& row, const DiskBoundary& disk) {
     return false;
   }
   return true;
+}
+
+// Remove an x interval occupied by a circular opening from the candidate row span.
+void subtract_interval(vector<pair<double, double>>& intervals, double remove_min,
+                       double remove_max) {
+  vector<pair<double, double>> kept;
+  for (const auto& [x_min, x_max] : intervals) {
+    if (remove_max <= x_min || remove_min >= x_max) {
+      kept.emplace_back(x_min, x_max);
+      continue;
+    }
+    if (remove_min > x_min) {
+      kept.emplace_back(x_min, std::min(remove_min, x_max));
+    }
+    if (remove_max < x_max) {
+      kept.emplace_back(std::max(remove_max, x_min), x_max);
+    }
+  }
+  intervals = kept;
+}
+
+// Compute x spans where the full row footprint remains inside the annulus and
+// outside the beampipe openings. Returned spans may be shortened/split, but each
+// placed box is fully contained by construction.
+vector<pair<double, double>> contained_x_intervals(const DiskBoundary& disk,
+                                                   const FrameFootprint& footprint) {
+  const double tolerance = 1.0e-6 * mm;
+  const double y_abs_max = std::max(std::abs(footprint.y_min), std::abs(footprint.y_max));
+  if (y_abs_max >= disk.rmax - tolerance) {
+    return {};
+  }
+
+  const double outer_x = std::sqrt(disk.rmax * disk.rmax - y_abs_max * y_abs_max) - tolerance;
+  if (outer_x <= 0.0) {
+    return {};
+  }
+
+  vector<pair<double, double>> intervals{{-outer_x, outer_x}};
+
+  auto subtract_circle = [&](double center_x, double center_y, double radius) {
+    if (radius <= 0.0) {
+      return;
+    }
+
+    double dy = 0.0;
+    if (center_y < footprint.y_min) {
+      dy = footprint.y_min - center_y;
+    } else if (center_y > footprint.y_max) {
+      dy = center_y - footprint.y_max;
+    }
+    if (dy >= radius) {
+      return;
+    }
+
+    const double dx = std::sqrt(radius * radius - dy * dy) + tolerance;
+    subtract_interval(intervals, center_x - dx, center_x + dx);
+  };
+
+  subtract_circle(0.0, 0.0, disk.rmin);
+  if (disk.has_beampipe_opening) {
+    subtract_circle(disk.lepton_opening.center_x, disk.lepton_opening.center_y,
+                    disk.lepton_opening.radius);
+    subtract_circle(disk.hadron_opening.center_x, disk.hadron_opening.center_y,
+                    disk.hadron_opening.radius);
+  }
+
+  intervals.erase(std::remove_if(intervals.begin(), intervals.end(),
+                                 [](const auto& interval) {
+                                   return interval.second - interval.first <= 2.0e-6 * mm;
+                                 }),
+                  intervals.end());
+  return intervals;
+}
+
+// Parse the tiled-layer frame block. Only type="corrugated" is handled here; other
+// frame types can be added later without changing the layer or tile placement logic.
+bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
+  const string frame_type = getAttrOrDefault<string>(x_frame, _Unicode(type), "");
+  if (frame_type != "corrugated") {
+    return false;
+  }
+
+  config.name            = getAttrOrDefault<string>(x_frame, _Unicode(name), config.name);
+  config.material        = getAttrOrDefault<string>(x_frame, _Unicode(material), config.material);
+  config.vis             = getAttrOrDefault<string>(x_frame, _Unicode(vis), config.vis);
+  config.thickness       = getAttrOrDefault(x_frame, _Unicode(thickness), config.thickness);
+  config.height          = getAttrOrDefault(x_frame, _Unicode(h), config.height);
+  config.theta           = getAttrOrDefault(x_frame, _Unicode(theta), config.theta);
+  config.half_pitch      = getAttrOrDefault(x_frame, _Unicode(d), config.half_pitch);
+  config.y0              = getAttrOrDefault(x_frame, _Unicode(y0), config.y0);
+  config.z_center_offset = getAttrOrDefault(x_frame, _Unicode(z_center_offset),
+                                            config.z_center_offset);
+  return true;
+}
+
+// Place the corrugated carbon frame as an insensitive layer component.
+// Assumptions:
+// - h is the surface-to-surface peak/valley envelope.
+// - d is half the pitch between same-surface flat-strip centers.
+// - theta is the web angle with respect to the x-y plane.
+// - y0=0 keeps the central lower flat centered at y=0; it is split there so no
+//   single frame volume crosses the xz plane.
+int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
+                           const CorrugatedFrameConfig& config) {
+  if (config.thickness <= 0.0 || config.height <= config.thickness ||
+      config.half_pitch <= 0.0 || config.theta <= 0.0) {
+    printout(WARNING, "TileEndcapTracker",
+             fmt::format("skipping corrugated frame for disk '{}': invalid dimensions",
+                         disk.disk_key));
+    return 0;
+  }
+
+  const double y_step       = config.height / std::tan(config.theta);
+  const double flat_length  = config.half_pitch - y_step;
+  const double center_delta = config.height - config.thickness;
+  if (flat_length <= 0.0 || center_delta <= 0.0) {
+    printout(WARNING, "TileEndcapTracker",
+             fmt::format("skipping corrugated frame for disk '{}': flat length is non-positive",
+                         disk.disk_key));
+    return 0;
+  }
+
+  Material frame_material = description.material(config.material);
+  const double z_low      = config.z_center_offset - center_delta / 2.0;
+  const double z_high     = config.z_center_offset + center_delta / 2.0;
+  const double web_angle  = std::atan2(center_delta, y_step);
+  const double web_length = std::hypot(center_delta, y_step);
+  const int n_min = static_cast<int>(std::floor((-disk.rmax - config.y0) /
+                                                (2.0 * config.half_pitch))) -
+                    2;
+  const int n_max = static_cast<int>(std::ceil((disk.rmax - config.y0) /
+                                               (2.0 * config.half_pitch))) +
+                    2;
+
+  int placed_count = 0;
+  int frame_index  = 0;
+
+  auto place_piece = [&](const string& kind, double y_center, double y_half_span, double z_center,
+                         double local_y_half, double local_z_half, double angle) {
+    const double y_min = y_center - y_half_span;
+    const double y_max = y_center + y_half_span;
+    vector<tuple<double, double, double>> segments{{y_min, y_max, local_y_half}};
+    if (y_min < 0.0 && y_max > 0.0) {
+      if (std::abs(angle) > 1.0e-12 || std::abs(y_half_span - local_y_half) > 1.0e-9 * mm) {
+        // Sloped pieces are not split because their projected y span does not map
+        // linearly to the local box axis; skip them instead of crossing y=0.
+        return;
+      }
+      segments = {{y_min, 0.0, (0.0 - y_min) / 2.0}, {0.0, y_max, (y_max - 0.0) / 2.0}};
+    }
+
+    for (const auto& [segment_y_min, segment_y_max, segment_local_y_half] : segments) {
+      if (segment_y_max - segment_y_min <= 1.0e-9 * mm) {
+        continue;
+      }
+      const double segment_y_center = (segment_y_min + segment_y_max) / 2.0;
+      const FrameFootprint footprint{segment_y_min, segment_y_max};
+      const auto intervals = contained_x_intervals(disk, footprint);
+      for (const auto& [x_min, x_max] : intervals) {
+        const double x_half = (x_max - x_min) / 2.0;
+        if (x_half <= 0.0) {
+          continue;
+        }
+
+        const double x_center = (x_min + x_max) / 2.0;
+        const string volume_name =
+            fmt::format("{}_{}_{}_{}", disk.disk_key, config.name, kind, frame_index++);
+        Box frame_solid(x_half, segment_local_y_half, local_z_half);
+        Volume frame_vol(volume_name, frame_solid, frame_material);
+        frame_vol.setVisAttributes(description.visAttributes(config.vis));
+        layer_vol.placeVolume(frame_vol,
+                              Transform3D(RotationZYX(0.0, 0.0, angle),
+                                          Position(x_center, segment_y_center, z_center)));
+        ++placed_count;
+      }
+    }
+  };
+
+  const double flat_y_half      = flat_length / 2.0;
+  const double flat_z_half      = config.thickness / 2.0;
+  const double web_y_half       = web_length / 2.0;
+  const double web_z_half       = config.thickness / 2.0;
+  const double web_y_projection = std::abs(std::cos(web_angle)) * web_y_half +
+                                  std::abs(std::sin(web_angle)) * web_z_half;
+
+  for (int n = n_min; n <= n_max; ++n) {
+    const double lower_y = config.y0 + 2.0 * n * config.half_pitch;
+    const double upper_y = config.y0 + (2.0 * n + 1.0) * config.half_pitch;
+
+    place_piece("lower_flat", lower_y, flat_y_half, z_low, flat_y_half, flat_z_half, 0.0);
+    place_piece("upper_flat", upper_y, flat_y_half, z_high, flat_y_half, flat_z_half, 0.0);
+
+    const double positive_web_y = lower_y + flat_length / 2.0 + y_step / 2.0;
+    const double negative_web_y = lower_y - flat_length / 2.0 - y_step / 2.0;
+    place_piece("web_pos", positive_web_y, web_y_projection, config.z_center_offset, web_y_half,
+                web_z_half, web_angle);
+    place_piece("web_neg", negative_web_y, web_y_projection, config.z_center_offset, web_y_half,
+                web_z_half, -web_angle);
+  }
+
+  return placed_count;
 }
 
 // Construct the mother volume solid for one layer.
@@ -578,6 +804,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       xml_comp_t x_layer_material = lmat;
       DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
                                                       "layer_material");
+    }
+
+    for (xml_coll_t fi(x_layer, _U(frame)); fi; ++fi) {
+      // Layer frame workflow:
+      // A type="corrugated" frame is an insensitive carbon support component that
+      // shares this tiled layer's envelope, z placement, reflection, and openings.
+      xml_comp_t x_frame(fi);
+      CorrugatedFrameConfig frame_config;
+      if (!parse_corrugated_frame(x_frame, frame_config)) {
+        continue;
+      }
+      const int placed_frame_count =
+          place_corrugated_frame(description, layer_vol, disk, frame_config);
+      if (placed_frame_count == 0) {
+        printout(WARNING, "TileEndcapTracker",
+                 fmt::format("no corrugated frame pieces placed for '{}' disk '{}'", det_name,
+                             disk.disk_key));
+      }
     }
 
     int placed_in_layer = 0;
