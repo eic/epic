@@ -231,11 +231,9 @@ string resolve_input_file(const string& configured_path) {
   return configured_path;
 }
 
-// Check whether a tile rectangle fits inside the layer cross-section.
-// The tiled-disk fallback expects the XML rmin to match the centered lepton
-// beampipe radius, while the shifted hadron opening remains a placement-only
-// cut. Reject any rectangle intersecting either circular exclusion, not just
-// tiles with corners inside the hole.
+// Check whether a tile rectangle fits inside the layer cross-section. For layers
+// with explicit openings, reject any rectangle intersecting either beampipe
+// exclusion circle, not just tiles with corners inside the hole.
 bool tile_inside_disk(const TileRow& row, const DiskBoundary& disk) {
   const array<pair<double, double>, 4> corners{{
       {row.x_min, row.y_min},
@@ -472,13 +470,32 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   return placed_count;
 }
 
-// Construct the mother volume solid for one layer.
-// Without a beampipe opening this is the legacy tube. With an opening, keep an
-// ACTS-friendly centered annulus using the XML rmin/rmax values, where rmin is
-// expected to be the centered lepton beampipe radius; the shifted hadron
-// opening stays in the placement filtering only.
+// Construct the Geant4/DD4hep truth envelope for one tiled layer. Layers with
+// beampipe openings use a boolean solid so the mother volume follows both the
+// lepton and hadron pipe cutouts; ACTS gets explicit envelope parameters later.
 Solid build_disk_solid(const string&, const DiskBoundary& disk) {
-  return Tube(disk.rmin, disk.rmax, disk.length / 2.0);
+  if (!disk.has_beampipe_opening) {
+    return Tube(disk.rmin, disk.rmax, disk.length / 2.0);
+  }
+
+  const double cut_half_length = disk.length;
+  Solid disk_solid            = Tube(0.0, disk.rmax, disk.length / 2.0);
+  auto subtract_opening = [&](const DiskBoundary::CircularOpening& opening) {
+    Tube opening_cut(0.0, opening.radius, cut_half_length);
+    disk_solid =
+        SubtractionSolid(disk_solid, opening_cut,
+                         Position(opening.center_x, opening.center_y, 0.0));
+  };
+
+  subtract_opening(disk.lepton_opening);
+  const bool same_opening =
+      std::abs(disk.lepton_opening.center_x - disk.hadron_opening.center_x) < 1e-9 &&
+      std::abs(disk.lepton_opening.center_y - disk.hadron_opening.center_y) < 1e-9 &&
+      std::abs(disk.lepton_opening.radius - disk.hadron_opening.radius) < 1e-9;
+  if (!same_opening) {
+    subtract_opening(disk.hadron_opening);
+  }
+  return disk_solid;
 }
 
 // Ensure the placed module thickness fits within the XML layer thickness.
@@ -749,9 +766,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_beampipe_opening(x_layer.child(_Unicode(beampipe_opening), false));
     if (x_beampipe_opening) {
       // The opening describes the beampipe exclusion in the layer-local x-y plane as
-      // two circles: the centered lepton pipe and the shifted hadron pipe. The
-      // fallback mother solid uses the XML rmin, which should match the lepton
-      // radius; both circles remain active for placement rejection.
+      // two circles: the centered lepton pipe and the shifted hadron pipe. Both
+      // circles define the subtraction envelope and remain active for tile rejection.
       disk.has_beampipe_opening = true;
       disk.lepton_opening.center_x =
           getAttrOrDefault(x_beampipe_opening, _Unicode(lepton_center_x), 0.0);
@@ -770,13 +786,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                  fmt::format("detector '{}' disk '{}' has non-positive beampipe opening radii",
                              det_name, disk.disk_key));
         std::_Exit(EXIT_FAILURE);
-      }
-      if (std::abs(disk.rmin - disk.lepton_opening.radius) > 1e-9) {
-        printout(WARNING, "TileEndcapTracker",
-                 fmt::format("detector '{}' disk '{}' uses rmin={} mm but lepton_radius={} mm; "
-                             "the mother annulus follows rmin, so these should match",
-                             det_name, disk.disk_key, disk.rmin / mm,
-                             disk.lepton_opening.radius / mm));
       }
     }
     string layer_name = det_name + string("_layer") + to_string(layer_id);
@@ -805,6 +814,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
                                                       "layer_material");
     }
+    // Give ACTS the simple layer envelope tolerances used by B0-style assembly
+    // layers while the DD4hep volume keeps the exact beampipe subtraction solid.
+    layerParams.set<double>("envelope_r_min", 0 * dd4hep::mm / dd4hep::mm);
+    layerParams.set<double>("envelope_r_max", 0 * dd4hep::mm / dd4hep::mm);
+    layerParams.set<double>("envelope_z_min", dd4hep::mm / dd4hep::mm);
+    layerParams.set<double>("envelope_z_max", dd4hep::mm / dd4hep::mm);
 
     for (xml_coll_t fi(x_layer, _U(frame)); fi; ++fi) {
       // Layer frame workflow:
