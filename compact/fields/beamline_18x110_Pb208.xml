@@ -4,7 +4,7 @@
   <define>
 
     <constant name="ElectronBeamEnergy" value="18*GeV"  />
-    <constant name="IonBeamEnergy"      value="22549.28*GeV" /> <!-- for Pb-207 at 108.41 GeV/n -->
+    <constant name="IonBeamEnergy"      value="22549.28*GeV" /> <!-- for Pb-208 at 108.41 GeV/n -->
 
     <constant name="FieldScaleFactor" value="275.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
 
