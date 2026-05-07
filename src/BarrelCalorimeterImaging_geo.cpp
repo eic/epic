@@ -335,7 +335,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
           // Default to centered
           auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
-          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(ny - 1) * dy / 2.);
+          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(y0), -(ny - 1) * dy / 2.);
           printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
                    stave_name.c_str(), x0, y0);
 

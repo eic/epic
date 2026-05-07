@@ -24,6 +24,18 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double height = dim.y(); // Size along y-axis
   double length = dim.z(); // Size along z-axis
 
+  xml_comp_t abs_dims    = detElem.child("absorber_dimensions");
+  double absorber_width  = abs_dims.attr<double>("width");
+  double absorber_height = abs_dims.attr<double>("height");
+
+  xml_comp_t scint_layout = detElem.child("scintillator_layout");
+  int nrows_even          = scint_layout.attr<int>("nrows_even_layers");
+  int nrows_odd           = scint_layout.attr<int>("nrows_odd_layers");
+  int ncols_even          = scint_layout.attr<int>("ncols_even_layers");
+  int ncols_odd           = scint_layout.attr<int>("ncols_odd_layers");
+
+  double tile = scint_layout.attr<double>("tile_side_length");
+
   xml_dim_t pos = detElem.position(); // Position in global coordinates
   xml_dim_t rot = detElem.rotation();
 
@@ -68,7 +80,28 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         Material slice_mat     = desc.material(x_slice.materialStr());
         slice_z += slice_thickness / 2.; // Going to slice halfway point
 
-        Box slice(width / 2., height / 2., slice_thickness / 2.);
+        double slice_width, slice_height, slice_x, slice_y;
+        if (x_slice.nameStr() == "ESRFoil_slice" or x_slice.nameStr() == "Scintillator_slice") {
+          if (i % 2 == 0) {
+            slice_width  = ncols_even * tile;
+            slice_height = nrows_even * tile;
+            slice_x      = tile / 4;
+            slice_y      = -tile / 4;
+          }
+          if (i % 2 == 1) {
+            slice_width  = ncols_odd * tile;
+            slice_height = nrows_odd * tile;
+            slice_x      = -tile / 4;
+            slice_y      = -tile / 4;
+          }
+        } else { //absorber
+          slice_width  = absorber_width;
+          slice_height = absorber_height;
+          slice_x      = 0;
+          slice_y      = (-nrows_even / 2 + 1 / 4) * tile + absorber_height / 2;
+        }
+
+        Box slice(slice_width / 2., slice_height / 2., slice_thickness / 2.);
 
         Volume slice_vol(slice_name, slice, slice_mat);
 
@@ -82,8 +115,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 
         // Placing slice within layer
-        pv = layer_vol.placeVolume(slice_vol,
-                                   Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
+        pv = layer_vol.placeVolume(
+            slice_vol, Transform3D(RotationZYX(0, 0, 0), Position(slice_x, slice_y, slice_z)));
         pv.addPhysVolID("slice", slice_num);
         slice_z += slice_thickness / 2.;
         z_distance_traversed += slice_thickness;
