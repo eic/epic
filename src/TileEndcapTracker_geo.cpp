@@ -349,16 +349,16 @@ bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
     return false;
   }
 
-  config.name            = getAttrOrDefault<string>(x_frame, _Unicode(name), config.name);
-  config.material        = getAttrOrDefault<string>(x_frame, _Unicode(material), config.material);
-  config.vis             = getAttrOrDefault<string>(x_frame, _Unicode(vis), config.vis);
-  config.thickness       = getAttrOrDefault(x_frame, _Unicode(thickness), config.thickness);
-  config.height          = getAttrOrDefault(x_frame, _Unicode(h), config.height);
-  config.theta           = getAttrOrDefault(x_frame, _Unicode(theta), config.theta);
-  config.half_pitch      = getAttrOrDefault(x_frame, _Unicode(d), config.half_pitch);
-  config.y0              = getAttrOrDefault(x_frame, _Unicode(y0), config.y0);
-  config.z_center_offset = getAttrOrDefault(x_frame, _Unicode(z_center_offset),
-                                            config.z_center_offset);
+  config.name       = getAttrOrDefault<string>(x_frame, _Unicode(name), config.name);
+  config.material   = getAttrOrDefault<string>(x_frame, _Unicode(material), config.material);
+  config.vis        = getAttrOrDefault<string>(x_frame, _Unicode(vis), config.vis);
+  config.thickness  = getAttrOrDefault(x_frame, _Unicode(thickness), config.thickness);
+  config.height     = getAttrOrDefault(x_frame, _Unicode(h), config.height);
+  config.theta      = getAttrOrDefault(x_frame, _Unicode(theta), config.theta);
+  config.half_pitch = getAttrOrDefault(x_frame, _Unicode(d), config.half_pitch);
+  config.y0         = getAttrOrDefault(x_frame, _Unicode(y0), config.y0);
+  config.z_center_offset =
+      getAttrOrDefault(x_frame, _Unicode(z_center_offset), config.z_center_offset);
   return true;
 }
 
@@ -371,11 +371,11 @@ bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
 //   single frame volume crosses the xz plane.
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
                            const CorrugatedFrameConfig& config) {
-  if (config.thickness <= 0.0 || config.height <= config.thickness ||
-      config.half_pitch <= 0.0 || config.theta <= 0.0) {
-    printout(WARNING, "TileEndcapTracker",
-             fmt::format("skipping corrugated frame for disk '{}': invalid dimensions",
-                         disk.disk_key));
+  if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
+      config.theta <= 0.0) {
+    printout(
+        WARNING, "TileEndcapTracker",
+        fmt::format("skipping corrugated frame for disk '{}': invalid dimensions", disk.disk_key));
     return 0;
   }
 
@@ -394,12 +394,10 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   const double z_high     = config.z_center_offset + center_delta / 2.0;
   const double web_angle  = std::atan2(center_delta, y_step);
   const double web_length = std::hypot(center_delta, y_step);
-  const int n_min = static_cast<int>(std::floor((-disk.rmax - config.y0) /
-                                                (2.0 * config.half_pitch))) -
-                    2;
-  const int n_max = static_cast<int>(std::ceil((disk.rmax - config.y0) /
-                                               (2.0 * config.half_pitch))) +
-                    2;
+  const int n_min =
+      static_cast<int>(std::floor((-disk.rmax - config.y0) / (2.0 * config.half_pitch))) - 2;
+  const int n_max =
+      static_cast<int>(std::ceil((disk.rmax - config.y0) / (2.0 * config.half_pitch))) + 2;
 
   int placed_count = 0;
   int frame_index  = 0;
@@ -445,12 +443,12 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
     }
   };
 
-  const double flat_y_half      = flat_length / 2.0;
-  const double flat_z_half      = config.thickness / 2.0;
-  const double web_y_half       = web_length / 2.0;
-  const double web_z_half       = config.thickness / 2.0;
-  const double web_y_projection = std::abs(std::cos(web_angle)) * web_y_half +
-                                  std::abs(std::sin(web_angle)) * web_z_half;
+  const double flat_y_half = flat_length / 2.0;
+  const double flat_z_half = config.thickness / 2.0;
+  const double web_y_half  = web_length / 2.0;
+  const double web_z_half  = config.thickness / 2.0;
+  const double web_y_projection =
+      std::abs(std::cos(web_angle)) * web_y_half + std::abs(std::sin(web_angle)) * web_z_half;
 
   for (int n = n_min; n <= n_max; ++n) {
     const double lower_y = config.y0 + 2.0 * n * config.half_pitch;
@@ -479,12 +477,11 @@ Solid build_disk_solid(const string&, const DiskBoundary& disk) {
   }
 
   const double cut_half_length = disk.length;
-  Solid disk_solid            = Tube(0.0, disk.rmax, disk.length / 2.0);
-  auto subtract_opening = [&](const DiskBoundary::CircularOpening& opening) {
+  Solid disk_solid             = Tube(0.0, disk.rmax, disk.length / 2.0);
+  auto subtract_opening        = [&](const DiskBoundary::CircularOpening& opening) {
     Tube opening_cut(0.0, opening.radius, cut_half_length);
-    disk_solid =
-        SubtractionSolid(disk_solid, opening_cut,
-                         Position(opening.center_x, opening.center_y, 0.0));
+    disk_solid = SubtractionSolid(disk_solid, opening_cut,
+                                  Position(opening.center_x, opening.center_y, 0.0));
   };
 
   subtract_opening(disk.lepton_opening);
