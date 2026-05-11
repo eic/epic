@@ -512,8 +512,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       mirrorTheta2 = M_PI;
     }
 
-    // solid : create sphere at origin, with specified angular limits;
-    // phi limits are increased to fill gaps (overlaps are cut away later)
+    // solid: create sphere at origin with the specified radial and theta limits;
+    // phi trimming is applied later via intersection with the pie-slice wedge
     Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2);
 
     // mirror placement transformation (note: transformations are in reverse order)
