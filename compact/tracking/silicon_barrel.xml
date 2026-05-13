@@ -13,18 +13,18 @@
     <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness*2.7" /> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
     <constant name="SiBarrelSiliconGap_width" value="1*mm" />
 
-    <constant name="SiBarrelMod1Service_thickness" value="0.07875*mm" />
-    <constant name="SiBarrelMod2Service_thickness" value="0.066045*mm" />
-    <constant name="SiBarrelMod1Frame_thickness" value="0.06*mm" />
-    <constant name="SiBarrelMod2Frame_thickness" value="0.12*mm" />
+    <constant name="SiBarrelStave1Service_thickness" value="0.07875*mm" />
+    <constant name="SiBarrelStave2Service_thickness" value="0.066045*mm" />
+    <constant name="SiBarrelStave1Frame_thickness" value="0.06*mm" />
+    <constant name="SiBarrelStave2Frame_thickness" value="0.12*mm" />
     <constant name="SiBarrelStave1_width" value="3.888*cm" />
     <constant name="SiBarrelStave2_width" value="3.888*cm" />
 
    <constant name="SiBarrel1_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
    <constant name="SiBarrel2_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
 
-    <constant name="SiBarrelMod1_length" value="50.3*cm - SiBarrel1_Length_Trim"/>
-    <constant name="SiBarrelMod2_length" value="79.3*cm - SiBarrel2_Length_Trim" />
+    <constant name="SiBarrelStave1_length" value="50.3*cm - SiBarrel1_Length_Trim"/>
+    <constant name="SiBarrelStave2_length" value="79.3*cm - SiBarrel2_Length_Trim" />
 
     <constant name="SiBarrelSingleModule1_length" value="13.0*cm"/>
     <constant name="SiBarrelSingleModule2_length" value="10.833*cm" />
@@ -43,24 +43,24 @@
    <constant name="SiBarrel2_Module6_Position" value="244.66*mm" />
    <constant name="SiBarrel2_Module7_Position" value="342.47*mm" />
 
-    <constant name="SiBarrelLayer1_length" value="SiBarrelMod1_length + 0.3*cm" />
-    <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 2*mm" />
+    <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
+    <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
     <constant name="SiBarrelLayer_thickness" value="1.6*cm" />
-    <constant name="SiBarrelMod1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
-    <constant name="SiBarrelMod2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
-   <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rc - SiBarrelLayer_thickness / 2" />
+    <constant name="SiBarrelStave1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
+    <constant name="SiBarrelStave2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
+   <constant name="SiBarrelLayer1_rmin" value="SiBarrelStave1_rc - SiBarrelLayer_thickness / 2" />
     <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
-    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rc -  SiBarrelLayer_thickness / 2 " />
+    <constant name="SiBarrelLayer2_rmin" value="SiBarrelStave2_rc -  SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
     <constant name="SiBarrelStave1_count" value="44" />
     <constant name="SiBarrelStave2_count" value="70" />
     <constant name="SiBarrel1_radius_castellation" value="6*mm" />
     <constant name="SiBarrel2_radius_castellation" value="6*mm" />
-    <constant name="SiBarrelMod1Lower_rc"         value="SiBarrelMod1_rc-SiBarrel1_radius_castellation/2" /> <!--get rmin of the lower modules -->
-    <constant name="SiBarrelMod2Lower_rc"         value="SiBarrelMod2_rc-SiBarrel2_radius_castellation/2"/>
+    <constant name="SiBarrelStave1Lower_rc"         value="SiBarrelStave1_rc-SiBarrel1_radius_castellation/2" /> <!--get rmin of the lower modules -->
+    <constant name="SiBarrelStave2Lower_rc"         value="SiBarrelStave2_rc-SiBarrel2_radius_castellation/2"/>
 
 
     <constant name="SiBarrelBrace_width" value="10*mm" />
@@ -75,7 +75,7 @@
     <constant name="SiBarrel2_Brace1_Position_Y" value="11.3*cm" />
     <constant name="SiBarrel2_Brace2_Position_Y" value="21.6*cm" />
     <constant name="SiBarrel2_Brace3_Position_Y" value="32.8*cm" />
-    <constant name="SiBarrel2_Brace4_Position_Y" value="SiBarrelMod2_length/2-SiBarrelBrace_width/2" /> <!-- to align last brace edge with module edge, the center should be 79.3/2-1/2=39.15cm-->
+    <constant name="SiBarrel2_Brace4_Position_Y" value="SiBarrelStave2_length/2-SiBarrelBrace_width/2" /> <!-- to align last brace edge with module edge, the center should be 79.3/2-1/2=39.15cm-->
 
 <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
 <constant name="SiBarrelSiliconCurveRadius" value="90.035*mm" />
@@ -84,16 +84,16 @@
 
 <constant name="SiBarrelSiliconCurveHeight1" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave1_width/2)^2)" />
 <constant name="SiBarrelSiliconCurveHeight2" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave2_width/2)^2)" />
-<constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight1 - SiBarrelMod1Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace1" />
-<constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight2 - SiBarrelMod2Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace2" />
-<constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight1 + SiBarrelMod1Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace1" />
-<constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight2 + SiBarrelMod2Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace2" />
+<constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight1 - SiBarrelStave1Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace1" />
+<constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight2 - SiBarrelStave2Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace2" />
+<constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight1 + SiBarrelStave1Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace1" />
+<constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight2 + SiBarrelStave2Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace2" />
 <constant name="SiBarrelSiliconCurveHalfAngle1" value="asin(0.5*SiBarrelStave1_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconCurveHalfAngle2" value="asin(0.5*SiBarrelStave2_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconGapHalfAngle" value="atan(0.5*SiBarrelSiliconGap_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrel_ShortThickness" value="0.5*SiBarrelSensorMod_thickness" />
-<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod1Service_thickness + SiBarrelMod1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace1 + SiBarrelSiliconCurveHeight1"  />
-<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod2Service_thickness + SiBarrelMod2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace2 + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelStave1Service_thickness + SiBarrelStave1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace1 + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelStave2Service_thickness + SiBarrelStave2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace2 + SiBarrelSiliconCurveHeight1"  />
 
 
   </define>
@@ -207,10 +207,10 @@
           material="CarbonFiber"
           sensitive="false"
           width="SiBarrelStave1_width"
-          length="SiBarrelMod1_length"
-          thickness="SiBarrelMod1Frame_thickness"
+          length="SiBarrelStave1_length"
+          thickness="SiBarrelStave1Frame_thickness"
           vis="TrackerSupportVis" >
-          <position x="0" y="0" z="-0.5*(SiBarrelBrace_thickness + SiBarrelMod1Frame_thickness)"/>
+          <position x="0" y="0" z="-0.5*(SiBarrelBrace_thickness + SiBarrelStave1Frame_thickness)"/>
         </module_component>
 
         <module_component name="Brace" material="CarbonFiber"
@@ -257,10 +257,10 @@
           material="Kapton"
           sensitive="false"
           width="SiBarrelStave1_width"
-          length="SiBarrelMod1_length"
-          thickness="SiBarrelMod1Service_thickness"
+          length="SiBarrelStave1_length"
+          thickness="SiBarrelStave1Service_thickness"
           vis="TrackerLayerVis">
-          <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelMod1Service_thickness)" />
+          <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelStave1Service_thickness)" />
           </module_component>
 
         <module_component name="CurvedSi1R"
@@ -371,7 +371,7 @@
           dr : Radial displacement parameter, of every other module.
         </comment>
         <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave1_count" phi0="0.0"
-          rc="SiBarrelMod1Lower_rc" dr="SiBarrel1_radius_castellation" />
+          rc="SiBarrelStave1Lower_rc" dr="SiBarrel1_radius_castellation" />
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>
@@ -570,10 +570,10 @@
           material="CarbonFiber"
           sensitive="false"
           width="SiBarrelStave2_width"
-          length="SiBarrelMod2_length"
-          thickness="SiBarrelMod2Frame_thickness"
+          length="SiBarrelStave2_length"
+          thickness="SiBarrelStave2Frame_thickness"
           vis="TrackerSupportVis" >
-          <position x="0" y="0" z="-0.5*(SiBarrelBrace_thickness + SiBarrelMod2Frame_thickness)"/>
+          <position x="0" y="0" z="-0.5*(SiBarrelBrace_thickness + SiBarrelStave2Frame_thickness)"/>
         </module_component>
 
         <module_component name="Brace" material="CarbonFiber"
@@ -652,10 +652,10 @@
           material="Kapton"
           sensitive="false"
           width="SiBarrelStave2_width"
-          length="SiBarrelMod2_length"
-          thickness="SiBarrelMod2Service_thickness"
+          length="SiBarrelStave2_length"
+          thickness="SiBarrelStave2Service_thickness"
           vis="TrackerLayerVis" >
-          <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelMod1Service_thickness)" />
+          <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelStave1Service_thickness)" />
         </module_component>
 
         <module_component name="CurvedSi1R"
@@ -850,7 +850,7 @@
           dr : Radial displacement parameter, of every other module.
         </comment>
         <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave2_count" phi0="0.0"
-          rc="SiBarrelMod2Lower_rc" dr="SiBarrel2_radius_castellation" />
+          rc="SiBarrelStave2Lower_rc" dr="SiBarrel2_radius_castellation" />
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>
