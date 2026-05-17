@@ -18,9 +18,6 @@ env:
   # JANA options as in https://github.com/eic/EICrecon/blob/main/.github/workflows/linux-eic-shell.yml
   # FIXME: FOFFMTRK has only 130 GeV matrix
   JANA_OPTIONS: -PFOFFMTRK:ForwardOffMRecParticles:requireMatchingMatrix=false -Pjana:ticker_interval=60000 -Pjana:warmup_timeout=0 -Pjana:timeout=0 -Ppodio:output_backend=rntuple
-  ASAN_OPTIONS: suppressions=${{ github.workspace }}/.github/asan.supp:malloc_context_size=20:detect_leaks=1:verify_asan_link_order=0:detect_stack_use_after_return=1:detect_odr_violation=1:new_delete_type_mismatch=0:intercept_tls_get_addr=0
-  LSAN_OPTIONS: suppressions=${{ github.workspace }}/.github/lsan.supp
-  UBSAN_OPTIONS: suppressions=${{ github.workspace }}/.github/ubsan.supp:print_stacktrace=1:silence_unsigned_overflow=1:report_error_type=1
 
 jobs:
   xmllint-before-build:
