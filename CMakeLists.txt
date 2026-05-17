@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 # CMP0074: find_package() uses <PackageName>_ROOT variables
 cmake_policy(SET CMP0074 NEW)
