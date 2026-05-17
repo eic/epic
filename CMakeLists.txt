@@ -53,21 +53,45 @@ find_package(IRT2 2.1.1)
 # Address sanitizer
 option(USE_ASAN "Compile with address sanitizer" OFF)
 if(${USE_ASAN})
-  execute_process(
-    COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libasan.so
-    OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_ASAN
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    execute_process(
+      COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libclang_rt.asan-${CMAKE_SYSTEM_PROCESSOR}.so
+      OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_ASAN
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  else()
+    execute_process(
+      COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libasan.so
+      OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_ASAN
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+  get_filename_component(ASAN_RUNTIME_DIR "${PRELOAD_SANITIZER_LIB_ASAN}" DIRECTORY)
+  list(APPEND CMAKE_BUILD_RPATH "${ASAN_RUNTIME_DIR}")
   list(PREPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_ASAN})
 endif()
 
 # Undefined behavior sanitizer
 option(USE_UBSAN "Compile with undefined behavior sanitizer" OFF)
 if(${USE_UBSAN})
-  execute_process(
-    COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libubsan.so
-    OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_UBSAN
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-  list(APPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_UBSAN})
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    execute_process(
+      COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libclang_rt.ubsan_standalone-${CMAKE_SYSTEM_PROCESSOR}.so
+      OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_UBSAN
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  else()
+    execute_process(
+      COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libubsan.so
+      OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_UBSAN
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+  get_filename_component(UBSAN_RUNTIME_DIR "${PRELOAD_SANITIZER_LIB_UBSAN}" DIRECTORY)
+  list(APPEND CMAKE_BUILD_RPATH "${UBSAN_RUNTIME_DIR}")
+  # With Clang, the ASAN runtime already integrates UBSAN; preloading
+  # libclang_rt.ubsan_standalone alongside libclang_rt.asan causes runtime
+  # conflicts (overlapping interceptors). Skip the UBSAN preload when ASAN is
+  # also active — ASAN handles both.
+  if(NOT (USE_ASAN AND CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    list(APPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_UBSAN})
+  endif()
 endif()
 
 #-----------------------------------------------------------------------------------
@@ -82,11 +106,28 @@ function(dd4hep_generate_rootmap library)
   set(${ENV_VAR}_VALUE $<TARGET_FILE_DIR:${library}>:$<TARGET_FILE_DIR:DD4hep::DD4hepGaudiPluginMgr>:$ENV{${ENV_VAR}})
 
   set(rootmapfile ${CMAKE_SHARED_MODULE_PREFIX}${library}.components)
-  string(JOIN ":" LD_PRELOAD ${PRELOAD_SANITIZER_LIB})
+
+  # Build the listcomponents invocation. When sanitizers are active we must
+  # LD_PRELOAD the runtime so ASAN initialises before any allocation occurs;
+  # loading it lazily via dlopen (RPATH) after DD4hep has already allocated
+  # memory causes a crash. To prevent LeakSanitizer from scanning the entire
+  # DD4hep/ROOT heap at process exit (which hangs the build), we force
+  # detect_leaks=0 for this helper invocation only.
+  string(JOIN ":" LD_PRELOAD_VALUE ${PRELOAD_SANITIZER_LIB})
+  if(LD_PRELOAD_VALUE)
+    set(EXTRA_ENV
+      "LD_PRELOAD=${LD_PRELOAD_VALUE}"
+      "ASAN_OPTIONS=detect_leaks=0:verify_asan_link_order=0"
+      "LSAN_OPTIONS=detect_leaks=0"
+    )
+  endif()
 
   add_custom_command(OUTPUT ${rootmapfile}
                      DEPENDS ${library}
-                     COMMAND ${ENV_VAR}=${${ENV_VAR}_VALUE} LD_PRELOAD=${LD_PRELOAD} $<TARGET_FILE:DD4hep::listcomponents> -o ${rootmapfile} $<TARGET_FILE_NAME:${library}>
+                     COMMAND ${CMAKE_COMMAND} -E env
+                       "${ENV_VAR}=${${ENV_VAR}_VALUE}"
+                       ${EXTRA_ENV}
+                       $<TARGET_FILE:DD4hep::listcomponents> -o ${rootmapfile} $<TARGET_FILE_NAME:${library}>
                      WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
                      COMMAND_EXPAND_LISTS
                      )
@@ -132,8 +173,12 @@ endif()
 # Address sanitizer
 if(${USE_ASAN})
   target_compile_options(${a_lib_name} PRIVATE -fsanitize=address -fno-omit-frame-pointer -g -O1)
-  target_link_options(${a_lib_name} PRIVATE -fsanitize=address)
-  target_link_libraries(${a_lib_name} PRIVATE asan)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_link_options(${a_lib_name} PRIVATE -fsanitize=address -shared-libasan)
+  else()
+    target_link_options(${a_lib_name} PRIVATE -fsanitize=address)
+    target_link_libraries(${a_lib_name} PRIVATE asan)
+  endif()
   install(FILES .github/asan.supp .github/lsan.supp
           DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
 endif()
@@ -146,8 +191,12 @@ if(${USE_UBSAN})
                             CXX_COMPILER_HAS_sanitize_${sanitizer})
     if(CXX_COMPILER_HAS_sanitize_${sanitizer})
       target_compile_options(${a_lib_name} PRIVATE -fsanitize=${sanitizer} -g -O1)
-      target_link_options(${a_lib_name} PRIVATE -fsanitize=${sanitizer})
-      target_link_libraries(${a_lib_name} PRIVATE ubsan)
+      if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_link_options(${a_lib_name} PRIVATE -fsanitize=${sanitizer} -shared-libsan)
+      else()
+        target_link_options(${a_lib_name} PRIVATE -fsanitize=${sanitizer})
+        target_link_libraries(${a_lib_name} PRIVATE ubsan)
+      endif()
     endif()
   endforeach()
   install(FILES .github/ubsan.supp
