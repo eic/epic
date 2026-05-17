@@ -255,6 +255,25 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.xml
 #-----------------------------------------------------------------------------------
 # Configure and install detector setup script
 #
+# When built with -DUSE_ASAN=ON / -DUSE_UBSAN=ON, embed sanitizer environment
+# variable exports into thisepic.sh so that reusable workflows (and local users)
+# automatically get the right suppression paths when they source this script.
+# Suppression files are installed alongside the plugin under ${DETECTOR_PATH}.
+# Note: bracket strings preserve ${...} literally (no CMake expansion); configure_file
+# with @ONLY passes them through so the shell expands $DETECTOR_PATH at runtime.
+set(ASAN_SETUP_LINES "")
+set(UBSAN_SETUP_LINES "")
+if(USE_ASAN)
+  set(ASAN_SETUP_LINES [[
+export ASAN_OPTIONS=suppressions=${DETECTOR_PATH}/asan.supp:malloc_context_size=20:detect_leaks=1:verify_asan_link_order=0:detect_stack_use_after_return=1:detect_odr_violation=1:new_delete_type_mismatch=0:intercept_tls_get_addr=0
+export LSAN_OPTIONS=suppressions=${DETECTOR_PATH}/lsan.supp
+]])
+endif()
+if(USE_UBSAN)
+  set(UBSAN_SETUP_LINES [[
+export UBSAN_OPTIONS=suppressions=${DETECTOR_PATH}/ubsan.supp:print_stacktrace=1:silence_unsigned_overflow=1:report_error_type=1
+]])
+endif()
 configure_file(templates/thisepic.sh.in ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
     DESTINATION ${CMAKE_INSTALL_BINDIR}
