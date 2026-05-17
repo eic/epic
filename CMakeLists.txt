@@ -139,7 +139,6 @@ if(${USE_ASAN})
 endif()
 
 # Undefined behavior sanitizer
-option(USE_UBSAN "Compile with undefined behavior sanitizer" OFF)
 if(${USE_UBSAN})
   foreach(sanitizer undefined float-divide-by-zero unsigned-integer-overflow
                     implicit-conversion local-bounds nullability)
