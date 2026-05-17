@@ -67,7 +67,7 @@ if(${USE_UBSAN})
     COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libubsan.so
     OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_UBSAN
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-  list(PREPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_UBSAN})
+  list(APPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_UBSAN})
 endif()
 
 #-----------------------------------------------------------------------------------
