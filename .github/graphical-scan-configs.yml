@@ -1,0 +1,50 @@
+# graphical-scan-configs.yml
+#
+# Configuration for DD4hep graphicalScan runs.
+# Used by the graphical-scan workflow jobs in linux-eic-shell.yml.
+#
+# graphicalScan usage:
+#   graphicalScan <compact.xml> <axis> <xMin> <xMax> <yMin> <yMax> <zMin> <zMax>
+#                 <nSlices> <nBins> <nSamples> <F|M|FM> <output.root>
+#
+#   axis     - axis perpendicular to the slice planes (X, Y, or Z)
+#   xMin/xMax, yMin/yMax, zMin/zMax - full coordinate range of the scan [cm]
+#   nSlices  - number of equally-spaced slice positions along the chosen axis
+#   nBins    - number of bins per histogram axis (higher = finer spatial resolution)
+#   nSamples - number of random samples per bin (higher = less statistical noise)
+#   label    - short identifier used for artifact and file naming
+
+scans:
+
+  # Transverse (XY) view: slices perpendicular to the beam axis (Z).
+  # Five slices span the detector from upstream to downstream, revealing
+  # the circular barrel cross-section for both field and material maps.
+  - axis: Z
+    xMin: -450
+    xMax:  450
+    yMin: -450
+    yMax:  450
+    zMin: -700
+    zMax:  700
+    nSlices:  5
+    nBins:  200
+    nSamples: 10
+    label: XY
+
+  # Longitudinal (ZY) view: a single slice through the detector centre (X ≈ 0).
+  # Shows the full forward/backward geometry and solenoid field profile.
+  - axis: X
+    xMin:  -10
+    xMax:   10
+    yMin: -450
+    yMax:  450
+    zMin: -700
+    zMax:  700
+    nSlices:  1
+    nBins:  200
+    nSamples: 10
+    label: ZY
+
+# Detector configurations to scan (must match installed compact XML basenames).
+detector_configs:
+  - epic_craterlake
