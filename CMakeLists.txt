@@ -95,52 +95,58 @@ if(${USE_UBSAN})
 endif()
 
 #-----------------------------------------------------------------------------------
+# Override dd4hep_generate_rootmap only when a sanitizer is active.  The custom
+# version LD_PRELOADs the sanitizer runtime so it is initialised before any
+# allocation occurs (loading it lazily via dlopen/RPATH causes a crash).
+# Without sanitizers, DD4hep's built-in implementation is used unchanged.
 
-function(dd4hep_generate_rootmap library)
+if(USE_ASAN OR USE_UBSAN)
+  function(dd4hep_generate_rootmap library)
 
-  if(APPLE)
-    set(ENV_VAR DYLD_LIBRARY_PATH)
-  else()
-    set(ENV_VAR LD_LIBRARY_PATH)
-  endif()
-  set(${ENV_VAR}_VALUE $<TARGET_FILE_DIR:${library}>:$<TARGET_FILE_DIR:DD4hep::DD4hepGaudiPluginMgr>:$ENV{${ENV_VAR}})
+    if(APPLE)
+      set(ENV_VAR DYLD_LIBRARY_PATH)
+    else()
+      set(ENV_VAR LD_LIBRARY_PATH)
+    endif()
+    set(${ENV_VAR}_VALUE $<TARGET_FILE_DIR:${library}>:$<TARGET_FILE_DIR:DD4hep::DD4hepGaudiPluginMgr>:$ENV{${ENV_VAR}})
 
-  set(rootmapfile ${CMAKE_SHARED_MODULE_PREFIX}${library}.components)
+    set(rootmapfile ${CMAKE_SHARED_MODULE_PREFIX}${library}.components)
 
-  # Build the listcomponents invocation. When sanitizers are active we must
-  # LD_PRELOAD the runtime so ASAN initialises before any allocation occurs;
-  # loading it lazily via dlopen (RPATH) after DD4hep has already allocated
-  # memory causes a crash. To prevent LeakSanitizer from scanning the entire
-  # DD4hep/ROOT heap at process exit (which hangs the build), we force
-  # detect_leaks=0 for this helper invocation only.
-  string(JOIN ":" LD_PRELOAD_VALUE ${PRELOAD_SANITIZER_LIB})
-  if(LD_PRELOAD_VALUE)
-    set(EXTRA_ENV
-      "LD_PRELOAD=${LD_PRELOAD_VALUE}"
-      "ASAN_OPTIONS=detect_leaks=0:verify_asan_link_order=0"
-      "LSAN_OPTIONS=detect_leaks=0"
+    # Build the listcomponents invocation. When sanitizers are active we must
+    # LD_PRELOAD the runtime so ASAN initialises before any allocation occurs;
+    # loading it lazily via dlopen (RPATH) after DD4hep has already allocated
+    # memory causes a crash. To prevent LeakSanitizer from scanning the entire
+    # DD4hep/ROOT heap at process exit (which hangs the build), we force
+    # detect_leaks=0 for this helper invocation only.
+    string(JOIN ":" LD_PRELOAD_VALUE ${PRELOAD_SANITIZER_LIB})
+    if(LD_PRELOAD_VALUE)
+      set(EXTRA_ENV
+        "LD_PRELOAD=${LD_PRELOAD_VALUE}"
+        "ASAN_OPTIONS=detect_leaks=0:verify_asan_link_order=0"
+        "LSAN_OPTIONS=detect_leaks=0"
+      )
+    endif()
+
+    add_custom_command(OUTPUT ${rootmapfile}
+                       DEPENDS ${library}
+                       COMMAND ${CMAKE_COMMAND} -E env
+                         "${ENV_VAR}=${${ENV_VAR}_VALUE}"
+                         ${EXTRA_ENV}
+                         $<TARGET_FILE:DD4hep::listcomponents> -o ${rootmapfile} $<TARGET_FILE_NAME:${library}>
+                       WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+                       COMMAND_EXPAND_LISTS
+                       )
+
+    add_custom_target(Components_${library} ALL DEPENDS ${rootmapfile})
+    SET( install_destination "lib" )
+    if( CMAKE_INSTALL_LIBDIR )
+      SET( install_destination ${CMAKE_INSTALL_LIBDIR} )
+    endif()
+    install(FILES $<TARGET_FILE_DIR:${library}>/${rootmapfile}
+      DESTINATION ${install_destination}
     )
-  endif()
-
-  add_custom_command(OUTPUT ${rootmapfile}
-                     DEPENDS ${library}
-                     COMMAND ${CMAKE_COMMAND} -E env
-                       "${ENV_VAR}=${${ENV_VAR}_VALUE}"
-                       ${EXTRA_ENV}
-                       $<TARGET_FILE:DD4hep::listcomponents> -o ${rootmapfile} $<TARGET_FILE_NAME:${library}>
-                     WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-                     COMMAND_EXPAND_LISTS
-                     )
-
-  add_custom_target(Components_${library} ALL DEPENDS ${rootmapfile})
-  SET( install_destination "lib" )
-  if( CMAKE_INSTALL_LIBDIR )
-    SET( install_destination ${CMAKE_INSTALL_LIBDIR} )
-  endif()
-  install(FILES $<TARGET_FILE_DIR:${library}>/${rootmapfile}
-    DESTINATION ${install_destination}
-  )
-endfunction()
+  endfunction()
+endif()
 
 #-----------------------------------------------------------------------------------
 
