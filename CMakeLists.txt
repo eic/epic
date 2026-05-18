@@ -65,6 +65,7 @@ dd4hep_add_plugin(${a_lib_name}
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
+  PRIVATE covfie::core
   )
 set(WITH_IRT1_SUPPORT TRUE CACHE STRING "Enable constant definitions used by EICrecon integration in IRT1")
 if(WITH_IRT1_SUPPORT)
