@@ -24,6 +24,7 @@ header_pages:
   - reports/artifacts.md
   - reports/geoviewer.md
   - reports/craterlake_views.md
+  - reports/craterlake_scans.md
 
 exclude:
   - bin/
