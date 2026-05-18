@@ -52,7 +52,7 @@ find_package(IRT2 2.1.1)
 
 # Address sanitizer
 option(USE_ASAN "Compile with address sanitizer" OFF)
-if(${USE_ASAN})
+if(USE_ASAN)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libclang_rt.asan-${CMAKE_SYSTEM_PROCESSOR}.so
@@ -71,7 +71,7 @@ endif()
 
 # Undefined behavior sanitizer
 option(USE_UBSAN "Compile with undefined behavior sanitizer" OFF)
-if(${USE_UBSAN})
+if(USE_UBSAN)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     execute_process(
       COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libclang_rt.ubsan_standalone-${CMAKE_SYSTEM_PROCESSOR}.so
@@ -177,7 +177,7 @@ endif()
 #-----------------------------------------------------------------------------------
 
 # Address sanitizer
-if(${USE_ASAN})
+if(USE_ASAN)
   target_compile_options(${a_lib_name} PRIVATE -fsanitize=address -fno-omit-frame-pointer -g -O1)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_link_options(${a_lib_name} PRIVATE -fsanitize=address -shared-libasan)
@@ -190,7 +190,7 @@ if(${USE_ASAN})
 endif()
 
 # Undefined behavior sanitizer
-if(${USE_UBSAN})
+if(USE_UBSAN)
   foreach(sanitizer undefined float-divide-by-zero unsigned-integer-overflow
                     implicit-conversion local-bounds nullability)
     check_cxx_compiler_flag("-fsanitize=${sanitizer}"
