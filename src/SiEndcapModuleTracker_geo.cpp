@@ -371,11 +371,11 @@ bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
 //   single frame volume crosses the xz plane.
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
                            const CorrugatedFrameConfig& config) {
-  if (config.thickness <= 0.0 || config.height <= config.thickness ||
-      config.half_pitch <= 0.0 || config.theta <= 0.0) {
-    printout(WARNING, "SiEndcapModuleTracker",
-             fmt::format("skipping corrugated frame for disk '{}': invalid dimensions",
-                         disk.disk_key));
+  if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
+      config.theta <= 0.0) {
+    printout(
+        WARNING, "SiEndcapModuleTracker",
+        fmt::format("skipping corrugated frame for disk '{}': invalid dimensions", disk.disk_key));
     return 0;
   }
 
@@ -497,7 +497,7 @@ Solid build_disk_solid(const string&, const DiskBoundary& disk) {
 
 // Ensure the placed module thickness fits within the XML layer thickness.
 bool module_inside_layer_z(const ModuleRow& row, const ModuleTemplate& module_template,
-                         const DiskBoundary& disk) {
+                           const DiskBoundary& disk) {
   const double module_half_thickness = module_template.total_thickness / 2.0;
   const double layer_half_thickness  = disk.length / 2.0;
   return (row.dz - module_half_thickness >= -layer_half_thickness) &&
@@ -508,7 +508,7 @@ bool module_inside_layer_z(const ModuleRow& row, const ModuleTemplate& module_te
 // built-in template map. This routine is intentionally tolerant: malformed or unknown
 // rows are skipped with warnings instead of aborting the geometry build.
 vector<ModuleRow> load_module_rows(const string& file_name,
-                               const map<string, ModuleTemplate>& module_templates) {
+                                   const map<string, ModuleTemplate>& module_templates) {
   vector<ModuleRow> rows;
   std::ifstream input(file_name);
   if (!input.is_open()) {
@@ -637,7 +637,7 @@ vector<ModuleRow> load_module_rows(const string& file_name,
 // Build one reusable module volume per module type and cache it. Individual placements
 // later reuse this prototype volume rather than rebuilding the stack for every CSV row.
 ModulePrototype build_module_prototype(Detector& description, SensitiveDetector& sens,
-                                   const ModuleTemplate& module_template) {
+                                       const ModuleTemplate& module_template) {
   ModulePrototype prototype;
   Material vacuum     = description.vacuum();
   const double x_size = module_template.x_size;
@@ -725,10 +725,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   string module_format = "csv";
   xml_comp_t x_module_placements(x_det.child("module_placements", false));
   if (x_module_placements) {
-    module_file =
-        getAttrOrDefault<string>(x_module_placements, _Unicode(file), module_file);
-    module_format =
-        getAttrOrDefault<string>(x_module_placements, _Unicode(format), module_format);
+    module_file   = getAttrOrDefault<string>(x_module_placements, _Unicode(file), module_file);
+    module_format = getAttrOrDefault<string>(x_module_placements, _Unicode(format), module_format);
   }
   if (module_format != "csv") {
     printout(WARNING, "SiEndcapModuleTracker",
@@ -739,8 +737,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   if (!module_file.empty()) {
     module_rows = load_module_rows(resolve_input_file(module_file), module_templates);
   } else {
-    printout(WARNING, "SiEndcapModuleTracker",
-             fmt::format("detector '{}' is missing a module_placements file declaration", det_name));
+    printout(
+        WARNING, "SiEndcapModuleTracker",
+        fmt::format("detector '{}' is missing a module_placements file declaration", det_name));
   }
 
   std::map<string, ModulePrototype> module_cache;
@@ -850,11 +849,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // 3. reject rows that do not fit in z
       // 4. place the requested module template
       if (!module_inside_disk(row, disk)) {
-        printout(WARNING, "SiEndcapModuleTracker",
-                 fmt::format("skipping module line {} for '{}' (disk '{}'): x_min={} mm y_min={} mm "
-                             "x_size={} mm y_size={} mm violates disk outer boundary/opening",
-                             row.csv_line, det_name, row.disk_key, row.x_min / mm, row.y_min / mm,
-                             row.x_size / mm, row.y_size / mm));
+        printout(
+            WARNING, "SiEndcapModuleTracker",
+            fmt::format("skipping module line {} for '{}' (disk '{}'): x_min={} mm y_min={} mm "
+                        "x_size={} mm y_size={} mm violates disk outer boundary/opening",
+                        row.csv_line, det_name, row.disk_key, row.x_min / mm, row.y_min / mm,
+                        row.x_size / mm, row.y_size / mm));
         continue;
       }
       auto module_template_it = module_templates.find(row.module_name);
@@ -879,7 +879,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       auto cache_it    = module_cache.find(cache_key);
       if (cache_it == module_cache.end()) {
         cache_it =
-            module_cache.emplace(cache_key, build_module_prototype(description, sens, module_template))
+            module_cache
+                .emplace(cache_key, build_module_prototype(description, sens, module_template))
                 .first;
       }
       ModulePrototype& prototype = cache_it->second;
