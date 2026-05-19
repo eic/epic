@@ -26,7 +26,7 @@ done
 # dawncut -1  0  0.01666 200 → plane -x + 0.01666*z + 200 = 0, keeps -x + 0.01666*z <= -200
 duskcut  1  0 -0.01666 200 "${INPUT_FILE}"       "${FILE_TAG}_t0.stp"
 duskcut -1  0  0.01666 200 "${FILE_TAG}_t0.stp"  "${FILE_TAG}.stp"
-dusk -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
 
 rm -f "${FILE_TAG}_t0.stp" "${FILE_TAG}.stp"
 echo "[generate_svg] Done: ${FILE_TAG}.svg"

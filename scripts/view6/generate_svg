@@ -30,32 +30,32 @@ INPUT="${FILE_TAG}_input.stp"
 # Slice a: |z| <= 1 mm (central XY plane)
 duskcut 0 0 -1 1 "${INPUT}" "${FILE_TAG}a_t0.stp"
 duskcut 0 0  1 1 "${FILE_TAG}a_t0.stp" "${FILE_TAG}a.stp"
-dusk -d "${FILE_TAG}a.stp" --mag 14 --draw 2 -o "${FILE_TAG}a.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}a.stp" --mag 14 --draw 2 -o "${FILE_TAG}a.svg"
 
 # Slice b: SiTracker Endcap layer 5 (860-945 mm)
 duskcut 0 0  1  945 "${INPUT}" "${FILE_TAG}b_t0.stp"
 duskcut 0 0 -1 -865 "${FILE_TAG}b_t0.stp" "${FILE_TAG}b.stp"
-dusk -d "${FILE_TAG}b.stp" --mag 14 --draw 2 -o "${FILE_TAG}b.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}b.stp" --mag 14 --draw 2 -o "${FILE_TAG}b.svg"
 
 # Slice c: SiTracker Endcap layer 4 (695-780 mm)
 duskcut 0 0  1  780 "${INPUT}" "${FILE_TAG}c_t0.stp"
 duskcut 0 0 -1 -700 "${FILE_TAG}c_t0.stp" "${FILE_TAG}c.stp"
-dusk -d "${FILE_TAG}c.stp" --mag 14 --draw 2 -o "${FILE_TAG}c.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}c.stp" --mag 14 --draw 2 -o "${FILE_TAG}c.svg"
 
 # Slice d: SiTracker Endcap layer 3 (530-595 mm)
 duskcut 0 0  1  595 "${INPUT}" "${FILE_TAG}d_t0.stp"
 duskcut 0 0 -1 -535 "${FILE_TAG}d_t0.stp" "${FILE_TAG}d.stp"
-dusk -d "${FILE_TAG}d.stp" --mag 14 --draw 2 -o "${FILE_TAG}d.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}d.stp" --mag 14 --draw 2 -o "${FILE_TAG}d.svg"
 
 # Slice e: SiTracker Endcap layer 2 (365-430 mm)
 duskcut 0 0  1  430 "${INPUT}" "${FILE_TAG}e_t0.stp"
 duskcut 0 0 -1 -370 "${FILE_TAG}e_t0.stp" "${FILE_TAG}e.stp"
-dusk -d "${FILE_TAG}e.stp" --mag 14 --draw 2 -o "${FILE_TAG}e.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}e.stp" --mag 14 --draw 2 -o "${FILE_TAG}e.svg"
 
 # Slice f: SiTracker Endcap layer 1 (200-225 mm)
 duskcut 0 0  1  225 "${INPUT}" "${FILE_TAG}f_t0.stp"
 duskcut 0 0 -1 -205 "${FILE_TAG}f_t0.stp" "${FILE_TAG}f.stp"
-dusk -d "${FILE_TAG}f.stp" --mag 14 --draw 2 -o "${FILE_TAG}f.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}f.stp" --mag 14 --draw 2 -o "${FILE_TAG}f.svg"
 
 rm -f "${FILE_TAG}_pre0.stp" "${FILE_TAG}_input.stp" \
       "${FILE_TAG}"[abcdef]_t0.stp "${FILE_TAG}"[abcdef].stp

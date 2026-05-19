@@ -33,13 +33,13 @@ fi
 
 # Side view — cut at x=1 mm (keep x >= 1 mm), theta=165, phi=75, draw=3
 duskcut -1 0 0 1 "${INPUT_FILE}" "${FILE_TAG}_side.stp"
-dusk -d "${FILE_TAG}_side.stp" --mag 10 --draw 3 --theta 165 --phi 75 \
+dusk --mesh-deflection 5 -d "${FILE_TAG}_side.stp" --mag 10 --draw 3 --theta 165 --phi 75 \
      --light-theta 180 --light-phi 90 -o "${FILE_TAG}.svg"
 
 # Top view — thin y-slice near y=0, theta=90, phi=90, draw=1
 duskcut  0  1 0 1 "${INPUT_FILE}"              "${FILE_TAG}_top_t0.stp"
 duskcut  0 -1 0 1 "${FILE_TAG}_top_t0.stp"     "${FILE_TAG}_top.stp"
-dusk -d "${FILE_TAG}_top.stp" --mag 10 --draw 1 --theta 90 --phi 90 \
+dusk --mesh-deflection 5 -d "${FILE_TAG}_top.stp" --mag 10 --draw 1 --theta 90 --phi 90 \
      -o "${FILE_TAG}_top.svg"
 
 rm -f "${FILE_TAG}_side.stp" "${FILE_TAG}_top_t0.stp" "${FILE_TAG}_top.stp"

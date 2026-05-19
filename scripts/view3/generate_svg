@@ -26,7 +26,7 @@ done
 #   dawncut 0 0 -1 1500 → plane -z+1500=0 → z=1500, clips z<1500, keeps z>=1500
 # We replicate exactly:
 duskcut 0 0 -1 1500 "${INPUT_FILE}" "${FILE_TAG}.stp"
-dusk -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
 
 rm -f "${FILE_TAG}.stp"
 echo "[generate_svg] Done: ${FILE_TAG}.svg"

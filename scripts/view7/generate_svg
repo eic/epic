@@ -24,12 +24,12 @@ done
 # Slice a: |z| <= 1 mm (central XY plane)
 duskcut 0 0 -1 1 "${INPUT_FILE}" "${FILE_TAG}a_t0.stp"
 duskcut 0 0  1 1 "${FILE_TAG}a_t0.stp" "${FILE_TAG}a.stp"
-dusk -d "${FILE_TAG}a.stp" --draw 2 -o "${FILE_TAG}a.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}a.stp" --draw 2 -o "${FILE_TAG}a.svg"
 
 # Slice b: SiTracker Endcap layer 1 (205-225 mm)
 duskcut 0 0  1  225 "${INPUT_FILE}" "${FILE_TAG}b_t0.stp"
 duskcut 0 0 -1 -205 "${FILE_TAG}b_t0.stp" "${FILE_TAG}b.stp"
-dusk -d "${FILE_TAG}b.stp" --draw 2 -o "${FILE_TAG}b.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}b.stp" --draw 2 -o "${FILE_TAG}b.svg"
 
 rm -f "${FILE_TAG}a_t0.stp" "${FILE_TAG}a.stp" \
       "${FILE_TAG}b_t0.stp" "${FILE_TAG}b.stp"

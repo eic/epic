@@ -33,7 +33,7 @@ done
 # so "downstream" = large +z. This view must keep the z > 5000 mm region.
 # Let me trust the original script literal translation: duskcut 0 0 -1 -5000
 duskcut 0 0 -1 -5000 "${INPUT_FILE}" "${FILE_TAG}b.stp"
-dusk -d "${FILE_TAG}b.stp" --draw 2 -o "${FILE_TAG}b.svg"
+dusk --mesh-deflection 5 -d "${FILE_TAG}b.stp" --draw 2 -o "${FILE_TAG}b.svg"
 
 rm -f "${FILE_TAG}b.stp"
 echo "[generate_svg] Done: ${FILE_TAG}b.svg"
