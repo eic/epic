@@ -60,6 +60,9 @@
     <constant name="SiBarrel2_Brace3_Position_Y" value="32.8*cm" />
     <constant name="SiBarrel2_Brace4_Position_Y" value="SiBarrelMod2_length/2-SiBarrelBrace_width/2" /> <!-- to align last brace edge with module edge, the center should be 79.3/2-1/2=39.15cm-->
 
+    <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length"/>
+    <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length"/>
+    <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length" />
 
 
   </define>
