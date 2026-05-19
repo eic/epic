@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Generate a simple gridded endcap module-placement CSV."""
 
 import argparse
 import ast
@@ -30,20 +31,28 @@ SAFE_FUNCS = {
 
 
 class DiskSpec:
-    def __init__(self, detector: str, disk: str, rmin_mm: float, rmax_mm: float,
-                 layer_length_mm: float, module_thickness_mm: float) -> None:
+    def __init__(self, detector: str, disk: str, rmin_mm: float, rmax_mm: float, layer_length_mm: float) -> None:
         self.detector = detector
         self.disk = disk
         self.rmin_mm = rmin_mm
         self.rmax_mm = rmax_mm
         self.layer_length_mm = layer_length_mm
-        self.module_thickness_mm = module_thickness_mm
+
+
+class ModuleSpec:
+    def __init__(self, name: str, x_size_mm: float, y_size_mm: float, thickness_mm: float) -> None:
+        self.name = name
+        self.x_size_mm = x_size_mm
+        self.y_size_mm = y_size_mm
+        self.thickness_mm = thickness_mm
 
 
 class ExpressionResolver:
+    # Resolve compact-XML constants with the same small arithmetic subset used in
+    # the geometry files so this helper stays easy to audit.
     def __init__(self) -> None:
-        self.raw = {}  # type: Dict[str, str]
-        self.cache = {}  # type: Dict[str, float]
+        self.raw: Dict[str, str] = {}
+        self.cache: Dict[str, float] = {}
 
     def add_constants_from_xml(self, xml_path: Path) -> None:
         root = ET.parse(xml_path).getroot()
@@ -111,7 +120,6 @@ def default_definitions_xml(geometry_xml: Path) -> Path:
     tracking_dir = geometry_xml.parent
     candidates = [
         tracking_dir / "definitions_craterlake.xml",
-        tracking_dir / "definitions_craterlake_tile.xml",
         tracking_dir / "definitions.xml",
     ]
     for candidate in candidates:
@@ -120,31 +128,40 @@ def default_definitions_xml(geometry_xml: Path) -> Path:
     raise FileNotFoundError("unable to infer definitions XML; pass --definitions-xml")
 
 
-def parse_module_thickness(detector: ET.Element, resolver: ExpressionResolver) -> float:
-    thickness = 0.0
-    module = detector.find("module")
-    if module is None:
-        raise ValueError(f"detector '{detector.get('name')}' has no <module>")
-    for component in module.findall("module_component"):
-        value = component.get("thickness")
-        if not value:
-            continue
-        thickness += resolver.eval_expr(value)
-    return thickness
+def builtin_modules(resolver: ExpressionResolver) -> Dict[str, ModuleSpec]:
+    # Keep this helper aligned with the built-in RSU module templates in
+    # SiEndcapModuleTracker_geo.cpp so the CSV stays compatible with the plugin.
+    thickness_mm = (
+        resolver.resolve("SiEndcapModuleFlatSheetCF_thickness")
+        + resolver.resolve("SiEndcapModuleGlue_thickness")
+        + resolver.resolve("SiTrackerSensor_thickness")
+    )
+    return {
+        "EIC_LAS_6RSU": ModuleSpec("EIC_LAS_6RSU", 130.0, 30.0, thickness_mm),
+        "EIC_LAS_5RSU": ModuleSpec("EIC_LAS_5RSU", 105.0, 30.0, thickness_mm),
+    }
 
 
-def parse_disks(geometry_xml: Path, definitions_xml: Path, disk_filter: List[str]) -> List[DiskSpec]:
+def resolve_module_name(value: str) -> str:
+    aliases = {
+        "6RSU": "EIC_LAS_6RSU",
+        "5RSU": "EIC_LAS_5RSU",
+    }
+    return aliases.get(value, value)
+
+
+def parse_disks(geometry_xml: Path, definitions_xml: Path, disk_filter: List[str]) -> Tuple[List[DiskSpec], Dict[str, ModuleSpec]]:
     resolver = ExpressionResolver()
     resolver.add_constants_from_xml(definitions_xml)
     resolver.add_constants_from_xml(geometry_xml)
+    modules = builtin_modules(resolver)
 
     root = ET.parse(geometry_xml).getroot()
-    disks = []  # type: List[DiskSpec]
+    disks: List[DiskSpec] = []
     for detector in root.findall(".//detector"):
-        if detector.get("type") != "epic_TileEndcapTracker":
+        if detector.get("type") != "epic_SiEndcapModuleTracker":
             continue
         detector_name = detector.get("name", "")
-        module_thickness = parse_module_thickness(detector, resolver)
         for layer in detector.findall("layer"):
             disk_name = layer.get("name") or f"{detector_name}_disk{layer.get('id', '')}"
             if disk_filter and disk_name not in disk_filter:
@@ -159,14 +176,19 @@ def parse_disks(geometry_xml: Path, definitions_xml: Path, disk_filter: List[str
                     rmin_mm=resolver.eval_expr(envelope.get("rmin", "0")),
                     rmax_mm=resolver.eval_expr(envelope.get("rmax", "0")),
                     layer_length_mm=resolver.eval_expr(envelope.get("length", "0")),
-                    module_thickness_mm=module_thickness,
                 )
             )
-    return disks
+    return disks, modules
 
 
-def corners_inside_annulus(x_min: float, y_min: float, x_size: float, y_size: float,
-                           rmin_mm: float, rmax_mm: float) -> bool:
+def corners_inside_annulus(
+    x_min: float,
+    y_min: float,
+    x_size: float,
+    y_size: float,
+    rmin_mm: float,
+    rmax_mm: float,
+) -> bool:
     corners = (
         (x_min, y_min),
         (x_min + x_size, y_min),
@@ -180,28 +202,41 @@ def corners_inside_annulus(x_min: float, y_min: float, x_size: float, y_size: fl
     return True
 
 
-def z_inside_layer(dz_mm: float, module_thickness_mm: float, layer_length_mm: float) -> bool:
-    half_module = module_thickness_mm / 2.0
+def z_inside_layer(dz_mm: float, module: ModuleSpec, layer_length_mm: float) -> bool:
+    half_module = module.thickness_mm / 2.0
     half_layer = layer_length_mm / 2.0
     return dz_mm - half_module >= -half_layer and dz_mm + half_module <= half_layer
 
 
-def generate_tiles_for_disk(disk: DiskSpec, tile_x_mm: float, tile_y_mm: float,
-                            x0_mm: Optional[float], y0_mm: Optional[float]) -> List[Tuple[float, float]]:
-    seed_x = x0_mm if x0_mm is not None else -tile_x_mm / 2.0
+def generate_modules_for_disk(
+    disk: DiskSpec,
+    module: ModuleSpec,
+    x0_mm: Optional[float],
+    y0_mm: Optional[float],
+) -> List[Tuple[float, float]]:
+    # Seed a simple rectangular grid and keep only modules whose full footprint
+    # fits inside the disk annulus. This is the quick deterministic fallback.
+    seed_x = x0_mm if x0_mm is not None else -module.x_size_mm / 2.0
     seed_y = y0_mm if y0_mm is not None else disk.rmin_mm
 
-    min_ix = math.floor((-disk.rmax_mm - seed_x) / tile_x_mm) - 1
-    max_ix = math.ceil((disk.rmax_mm - seed_x) / tile_x_mm) + 1
-    min_iy = math.floor((-disk.rmax_mm - seed_y) / tile_y_mm) - 1
-    max_iy = math.ceil((disk.rmax_mm - seed_y) / tile_y_mm) + 1
+    min_ix = math.floor((-disk.rmax_mm - seed_x) / module.x_size_mm) - 1
+    max_ix = math.ceil((disk.rmax_mm - seed_x) / module.x_size_mm) + 1
+    min_iy = math.floor((-disk.rmax_mm - seed_y) / module.y_size_mm) - 1
+    max_iy = math.ceil((disk.rmax_mm - seed_y) / module.y_size_mm) + 1
 
-    placements = []  # type: List[Tuple[float, float]]
+    placements: List[Tuple[float, float]] = []
     for iy in range(min_iy, max_iy + 1):
-        y_min = seed_y + iy * tile_y_mm
+        y_min = seed_y + iy * module.y_size_mm
         for ix in range(min_ix, max_ix + 1):
-            x_min = seed_x + ix * tile_x_mm
-            if corners_inside_annulus(x_min, y_min, tile_x_mm, tile_y_mm, disk.rmin_mm, disk.rmax_mm):
+            x_min = seed_x + ix * module.x_size_mm
+            if corners_inside_annulus(
+                x_min,
+                y_min,
+                module.x_size_mm,
+                module.y_size_mm,
+                disk.rmin_mm,
+                disk.rmax_mm,
+            ):
                 placements.append((x_min, y_min))
     placements.sort(key=lambda item: (item[1], item[0]))
     return placements
@@ -209,55 +244,59 @@ def generate_tiles_for_disk(disk: DiskSpec, tile_x_mm: float, tile_y_mm: float,
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate CSV tile placements for epic_TileEndcapTracker disks."
+        description="Generate CSV module placements for epic_SiEndcapModuleTracker disks."
     )
     parser.add_argument(
         "--geometry-xml",
-        default="disk_layout/epic/compact/tracking/silicon_disks_outer_tiles.xml",
-        help="Tile geometry XML with epic_TileEndcapTracker detectors.",
+        default="disk_layout/epic/compact/tracking/silicon_disks_modules.xml",
+        help="module geometry XML with epic_SiEndcapModuleTracker detectors",
     )
     parser.add_argument(
         "--definitions-xml",
         default=None,
-        help="Definitions XML used by the geometry XML. Defaults to definitions_craterlake.xml next to the geometry file.",
+        help="definitions XML used by the geometry XML; defaults to definitions_craterlake.xml next to the geometry file",
+    )
+    parser.add_argument(
+        "--module",
+        default="EIC_LAS_6RSU",
+        choices=["EIC_LAS_6RSU", "EIC_LAS_5RSU", "6RSU", "5RSU"],
+        help="built-in RSU module type to place",
     )
     parser.add_argument(
         "--output",
-        default="disk_layout/epic/compact/tracking/SVT_endcap_tiles.csv",
-        help="Output CSV path.",
+        default="disk_layout/epic/compact/tracking/SVT_endcap_modules.csv",
+        help="output CSV path",
     )
     parser.add_argument(
         "--disk",
         action="append",
         default=[],
-        help="Disk name to generate. Repeat to select multiple disks. Default: all tiled disks.",
+        help="disk name to generate; repeat to select multiple disks; default: all detector disks",
     )
-    parser.add_argument("--tile-x-mm", type=float, default=130.0, help="Tile width in mm.")
-    parser.add_argument("--tile-y-mm", type=float, default=30.0, help="Tile height in mm.")
     parser.add_argument(
         "--x0-mm",
         type=float,
         default=None,
-        help="Seed tile lower-left x in mm. Default: centered, so x0=-tile_x/2.",
+        help="seed module lower-left x in mm; default centers the first column on x=0",
     )
     parser.add_argument(
         "--y0-mm",
         type=float,
         default=None,
-        help="Seed tile lower-left y in mm. Default: tile lower edge touches the disk inner radius.",
+        help="seed module lower-left y in mm; default starts at the disk inner radius",
     )
-    parser.add_argument("--dz-mm", type=float, default=0.0, help="Per-tile dz to write to CSV.")
+    parser.add_argument("--dz-mm", type=float, default=0.0, help="per-module dz to write to the CSV")
     parser.add_argument(
         "--facing",
         choices=["+z", "-z"],
         default="+z",
-        help="Module facing to write to CSV.",
+        help="module facing to write to the CSV",
     )
     parser.add_argument(
         "--enabled",
         default="true",
         choices=["true", "false"],
-        help="Enabled flag to write to CSV.",
+        help="enabled flag to write to the CSV",
     )
     return parser.parse_args()
 
@@ -268,34 +307,36 @@ def main() -> int:
     definitions_xml = Path(args.definitions_xml) if args.definitions_xml else default_definitions_xml(geometry_xml)
     output_path = Path(args.output)
 
-    disks = parse_disks(geometry_xml, definitions_xml, args.disk)
+    disks, modules = parse_disks(geometry_xml, definitions_xml, args.disk)
     if not disks:
-        print("No matching epic_TileEndcapTracker disks found.", file=sys.stderr)
+        print("No matching epic_SiEndcapModuleTracker disks found.", file=sys.stderr)
         return 1
 
-    rows = []  # type: List[List[str]]
+    module_name = resolve_module_name(args.module)
+    module = modules[module_name]
+
+    rows: List[List[str]] = []
     for disk in disks:
-        if not z_inside_layer(args.dz_mm, disk.module_thickness_mm, disk.layer_length_mm):
+        if not z_inside_layer(args.dz_mm, module, disk.layer_length_mm):
             print(
                 f"Skipping {disk.disk}: dz={args.dz_mm:.3f} mm exceeds layer thickness "
-                f"{disk.layer_length_mm:.3f} mm for module thickness {disk.module_thickness_mm:.3f} mm.",
+                f"{disk.layer_length_mm:.3f} mm for module thickness {module.thickness_mm:.3f} mm.",
                 file=sys.stderr,
             )
             continue
 
-        placements = generate_tiles_for_disk(disk, args.tile_x_mm, args.tile_y_mm, args.x0_mm, args.y0_mm)
+        placements = generate_modules_for_disk(disk, module, args.x0_mm, args.y0_mm)
         if not placements:
-            print(f"Skipping {disk.disk}: no valid tile placements found.", file=sys.stderr)
+            print(f"Skipping {disk.disk}: no valid module placements found.", file=sys.stderr)
             continue
 
         for x_min, y_min in placements:
             rows.append(
                 [
                     disk.disk,
+                    module.name,
                     f"{x_min:.3f}",
                     f"{y_min:.3f}",
-                    f"{args.tile_x_mm:.3f}",
-                    f"{args.tile_y_mm:.3f}",
                     f"{args.dz_mm:.3f}",
                     args.facing,
                     args.enabled,
@@ -306,18 +347,16 @@ def main() -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", newline="") as handle:
         writer = csv.writer(handle)
-        writer.writerow(
-            ["disk", "x_min_mm", "y_min_mm", "x_size_mm", "y_size_mm", "dz_mm", "facing", "enabled", "comment"]
-        )
+        writer.writerow(["disk", "module", "x_min_mm", "y_min_mm", "dz_mm", "facing", "enabled", "comment"])
         writer.writerows(rows)
 
-    print(f"Wrote {len(rows)} tiles to {output_path}")
+    print(f"Wrote {len(rows)} modules to {output_path}")
     for disk in disks:
         count = sum(1 for row in rows if row[0] == disk.disk)
         if count:
             print(
-                f"{disk.disk}: {count} tiles, r=[{disk.rmin_mm:.3f}, {disk.rmax_mm:.3f}] mm, "
-                f"seed=({args.x0_mm if args.x0_mm is not None else -args.tile_x_mm / 2.0:.3f}, "
+                f"{disk.disk}: {count} modules, r=[{disk.rmin_mm:.3f}, {disk.rmax_mm:.3f}] mm, "
+                f"seed=({args.x0_mm if args.x0_mm is not None else -module.x_size_mm / 2.0:.3f}, "
                 f"{args.y0_mm if args.y0_mm is not None else disk.rmin_mm:.3f}) mm"
             )
     return 0

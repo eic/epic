@@ -15,8 +15,8 @@
 
     <comment>
       EIC-LAS based endcap module stack.
-      The tiled module footprints/types are built in epic/src/TileEndcapTracker_geo.cpp,
-      (module structure: build_tile_prototype. load placement: load_tile_rows)
+      The endcap module footprints/types are built in epic/src/SiEndcapModuleTracker_geo.cpp,
+      (module structure: build_module_prototype. load placement: load_module_rows)
       so there are intentionally no local &lt;module&gt; declarations in this file.
     </comment>
     <constant name="SiEndcapModuleGlue_thickness"           value="60*um"/>
@@ -34,13 +34,13 @@
       Corrugated carbon support:
         - h is the surface-to-surface corrugation envelope
         - d is the half-pitch; same-surface flat centers are separated by 2*d
-        - tile placements use compact/tracking/SVT_endcap_tiles_corrugation_all.csv
+        - module placements use compact/tracking/SVT_endcap_modules_corrugation_all.csv
         - module rows align to opposite-side flat centers and use dz to choose the disk side
     </comment>
 
     <comment>
       Per-disk beampipe openings from scripts/beampipe_envelope_circles.py.
-      The tiled mother volume subtracts the explicit lepton and hadron beampipe
+      The module mother volume subtracts the explicit lepton and hadron beampipe
       openings in the plugin. The same circles are also used for placement rejection.
       For reflected N-side layers, hadron_center_x is expressed in the local layer frame.
     </comment>
@@ -65,12 +65,12 @@
     <detector
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
-      type="epic_TileEndcapTracker"
+      type="epic_SiEndcapModuleTracker"
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <tile_placements file="compact/tracking/SVT_endcap_tiles_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
       <comment>
         Module geometry comes from the plugin. This detector uses the
         corrugation-aware placement CSV so modules sit on both sides of the frame.
@@ -99,12 +99,12 @@
     <detector
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
-      type="epic_TileEndcapTracker"
+      type="epic_SiEndcapModuleTracker"
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <tile_placements file="compact/tracking/SVT_endcap_tiles_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="InnerTrackerEndcap_active_rmin"
@@ -174,14 +174,14 @@
     <constant name="TrackerEndcapNLayer4_zmin" value="TrackerEndcapNMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
 
     <comment>
-      ACTS/frame-clearance radii for the tiled endcaps:
-        - keep the active radius near the surviving active tile edge
+      ACTS/frame-clearance radii for the module endcaps:
+        - keep the active radius near the surviving active module edge
         - use these values for layer rmin and corrugated-frame containment checks
         - keep beampipe_opening radii on the physical per-disk beampipe constants
-        - if ACTS later creates zero-width radial gaps, retune these from the innermost surviving tile rows
-        - the inner disk active edge comes from the first surviving InnerTrackerEndcap tile rows
-        - the middle disk active edge comes from the first surviving MiddleTrackerEndcap tile rows
-        - the outer disks share a common active edge from the first surviving OuterTrackerEndcap tile rows
+        - if ACTS later creates zero-width radial gaps, retune these from the innermost surviving module rows
+        - the inner disk active edge comes from the first surviving InnerTrackerEndcap module rows
+        - the middle disk active edge comes from the first surviving MiddleTrackerEndcap module rows
+        - the outer disks share a common active edge from the first surviving OuterTrackerEndcap module rows
     </comment>
     <constant name="InnerTrackerEndcap_active_rmin"  value="37.0*mm" />
     <constant name="MiddleTrackerEndcap_active_rmin" value="54.45*mm" />
@@ -192,12 +192,12 @@
     <detector
       id="TrackerEndcapP_1_ID"
       name="MiddleTrackerEndcapP"
-      type="epic_TileEndcapTracker"
+      type="epic_SiEndcapModuleTracker"
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <tile_placements file="compact/tracking/SVT_endcap_tiles_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
       <layer id="1" name="MiddleTrackerEndcapP_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -222,12 +222,12 @@
     <detector
       id="TrackerEndcapN_1_ID"
       name="MiddleTrackerEndcapN"
-      type="epic_TileEndcapTracker"
+      type="epic_SiEndcapModuleTracker"
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <tile_placements file="compact/tracking/SVT_endcap_tiles_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
       <layer id="1" name="MiddleTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -252,12 +252,12 @@
     <detector
       id="TrackerEndcapP_2_ID"
       name="OuterTrackerEndcapP"
-      type="epic_TileEndcapTracker"
+      type="epic_SiEndcapModuleTracker"
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <tile_placements file="compact/tracking/SVT_endcap_tiles_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
       <layer id="2" name="OuterTrackerEndcapP_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"
@@ -322,12 +322,12 @@
     <detector
       id="TrackerEndcapN_2_ID"
       name="OuterTrackerEndcapN"
-      type="epic_TileEndcapTracker"
+      type="epic_SiEndcapModuleTracker"
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <tile_placements file="compact/tracking/SVT_endcap_tiles_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
       <layer id="2" name="OuterTrackerEndcapN_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"

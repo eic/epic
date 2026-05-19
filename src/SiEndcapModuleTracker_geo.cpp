@@ -54,7 +54,7 @@ struct ModuleTemplate {
 };
 
 // One placement row loaded from the CSV file.
-struct TileRow {
+struct ModuleRow {
   string disk_key;
   string module_name;
   double x_min{0.0};
@@ -88,7 +88,7 @@ struct DiskBoundary {
 };
 
 // Cached built module volume and its sensitive surfaces, reused across many placements.
-struct TilePrototype {
+struct ModulePrototype {
   Volume volume;
   Placements sensitives;
   vector<VolPlane> surfaces;
@@ -178,8 +178,8 @@ bool parse_facing(const string& value, bool& facing_positive_z) {
 // Build the small set of supported tiled-disk module types.
 map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   // Workflow note:
-  // Tile footprints and stack-up for the SVT disk RSU modules are defined here in C++.
-  // The tiled XML only names modules in the placement CSV; it intentionally does not
+  // Module footprints and stack-up for the SVT disk RSU modules are defined here in C++.
+  // The compact XML only names modules in the placement CSV; it intentionally does not
   // carry local <module> blocks for EIC_LAS_6RSU / EIC_LAS_5RSU.
   auto build = [&](const string& name, double x_size, double y_size) {
     ModuleTemplate module_template;
@@ -231,10 +231,10 @@ string resolve_input_file(const string& configured_path) {
   return configured_path;
 }
 
-// Check whether a tile rectangle fits inside the layer cross-section. For layers
+// Check whether a module rectangle fits inside the layer cross-section. For layers
 // with explicit openings, reject any rectangle intersecting either beampipe
-// exclusion circle, not just tiles with corners inside the hole.
-bool tile_inside_disk(const TileRow& row, const DiskBoundary& disk) {
+// exclusion circle, not just modules with corners inside the hole.
+bool module_inside_disk(const ModuleRow& row, const DiskBoundary& disk) {
   const array<pair<double, double>, 4> corners{{
       {row.x_min, row.y_min},
       {row.x_min + row.x_size, row.y_min},
@@ -342,7 +342,7 @@ vector<pair<double, double>> contained_x_intervals(const DiskBoundary& disk,
 }
 
 // Parse the tiled-layer frame block. Only type="corrugated" is handled here; other
-// frame types can be added later without changing the layer or tile placement logic.
+// frame types can be added later without changing the layer or module placement logic.
 bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
   const string frame_type = getAttrOrDefault<string>(x_frame, _Unicode(type), "");
   if (frame_type != "corrugated") {
@@ -371,11 +371,11 @@ bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
 //   single frame volume crosses the xz plane.
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
                            const CorrugatedFrameConfig& config) {
-  if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
-      config.theta <= 0.0) {
-    printout(
-        WARNING, "TileEndcapTracker",
-        fmt::format("skipping corrugated frame for disk '{}': invalid dimensions", disk.disk_key));
+  if (config.thickness <= 0.0 || config.height <= config.thickness ||
+      config.half_pitch <= 0.0 || config.theta <= 0.0) {
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("skipping corrugated frame for disk '{}': invalid dimensions",
+                         disk.disk_key));
     return 0;
   }
 
@@ -383,7 +383,7 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   const double flat_length  = config.half_pitch - y_step;
   const double center_delta = config.height - config.thickness;
   if (flat_length <= 0.0 || center_delta <= 0.0) {
-    printout(WARNING, "TileEndcapTracker",
+    printout(WARNING, "SiEndcapModuleTracker",
              fmt::format("skipping corrugated frame for disk '{}': flat length is non-positive",
                          disk.disk_key));
     return 0;
@@ -496,7 +496,7 @@ Solid build_disk_solid(const string&, const DiskBoundary& disk) {
 }
 
 // Ensure the placed module thickness fits within the XML layer thickness.
-bool tile_inside_layer_z(const TileRow& row, const ModuleTemplate& module_template,
+bool module_inside_layer_z(const ModuleRow& row, const ModuleTemplate& module_template,
                          const DiskBoundary& disk) {
   const double module_half_thickness = module_template.total_thickness / 2.0;
   const double layer_half_thickness  = disk.length / 2.0;
@@ -507,13 +507,13 @@ bool tile_inside_layer_z(const TileRow& row, const ModuleTemplate& module_templa
 // Load the placement CSV once for the detector and attach module dimensions from the
 // built-in template map. This routine is intentionally tolerant: malformed or unknown
 // rows are skipped with warnings instead of aborting the geometry build.
-vector<TileRow> load_tile_rows(const string& file_name,
+vector<ModuleRow> load_module_rows(const string& file_name,
                                const map<string, ModuleTemplate>& module_templates) {
-  vector<TileRow> rows;
+  vector<ModuleRow> rows;
   std::ifstream input(file_name);
   if (!input.is_open()) {
-    printout(WARNING, "TileEndcapTracker",
-             fmt::format("unable to open tile placement file '{}'", file_name));
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("unable to open module placement file '{}'", file_name));
     return rows;
   }
 
@@ -545,7 +545,7 @@ vector<TileRow> load_tile_rows(const string& file_name,
       bool missing_header = false;
       for (const auto& header : required_headers) {
         if (!header_index.count(header)) {
-          printout(WARNING, "TileEndcapTracker",
+          printout(WARNING, "SiEndcapModuleTracker",
                    fmt::format("missing required CSV header '{}' in '{}'", header, file_name));
           missing_header = true;
         }
@@ -565,25 +565,25 @@ vector<TileRow> load_tile_rows(const string& file_name,
       return fields[iter->second];
     };
 
-    TileRow row;
+    ModuleRow row;
     row.disk_key    = get_field("disk");
     row.module_name = get_field("module");
     row.csv_line    = line_number;
     if (row.disk_key.empty()) {
       printout(
-          WARNING, "TileEndcapTracker",
+          WARNING, "SiEndcapModuleTracker",
           fmt::format("skipping CSV line {} with empty disk key in '{}'", line_number, file_name));
       continue;
     }
     if (row.module_name.empty()) {
-      printout(WARNING, "TileEndcapTracker",
+      printout(WARNING, "SiEndcapModuleTracker",
                fmt::format("skipping CSV line {} with empty module name in '{}'", line_number,
                            file_name));
       continue;
     }
     auto module_iter = module_templates.find(row.module_name);
     if (module_iter == module_templates.end()) {
-      printout(WARNING, "TileEndcapTracker",
+      printout(WARNING, "SiEndcapModuleTracker",
                fmt::format("skipping CSV line {} with unknown module '{}' in '{}'", line_number,
                            row.module_name, file_name));
       continue;
@@ -601,14 +601,14 @@ vector<TileRow> load_tile_rows(const string& file_name,
         row.dz = std::stod(dz_value) * mm;
       }
     } catch (const std::exception&) {
-      printout(WARNING, "TileEndcapTracker",
+      printout(WARNING, "SiEndcapModuleTracker",
                fmt::format("skipping malformed CSV line {} in '{}'", line_number, file_name));
       continue;
     }
 
     string facing_value = get_field("facing");
     if (!facing_value.empty() && !parse_facing(facing_value, row.facing_positive_z)) {
-      printout(WARNING, "TileEndcapTracker",
+      printout(WARNING, "SiEndcapModuleTracker",
                fmt::format("skipping CSV line {} with invalid facing '{}' in '{}'", line_number,
                            facing_value, file_name));
       continue;
@@ -623,7 +623,7 @@ vector<TileRow> load_tile_rows(const string& file_name,
       continue;
     }
     if (row.x_size <= 0 || row.y_size <= 0) {
-      printout(WARNING, "TileEndcapTracker",
+      printout(WARNING, "SiEndcapModuleTracker",
                fmt::format("skipping CSV line {} with non-positive dimensions in '{}'", line_number,
                            file_name));
       continue;
@@ -636,9 +636,9 @@ vector<TileRow> load_tile_rows(const string& file_name,
 
 // Build one reusable module volume per module type and cache it. Individual placements
 // later reuse this prototype volume rather than rebuilding the stack for every CSV row.
-TilePrototype build_tile_prototype(Detector& description, SensitiveDetector& sens,
+ModulePrototype build_module_prototype(Detector& description, SensitiveDetector& sens,
                                    const ModuleTemplate& module_template) {
-  TilePrototype prototype;
+  ModulePrototype prototype;
   Material vacuum     = description.vacuum();
   const double x_size = module_template.x_size;
   const double y_size = module_template.y_size;
@@ -691,7 +691,7 @@ TilePrototype build_tile_prototype(Detector& description, SensitiveDetector& sen
 
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens) {
   // Detector-level workflow:
-  // 1. read the detector XML block and shared tile-placement CSV
+  // 1. read the detector XML block and shared module-placement CSV
   // 2. build each layer mother volume, including optional beampipe cutouts
   // 3. filter CSV rows against that layer geometry
   // 4. place cached module prototypes and attach sensitive surfaces
@@ -720,28 +720,30 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   map<string, ModuleTemplate> module_templates = builtin_module_templates(description);
 
   // The tiled SVT workflow uses one shared placement CSV by default. A detector-local
-  // <tile_placements .../> block can still override that file if needed later.
-  string tile_file   = "compact/tracking/SVT_endcap_tiles.csv";
-  string tile_format = "csv";
-  xml_comp_t x_tile_placements(x_det.child("tile_placements", false));
-  if (x_tile_placements) {
-    tile_file   = getAttrOrDefault<string>(x_tile_placements, _Unicode(file), tile_file);
-    tile_format = getAttrOrDefault<string>(x_tile_placements, _Unicode(format), tile_format);
+  // <module_placements .../> block can still override that file if needed later.
+  string module_file   = "compact/tracking/SVT_endcap_modules.csv";
+  string module_format = "csv";
+  xml_comp_t x_module_placements(x_det.child("module_placements", false));
+  if (x_module_placements) {
+    module_file =
+        getAttrOrDefault<string>(x_module_placements, _Unicode(file), module_file);
+    module_format =
+        getAttrOrDefault<string>(x_module_placements, _Unicode(format), module_format);
   }
-  if (tile_format != "csv") {
-    printout(WARNING, "TileEndcapTracker",
-             fmt::format("unsupported tile placement format '{}' for '{}'; attempting CSV",
-                         tile_format, det_name));
+  if (module_format != "csv") {
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("unsupported module placement format '{}' for '{}'; attempting CSV",
+                         module_format, det_name));
   }
-  vector<TileRow> tile_rows;
-  if (!tile_file.empty()) {
-    tile_rows = load_tile_rows(resolve_input_file(tile_file), module_templates);
+  vector<ModuleRow> module_rows;
+  if (!module_file.empty()) {
+    module_rows = load_module_rows(resolve_input_file(module_file), module_templates);
   } else {
-    printout(WARNING, "TileEndcapTracker",
-             fmt::format("detector '{}' is missing a tile_placements file declaration", det_name));
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("detector '{}' is missing a module_placements file declaration", det_name));
   }
 
-  std::map<string, TilePrototype> tile_cache;
+  std::map<string, ModulePrototype> module_cache;
   int mod_num = 1;
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
     // Read one disk layer description from XML and convert it into the placement
@@ -764,7 +766,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     if (x_beampipe_opening) {
       // The opening describes the beampipe exclusion in the layer-local x-y plane as
       // two circles: the centered lepton pipe and the shifted hadron pipe. Both
-      // circles define the subtraction envelope and remain active for tile rejection.
+      // circles define the subtraction envelope and remain active for module rejection.
       disk.has_beampipe_opening = true;
       disk.lepton_opening.center_x =
           getAttrOrDefault(x_beampipe_opening, _Unicode(lepton_center_x), 0.0);
@@ -779,7 +781,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       disk.hadron_opening.radius =
           getAttrOrDefault(x_beampipe_opening, _Unicode(hadron_radius), disk.lepton_opening.radius);
       if (disk.lepton_opening.radius <= 0.0 || disk.hadron_opening.radius <= 0.0) {
-        printout(ERROR, "TileEndcapTracker",
+        printout(ERROR, "SiEndcapModuleTracker",
                  fmt::format("detector '{}' disk '{}' has non-positive beampipe opening radii",
                              det_name, disk.disk_key));
         std::_Exit(EXIT_FAILURE);
@@ -830,14 +832,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       const int placed_frame_count =
           place_corrugated_frame(description, layer_vol, disk, frame_config);
       if (placed_frame_count == 0) {
-        printout(WARNING, "TileEndcapTracker",
+        printout(WARNING, "SiEndcapModuleTracker",
                  fmt::format("no corrugated frame pieces placed for '{}' disk '{}'", det_name,
                              disk.disk_key));
       }
     }
 
     int placed_in_layer = 0;
-    for (const auto& row : tile_rows) {
+    for (const auto& row : module_rows) {
       if (row.disk_key != disk.disk_key) {
         continue;
       }
@@ -847,9 +849,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // 2. reject rows that intersect the disk boundary or beampipe opening
       // 3. reject rows that do not fit in z
       // 4. place the requested module template
-      if (!tile_inside_disk(row, disk)) {
-        printout(WARNING, "TileEndcapTracker",
-                 fmt::format("skipping tile line {} for '{}' (disk '{}'): x_min={} mm y_min={} mm "
+      if (!module_inside_disk(row, disk)) {
+        printout(WARNING, "SiEndcapModuleTracker",
+                 fmt::format("skipping module line {} for '{}' (disk '{}'): x_min={} mm y_min={} mm "
                              "x_size={} mm y_size={} mm violates disk outer boundary/opening",
                              row.csv_line, det_name, row.disk_key, row.x_min / mm, row.y_min / mm,
                              row.x_size / mm, row.y_size / mm));
@@ -857,16 +859,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       }
       auto module_template_it = module_templates.find(row.module_name);
       if (module_template_it == module_templates.end()) {
-        printout(WARNING, "TileEndcapTracker",
-                 fmt::format("skipping tile line {} for '{}' (disk '{}'): module '{}' not found",
+        printout(WARNING, "SiEndcapModuleTracker",
+                 fmt::format("skipping module line {} for '{}' (disk '{}'): module '{}' not found",
                              row.csv_line, det_name, row.disk_key, row.module_name));
         continue;
       }
       const ModuleTemplate& module_template = module_template_it->second;
 
-      if (!tile_inside_layer_z(row, module_template, disk)) {
-        printout(WARNING, "TileEndcapTracker",
-                 fmt::format("skipping tile line {} for '{}' (disk '{}'): dz={} mm with module "
+      if (!module_inside_layer_z(row, module_template, disk)) {
+        printout(WARNING, "SiEndcapModuleTracker",
+                 fmt::format("skipping module line {} for '{}' (disk '{}'): dz={} mm with module "
                              "thickness {} mm exceeds layer half-thickness {} mm",
                              row.csv_line, det_name, row.disk_key, row.dz / mm,
                              module_template.total_thickness / mm, disk.length / (2.0 * mm)));
@@ -874,13 +876,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       }
 
       string cache_key = row.module_name;
-      auto cache_it    = tile_cache.find(cache_key);
-      if (cache_it == tile_cache.end()) {
+      auto cache_it    = module_cache.find(cache_key);
+      if (cache_it == module_cache.end()) {
         cache_it =
-            tile_cache.emplace(cache_key, build_tile_prototype(description, sens, module_template))
+            module_cache.emplace(cache_key, build_module_prototype(description, sens, module_template))
                 .first;
       }
-      TilePrototype& prototype = cache_it->second;
+      ModulePrototype& prototype = cache_it->second;
 
       // Convert the CSV rectangle origin into the module center used by DD4hep.
       const double x_center = row.x_min + row.x_size / 2.0;
@@ -914,8 +916,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
 
     if (placed_in_layer == 0) {
-      printout(WARNING, "TileEndcapTracker",
-               fmt::format("no valid tiles placed for '{}' disk '{}'", det_name, disk.disk_key));
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("no valid modules placed for '{}' disk '{}'", det_name, disk.disk_key));
     }
   }
 
@@ -927,4 +929,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   return sdet;
 }
 
-DECLARE_DETELEMENT(epic_TileEndcapTracker, create_detector)
+DECLARE_DETELEMENT(epic_SiEndcapModuleTracker, create_detector)
