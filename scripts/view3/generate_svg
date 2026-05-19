@@ -21,10 +21,7 @@ done
 
 [[ -z "${INPUT_FILE}" ]] && { echo "Error: no input file."; print_the_help; }
 
-# Keep z <= 1500 mm  (dawncut 0 0 -1 1500 → clip front: -z+1500>0 → z<1500 clipped → keep z>=1500)
-# Wait: that keeps z>=1500. The original script does:
-#   dawncut 0 0 -1 1500 → plane -z+1500=0 → z=1500, clips z<1500, keeps z>=1500
-# We replicate exactly:
+# Keep the portion of the model with z >= 1500 mm.
 duskcut 0 0 -1 1500 "${INPUT_FILE}" "${FILE_TAG}.stp"
 dusk --mesh-deflection 5 -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
 
