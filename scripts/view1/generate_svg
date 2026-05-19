@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# generate_svg — dusk/duskcut equivalent of generate_eps for view1
+# Produces side and top SVG views using STEP file input.
+#
+# Usage: ./generate_svg -i detector.stp [-t tag]
+
+function print_the_help {
+  echo "USAGE: $0 -i <STEP_FILE> [-t <tag>]"
+  echo "  OPTIONS:"
+  echo "    -i, --input  <file>   input STEP file (required)"
+  echo "    -t, --tag    <tag>    filename tag (default: view01)"
+  exit 0
+}
+
+FILE_TAG="view01"
+INPUT_FILE=""
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    -h|--help)    print_the_help ;;
+    -i|--input)   INPUT_FILE="$2"; shift; shift ;;
+    -t|--tag)     FILE_TAG="$2";   shift; shift ;;
+    *) echo "unknown option $1"; print_the_help ;;
+  esac
+done
+
+if [[ -z "${INPUT_FILE}" ]]; then
+  echo "Error: no input file specified."
+  print_the_help
+fi
+
+# Side view — cut at x=1 mm (keep x >= 1 mm), theta=165, phi=75, draw=3
+duskcut -1 0 0 1 "${INPUT_FILE}" "${FILE_TAG}_side.stp"
+dusk -d "${FILE_TAG}_side.stp" --mag 10 --draw 3 --theta 165 --phi 75 \
+     --light-theta 180 --light-phi 90 -o "${FILE_TAG}.svg"
+
+# Top view — thin y-slice near y=0, theta=90, phi=90, draw=1
+duskcut  0  1 0 1 "${INPUT_FILE}"              "${FILE_TAG}_top_t0.stp"
+duskcut  0 -1 0 1 "${FILE_TAG}_top_t0.stp"     "${FILE_TAG}_top.stp"
+dusk -d "${FILE_TAG}_top.stp" --mag 10 --draw 1 --theta 90 --phi 90 \
+     -o "${FILE_TAG}_top.svg"
+
+rm -f "${FILE_TAG}_side.stp" "${FILE_TAG}_top_t0.stp" "${FILE_TAG}_top.stp"
+echo "[generate_svg] Done: ${FILE_TAG}.svg  ${FILE_TAG}_top.svg"

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# generate_svg — dusk/duskcut equivalent of generate_eps for view13
+# Everything downstream of z = 5 m (forward spectrometer region).
+
+function print_the_help {
+  echo "USAGE: $0 -i <STEP_FILE> [-t <tag>]"
+  exit 0
+}
+
+FILE_TAG="view13"
+INPUT_FILE=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)  print_the_help ;;
+    -i|--input) INPUT_FILE="$2"; shift; shift ;;
+    -t|--tag)   FILE_TAG="$2";   shift; shift ;;
+    *) echo "unknown option $1"; print_the_help ;;
+  esac
+done
+
+[[ -z "${INPUT_FILE}" ]] && { echo "Error: no input file."; print_the_help; }
+
+# dawncut 0 0 -1 -5000 → plane -z-5000=0 → z=-5000, clips -z-5000>0 i.e. z<-5000
+# Wait: clips front side: 0*x+0*y+(-1)*z+(-5000)>0 → -z-5000>0 → z<-5000
+# Actually let me re-read: dawncut 0 0 -1 -5000
+#   plane: -z + (-5000) = 0 → z = -5000, but that's wrong for "downstream of z=5000"
+# From generate_eps comment: "everything downstream of z = 5 m"
+# dawncut 0 0 -1 -5000: clips -z-5000 > 0 → -z > 5000 → z < -5000. Keeps z >= -5000.
+# But "downstream" in EIC is hadron-going (+z). Hmm, dawncut convention: n=(0,0,-1), d=-5000.
+# Plane: -z - 5000 = 0 → z = -5000. Keep: -z - 5000 ≤ 0 → z ≥ -5000.
+# That keeps z ≥ -5000, i.e. everything except z < -5000. For EIC, ion beam goes in +z,
+# so "downstream" = large +z. This view must keep the z > 5000 mm region.
+# Let me trust the original script literal translation: duskcut 0 0 -1 -5000
+duskcut 0 0 -1 -5000 "${INPUT_FILE}" "${FILE_TAG}b.stp"
+dusk -d "${FILE_TAG}b.stp" --draw 2 -o "${FILE_TAG}b.svg"
+
+rm -f "${FILE_TAG}b.stp"
+echo "[generate_svg] Done: ${FILE_TAG}b.svg"

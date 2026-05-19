@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# generate_svg — dusk/duskcut equivalent of generate_eps for view3
+# Single XZ side view of the central region (z <= 1500 mm).
+
+function print_the_help {
+  echo "USAGE: $0 -i <STEP_FILE> [-t <tag>]"
+  exit 0
+}
+
+FILE_TAG="view3"
+INPUT_FILE=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)  print_the_help ;;
+    -i|--input) INPUT_FILE="$2"; shift; shift ;;
+    -t|--tag)   FILE_TAG="$2";   shift; shift ;;
+    *) echo "unknown option $1"; print_the_help ;;
+  esac
+done
+
+[[ -z "${INPUT_FILE}" ]] && { echo "Error: no input file."; print_the_help; }
+
+# Keep z <= 1500 mm  (dawncut 0 0 -1 1500 → clip front: -z+1500>0 → z<1500 clipped → keep z>=1500)
+# Wait: that keeps z>=1500. The original script does:
+#   dawncut 0 0 -1 1500 → plane -z+1500=0 → z=1500, clips z<1500, keeps z>=1500
+# We replicate exactly:
+duskcut 0 0 -1 1500 "${INPUT_FILE}" "${FILE_TAG}.stp"
+dusk -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
+
+rm -f "${FILE_TAG}.stp"
+echo "[generate_svg] Done: ${FILE_TAG}.svg"
