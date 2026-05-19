@@ -23,9 +23,9 @@
     <constant name="SiEndcapModuleFlatSheetCF_thickness"    value="0.15*mm"/>
     <constant name="SiTrackerSensor_thickness"              value="40*um"/>
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.2*mm"/>
-    <constant name="SiEndcapCorrugation_h"                  value="4.0*mm"/>
+    <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
     <constant name="SiEndcapCorrugation_theta"              value="35*deg"/>
-    <constant name="SiEndcapCorrugation_d"                  value="17.385*mm"/>
+    <constant name="SiEndcapCorrugation_d"                  value="34.77*mm/2"/>
 
     <comment> Global Si endcap variables </comment>
     <!-- <constant name="SiTrackerEndcapMod_thickness"   value="SiEndcapModuleFlatSheetCF_thickness + SiEndcapModuleGlue_thickness + SiTrackerSensor_thickness" /> -->
