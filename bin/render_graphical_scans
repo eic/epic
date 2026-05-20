@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2024 EIC Collaboration
+'''
+    Render TH2F histograms from graphicalScan ROOT output to PNG images,
+    with the ePIC collaboration logo overlaid in the bottom-right corner.
+
+    Usage:
+        render_graphical_scans <input.root> <output_dir>
+'''
+
+import io
+import os
+import sys
+import argparse
+import urllib.request
+
+from PIL import Image
+
+import ROOT
+
+ROOT.gROOT.SetBatch(True)
+ROOT.gStyle.SetOptStat(0)
+ROOT.gStyle.SetPalette(ROOT.kRainBow)
+
+# White-on-transparent logo works well over COLZ colour-scale plots.
+LOGO_URL = 'https://zenodo.org/records/14058463/files/2560px-EPIC-logo_white_transparent.png?download=1'
+# Logo width as a fraction of the canvas width; placed in the bottom-right corner.
+LOGO_WIDTH_FRACTION = 0.18
+LOGO_MARGIN = 20  # pixels from the canvas edge
+
+
+def fetch_logo(url):
+    '''Download the ePIC logo and return a PIL Image (RGBA).'''
+    print(f'Fetching logo from {url}')
+    with urllib.request.urlopen(url) as resp:
+        data = resp.read()
+    return Image.open(io.BytesIO(data)).convert('RGBA')
+
+
+def overlay_logo(png_path, logo):
+    '''Composite *logo* onto the bottom-right corner of the PNG at *png_path*.'''
+    base = Image.open(png_path).convert('RGBA')
+    w, h = base.size
+
+    logo_w = int(w * LOGO_WIDTH_FRACTION)
+    logo_h = int(logo.height * logo_w / logo.width)
+    resized = logo.resize((logo_w, logo_h), Image.LANCZOS)
+
+    x = w - logo_w - LOGO_MARGIN
+    y = h - logo_h - LOGO_MARGIN
+    base.paste(resized, (x, y), resized)
+    base.save(png_path)
+
+
+def render_histogram(hist, output_path, base_width=1200,
+                     left_margin=0.10, right_margin=0.15,
+                     top_margin=0.10, bottom_margin=0.10):
+    '''Render *hist* to *output_path* with an aspect ratio that preserves equal
+    physical scale on both axes (no distortion of cylindrical geometry).
+
+    The canvas height is derived from the histogram axis ranges and the margin
+    fractions so that 1 cm on the x-axis occupies the same number of pixels as
+    1 cm on the y-axis.
+    '''
+    x_span = hist.GetXaxis().GetXmax() - hist.GetXaxis().GetXmin()
+    y_span = hist.GetYaxis().GetXmax() - hist.GetYaxis().GetXmin()
+
+    # Plot area fractions (excluding margins)
+    plot_w_frac = 1.0 - left_margin - right_margin
+    plot_h_frac = 1.0 - top_margin  - bottom_margin
+
+    # Equal physical scale: plot_width_px / x_span == plot_height_px / y_span
+    plot_width_px = base_width * plot_w_frac
+    canvas_height  = int(plot_width_px / x_span * y_span / plot_h_frac)
+
+    c = ROOT.TCanvas(f'c_{hist.GetName()}', '', base_width, canvas_height)
+    c.SetLeftMargin(left_margin)
+    c.SetRightMargin(right_margin)
+    c.SetTopMargin(top_margin)
+    c.SetBottomMargin(bottom_margin)
+    hist.Draw('COLZ')
+    hist.GetXaxis().SetTitleSize(0.04)
+    hist.GetYaxis().SetTitleSize(0.04)
+    c.SaveAs(output_path)
+    c.Close()
+
+
+def render_root_file(input_path, output_dir, logo):
+    os.makedirs(output_dir, exist_ok=True)
+
+    f = ROOT.TFile.Open(input_path)
+    if not f or f.IsZombie():
+        print(f'ERROR: Cannot open {input_path}', file=sys.stderr)
+        sys.exit(1)
+
+    for slice_key in f.GetListOfKeys():
+        obj = slice_key.ReadObj()
+        if not isinstance(obj, ROOT.TDirectoryFile):
+            continue
+        slice_name = slice_key.GetName()
+
+        for hist_key in obj.GetListOfKeys():
+            hist = hist_key.ReadObj()
+            if not isinstance(hist, ROOT.TH2F):
+                continue
+            hist_name = hist_key.GetName()
+            # Sanitise title for use in filename
+            safe_title = (hist.GetTitle()
+                          .replace(' ', '_').replace('[', '').replace(']', '')
+                          .replace('/', '_per_').replace('=', '').replace('.', 'p'))
+            png_name = f'{slice_name}_{hist_name}_{safe_title}.png'
+            output_path = os.path.join(output_dir, png_name)
+            print(f'Rendering {slice_name}/{hist_name} -> {output_path}')
+            render_histogram(hist, output_path)
+            if logo is not None:
+                overlay_logo(output_path, logo)
+
+    f.Close()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        prog='render_graphical_scans',
+        description='Render TH2F histograms from graphicalScan ROOT output to PNG images.',
+    )
+    parser.add_argument('input', help='Input ROOT file produced by graphicalScan')
+    parser.add_argument('output_dir', help='Directory to write PNG images into')
+    parser.add_argument('--no-logo', action='store_true',
+                        help='Skip logo overlay (useful when network is unavailable)')
+    args = parser.parse_args()
+
+    logo = None
+    if not args.no_logo:
+        try:
+            logo = fetch_logo(LOGO_URL)
+        except Exception as e:
+            print(f'WARNING: Could not fetch logo ({e}); continuing without overlay.', file=sys.stderr)
+
+    render_root_file(args.input, args.output_dir, logo)
+    print(f'Done. Images written to {args.output_dir}/')
