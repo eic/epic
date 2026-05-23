@@ -106,17 +106,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::string csec_gdml_cache =
       getAttrOrDefault<std::string>(x_det_csec_gdmlfile, _Unicode(cache), " ");
 
-  xml_comp_t x_det_er_gdmlfile = x_det.child("er_gdmlfile");
-  std::string er_gdml_material =
-      getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(material), " ");
-  xml_comp_t x_er_dims = x_det_er_gdmlfile.child(_Unicode(dimensions));
-  double er_rinner     = x_er_dims.attr<double>(_Unicode(rinner)) * mm;
-  double er_router     = x_er_dims.attr<double>(_Unicode(router)) * mm;
-  double er_zhalf      = x_er_dims.attr<double>(_Unicode(zhalf)) * mm;
-  double er_zcenter    = x_er_dims.attr<double>(_Unicode(zcenter)) * mm;
-  int er_nholes        = x_er_dims.attr<int>(_Unicode(nholes));
-  double er_rhole      = x_er_dims.attr<double>(_Unicode(rhole)) * mm;
-  double er_rhole_ctr  = x_er_dims.attr<double>(_Unicode(rhole_ctr)) * mm;
+  xml_comp_t x_end_ring        = x_det.child("end_ring");
+  std::string er_material_name = getAttrOrDefault<std::string>(x_end_ring, _Unicode(material), " ");
+  xml_comp_t x_er_dims         = x_end_ring.child(_Unicode(dimensions));
+  double er_rinner             = x_er_dims.attr<double>(_Unicode(rinner)) * mm;
+  double er_router             = x_er_dims.attr<double>(_Unicode(router)) * mm;
+  double er_zhalf              = x_er_dims.attr<double>(_Unicode(zhalf)) * mm;
+  double er_zcenter            = x_er_dims.attr<double>(_Unicode(zcenter)) * mm;
+  int er_nholes                = x_er_dims.attr<int>(_Unicode(nholes));
+  double er_rhole              = x_er_dims.attr<double>(_Unicode(rhole)) * mm;
+  double er_rhole_ctr          = x_er_dims.attr<double>(_Unicode(rhole_ctr)) * mm;
 
   // Loop over the defines section and pick up the tile offsets, ref location and angles
 
@@ -242,7 +241,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Volume barrel_er_vol;
   {
     Tube er_base("", er_rinner, er_router, er_zhalf);
-    Material er_material = description.material(er_gdml_material.c_str());
+    Material er_material = description.material(er_material_name.c_str());
     barrel_er_vol        = Volume("BarrelHCalEndRing", er_base, er_material);
     barrel_er_vol.setVisAttributes(description, x_det.visStr());
 
@@ -300,40 +299,39 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // standard tiles
 
-      gdmlname   = _toString(j, "tile%d_gdmlfile");
+      gdmlname   = _toString(j, "tile%d");
       solid_name = _toString(j, "OuterHCalTile%02d");
 
     } else {
 
       // chimney tiles
 
-      gdmlname   = _toString(j - 4, "ctile%d_gdmlfile");
+      gdmlname   = _toString(j - 4, "ctile%d");
       solid_name = _toString(j - 4, "OuterHCalChimneyTile%02d");
     }
 
     // tile shape: read material and Xtru shape from compact XML
-    xml_comp_t x_det_tgdmlfile = x_det.child(gdmlname);
-    std::string tgdml_material =
-        getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(material), " ");
+    xml_comp_t x_tile              = x_det.child(gdmlname);
+    std::string tile_material_name = getAttrOrDefault<std::string>(x_tile, _Unicode(material), " ");
 
     // Parse <shape type="Xtru"> child: <twoDimVertex> and <section> elements
-    xml_comp_t x_shape = x_det_tgdmlfile.child(_Unicode(shape));
+    xml_comp_t x_shape = x_tile.child(_Unicode(shape));
     std::vector<double> vx, vy, vz, vxoff, vyoff, vscale;
     for (xml_coll_t v(x_shape, _Unicode(twoDimVertex)); v; ++v) {
       xml_comp_t vertex = v;
       vx.push_back(vertex.attr<double>(_Unicode(x)) * mm);
       vy.push_back(vertex.attr<double>(_Unicode(y)) * mm);
     }
-    for (xml_coll_t s(x_shape, _Unicode(section)); s; ++s) {
-      xml_comp_t sec = s;
-      vz.push_back(sec.attr<double>(_Unicode(zPosition)) * mm);
-      vxoff.push_back(getAttrOrDefault<double>(sec, _Unicode(xOffset), 0.) * mm);
-      vyoff.push_back(getAttrOrDefault<double>(sec, _Unicode(yOffset), 0.) * mm);
-      vscale.push_back(getAttrOrDefault<double>(sec, _Unicode(scalingFactor), 1.));
+    for (xml_coll_t sec_iter(x_shape, _Unicode(section)); sec_iter; ++sec_iter) {
+      xml_comp_t xtru_sec = sec_iter;
+      vz.push_back(xtru_sec.attr<double>(_Unicode(zPosition)) * mm);
+      vxoff.push_back(getAttrOrDefault<double>(xtru_sec, _Unicode(xOffset), 0.) * mm);
+      vyoff.push_back(getAttrOrDefault<double>(xtru_sec, _Unicode(yOffset), 0.) * mm);
+      vscale.push_back(getAttrOrDefault<double>(xtru_sec, _Unicode(scalingFactor), 1.));
     }
 
     ExtrudedPolygon tile_solid(vx, vy, vz, vxoff, vyoff, vscale);
-    Material tile_material = description.material(tgdml_material.c_str());
+    Material tile_material = description.material(tile_material_name.c_str());
     Volume solidVolume(solid_name, tile_solid, tile_material);
     solidVolume.setVisAttributes(description, x_det.visStr());
     solidVolume.setSensitiveDetector(sens);
