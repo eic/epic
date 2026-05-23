@@ -25,11 +25,11 @@
         <type_flags type="DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC"/>
         <sec_gdmlfile file="gdml/barrel_hcal_steel_sector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_sector_nocombs.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="Steel1020"/>
         <csec_gdmlfile file="gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="Steel1020"/>
-        <er_gdmlfile material="Steel1020">
+        <end_ring material="Steel1020">
           <dimensions rinner="1980.15" router="2619.85" zhalf="19.304" zcenter="3178.406"
                       nholes="32" rhole="152.4" rhole_ctr="2293.86069"/>
-        </er_gdmlfile>
-        <tile1_gdmlfile material="PlasticScint">
+        </end_ring>
+        <tile1 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="1.9212" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition="8.9212" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -42,8 +42,8 @@
             <twoDimVertex x=" 136.273087" y=" 381.494482"/>
             <twoDimVertex x="  63.817399" y="-426.850000"/>
           </shape>
-        </tile1_gdmlfile>
-        <tile2_gdmlfile material="PlasticScint">
+        </tile1>
+        <tile2 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -56,8 +56,8 @@
             <twoDimVertex x=" 173.766669" y=" 381.922482"/>
             <twoDimVertex x="  28.060339" y="-426.422000"/>
           </shape>
-        </tile2_gdmlfile>
-        <tile3_gdmlfile material="PlasticScint">
+        </tile2>
+        <tile3 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -70,8 +70,8 @@
             <twoDimVertex x=" 207.250291" y=" 381.264482"/>
             <twoDimVertex x=" -12.735671" y="-427.080000"/>
           </shape>
-        </tile3_gdmlfile>
-        <tile4_gdmlfile material="PlasticScint">
+        </tile3>
+        <tile4 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -84,8 +84,8 @@
             <twoDimVertex x="  52.630129" y=" 372.476495"/>
             <twoDimVertex x="  52.630129" y=" 381.526482"/>
           </shape>
-        </tile4_gdmlfile>
-        <tile5_gdmlfile material="PlasticScint">
+        </tile4>
+        <tile5 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -98,8 +98,8 @@
             <twoDimVertex x=" 147.596552" y=" 372.428495"/>
             <twoDimVertex x=" 147.596552" y=" 381.478482"/>
           </shape>
-        </tile5_gdmlfile>
-        <tile6_gdmlfile material="PlasticScint">
+        </tile5>
+        <tile6 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -112,8 +112,8 @@
             <twoDimVertex x=" 330.776465" y=" 381.425482"/>
             <twoDimVertex x="-125.911157" y="-426.919000"/>
           </shape>
-        </tile6_gdmlfile>
-        <tile7_gdmlfile material="PlasticScint">
+        </tile6>
+        <tile7 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -126,8 +126,8 @@
             <twoDimVertex x=" 376.774077" y=" 381.368482"/>
             <twoDimVertex x="-165.592134" y="-426.976000"/>
           </shape>
-        </tile7_gdmlfile>
-        <tile8_gdmlfile material="PlasticScint">
+        </tile7>
+        <tile8 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -140,8 +140,8 @@
             <twoDimVertex x=" 426.309854" y=" 381.520482"/>
             <twoDimVertex x="-205.897178" y="-426.824000"/>
           </shape>
-        </tile8_gdmlfile>
-        <tile9_gdmlfile material="PlasticScint">
+        </tile8>
+        <tile9 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -154,8 +154,8 @@
             <twoDimVertex x="-172.192846" y=" 317.257495"/>
             <twoDimVertex x="-172.192846" y=" 326.307482"/>
           </shape>
-        </tile9_gdmlfile>
-        <tile10_gdmlfile material="PlasticScint">
+        </tile9>
+        <tile10 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -168,8 +168,8 @@
             <twoDimVertex x="-200.582895" y=" 317.386495"/>
             <twoDimVertex x="-200.582895" y=" 326.436482"/>
           </shape>
-        </tile10_gdmlfile>
-        <tile11_gdmlfile material="PlasticScint">
+        </tile10>
+        <tile11 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -182,8 +182,8 @@
             <twoDimVertex x="-488.055959" y=" 338.185482"/>
             <twoDimVertex x=" 239.031199" y="-346.196498"/>
           </shape>
-        </tile11_gdmlfile>
-        <tile12_gdmlfile material="PlasticScint">
+        </tile11>
+        <tile12 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -197,8 +197,8 @@
             <twoDimVertex x="-333.086451" y="  86.981442"/>
             <twoDimVertex x=" 183.030736" y="-308.834498"/>
           </shape>
-        </tile12_gdmlfile>
-        <ctile9_gdmlfile material="PlasticScint">
+        </tile12>
+        <ctile9 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -211,8 +211,8 @@
             <twoDimVertex x=" 295.139543" y=" 162.710482"/>
             <twoDimVertex x="  -3.233504" y="-167.969510"/>
           </shape>
-        </ctile9_gdmlfile>
-        <ctile10_gdmlfile material="PlasticScint">
+        </ctile9>
+        <ctile10 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -225,8 +225,8 @@
             <twoDimVertex x="  39.796895" y=" 153.649495"/>
             <twoDimVertex x="  39.796895" y=" 162.699482"/>
           </shape>
-        </ctile10_gdmlfile>
-        <ctile11_gdmlfile material="PlasticScint">
+        </ctile10>
+        <ctile11 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -239,8 +239,8 @@
             <twoDimVertex x=" 304.647959" y=" 165.380482"/>
             <twoDimVertex x=" -46.687490" y="-165.319499"/>
           </shape>
-        </ctile11_gdmlfile>
-        <ctile12_gdmlfile material="PlasticScint">
+        </ctile11>
+        <ctile12 material="PlasticScint">
           <shape type="Xtru">
             <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
             <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
@@ -254,7 +254,7 @@
             <twoDimVertex x=" 158.588451" y=" -88.011558"/>
             <twoDimVertex x=" 103.674877" y="-130.125510"/>
           </shape>
-        </ctile12_gdmlfile>
+        </ctile12>
 
   <define>
 
