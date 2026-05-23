@@ -240,7 +240,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // which is geometrically equivalent to a hole in the steel.
   Volume barrel_er_vol;
   {
-    Tube er_base("", er_rinner, er_router, er_zhalf);
+    Tube er_base(er_rinner, er_router, er_zhalf);
     Material er_material = description.material(er_material_name.c_str());
     barrel_er_vol        = Volume("BarrelHCalEndRing", er_base, er_material);
     barrel_er_vol.setVisAttributes(description, x_det.visStr());
@@ -248,7 +248,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // Bolt-hole daughters: same half-length as the ring (flush faces — no
     // overlap needed because the hole solid is a proper daughter, not a
     // Boolean operand).
-    Tube er_hole("BarrelHCalEndRingHole", 0., er_rhole, er_zhalf);
+    Tube er_hole(0., er_rhole, er_zhalf);
     Volume hole_vol("BarrelHCalEndRingHole", er_hole, description.air());
     hole_vol.setVisAttributes(description, "InvisibleNoDaughters");
     for (int i = 0; i < er_nholes; ++i) {
