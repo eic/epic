@@ -16,3 +16,21 @@ leak:libDDCorePlugins.so
 # time: TStorage::ObjectAlloc (ROOT object pool) and TList::NewLink (TList
 # node allocations).
 leak:libCore.so
+
+# CPyCppyy (ROOT's Python-C++ binding layer): at Python import time,
+# CPyCppyy builds one proxy type object per DD4hep/Geant4 C++ class and
+# caches them in Python's global type registry. These include CPPOverload
+# (method proxies), CPPType/CPPScope (type proxies), scope dictionaries,
+# and converter factory entries. Python does not release module-level type
+# objects at interpreter shutdown, so LSAN reports them as leaked.
+leak:libCPyCppyy.so
+
+# CPython object allocator: Python objects (dicts, tuples, type objects)
+# created during CPyCppyy module initialisation live in Python's global
+# namespace and are not freed at interpreter shutdown.
+leak:_PyObject_Malloc
+
+# std::string growth allocations (via _M_mutate) with truncated stack
+# traces that lack deeper context; these arise from CPyCppyy storing C++
+# type/method names as std::string in global maps during Python import.
+leak:_M_mutate
