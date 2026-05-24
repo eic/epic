@@ -263,10 +263,21 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.xml
 #
 # When built with -DUSE_ASAN=ON / -DUSE_UBSAN=ON, embed sanitizer environment
 # variable exports into thisepic.sh so that reusable workflows (and local users)
-# automatically get the right suppression paths when they source this script.
-# Suppression files are installed alongside the plugin under ${DETECTOR_PATH}.
-# Note: bracket strings preserve ${...} literally (no CMake expansion); configure_file
-# with @ONLY passes them through so the shell expands $DETECTOR_PATH at runtime.
+# automatically get the right suppression paths and LD_PRELOAD when they source
+# this script.  Suppression files are installed alongside the plugin under
+# ${DETECTOR_PATH}.
+#
+# Implementation note: bracket strings preserve ${...} literally (no CMake
+# expansion); configure_file with @ONLY passes them through so the shell expands
+# $DETECTOR_PATH at runtime.  For PRELOAD_SETUP_LINES, where the sanitizer lib
+# path is a CMake-time value but ${LD_PRELOAD:+:${LD_PRELOAD}} is a shell
+# expression, string(CONFIGURE @ONLY) is used to expand only the @VAR@ token
+# while leaving the shell parameter expression untouched.
+set(PRELOAD_SETUP_LINES "")
+if(PRELOAD_SANITIZER_LIB)
+  string(JOIN ":" PRELOAD_SANITIZER_LIB_JOINED ${PRELOAD_SANITIZER_LIB})
+  string(CONFIGURE [[export LD_PRELOAD=@PRELOAD_SANITIZER_LIB_JOINED@${LD_PRELOAD:+:${LD_PRELOAD}}]] PRELOAD_SETUP_LINES @ONLY)
+endif()
 set(ASAN_SETUP_LINES "")
 set(UBSAN_SETUP_LINES "")
 if(USE_ASAN)
