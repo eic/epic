@@ -1,0 +1,18 @@
+# epic FieldMapB: field-map data vectors and the FieldMapB object itself are
+# registered in DD4hep's global Detector handle map and live for the lifetime
+# of the process. DD4hep's Detector singleton does not call their destructors
+# at process exit, so LSAN reports these as indirect leaks.
+leak:FieldMapB::Configure
+leak:create_field_map_b
+
+# DD4hep global Detector registry: Constant, NamedObject, DetElement,
+# LimitSet, AlignmentCondition, IDDescriptorObject, BitFieldCoder,
+# Segmentation parameters/identifiers, segmentation factories, plugin string
+# construction, check_process_file — all stored in process-lifetime maps.
+leak:libDDCore.so
+leak:libDDCorePlugins.so
+
+# ROOT internal memory management used by DD4hep at detector construction
+# time: TStorage::ObjectAlloc (ROOT object pool) and TList::NewLink (TList
+# node allocations).
+leak:libCore.so
