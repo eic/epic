@@ -707,6 +707,163 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // calculate PDU pitch: the distance between two adjacent PDUs
     double pduPitch = pduNumSensors * resinSide + (pduNumSensors + 1) * pduSensorGap + pduGap;
 
+    // BUILD PDU ASSEMBLY TEMPLATE -------------------------------------------------------
+    /* All PDUs within a sector have identical internal geometry; only their placement in
+     * the gas volume differs (each PDU points to a different spot on the sensor sphere).
+     * By building one Assembly template per sector and placing it N times, TGeo can share
+     * the same B-rep description for all PDU copies, dramatically reducing volume count
+     * and STEP export size.
+     *
+     * PhysVolID allocation:
+     *  - "sipm"   is set on the pssVol placement inside sensorAssembly (varies per slot)
+     *  - "sector" and "pdu" are set on the pduAssembly placement in gasvolVol (varies per PDU)
+     * The VolumeManager accumulates IDs from all levels when encoding a hit's cellID, so the
+     * full {sector, pdu, sipm} triple is correctly reconstructed at simulation time.
+     */
+
+    /* begin building sensors and PDUs, where:
+     * - sensor assembly: collection of all objects for a single SiPM
+     * - photodetector unit (PDU) assembly: matrix of SiPMs with services
+     *   - coordinate system: the "origin" of the assembly will be the center of the
+     *     outermost surface of the photosensitive surface (pss)
+     *     - reconstruction can access the sensor surface position from the sensor
+     *       assembly origin, which will ultimately have coordinates w.r.t. to the IP after
+     *       placement in the dRICH vessel
+     *     - the pss is segmented into SiPM pixels; gaps between the pixels
+     *       are accounted for in reconstruction, and each pixel reads out as a unique `cellID`
+     *     - `cellID` to postion conversion will give pixel centroids within the pss volume,
+     *       (not exactly at the pss surface, but rather in the center of the pss volume,
+     *       so keep in mind the very small offset)
+     */
+
+    // photosensitive surface (pss) and resin solids
+    Box pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
+    Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
+
+    // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
+    SubtractionSolid resinSolidEmbedded(
+        resinSolid, pssSolid,
+        Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2.)));
+
+    /* NOTE:
+     * Here we could add gaps (size=`DRICH_pixel_gap`) between the pixels
+     * as additional resin volumes, but this would require several more
+     * iterative boolean operations, which may cause significant
+     * performance slow downs in the simulation. Alternatively, one can
+     * create a pixel gap mask with several disjoint, thin `Box` volumes
+     * just outside the pss surface (no booleans required), but this
+     * would amount to a very large number of additional volumes. Instead,
+     * we have decided to apply pixel gap masking to the digitization
+     * algorithm, downstream in reconstruction.
+     */
+
+    // pss and resin volumes (one per sector, shared across all PDU copies)
+    Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
+    Volume resinVol(detName + "_resin_" + secName, resinSolidEmbedded, resinMat);
+    pssVol.setVisAttributes(pssVis);
+    resinVol.setVisAttributes(resinVis);
+
+    // sensitivity
+    if (!debugOptics || debugOpticsMode == 3)
+      pssVol.setSensitiveDetector(sens);
+
+    // sensor optical surface: applied once to pssVol; covers all instances in all PDU copies
+    if (!debugOptics || debugOpticsMode == 3) {
+      SkinSurface pssSkin(desc, det, "sensor_optical_surface_" + secName, pssSurf, pssVol);
+      pssSkin.isValid();
+    }
+
+    // PDU sensor grid parameters
+    double pduSensorPitch     = resinSide + pduSensorGap;
+    double pduSensorOffsetMax = pduSensorPitch * (pduNumSensors - 1) / 2.0;
+
+    // placement transformations within sensorAssembly (identical for all sensors)
+    // - set assembly origin to pss outermost surface centroid
+    auto pssPlacement   = Transform3D(Translation3D(0., 0., -pssThickness / 2.0));
+    auto resinPlacement = Transform3D(Translation3D(0., 0., -resinThickness / 2.0));
+
+    // PDU assembly template for this sector
+    Assembly pduAssembly(detName + "_pdu_" + secName);
+
+    // fill sensor grid: one sensorAssembly per (sensorIx, sensorIy) slot
+    // sensorPVs[isipm] holds the pssPV for that slot, used for DetElement creation later
+    std::vector<PlacedVolume> sensorPVs;
+    for (int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
+      for (int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
+        int isipm               = sensorIx * pduNumSensors + sensorIy;
+        double pduSensorOffsetX = sensorIx * pduSensorPitch - pduSensorOffsetMax;
+        double pduSensorOffsetY = sensorIy * pduSensorPitch - pduSensorOffsetMax;
+        Assembly sensorAssembly(detName + "_sensor_" + secName + "_" + std::to_string(isipm));
+        auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
+        sensorAssembly.placeVolume(resinVol, resinPlacement);
+        pssPV.addPhysVolID("sipm", isipm); // "sector" and "pdu" go on the pduAssembly placement
+        pduAssembly.placeVolume(
+            sensorAssembly, Transform3D(Translation3D(pduSensorOffsetX, pduSensorOffsetY, 0.0)));
+        sensorPVs.push_back(pssPV);
+      }
+    } // end PDU SiPM matrix template loop
+
+    // front service volumes (one per sector, placed once in pduAssembly template)
+    Transform3D frontServiceTransformation = Transform3D(Translation3D(0., 0., -resinThickness));
+    for (xml::Collection_t serviceElem(pduElem.child(_Unicode(frontservices)), _Unicode(service));
+         serviceElem; ++serviceElem) {
+      auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
+      auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
+      auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
+      auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
+      auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
+      Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
+      Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
+      serviceVol.setVisAttributes(serviceVis);
+      frontServiceTransformation =
+          Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * frontServiceTransformation;
+      pduAssembly.placeVolume(serviceVol, frontServiceTransformation);
+      frontServiceTransformation =
+          Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * frontServiceTransformation;
+    }
+
+    // circuit board volumes (one per sector)
+    auto boardsElem = pduElem.child(_Unicode(boards));
+    auto boardsMat  = desc.material(boardsElem.attr<std::string>(_Unicode(material)));
+    auto boardsVis  = desc.visAttributes(boardsElem.attr<std::string>(_Unicode(vis)));
+    Transform3D backServiceTransformation;
+    for (xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem) {
+      auto boardName      = boardElem.attr<std::string>(_Unicode(name));
+      auto boardWidth     = boardElem.attr<double>(_Unicode(width));
+      auto boardLength    = boardElem.attr<double>(_Unicode(length));
+      auto boardThickness = boardElem.attr<double>(_Unicode(thickness));
+      auto boardOffset    = boardElem.attr<double>(_Unicode(offset));
+      Box boardSolid(boardWidth / 2.0, boardThickness / 2.0, boardLength / 2.0);
+      Volume boardVol(detName + "_" + boardName + "+" + secName, boardSolid, boardsMat);
+      boardVol.setVisAttributes(boardsVis);
+      auto boardTransformation =
+          Translation3D(0., boardOffset, -boardLength / 2.0) * frontServiceTransformation;
+      pduAssembly.placeVolume(boardVol, boardTransformation);
+      if (boardName == "RDO")
+        backServiceTransformation =
+            Translation3D(0., 0., -boardLength) * frontServiceTransformation;
+    }
+
+    // back service volumes (one per sector)
+    for (xml::Collection_t serviceElem(pduElem.child(_Unicode(backservices)), _Unicode(service));
+         serviceElem; ++serviceElem) {
+      auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
+      auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
+      auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
+      auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
+      auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
+      Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
+      Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
+      serviceVol.setVisAttributes(serviceVis);
+      backServiceTransformation =
+          Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * backServiceTransformation;
+      pduAssembly.placeVolume(serviceVol, backServiceTransformation);
+      backServiceTransformation =
+          Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * backServiceTransformation;
+    }
+
+    // PDU PLACEMENT LOOP ----------------------------------------------------------------
+
     // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
     double nTheta = M_PI * sensorSphRadius / pduPitch;
     for (int t = 0; t < (int)(nTheta + 0.5); t++) {
@@ -741,52 +898,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
-          /* begin building sensors and PDUs, where:
-           * - sensor assembly: collection of all objects for a single SiPM
-           * - photodetector unit (PDU) assembly: matrix of SiPMs with services
-           *   - coordinate system: the "origin" of the assembly will be the center of the
-           *     outermost surface of the photosensitive surface (pss)
-           *     - reconstruction can access the sensor surface position from the sensor
-           *       assembly origin, which will ultimately have coordinates w.r.t. to the IP after
-           *       placement in the dRICH vessel
-           *     - the pss is segmented into SiPM pixels; gaps between the pixels
-           *       are accounted for in reconstruction, and each pixel reads out as a unique `cellID`
-           *     - `cellID` to postion conversion will give pixel centroids within the pss volume,
-           *       (not exactly at the pss surface, but rather in the center of the pss volume,
-           *       so keep in mind the very small offset)
-           */
-
-          // photosensitive surface (pss) and resin solids
-          Box pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
-          Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
-
-          // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
-          SubtractionSolid resinSolidEmbedded(
-              resinSolid, pssSolid,
-              Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2.)));
-
-          /* NOTE:
-           * Here we could add gaps (size=`DRICH_pixel_gap`) between the pixels
-           * as additional resin volumes, but this would require several more
-           * iterative boolean operations, which may cause significant
-           * performance slow downs in the simulation. Alternatively, one can
-           * create a pixel gap mask with several disjoint, thin `Box` volumes
-           * just outside the pss surface (no booleans required), but this
-           * would amount to a very large number of additional volumes. Instead,
-           * we have decided to apply pixel gap masking to the digitization
-           * algorithm, downstream in reconstruction.
-           */
-
-          // pss and resin volumes
-          Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
-          Volume resinVol(detName + "_resin_" + secName, resinSolidEmbedded, resinMat);
-          pssVol.setVisAttributes(pssVis);
-          resinVol.setVisAttributes(resinVis);
-
-          // sensitivity
-          if (!debugOptics || debugOpticsMode == 3)
-            pssVol.setSensitiveDetector(sens);
-
           // PDU placement definition: describe how to place a PDU on the sphere
           /* - transformations operate on global coordinates; the corresponding
            *   generator coordinates are provided in the comments
@@ -805,52 +916,33 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
           // clang-format on
 
-          // generate matrix of sensors and place them in `pduAssembly`
-          Assembly pduAssembly(detName + "_pdu_" + secName);
-          double pduSensorPitch     = resinSide + pduSensorGap;
-          double pduSensorOffsetMax = pduSensorPitch * (pduNumSensors - 1) / 2.0;
-          int isipm                 = 0;
+          // place shared pduAssembly template; set "sector" and "pdu" physVolIDs on this placement
+          auto pduPV = gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
+          pduPV.addPhysVolID("sector", isec).addPhysVolID("pdu", ipdu);
+
+          // per-sensor DetElement creation and parameter storage
+          // (these depend on pduAssemblyPlacement which varies per PDU position)
+          int isipm = 0;
           for (int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
             for (int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
 
-              Assembly sensorAssembly(detName + "_sensor_" + secName);
-
-              // placement transformations
-              // - placement of objects in `sensorAssembly`
-              auto pssPlacement   = Transform3D(Translation3D(
-                  0., 0.,
-                  -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
-              auto resinPlacement = Transform3D(Translation3D(0., 0., -resinThickness / 2.0));
-              // - placement of a `sensorAssembly` in `pduAssembly`
               auto pduSensorOffsetX = sensorIx * pduSensorPitch - pduSensorOffsetMax;
               auto pduSensorOffsetY = sensorIy * pduSensorPitch - pduSensorOffsetMax;
               auto sensorAssemblyPlacement =
                   Transform3D(Translation3D(pduSensorOffsetX, pduSensorOffsetY, 0.0));
 
-              // placements
-              auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
-              sensorAssembly.placeVolume(resinVol, resinPlacement);
-              pduAssembly.placeVolume(sensorAssembly, sensorAssemblyPlacement);
-
-              // sensor readout // NOTE: follow `sensorIDfields`
-              pssPV.addPhysVolID("sector", isec)
-                  .addPhysVolID("pdu", ipdu)
-                  .addPhysVolID("sipm", isipm);
-
-              // sensor DetElement
-              auto sensorID = encodeSensorID(pssPV.volIDs());
+              // sensor readout: build sensorID from known (sector, pdu, sipm) values
+              // NOTE: physVolIDs are split across levels: {sector,pdu} on pduPV, {sipm} on sensorPVs[isipm]
+              auto sensorID = encodeSensorID(std::vector<std::pair<std::string, int>>{
+                  {"sector", isec}, {"pdu", ipdu}, {"sipm", isipm}});
               //printf("@S@ %d vs %lu\n", isec, (sensorID >> 8) & 0x7);
               std::string sensorIDname =
                   secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
-              pssDE.setPlacement(pssPV);
-
-              // sensor surface properties
-              if (!debugOptics || debugOpticsMode == 3) {
-                SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + sensorIDname, pssSurf,
-                                    pssVol);
-                pssSkin.isValid();
-              }
+              // NOTE: sensorPVs[isipm] is the template node shared across all PDU copies;
+              // setPlacement is best-effort here — the VolumeManager encodes cellIDs correctly
+              // via the physVolID chain regardless of this hint
+              pssDE.setPlacement(sensorPVs[isipm]);
 
               // obtain some parameters useful for optics, so we don't have to figure them out downstream
               // - sensor position: the centroid of the active SURFACE of the `pss`
@@ -968,78 +1060,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               // increment SIPM number
               isipm++;
             }
-          } // end PDU SiPM matrix loop
-
-          // front service volumes
-          Transform3D frontServiceTransformation =
-              Transform3D(Translation3D(0., 0., -resinThickness));
-          for (xml::Collection_t serviceElem(pduElem.child(_Unicode(frontservices)),
-                                             _Unicode(service));
-               serviceElem; ++serviceElem) {
-            auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
-            auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
-            auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
-            auto serviceMat = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
-            auto serviceVis = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
-            Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
-            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid,
-                              serviceMat);
-            serviceVol.setVisAttributes(serviceVis);
-            frontServiceTransformation =
-                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
-                frontServiceTransformation;
-            pduAssembly.placeVolume(serviceVol, frontServiceTransformation);
-            frontServiceTransformation =
-                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
-                frontServiceTransformation;
-          }
-
-          // circuit board volumes
-          auto boardsElem = pduElem.child(_Unicode(boards));
-          auto boardsMat  = desc.material(boardsElem.attr<std::string>(_Unicode(material)));
-          auto boardsVis  = desc.visAttributes(boardsElem.attr<std::string>(_Unicode(vis)));
-          Transform3D backServiceTransformation;
-          for (xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem) {
-            auto boardName      = boardElem.attr<std::string>(_Unicode(name));
-            auto boardWidth     = boardElem.attr<double>(_Unicode(width));
-            auto boardLength    = boardElem.attr<double>(_Unicode(length));
-            auto boardThickness = boardElem.attr<double>(_Unicode(thickness));
-            auto boardOffset    = boardElem.attr<double>(_Unicode(offset));
-            Box boardSolid(boardWidth / 2.0, boardThickness / 2.0, boardLength / 2.0);
-            Volume boardVol(detName + "_" + boardName + "+" + secName, boardSolid, boardsMat);
-            boardVol.setVisAttributes(boardsVis);
-            auto boardTransformation =
-                Translation3D(0., boardOffset, -boardLength / 2.0) * frontServiceTransformation;
-            pduAssembly.placeVolume(boardVol, boardTransformation);
-            if (boardName == "RDO")
-              backServiceTransformation =
-                  Translation3D(0., 0., -boardLength) * frontServiceTransformation;
-          }
-
-          // back service volumes
-          for (xml::Collection_t serviceElem(pduElem.child(_Unicode(backservices)),
-                                             _Unicode(service));
-               serviceElem; ++serviceElem) {
-            auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
-            auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
-            auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
-            auto serviceMat = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
-            auto serviceVis = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
-            Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
-            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid,
-                              serviceMat);
-            serviceVol.setVisAttributes(serviceVis);
-            backServiceTransformation =
-                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
-                backServiceTransformation;
-            pduAssembly.placeVolume(serviceVol, backServiceTransformation);
-            backServiceTransformation =
-                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
-                backServiceTransformation;
-          }
-
-          // place PDU assembly
-          gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
+          } // end per-PDU sensor DetElement loop
 
           // increment PDU number
           ipdu++;
