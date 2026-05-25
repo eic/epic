@@ -93,6 +93,12 @@ leak:libpython
 leak:resize_compact
 leak:_PyObject_Calloc
 
+# npsim GeoCad library: TGeoToOCC::OCC_SimpleShape allocates a
+# Double_t[] buffer for TGeoPgon mesh vertices and never frees it.
+# Fixed upstream in https://github.com/eic/npsim/pull/63; suppress
+# until the fix is released and picked up by the CI container image.
+leak:libGeoCad.so
+
 # OpenCASCADE STEP/XCAF infrastructure: TCollection_AsciiString uses a
 # separately-allocated char buffer (reallocate) stored in a global/static
 # context; TPrsStd_DriverTable::Get() is a lazy-initialised singleton that
