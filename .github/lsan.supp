@@ -54,9 +54,11 @@ leak:libG4
 # GCC C++ compiler (cc1plus and g++ driver) spawned by ROOT's ACLiC to
 # compile test macros (e.g. test_ACTS.cxx).  GCC intentionally does not
 # free compiler-internal memory at exit; suppress both the compiler
-# backend (cc1plus) and the compiler driver (x86_64-linux-gnu-g++-14).
+# backend (cc1plus), the compiler driver (x86_64-linux-gnu-g++-14), and
+# the linker driver (collect2) which is invoked by g++ to run ld.
 leak:cc1plus
 leak:x86_64-linux-gnu-g++
+leak:collect2
 
 # pybind11-based Python extension modules (e.g. scipy): pybind11 stores
 # cpp_function records and native-enum type-map entries in Python's global
