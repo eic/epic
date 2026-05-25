@@ -711,8 +711,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     /* All PDUs within a sector have identical internal geometry; only their placement in
      * the gas volume differs (each PDU points to a different spot on the sensor sphere).
      * By building one Assembly template per sector and placing it N times, TGeo can share
-     * the same B-rep description for all PDU copies, dramatically reducing volume count
-     * and STEP export size.
+     * the same volume objects for all PDU copies, reducing the unique TGeoVolume count,
+     * the associated memory footprint, and the cost of geometry lookups.
      *
      * PhysVolID allocation:
      *  - "sipm"   is set on the pssVol placement inside sensorAssembly (varies per slot)
