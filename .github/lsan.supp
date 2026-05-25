@@ -30,10 +30,25 @@ leak:libCPyCppyy.so
 # namespace and are not freed at interpreter shutdown.
 leak:_PyObject_Malloc
 
-# std::string growth allocations (via _M_mutate) with truncated stack
-# traces that lack deeper context; these arise from CPyCppyy storing C++
-# type/method names as std::string in global maps during Python import.
+# std::string growth/assign allocations (_M_mutate, _M_assign) with
+# truncated stack traces: these appear in the context of CPyCppyy type
+# registration and Geant4/DDG4 object naming at initialisation time.
 leak:_M_mutate
+leak:_M_assign
+
+# DD4hep's Geant4 integration layer (libDDG4): Geant4Converter creates
+# G4VSolid, G4Material, G4LogicalVolume, G4OpticalSurface, G4SkinSurface,
+# G4VisAttributes, and Geant4UIMessenger objects during geometry
+# conversion; all are registered in Geant4's global stores and never
+# freed at process exit.
+leak:libDDG4.so
+
+# Geant4 simulation libraries: global stores (G4LogicalSurfaceStore,
+# G4MaterialTable, G4UImanager, G4PhysicsListHelper) and their contents
+# (G4MaterialPropertiesTable, G4PhysicsFreeVector, G4UIcommand,
+# G4TransportationLogger) are created at Geant4 initialisation and never
+# released when the process exits.  Matches all libG4*.so libraries.
+leak:libG4
 
 # OpenCASCADE STEP/XCAF infrastructure: TCollection_AsciiString uses a
 # separately-allocated char buffer (reallocate) stored in a global/static
