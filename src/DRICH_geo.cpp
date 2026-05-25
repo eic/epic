@@ -731,7 +731,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
      *       placement in the dRICH vessel
      *     - the pss is segmented into SiPM pixels; gaps between the pixels
      *       are accounted for in reconstruction, and each pixel reads out as a unique `cellID`
-     *     - `cellID` to postion conversion will give pixel centroids within the pss volume,
+     *     - `cellID` to position conversion will give pixel centroids within the pss volume,
      *       (not exactly at the pss surface, but rather in the center of the pss volume,
      *       so keep in mind the very small offset)
      */
