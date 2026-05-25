@@ -34,3 +34,11 @@ leak:_PyObject_Malloc
 # traces that lack deeper context; these arise from CPyCppyy storing C++
 # type/method names as std::string in global maps during Python import.
 leak:_M_mutate
+
+# OpenCASCADE STEP/XCAF infrastructure: TCollection_AsciiString uses a
+# separately-allocated char buffer (reallocate) stored in a global/static
+# context; TPrsStd_DriverTable::Get() is a lazy-initialised singleton that
+# is never destroyed at process exit. Both are in the geometry-to-STEP
+# conversion step (TGeoToStep) and contain no epic geometry data.
+leak:libTKernel.so
+leak:libTKVCAF.so
