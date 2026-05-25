@@ -106,3 +106,17 @@ leak:libGeoCad.so
 # conversion step (TGeoToStep) and contain no epic geometry data.
 leak:libTKernel.so
 leak:libTKVCAF.so
+
+# OpenSSL (libcrypto.so.3): global cryptographic state — PRNG pool,
+# algorithm/provider tables, thread-local error state — allocated via
+# CRYPTO_malloc / CRYPTO_aligned_alloc / CRYPTO_realloc at first use.
+# OpenSSL intentionally does not release these at process exit unless
+# OPENSSL_cleanup() is explicitly called; the Python cryptography module
+# imports libcrypto as a side-effect of being loaded.
+leak:libcrypto.so
+
+# BFD (libbfd-2.44, part of binutils): string table and section-header
+# data allocated by _bfd_elf_strtab_save and similar routines during
+# object/ELF file inspection.  Called by gprofng (profiler) when it
+# processes binary objects; not freed at exit.
+leak:libbfd
