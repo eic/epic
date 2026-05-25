@@ -64,6 +64,35 @@ leak:x86_64-linux-gnu-g++
 # shutdown.  Same structural pattern as CPyCppyy proxy objects.
 leak:pybind11
 
+# PyO3 (Rust-based Python extension modules, e.g. cryptography): PyO3
+# allocates PyCFunction wrappers and type objects in Python's global space
+# at module import time.  The 'pyo3::types::function::PyCFunction::internal_new'
+# and 'pyo3::pyclass::create_type_object' frames appear as the roots.
+# Matches any .so whose path or symbol contains "pyo3".
+leak:pyo3
+
+# CPython extension modules (.cpython-NNN-*.so) and stable-ABI extensions
+# (.abi3.so): all Python extension modules of these forms (e.g.
+# boost_histogram/_core.cpython-313-x86_64-linux-gnu.so,
+# cryptography/hazmat/bindings/_rust.abi3.so, numpy/_multiarray_umath)
+# register global type objects, ufuncs, and method tables in Python's type
+# system at import time.  Python does not free these at interpreter shutdown.
+leak:.cpython-
+leak:.abi3.so
+
+# NumPy universal functions (ufuncs) registered via
+# PyUFunc_FromFuncAndDataAndSignatureAndIdentity allocate name/type strings
+# into Python's global ufunc table at import time; never freed.
+leak:PyUFunc_FromFuncAndData
+
+# Python interpreter itself: Python string internment (resize_compact in
+# unicodeobject.c) and object allocator (_PyObject_Calloc in obmalloc.c)
+# are called during extension module initialisation to create interned
+# strings and type-object instances that live for the process lifetime.
+leak:libpython
+leak:resize_compact
+leak:_PyObject_Calloc
+
 # OpenCASCADE STEP/XCAF infrastructure: TCollection_AsciiString uses a
 # separately-allocated char buffer (reallocate) stored in a global/static
 # context; TPrsStd_DriverTable::Get() is a lazy-initialised singleton that
