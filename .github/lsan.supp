@@ -120,3 +120,12 @@ leak:libcrypto.so
 # object/ELF file inspection.  Called by gprofng (profiler) when it
 # processes binary objects; not freed at exit.
 leak:libbfd
+
+# ROOT ACLiC-compiled macros (e.g. test_ACTS.cxx): ROOT compiles a test
+# macro into a shared library (.so), loads it with dlopen, runs it, then
+# calls dlclose before process exit.  LSAN scans the heap after dlclose,
+# so any still-reachable addresses inside the library can no longer be
+# resolved to a module name — they appear as <unknown module>.  These
+# are tiny allocations (< 200 bytes total) from ACTS/ROOT global state
+# registered inside the compiled .so; not from libepic.so.
+leak:<unknown module>
