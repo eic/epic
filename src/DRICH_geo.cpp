@@ -939,10 +939,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               std::string sensorIDname =
                   secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
-              // NOTE: sensorPVs[isipm] is the template node shared across all PDU copies;
-              // setPlacement is best-effort here — the VolumeManager encodes cellIDs correctly
-              // via the physVolID chain regardless of this hint
-              pssDE.setPlacement(sensorPVs[isipm]);
+              // Use pduPV (the concrete placed PDU instance) rather than the shared template
+              // sensor node: pduPV is unique per PDU placement and carries the {sector,pdu}
+              // physVolIDs, making DE-based lookups unambiguous. The individual sensor
+              // position within the PDU is available via the VariantParameters below.
+              pssDE.setPlacement(pduPV);
 
               // obtain some parameters useful for optics, so we don't have to figure them out downstream
               // - sensor position: the centroid of the active SURFACE of the `pss`
