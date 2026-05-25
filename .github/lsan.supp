@@ -36,12 +36,13 @@ leak:_PyObject_Malloc
 leak:_M_mutate
 leak:_M_assign
 
-# DD4hep's Geant4 integration layer (libDDG4): Geant4Converter creates
-# G4VSolid, G4Material, G4LogicalVolume, G4OpticalSurface, G4SkinSurface,
-# G4VisAttributes, and Geant4UIMessenger objects during geometry
-# conversion; all are registered in Geant4's global stores and never
-# freed at process exit.
-leak:libDDG4.so
+# DD4hep's Geant4 integration layer (libDDG4, libDDG4Plugins): Geant4Converter
+# creates G4VSolid, G4Material, G4LogicalVolume, G4OpticalSurface, G4SkinSurface,
+# G4VisAttributes, and Geant4UIMessenger objects during geometry conversion;
+# Geant4FieldTrackingSetup and other DDG4 plugins also register objects in
+# Geant4's global stores and never free them at process exit.
+# Matches both libDDG4.so and libDDG4Plugins.so.
+leak:libDDG4
 
 # Geant4 simulation libraries: global stores (G4LogicalSurfaceStore,
 # G4MaterialTable, G4UImanager, G4PhysicsListHelper) and their contents
@@ -49,6 +50,12 @@ leak:libDDG4.so
 # G4TransportationLogger) are created at Geant4 initialisation and never
 # released when the process exits.  Matches all libG4*.so libraries.
 leak:libG4
+
+# GCC C++ compiler (cc1plus) spawned by ROOT's ACLiC to compile test macros
+# (e.g. test_ACTS.cxx).  GCC intentionally does not free all compiler-internal
+# data structures at exit (a well-known performance trade-off); the resulting
+# LSAN reports contain no epic geometry code.
+leak:cc1plus
 
 # OpenCASCADE STEP/XCAF infrastructure: TCollection_AsciiString uses a
 # separately-allocated char buffer (reallocate) stored in a global/static
