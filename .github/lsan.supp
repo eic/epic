@@ -51,11 +51,18 @@ leak:libDDG4
 # released when the process exits.  Matches all libG4*.so libraries.
 leak:libG4
 
-# GCC C++ compiler (cc1plus) spawned by ROOT's ACLiC to compile test macros
-# (e.g. test_ACTS.cxx).  GCC intentionally does not free all compiler-internal
-# data structures at exit (a well-known performance trade-off); the resulting
-# LSAN reports contain no epic geometry code.
+# GCC C++ compiler (cc1plus and g++ driver) spawned by ROOT's ACLiC to
+# compile test macros (e.g. test_ACTS.cxx).  GCC intentionally does not
+# free compiler-internal memory at exit; suppress both the compiler
+# backend (cc1plus) and the compiler driver (x86_64-linux-gnu-g++-14).
 leak:cc1plus
+leak:x86_64-linux-gnu-g++
+
+# pybind11-based Python extension modules (e.g. scipy): pybind11 stores
+# cpp_function records and native-enum type-map entries in Python's global
+# internals at module import time and never frees them at interpreter
+# shutdown.  Same structural pattern as CPyCppyy proxy objects.
+leak:pybind11
 
 # OpenCASCADE STEP/XCAF infrastructure: TCollection_AsciiString uses a
 # separately-allocated char buffer (reallocate) stored in a global/static
