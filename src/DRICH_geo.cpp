@@ -387,7 +387,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
       if (i == 0) {
 
-        rMinBottom = radiatorRmin - boreDelta * coronasThickness / vesselLength;
+        rMinBottom = centralRadius - boreDelta * (coronasThickness / 2.0) / vesselLength;
         rMinTop    = rMinBottom + snoutDelta * aerogelThickness / snoutLength;
         rMaxBottom = rMinBottom + boreDelta * coronasThickness / vesselLength;
         rMaxTop    = rMinTop + boreDelta * coronasThickness / vesselLength;
