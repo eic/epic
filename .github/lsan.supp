@@ -123,6 +123,15 @@ leak:libcrypto.so
 # processes binary objects; not freed at exit.
 leak:libbfd
 
+# EDM4hep PODIO data-model library: createMCParticleBuffers and
+# createSimCalorimeterHitBuffers (and analogous per-collection buffer
+# factories in the anonymous namespace) allocate SoA data buffers at
+# first collection use and register them with PODIO's frame/collection
+# lifecycle.  PODIO intentionally does not destroy these at process exit
+# (the global registry is a static and its destructor is never called),
+# so LSAN reports them as direct leaks.
+leak:libedm4hep.so
+
 # ROOT ACLiC-compiled macros (e.g. test_ACTS.cxx): ROOT compiles a test
 # macro into a shared library (.so), loads it with dlopen, runs it, then
 # calls dlclose before process exit.  LSAN scans the heap after dlclose,
