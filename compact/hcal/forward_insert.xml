@@ -92,6 +92,7 @@
       calorimeterType="HAD_ENDCAP"
       left_right_gap="0.38*cm"
     >
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC"/>
       <position x="HcalEndcapPInsert_xposition" y="HcalEndcapPInsert_yposition" z="HcalEndcapPInsert_zmin"/>
       <dimensions
         x="HcalEndcapPInsert_width"

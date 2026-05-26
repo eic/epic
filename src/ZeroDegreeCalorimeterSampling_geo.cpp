@@ -8,6 +8,7 @@
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
 #include <XML/Layering.h>
+#include <XML/Utilities.h>
 //////////////////////////////////////////////////
 // Far Forward Ion Zero Degree Calorimeter - Hcal
 //////////////////////////////////////////////////
@@ -89,6 +90,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   }
 
   DetElement det(detName, detID);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
+
   Volume motherVol = desc.pickMotherVolume(det);
   Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()),
                  Position(pos.x(), pos.y(), pos.z() + totWidth / 2.0));

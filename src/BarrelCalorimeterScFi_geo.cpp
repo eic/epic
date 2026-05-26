@@ -18,6 +18,7 @@
 #include "Math/Point2D.h"
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include <functional>
 
 using namespace dd4hep;
@@ -74,6 +75,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   DetElement sdet(det_name, det_id);
   Volume motherVol = desc.pickMotherVolume(sdet);
 
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+
   Assembly envelope(det_name);
   Transform3D tr_global = Translation3D(0, 0, offset) * RotationZ(0);
   PlacedVolume env_phv  = motherVol.placeVolume(envelope, tr_global);
@@ -85,6 +89,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   // build a single sector
   DetElement sector_det("sector0", det_id);
   Assembly mod_vol("sector");
+  sector_det.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // keep tracking of the total thickness
   double l_pos_z = inner_r;
@@ -117,6 +122,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         Trapezoid l_shape(l_trd_x1, l_trd_x2, l_trd_y1, l_trd_y2, l_trd_z);
         Volume l_vol(l_name, l_shape, air);
         DetElement layer(sector_det, l_name, det_id);
+        layer.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
         // Loop over the sublayers or slices for this layer.
         int s_num      = 1;
@@ -133,6 +139,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           Trapezoid s_shape(s_trd_x1, s_trd_x2, s_trd_y1, s_trd_y2, s_trd_z);
           Volume s_vol(s_name, s_shape, desc.material(x_slice.materialStr()));
           DetElement slice(layer, s_name, det_id);
+          slice.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
           // build fibers
           if (x_slice.hasChild(_Unicode(fiber))) {
@@ -177,6 +184,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     PlacedVolume pv = envelope.placeVolume(mod_vol, tr);
     pv.addPhysVolID("sector", i + 1);
     DetElement sd = (i == 0) ? sector_det : sector_det.clone(Form("sector%d", i));
+    sd.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     sd.setPlacement(pv);
     sdet.add(sd);
   }
