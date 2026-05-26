@@ -90,6 +90,7 @@
       renderComponents="0"
       allSensitive="0"
       >
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC"/>
 
       <position x="0" y="0" z="LFHCAL_zmin"/>
       <dimensions

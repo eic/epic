@@ -53,8 +53,17 @@ EOF
     fi
   fi
 done
-curl --location https://github.com/acts-project/acts/pull/4931.diff | patch -p1
-curl --location https://github.com/acts-project/acts/pull/5046.diff | patch -p1
+function patch_acts() {
+  local url="$1"
+  local file="$(basename "$1")"
+  if [ ! -e "$file" ]; then
+    wget "$url"
+    patch -p1 --forward --input="$file"
+  fi
+}
+patch_acts https://github.com/acts-project/acts/pull/4931.diff
+patch_acts https://github.com/acts-project/acts/pull/5046.diff
+patch_acts https://github.com/acts-project/acts/pull/5359.diff
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
@@ -196,7 +205,6 @@ mkdir -p Surfaces/1D_plot
 
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_regenerated'.root","'${trackFile}'",-1,"Surfaces/regenerated/ratio_plot","Surfaces/regenerated/prop_plot","Surfaces/regenerated/map_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_current'.root","'${trackFile}'",-1,"Surfaces/current/ratio_plot","Surfaces/current/prop_plot","Surfaces/current/map_plot")'
-# These scripts still need to be patched to work with missing sur_type
-#root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
-#root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
 echo "::endgroup::"

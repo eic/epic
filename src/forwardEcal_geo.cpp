@@ -12,6 +12,7 @@
 #include "DD4hep/Printout.h"
 #include <XML/Helper.h>
 #include <XML/Layering.h>
+#include <XML/Utilities.h>
 #include "forwardEcalMap.h"
 
 using namespace dd4hep;
@@ -291,6 +292,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Volume motherVol = desc.pickMotherVolume(det);
   auto tr          = Transform3D(Position(0.0, 0.0, zmin + length / 2.0));
   pv               = motherVol.placeVolume(envelopeVol, tr);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
+
   pv.addPhysVolID("system", detID);
   det.setPlacement(pv);
 
