@@ -88,7 +88,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto segmentationType = coronasElem.attr<std::string>("segmentation");
   // read crown parameters from child <crown> elements
   std::vector<double> radii;
-  std::vector<int>    numSegments;
+  std::vector<int> numSegments;
   for (xml::Collection_t crownIt(coronasElem, _Unicode(crown)); crownIt; ++crownIt) {
     xml::Component crownElem = crownIt;
     radii.push_back(crownElem.attr<double>(_Unicode(radius)));
