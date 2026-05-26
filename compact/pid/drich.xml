@@ -46,7 +46,6 @@
 
 
 <constant name="DRICH_corona_thickness" value="1*mm"/>
-<constant name="DRICH_num_coronas" value="5"/>
 
 
 <comment>
@@ -145,12 +144,15 @@
   <coronas
     segmentation="trapezoidal"
     thickness="DRICH_corona_thickness"
-    num="DRICH_num_coronas"
     material="CarbonFiber_15percent"
     vis="DRICH_Corona_vis"
-    num_segments="10,18,24,30"
-    radii= "12.9596, 31.8, 51.0, 70.5, 88.7962"
-    />
+    >
+    <crown radius="12.9596*cm" num_segments="10"/>
+    <crown radius="31.8*cm"    num_segments="18"/>
+    <crown radius="51.0*cm"    num_segments="24"/>
+    <crown radius="70.5*cm"    num_segments="30"/>
+    <crown radius="88.7962*cm"/>
+  </coronas>
   <airgap
     material="AirOptical"
     vis="DRICH_gas_vis"

@@ -10,7 +10,6 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include <numeric>
-#include <sstream>
 #include <vector>
 
 #include <XML/Helper.h>
@@ -86,10 +85,17 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto coronasMat       = desc.material(coronasElem.attr<std::string>(_Unicode(material)));
   auto coronasVis       = desc.visAttributes(coronasElem.attr<std::string>(_Unicode(vis)));
   auto coronasThickness = coronasElem.attr<double>(_Unicode(thickness));
-  int numCrowns         = coronasElem.attr<int>(_Unicode(num));
   auto segmentationType = coronasElem.attr<std::string>("segmentation");
-  auto segmentsStr      = coronasElem.attr<std::string>(_Unicode(num_segments));
-  auto radiiStr         = coronasElem.attr<std::string>(_Unicode(radii));
+  // read crown parameters from child <crown> elements
+  std::vector<double> radii;
+  std::vector<int>    numSegments;
+  for (xml::Collection_t crownIt(coronasElem, _Unicode(crown)); crownIt; ++crownIt) {
+    xml::Component crownElem = crownIt;
+    radii.push_back(crownElem.attr<double>(_Unicode(radius)));
+    if (crownElem.hasAttr(_Unicode(num_segments)))
+      numSegments.push_back(crownElem.attr<int>(_Unicode(num_segments)));
+  }
+  int numCrowns = radii.size();
   // - filter
   auto filterElem      = radiatorElem.child(_Unicode(filter));
   auto filterMatName   = filterElem.attr<std::string>(_Unicode(material));
@@ -361,20 +367,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   if (segmentationType == "trapezoidal") {
     double crownHeight = structureThickness;
-    std::vector<int> numSegments;
-    std::stringstream ss(segmentsStr);
-    std::string val;
-    while (std::getline(ss, val, ',')) {
-      numSegments.push_back(std::stoi(val));
-    }
-
-    std::vector<double> radii;
-    std::stringstream radiiSS(radiiStr);
-    std::string radius;
-
-    while (std::getline(radiiSS, radius, ',')) {
-      radii.push_back(std::stod(radius));
-    }
     std::vector<double> innerRadiusBottoms_half;
     std::vector<double> innerRadiusTops_half;
     std::vector<double> outerRadiusBottoms_half;
