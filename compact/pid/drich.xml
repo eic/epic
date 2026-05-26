@@ -126,7 +126,7 @@
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
   - `thickness`: radiator thickness, defined separately for aerogel and filter
   - `pitch`: controls the angle of the radiator (0=vertical)
-  - `segmentations`:controls tiling method. They can be "trapezoidal", "square" or "unique".
+  - `segmentations`:controls tiling method. They can be "trapezoidal" or "unique".
   A unique segmentation means, no tiling of aerogel.
 
 </documentation>
