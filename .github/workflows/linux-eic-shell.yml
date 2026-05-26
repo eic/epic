@@ -169,7 +169,7 @@ jobs:
           pushd scripts/material_map
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
           export DETECTOR_CONFIG=epic_craterlake_material_map
-          ./run_material_map_validation.sh
+          env -u LD_PRELOAD ./run_material_map_validation.sh
           popd
     - uses: actions/upload-artifact@v7
       with:
