@@ -3,7 +3,7 @@
 export DETECTOR=epic
 export DETECTOR_PATH=/w/eic-scshelf2104/users/anatochii/epic/install/share/epic
 export DETECTOR_CONFIG=${1:-epic}
-export DETECTOR_VERSION=26.02.0-9-g7096d57e0-dirty
+export DETECTOR_VERSION=26.02.0-11-g048c5469b
 
 ## Warn is not the right name (this script is sourced, hence $1)
 if [[ "$(basename ${BASH_SOURCE[0]})" != "thisepic.sh" ]]; then
