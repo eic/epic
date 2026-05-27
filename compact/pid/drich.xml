@@ -43,6 +43,11 @@
 <constant name="DRICH_pdu_sensor_gap"  value="0.2*mm"/> <!-- gap between adjacent sensors -->
 <constant name="DRICH_pdu_gap"         value="3.0*mm"/> <!-- gap between adjacent PDUs -->
 <!-- settings and switches -->
+
+
+<constant name="DRICH_corona_thickness" value="1*mm"/>
+
+
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
                            2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
@@ -121,6 +126,9 @@
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
   - `thickness`: radiator thickness, defined separately for aerogel and filter
   - `pitch`: controls the angle of the radiator (0=vertical)
+  - `segmentations`:controls tiling method. They can be "trapezoidal" or "unique".
+  A unique segmentation means, no tiling of aerogel.
+
 </documentation>
 <radiator
   rmin="DRICH_rmin0 + DRICH_wall_thickness + 0.2*cm"
@@ -133,6 +141,18 @@
     vis="DRICH_aerogel_vis"
     thickness="DRICH_aerogel_thickness"
     />
+  <coronas
+    segmentation="trapezoidal"
+    thickness="DRICH_corona_thickness"
+    material="CarbonFiber_15percent"
+    vis="DRICH_Corona_vis"
+    >
+    <crown radius="12.9596*cm" num_segments="10"/>
+    <crown radius="31.8*cm"    num_segments="18"/>
+    <crown radius="51.0*cm"    num_segments="24"/>
+    <crown radius="70.5*cm"    num_segments="30"/>
+    <crown radius="88.7962*cm"/>
+  </coronas>
   <airgap
     material="AirOptical"
     vis="DRICH_gas_vis"
