@@ -79,7 +79,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   //---- Entire DIRC assembly
   Assembly det_volume("DIRC");
-  det_volume.setVisAttributes(desc.visAttributes(xml_det.visStr()));
+  det_volume.setAttributes(desc, xml_det.regionStr(), xml_det.limitsStr(), xml_det.visStr());
   Transform3D det_tr(RotationY(0), Position(0.0, 0.0, dirc_pos_z));
   det.setPlacement(
       desc.pickMotherVolume(det).placeVolume(det_volume, det_tr).addPhysVolID("system", det_id));
