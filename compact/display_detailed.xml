@@ -128,10 +128,11 @@
 
     <vis name="DRICH_vessel_vis"  ref="AnlGray" showDaughters="true" visible="true" />
     <vis name="DRICH_gas_vis"     ref="AnlLightGray" alpha="0.2" showDaughters="true" visible="true" />
-    <vis name="DRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
+    <vis name="DRICH_aerogel_vis" ref="AnlTeal" alpha ="0.8" showDaughters="false" visible="true" />
     <vis name="DRICH_filter_vis"  alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true" />
     <vis name="DRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
     <vis name="DRICH_sensor_vis"  ref="AnlGreen" showDaughters="true" visible="true" />
+    <vis name="DRICH_Corona_vis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
 
