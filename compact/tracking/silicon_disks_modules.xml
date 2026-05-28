@@ -22,6 +22,41 @@
     <constant name="SiEndcapModuleGlue_thickness"           value="60*um"/>
     <constant name="SiEndcapModuleFlatSheetCF_thickness"    value="0.15*mm"/>
     <constant name="SiTrackerSensor_thickness"              value="40*um"/>
+
+    <comment>
+      Corrugated EIC-LAS endcap module constants.
+      These are not used by the legacy EIC_LAS_6RSU / EIC_LAS_5RSU module
+      templates yet. They provide the parameter scaffold for the new
+      EIC_LAS_6RSU_CORR implementation.
+    </comment>
+    <constant name="SiEndcapRSU_width"                       value="19.564*mm"/>
+    <constant name="SiEndcapRSU_length"                      value="21.666*mm"/>
+    <constant name="SiEndcapRSU_periphery_width"             value="0.398*mm"/>
+    <constant name="SiEndcapRSU_bias_width"                  value="0.06*mm"/>
+    <constant name="SiEndcapRSU_backbone_width"              value="0.09*mm"/>
+
+    <constant name="SiEndcapModule_width_corrugated"         value="32.0*mm"/>
+    <constant name="SiEndcapModule_inner_width_corrugated"   value="29.0*mm"/>
+    <constant name="SiEndcapRSU_y_margin"                    value="6.22*mm"/>
+    <constant name="SiEndcapModule_support_bottom_cut_width" value="3.0*mm"/>
+
+    <constant name="SiEndcapModule6RSU_strip_length"         value="136.02*mm"/>
+    <constant name="SiEndcapModule6RSU_package_length"       value="152.02*mm"/>
+    <constant name="SiEndcapModule6RSU_left_extension"       value="11.0*mm"/>
+    <constant name="SiEndcapModule6RSU_right_extension"      value="5.0*mm"/>
+    <constant name="SiEndcapModule6RSU_sensor_left_margin"   value="4.5*mm"/>
+    <constant name="SiEndcapModule6RSU_sensor_right_margin"  value="1.5*mm"/>
+    <constant name="SiEndcapModule6RSU_left_cut_length"      value="11.0*mm"/>
+    <constant name="SiEndcapModule6RSU_right_cut_length"     value="5.0*mm"/>
+
+    <constant name="SiEndcapSensor_thickness"                value="50*um"/>
+    <constant name="SiEndcapFPC_thickness"                   value="115*um"/>
+    <constant name="SiEndcapAdhesive_thickness"              value="80*um"/>
+    <constant name="SiEndcapModuleCF_thickness"              value="150*um"/>
+    <constant name="SiEndcapLECFPC_width"                    value="7.0*mm"/>
+    <constant name="SiEndcapRECFPC_width"                    value="4.0*mm"/>
+    <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
+
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.2*mm"/>
     <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
     <constant name="SiEndcapCorrugation_theta"              value="35*deg"/>
@@ -104,7 +139,8 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
+      <comment><module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/></comment>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv" format="csv"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="InnerTrackerEndcap_active_rmin"

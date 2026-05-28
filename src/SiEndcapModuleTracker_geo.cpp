@@ -41,6 +41,8 @@ struct ComponentTemplate {
   bool sensitive{false};
   double x_override{-1.0};
   double y_override{-1.0};
+  double x_offset{0.0};
+  double y_offset{0.0};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -63,6 +65,7 @@ struct ModuleRow {
   double y_size{0.0};
   double dz{0.0};
   bool facing_positive_z{true};
+  string handedness;
   bool enabled{true};
   int csv_line{0};
 };
@@ -174,6 +177,24 @@ bool parse_facing(const string& value, bool& facing_positive_z) {
   return false;
 }
 
+bool parse_handedness(const string& value, string& handedness) {
+  string lower;
+  lower.reserve(value.size());
+  for (char ch : value) {
+    lower.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(ch))));
+  }
+
+  if (lower.empty()) {
+    handedness = "";
+    return true;
+  }
+  if (lower == "left" || lower == "right") {
+    handedness = lower;
+    return true;
+  }
+  return false;
+}
+
 // to do: add RSU structure, as well as detailed of the module.
 // Build the small set of supported tiled-disk module types.
 map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
@@ -203,10 +224,43 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     }
     return module_template;
   };
+
+  auto build_corrugated_6rsu = [&](const string& name) {
+    ModuleTemplate module_template;
+    module_template.name   = name;
+    module_template.vis    = "TrackerModuleVis";
+    module_template.x_size = description.constant<double>("SiEndcapModule6RSU_package_length");
+    module_template.y_size = description.constant<double>("SiEndcapModule_width_corrugated");
+
+    const double rsu_chain_length = 6.0 * description.constant<double>("SiEndcapRSU_length");
+    const double sensor_x_offset =
+        -module_template.x_size / 2.0 +
+        description.constant<double>("SiEndcapModule6RSU_left_extension") +
+        description.constant<double>("SiEndcapModule6RSU_sensor_left_margin") +
+        rsu_chain_length / 2.0;
+
+    const array<ComponentTemplate, 3> components{{
+        {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber",
+         "TrackerSupportVis", false, -1.0, -1.0},
+        {description.constant<double>("SiEndcapAdhesive_thickness"), "SVT_Endcap_Glue",
+         "TrackerServiceVis", false, -1.0, -1.0},
+        {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "TrackerLayerVis",
+         true, rsu_chain_length, description.constant<double>("SiEndcapRSU_width"),
+         sensor_x_offset, 0.0},
+    }};
+
+    for (const auto& component : components) {
+      module_template.total_thickness += component.thickness;
+      module_template.components.push_back(component);
+    }
+    return module_template;
+  };
+
   // hard-coded EIC-LAS module size.
   map<string, ModuleTemplate> module_templates;
   module_templates.emplace("EIC_LAS_6RSU", build("EIC_LAS_6RSU", 130.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_5RSU", build("EIC_LAS_5RSU", 105.0 * mm, 30.0 * mm));
+  module_templates.emplace("EIC_LAS_6RSU_CORR", build_corrugated_6rsu("EIC_LAS_6RSU_CORR"));
   return module_templates;
 }
 
@@ -614,6 +668,26 @@ vector<ModuleRow> load_module_rows(const string& file_name,
       continue;
     }
 
+    string handedness_value = get_field("handedness");
+    if (!parse_handedness(handedness_value, row.handedness)) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping CSV line {} with invalid handedness '{}' in '{}'",
+                           line_number, handedness_value, file_name));
+      continue;
+    }
+    const string corrugated_suffix = "_CORR";
+    const bool corrugated_module =
+        row.module_name.size() >= corrugated_suffix.size() &&
+        row.module_name.compare(row.module_name.size() - corrugated_suffix.size(),
+                                corrugated_suffix.size(), corrugated_suffix) == 0;
+    if (corrugated_module && row.handedness.empty()) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping CSV line {} for corrugated module '{}' without explicit "
+                           "left/right handedness in '{}'",
+                           line_number, row.module_name, file_name));
+      continue;
+    }
+
     string enabled_value = get_field("enabled");
     if (!enabled_value.empty()) {
       row.enabled = parse_bool(enabled_value);
@@ -661,7 +735,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
     component_volume.setVisAttributes(description.visAttributes(component.vis));
 
     z_position += component.thickness / 2.0;
-    PlacedVolume pv = prototype.volume.placeVolume(component_volume, Position(0, 0, z_position));
+    PlacedVolume pv = prototype.volume.placeVolume(
+        component_volume, Position(component.x_offset, component.y_offset, z_position));
+
     if (component.sensitive) {
       pv.addPhysVolID("sensor", sensor_id);
       component_volume.setSensitiveDetector(sens);
@@ -875,7 +951,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         continue;
       }
 
-      string cache_key = row.module_name;
+      string cache_key =
+          row.handedness.empty() ? row.module_name : row.module_name + "_" + row.handedness;
       auto cache_it    = module_cache.find(cache_key);
       if (cache_it == module_cache.end()) {
         cache_it =
