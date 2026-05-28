@@ -218,7 +218,6 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   std::string f_id_grid = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
   std::string f_id_fiber =
       getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
-  std::string f_id_row = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_z), "z");
 
   // Set up the readout grid for the fiber layers
   // Trapezoid is divided into segments with equal dz and equal number of divisions in x
@@ -286,10 +285,23 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
       std::sort(row_x.begin(), row_x.end());
 
     // Place fibers using paramVolume1D (1D uniform translation), one call per z-row.
-    // Each row is wrapped in its own Assembly with physVolID(f_id_row, row_index) so that
-    // the VolumeManager cellID code is unique per row (DD4hep requires volID=0 for parameterised
-    // volumes; the copy number encodes the fiber column index within each row).
-    // In the readout: f_id_row ("z") = fiber row index, f_id_fiber ("fiber") = column index.
+    // Each row is wrapped in its own Assembly with physVolID(f_id_fiber, row_index * n_x_max) so
+    // that the VolumeManager cellID code is unique per row (DD4hep requires volID=0 for
+    // parameterised volumes; the copy number encodes the fiber column index).
+    // At init time the fiber field is OR'd: row_index * n_x_max | 0 = row_index * n_x_max.
+    // At runtime the copy_no is OR'd in: fiber = row_index * n_x_max + copy_no (no bit overlap).
+    // The "z" field is left at 0 from the physVolID side so that CartesianStripZ segmentation
+    // can freely encode the longitudinal position along the fiber.
+    int n_x_max = 1;
+    for (auto& [k, v] : rows)
+      n_x_max = std::max(n_x_max, static_cast<int>(v.size()));
+    {
+      int p = 1;
+      while (p < n_x_max)
+        p <<= 1;
+      n_x_max = p;
+    } // round up to power of 2
+
     int row_index = 0;
     for (auto& [z_key, row_x] : rows) {
       int n_x        = static_cast<int>(row_x.size());
@@ -301,11 +313,12 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
       PlacedVolume first_pv = row_vol.paramVolume1D(Transform3D(Position(x_start, 0., 0.)),
                                                     f_vol_clad, static_cast<size_t>(n_x),
                                                     Transform3D(Position(f_spacing_x, 0., 0.)));
-      // volID must be 0 for parameterised volumes; each copy's fiber field gets its copy number at runtime
+      // volID must be 0 for parameterised volumes; each copy's fiber column index arrives via copy_no
       first_pv.addPhysVolID(f_id_fiber, 0);
 
       auto row_phv = grid_vol.placeVolume(row_vol, Position(0., z_rel, 0.));
-      row_phv.addPhysVolID(f_id_row, row_index);
+      // row base offset in fiber field; OR'd with copy_no at runtime → fiber = row*n_x_max + col
+      row_phv.addPhysVolID(f_id_fiber, row_index * n_x_max);
       ++row_index;
     }
 
