@@ -66,9 +66,10 @@ Silicon sensor, sensitive
 Current corrugated prototype:
 
 - `EIC_LAS_6RSU_CORR` is implemented separately from the legacy `EIC_LAS_6RSU`.
-- `ComponentTemplate` supports local component offsets.
-- The corrugated 6-RSU sensor band is currently a single sensitive silicon strip with the design-driven RSU-band width.
-- Left/right handedness is parsed from CSV and included in the prototype cache key, but the geometry is not visibly mirrored yet because asymmetric FPC/readout/end features are still deferred.
+- `ComponentTemplate` supports local component offsets, `x_repeat`, and `rsu_four_region_pattern`.
+- The corrugated 6-RSU sensor band is split into six RSU pitches.
+- Each RSU pitch is approximated as four active silicon rectangles with inactive silicon bias, periphery/readout, and backbone regions.
+- Left/right handedness is parsed from CSV and included in the prototype cache key. The current implementation swaps the sensor-band start side using the left/right end-extension and sensor-margin constants. More detailed asymmetric FPC/readout/end features are still deferred.
 
 ## Target Geometry Concept
 
@@ -299,6 +300,8 @@ Backward-compatible behavior:
 - Missing handedness defaults to a conservative value only for old module names.
 - New corrugated module rows should specify handedness explicitly.
 - Do not infer handedness from corrugation row or position.
+- For the first geometry implementation, handedness should at least swap the sensor-band start side:
+  `left` uses the left extension and left sensor margin, while `right` uses the right extension and right sensor margin.
 
 Validation:
 
@@ -314,6 +317,15 @@ Update each RSU to use the vertex-barrel-style approximation:
 12 physical tiles -> 4 active rectangular regions
 inactive gaps/regions -> passive Silicon
 ```
+
+Implementation notes:
+
+- Use the vertex-barrel dimensions as the current approximation:
+  `active_x = RSU_length/2 - backbone_width`
+  and `active_y = RSU_width/2 - bias_width - periphery_width`.
+- Keep inactive silicon regions passive, using the same silicon material but without the sensitive detector.
+- Put bias strips at the internal boundary between the two local-y halves, and periphery/readout strips at the outer edges, following the vertex-barrel `upper`/`lower` convention.
+- Keep all dimensions driven by XML constants so later design updates do not require C++ rewrites.
 
 Validation:
 

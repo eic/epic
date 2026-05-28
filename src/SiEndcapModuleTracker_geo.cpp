@@ -43,6 +43,8 @@ struct ComponentTemplate {
   double y_override{-1.0};
   double x_offset{0.0};
   double y_offset{0.0};
+  int x_repeat{1};
+  bool rsu_four_region_pattern{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -246,7 +248,7 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
          "TrackerServiceVis", false, -1.0, -1.0},
         {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "TrackerLayerVis",
          true, rsu_chain_length, description.constant<double>("SiEndcapRSU_width"),
-         sensor_x_offset, 0.0},
+         sensor_x_offset, 0.0, 6, true},
     }};
 
     for (const auto& component : components) {
@@ -262,6 +264,34 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   module_templates.emplace("EIC_LAS_5RSU", build("EIC_LAS_5RSU", 105.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_6RSU_CORR", build_corrugated_6rsu("EIC_LAS_6RSU_CORR"));
   return module_templates;
+}
+
+double corrugated_6rsu_sensor_x_offset(Detector& description, const ModuleTemplate& module_template,
+                                       const string& handedness) {
+  const double rsu_chain_length = 6.0 * description.constant<double>("SiEndcapRSU_length");
+  double end_extension          = description.constant<double>("SiEndcapModule6RSU_left_extension");
+  double sensor_margin          = description.constant<double>("SiEndcapModule6RSU_sensor_left_margin");
+  if (handedness == "right") {
+    end_extension = description.constant<double>("SiEndcapModule6RSU_right_extension");
+    sensor_margin = description.constant<double>("SiEndcapModule6RSU_sensor_right_margin");
+  }
+  return -module_template.x_size / 2.0 + end_extension + sensor_margin + rsu_chain_length / 2.0;
+}
+
+ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate module_template,
+                                          const string& handedness) {
+  if (module_template.name != "EIC_LAS_6RSU_CORR" || handedness.empty()) {
+    return module_template;
+  }
+
+  const double sensor_x_offset =
+      corrugated_6rsu_sensor_x_offset(description, module_template, handedness);
+  for (auto& component : module_template.components) {
+    if (component.sensitive) {
+      component.x_offset = sensor_x_offset;
+    }
+  }
+  return module_template;
 }
 
 // Resolve a CSV path either directly or relative to DETECTOR_PATH, matching the
@@ -727,18 +757,12 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
   for (const auto& component : module_template.components) {
     double comp_x = component.x_override > 0.0 ? component.x_override : x_size;
     double comp_y = component.y_override > 0.0 ? component.y_override : y_size;
+    const int x_repeat = std::max(1, component.x_repeat);
 
     Material material     = description.material(component.material);
-    string component_name = _toString(component_id, "component%d");
-    Box comp_solid(comp_x / 2.0, comp_y / 2.0, component.thickness / 2.0);
-    Volume component_volume(component_name, comp_solid, material);
-    component_volume.setVisAttributes(description.visAttributes(component.vis));
-
     z_position += component.thickness / 2.0;
-    PlacedVolume pv = prototype.volume.placeVolume(
-        component_volume, Position(component.x_offset, component.y_offset, z_position));
 
-    if (component.sensitive) {
+    auto attach_sensitive = [&](Volume& component_volume, PlacedVolume& pv) {
       pv.addPhysVolID("sensor", sensor_id);
       component_volume.setSensitiveDetector(sens);
       prototype.sensitives.push_back(pv);
@@ -754,6 +778,83 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       prototype.surfaces.emplace_back(component_volume, type, inner_thickness, outer_thickness, u,
                                       v, n, o);
       ++sensor_id;
+    };
+
+    if (component.rsu_four_region_pattern) {
+      const double rsu_pitch_x    = comp_x / x_repeat;
+      const double half_rsu_x     = rsu_pitch_x / 2.0;
+      const double half_rsu_y     = comp_y / 2.0;
+      const double bias_width     = description.constant<double>("SiEndcapRSU_bias_width");
+      const double periphery_width = description.constant<double>("SiEndcapRSU_periphery_width");
+      const double backbone_width = description.constant<double>("SiEndcapRSU_backbone_width");
+      const double active_x       = std::max(0.0, half_rsu_x - backbone_width);
+      const double active_y       = std::max(0.0, half_rsu_y - bias_width - periphery_width);
+
+      auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
+                           double pos_y, const string& vis, bool sensitive) {
+        if (box_x <= 0.0 || box_y <= 0.0) {
+          return;
+        }
+        Box box_solid(box_x / 2.0, box_y / 2.0, component.thickness / 2.0);
+        Volume box_volume(name, box_solid, material);
+        box_volume.setVisAttributes(description.visAttributes(vis));
+        PlacedVolume pv = prototype.volume.placeVolume(
+            box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y,
+                                 z_position));
+        if (sensitive) {
+          attach_sensitive(box_volume, pv);
+        }
+      };
+
+      for (int repeat_idx = 0; repeat_idx < x_repeat; ++repeat_idx) {
+        const double rsu_x_min = -comp_x / 2.0 + repeat_idx * rsu_pitch_x;
+        const string base_name =
+            _toString(component_id, "component%d") + _toString(repeat_idx + 1, "_rsu%d");
+
+        for (int x_half = 0; x_half < 2; ++x_half) {
+          const double half_x_min       = rsu_x_min + x_half * half_rsu_x;
+          const double backbone_x_center = half_x_min + backbone_width / 2.0;
+          const double active_x_center  = half_x_min + backbone_width + active_x / 2.0;
+
+          place_box(base_name + _toString(x_half + 1, "_xhalf%d_backbone"), backbone_width,
+                    comp_y, backbone_x_center, 0.0, "TrackerServiceVis", false);
+
+          for (int y_half = 0; y_half < 2; ++y_half) {
+            const double half_y_min = -comp_y / 2.0 + y_half * half_rsu_y;
+            const bool lower_half = y_half == 0;
+            const double first_passive_width  = lower_half ? periphery_width : bias_width;
+            const double second_passive_width = lower_half ? bias_width : periphery_width;
+            const double first_passive_y_center = half_y_min + first_passive_width / 2.0;
+            const double active_y_center =
+                half_y_min + first_passive_width + active_y / 2.0;
+            const double second_passive_y_center =
+                half_y_min + first_passive_width + active_y + second_passive_width / 2.0;
+            const string tile_name =
+                base_name + _toString(x_half + 1, "_xhalf%d") +
+                _toString(y_half + 1, "_yhalf%d");
+
+            place_box(tile_name + (lower_half ? "_periphery" : "_bias"), active_x,
+                      first_passive_width, active_x_center, first_passive_y_center,
+                      "TrackerServiceVis", false);
+            place_box(tile_name + "_sensor", active_x, active_y, active_x_center,
+                      active_y_center, component.vis, true);
+            place_box(tile_name + (lower_half ? "_bias" : "_periphery"), active_x,
+                      second_passive_width, active_x_center, second_passive_y_center,
+                      "TrackerServiceVis", false);
+          }
+        }
+      }
+    } else {
+      string component_name = _toString(component_id, "component%d");
+      Box comp_solid(comp_x / 2.0, comp_y / 2.0, component.thickness / 2.0);
+      Volume component_volume(component_name, comp_solid, material);
+      component_volume.setVisAttributes(description.visAttributes(component.vis));
+
+      PlacedVolume pv = prototype.volume.placeVolume(
+          component_volume, Position(component.x_offset, component.y_offset, z_position));
+      if (component.sensitive) {
+        attach_sensitive(component_volume, pv);
+      }
     }
     z_position += component.thickness / 2.0;
     thickness_so_far += component.thickness;
@@ -940,7 +1041,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                              row.csv_line, det_name, row.disk_key, row.module_name));
         continue;
       }
-      const ModuleTemplate& module_template = module_template_it->second;
+      ModuleTemplate module_template =
+          with_corrugated_handedness(description, module_template_it->second, row.handedness);
 
       if (!module_inside_layer_z(row, module_template, disk)) {
         printout(WARNING, "SiEndcapModuleTracker",

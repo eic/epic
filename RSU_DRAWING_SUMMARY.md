@@ -132,6 +132,45 @@ RSU width  ~= 19.56
 RSU length ~= 21.67
 ```
 
+## RSU Inactive-Region Assumptions
+
+The current geometry implementation uses a simplified vertex-barrel-style RSU approximation. This is an implementation assumption, not a fully detailed extraction from `rsu.pdf`.
+
+Each RSU is represented as:
+
+```text
+2 divisions along local x  x  2 divisions along local y
+= 4 active rectangular silicon regions
+```
+
+The inactive pieces are represented as passive silicon around or between those active regions:
+
+```text
+backbone width:  0.09
+bias width:      0.06
+periphery width: 0.398
+```
+
+Interpretation:
+
+- `backbone`: narrow inactive strip separating the two local-x halves of an RSU. In the current model it runs across the full RSU width in local `y`.
+- `bias`: narrow inactive strip at the internal boundary between the two local-y halves. It follows the vertex-barrel convention where bias regions sit near the central boundary.
+- `periphery`: inactive strip near the outer local-y edges of the RSU, representing non-sensitive edge/readout/periphery area.
+
+With the current constants, each active rectangle is:
+
+```text
+active_x = RSU_length/2 - backbone_width
+         = 21.666/2 - 0.09
+         = 10.743
+
+active_y = RSU_width/2 - bias_width - periphery_width
+         = 19.564/2 - 0.06 - 0.398
+         = 9.324
+```
+
+This approximation captures the tracking-relevant active versus inactive silicon pattern without modeling every physical tile, readout, or edge-detail feature.
+
 ## Implementation Notes
 
 For a detailed six-RSU corrugated/endcap module, the drawing suggests that the old simplified `130 mm x 30 mm` module footprint is only the approximate six-RSU active pitch region. A more complete package model should likely distinguish:

@@ -376,3 +376,63 @@ Known limitations / next step:
 - Left/right handedness still does not change the local geometry.
 - The temporary XML test switch in `compact/tracking/silicon_disks_modules.xml` is intentionally retained for visualization and should be reverted before finalizing production geometry.
 - Before opening a pull request, remove the temporary test CSV and the working markdown files added for this implementation unless any are intentionally promoted to permanent documentation.
+
+## 2026-05-27 UTC - Phase 5 RSU four-region active pattern
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_phase5_rsu_four_region_2026-05-27.sh`
+
+Intent:
+- Reimplement Phase 5 on top of the Phase 4 checkpoint commit so the substantial RSU subdivision change is isolated in a fresh working-tree diff.
+- Replace the single sensitive silicon strip in `EIC_LAS_6RSU_CORR` with a vertex-barrel-style approximation where each RSU has four active regions and inactive silicon gaps.
+
+Implementation:
+- Extended `ComponentTemplate` with `x_repeat` and `rsu_four_region_pattern`.
+- Marked the corrugated 6-RSU silicon component as six repeated RSU pitches using the four-region pattern.
+- In `build_module_prototype(...)`, split each RSU pitch into two halves along local x and two halves along local y.
+- For each RSU, create four sensitive silicon rectangles.
+- Model backbone, bias, and periphery/readout regions as passive silicon boxes using `TrackerServiceVis`.
+- Follow the vertex-barrel `upper`/`lower` convention along local y: bias strips are placed at the internal boundary between the two y halves, while periphery/readout strips are placed at the outer edges.
+- Dimensions are taken from XML constants:
+  `SiEndcapRSU_length`, `SiEndcapRSU_width`, `SiEndcapRSU_backbone_width`,
+  `SiEndcapRSU_bias_width`, and `SiEndcapRSU_periphery_width`.
+
+Validation:
+- Created and ran `tmp/validate_phase5_rsu_four_region_2026-05-27.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- CSV field-count check confirmed active test rows have 9 fields with explicit handedness.
+
+Known limitations / next step:
+- This has not yet been compiled or exported in the DD4hep environment from this shell.
+- Left/right handedness swaps the sensor-band start side, but detailed asymmetric FPC/readout/end features are still not modeled.
+- The temporary XML test switch in `compact/tracking/silicon_disks_modules.xml` is intentionally retained for visualization and should be reverted before finalizing production geometry.
+
+## 2026-05-27 UTC - Fixed handed corrugated prototype selection
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix the issue where `left` and `right` handed corrugated rows had separate cache keys but still built identical module prototypes.
+
+Implementation:
+- Added `corrugated_6rsu_sensor_x_offset(...)` to calculate the sensor-band local x offset from the package length, RSU chain length, and handed end-extension/sensor-margin constants.
+- Added `with_corrugated_handedness(...)`, which copies the selected module template and updates sensitive component offsets before prototype construction.
+- `left` now uses `SiEndcapModule6RSU_left_extension + SiEndcapModule6RSU_sensor_left_margin`.
+- `right` now uses `SiEndcapModule6RSU_right_extension + SiEndcapModule6RSU_sensor_right_margin`.
+
+Validation:
+- Re-ran `tmp/validate_phase5_rsu_four_region_2026-05-27.sh`; it passed.
+- Ran `git diff --check`; it passed.
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+- Sanity-calculated the current sensor-band offsets:
+  `left = +4.488 mm`, `right = -4.512 mm`.
+
+Known limitations / next step:
+- This fixes the modeled sensor-band handedness, but detailed asymmetric FPC/readout/end pieces are still deferred.
