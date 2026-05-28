@@ -107,7 +107,7 @@ struct ModulePrototype {
 struct CorrugatedFrameConfig {
   string name{"frame"};
   string material{"CarbonFiber"};
-  string vis{"TrackerSupportVis"};
+  string vis{"SVTSupportVis"};
   double thickness{0.2 * mm};
   double height{4.2 * mm};
   double theta{36.0 * degree};
@@ -213,10 +213,10 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
 
     const array<ComponentTemplate, 3> components{{
         {description.constant<double>("SiEndcapModuleFlatSheetCF_thickness"), "CarbonFiber",
-         "TrackerSupportVis", false, -1.0, -1.0},
+         "SVTSupportVis", false, -1.0, -1.0},
         {description.constant<double>("SiEndcapModuleGlue_thickness"), "SVT_Endcap_Glue",
-         "TrackerServiceVis", false, -1.0, -1.0},
-        {description.constant<double>("SiTrackerSensor_thickness"), "Silicon", "TrackerLayerVis",
+         "SVTGlueVis", false, -1.0, -1.0},
+        {description.constant<double>("SiTrackerSensor_thickness"), "Silicon", "SVTSensorVis",
          true, -1.0, -1.0},
     }};
 
@@ -243,10 +243,10 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
 
     const array<ComponentTemplate, 3> components{{
         {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber",
-         "TrackerSupportVis", false, -1.0, -1.0},
+         "SVTSupportVis", false, -1.0, -1.0},
         {description.constant<double>("SiEndcapAdhesive_thickness"), "SVT_Endcap_Glue",
-         "TrackerServiceVis", false, -1.0, -1.0},
-        {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "TrackerLayerVis",
+         "SVTGlueVis", false, -1.0, -1.0},
+        {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "SVTSensorVis",
          true, rsu_chain_length, description.constant<double>("SiEndcapRSU_width"),
          sensor_x_offset, 0.0, 6, true},
     }};
@@ -817,7 +817,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           const double active_x_center  = half_x_min + backbone_width + active_x / 2.0;
 
           place_box(base_name + _toString(x_half + 1, "_xhalf%d_backbone"), backbone_width,
-                    comp_y, backbone_x_center, 0.0, "TrackerServiceVis", false);
+                    comp_y, backbone_x_center, 0.0, "SVTReadoutVis", false);
 
           for (int y_half = 0; y_half < 2; ++y_half) {
             const double half_y_min = -comp_y / 2.0 + y_half * half_rsu_y;
@@ -835,12 +835,12 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
 
             place_box(tile_name + (lower_half ? "_periphery" : "_bias"), active_x,
                       first_passive_width, active_x_center, first_passive_y_center,
-                      "TrackerServiceVis", false);
+                      "SVTReadoutVis", false);
             place_box(tile_name + "_sensor", active_x, active_y, active_x_center,
                       active_y_center, component.vis, true);
             place_box(tile_name + (lower_half ? "_bias" : "_periphery"), active_x,
                       second_passive_width, active_x_center, second_passive_y_center,
-                      "TrackerServiceVis", false);
+                      "SVTReadoutVis", false);
           }
         }
       }

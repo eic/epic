@@ -436,3 +436,29 @@ Validation:
 
 Known limitations / next step:
 - This fixes the modeled sensor-band handedness, but detailed asymmetric FPC/readout/end pieces are still deferred.
+
+## 2026-05-28 UTC - SVT-specific visualization attributes
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/display.xml`
+- `compact/display_detailed.xml`
+- `compact/display_geoviewer.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make the corrugated RSU module easier to inspect by using SVT-specific visualization attributes and separating glue color from inactive RSU silicon.
+
+Implementation:
+- Changed module support components from `TrackerSupportVis` to `SVTSupportVis`.
+- Changed active silicon components from `TrackerLayerVis` to `SVTSensorVis`.
+- Changed inactive RSU backbone/bias/periphery silicon boxes from `TrackerServiceVis` to `SVTReadoutVis`.
+- Added `SVTGlueVis` and assigned glue/adhesive components to it.
+- Added the SVT visualization definitions to `display_detailed.xml` and `display_geoviewer.xml` in addition to the existing main `display.xml` definitions.
+
+Validation:
+- Ran `git diff --check`; it passed.
+- Ran `xmllint --noout` on `compact/display.xml`, `compact/display_detailed.xml`, `compact/display_geoviewer.xml`, and `compact/tracking/silicon_disks_modules.xml`; it passed.
+
+Known limitations / next step:
+- This has not yet been visually checked with `dd_web_display` in the configured DD4hep environment.
