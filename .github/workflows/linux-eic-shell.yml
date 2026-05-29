@@ -549,7 +549,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        particle: [pi, e]
+        particle: [pi, e, geantino]
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
