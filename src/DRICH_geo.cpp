@@ -632,6 +632,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                            mirrorVol);
     mirrorSkin.isValid();
 
+    // BUILD PER-SECTOR SENSORBOX SUBVOLUME =============================================
+    // Grouping the 210 PDU assemblies per sector into a dedicated subvolume reduces the
+    // number of direct daughters of gasvolVol from 1,269 to 15, which improves TGeo
+    // voxelisation and navigation performance for optical photon tracking.
+    double sensorboxZ = -(snoutLength + sensorboxLength) / 2. + windowThickness;
+    Volume sensorboxGasVol(detName + "_sensorbox_" + secName, gasvolSensorboxTube, gasvolMat);
+    sensorboxGasVol.setVisAttributes(gasvolVis);
+    auto sensorboxGasPlacement = Transform3D(sectorRotation, Position(0., 0., sensorboxZ));
+    gasvolVol.placeVolume(sensorboxGasVol, sensorboxGasPlacement);
+
 #if defined(WITH_IRT2_SUPPORT) || defined(WITH_IRT1_SUPPORT)
     // reconstruction constants (w.r.t. IP)
     // - access sector center after `sectorRotation`
@@ -916,8 +926,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
           // clang-format on
 
-          // place shared pduAssembly template; set "sector" and "pdu" physVolIDs on this placement
-          auto pduPV = gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
+          // place shared pduAssembly template inside the per-sector sensorbox subvolume;
+          // factor out the sensorbox placement to get PDU coordinates in the sensorbox frame
+          auto pduInSensorboxPlacement = sensorboxGasPlacement.Inverse() * pduAssemblyPlacement;
+          auto pduPV = sensorboxGasVol.placeVolume(pduAssembly, pduInSensorboxPlacement);
           pduPV.addPhysVolID("sector", isec).addPhysVolID("pdu", ipdu);
 
           // per-sensor DetElement creation and parameter storage
