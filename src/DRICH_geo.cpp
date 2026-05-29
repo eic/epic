@@ -426,14 +426,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       double segmentSpacing      = 2 * M_PI / N;
       double segmentAngularWidth = coronasThickness / rMin_Zminus;
 
-      ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
-                               rMax_Zplus, 0.0, segmentAngularWidth);
+      ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus, rMax_Zplus,
+                               0.0, segmentAngularWidth);
       std::string segName = "CarbonSegment_" + std::to_string(i);
       Volume segVol(segName, segmentSolid, coronasMat);
       segVol.setVisAttributes(coronasVis);
 
       for (int p = 0; p < N; p++) {
-        aerogelVol.placeVolume(segVol, Transform3D(RotationZ(p * segmentSpacing), Position(0., 0., 0.)));
+        aerogelVol.placeVolume(segVol,
+                               Transform3D(RotationZ(p * segmentSpacing), Position(0., 0., 0.)));
       }
     } //crown
   } //trapezoidal
