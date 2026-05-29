@@ -551,8 +551,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     // Ceramic body (sidewall and anode)
     //
     {
-      Box cerbox(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2,
-                 _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
+      Box cerbox(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2, _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
       Box cutbox(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
                  _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
 
@@ -608,10 +607,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       // Eventually place the whole HRPPD container volume;
       double dz =
           _FIDUCIAL_VOLUME_LENGTH_ / 2 - _SENSOR_AREA_LENGTH_ + _HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2;
-      auto hrppdPV =
-          pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz)).addPhysVolID("hrppd", imod);
+      auto hrppdPV = pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz))
+                         .addPhysVolID("hrppd", imod);
 
-      auto sensorID = encodeSensorID(std::vector<std::pair<std::string, int>>{{"hrppd", int(imod)}});
+      auto sensorID =
+          encodeSensorID(std::vector<std::pair<std::string, int>>{{"hrppd", int(imod)}});
       TString deName;
       deName.Form("%s-sensor-%02d", detName.c_str(), imod);
       DetElement pcDE(sdet, deName.Data(), sensorID);
