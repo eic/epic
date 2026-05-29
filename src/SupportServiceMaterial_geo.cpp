@@ -49,7 +49,7 @@ bool can_share_support_volume(const SharedSupportVolume& cached, const xml_comp_
 
 std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_t& x_det,
                                            const xml_comp_t& x_support, const xml_comp_t& x_child,
-                                           const double offset = 0,
+                                           const double offset            = 0,
                                            const std::string& volume_name = "") {
   // Get Initial rotation/translation info
   xml_dim_t x_pos(x_child.child(_U(position), false));
@@ -176,10 +176,9 @@ std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_
   // Materials
   Material mat = descr.material(getAttrOrDefault<std::string>(x_child, _U(material), "Air"));
   // Create our volume
-  const std::string resolved_volume_name = volume_name.empty()
-                                               ? getAttrOrDefault<std::string>(x_child, _U(name),
-                                                                               "support_vol")
-                                               : volume_name;
+  const std::string resolved_volume_name =
+      volume_name.empty() ? getAttrOrDefault<std::string>(x_child, _U(name), "support_vol")
+                          : volume_name;
   Volume vol{resolved_volume_name, solid, mat};
 
   // Create full transformation
@@ -327,10 +326,10 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
 
   // Loop over the supports
   for (xml_coll_t su{x_det, _U(support)}; su; ++su) {
-    xml_comp_t x_sup                  = su;
-    const std::string support_name    = x_sup.nameStr();
+    xml_comp_t x_sup                   = su;
+    const std::string support_name     = x_sup.nameStr();
     const std::size_t support_instance = ++support_occurrences[support_name];
-    const double rot_z                = getAttrOrDefault(x_sup, _U(phi0), 0.);
+    const double rot_z                 = getAttrOrDefault(x_sup, _U(phi0), 0.);
     RotationZ rot(rot_z);
     Transform3D tr_rot(
         rot, Position(0, 0, 0)); // additional rotation of the module after position offset
@@ -340,8 +339,8 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
       double delta_phi = 0;
       if (can_share_support_volume(cache_it->second, x_sup, delta_phi)) {
         Transform3D tr_phi(RotationZ(delta_phi), Position(0, 0, 0));
-        [[maybe_unused]] auto pv = assembly.placeVolume(cache_it->second.volume,
-                                                        tr_rot * tr_phi * cache_it->second.transform);
+        [[maybe_unused]] auto pv = assembly.placeVolume(
+            cache_it->second.volume, tr_rot * tr_phi * cache_it->second.transform);
         continue;
       }
     }
