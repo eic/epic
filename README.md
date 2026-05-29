@@ -9,7 +9,7 @@ This version has been edited by Long Li (University of Birmingham) and Sam Henry
 
 This is intended for design studies of the outer barrels to investigate the impact of the design of detector performances and verify the simple geometry used for routine simulations is accurate. It may be of interested to other groups wishing to do similar studies on other detector components.
 
-
+Notes the .gdml files produced from the CAD files have now been moved to https://github.com/eic/epic-data/tree/SVTOB_UK/SVTOB_CAD
 
 Getting Started
 ---------------
