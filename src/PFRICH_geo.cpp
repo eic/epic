@@ -175,7 +175,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
         new FlatSurface(TVector3(0, 0, 0), sign * TVector3(1, 0, 0), TVector3(0, -1, 0));
 
     auto radiator =
-        geometry->SetContainerVolume(cdet, "GasVolume", 0, (G4LogicalVolume*)(0x0), 0, boundary);
+        geometry->SetContainerVolume(cdet, "GasVolume", 0, (G4LogicalVolume*)(0x10), 0, boundary);
     radiator->SetAlternativeMaterialName(vesselGasName.c_str());
   }
 #endif
@@ -273,7 +273,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       auto radiator =
           geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 0,
-                                    (G4LogicalVolume*)(0x1), 0, surface, aerogelThickness / mm);
+                                    (G4LogicalVolume*)(0x11), 0, surface, aerogelThickness / mm);
       radiator->SetAlternativeMaterialName(aerogelMatName.c_str());
     }
 #endif
@@ -308,7 +308,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       auto radiator =
           geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 0,
-                                    (G4LogicalVolume*)(0x2), 0, surface, filterThickness / mm);
+                                    (G4LogicalVolume*)(0x12), 0, surface, filterThickness / mm);
       radiator->SetAlternativeMaterialName(filterMatName.c_str());
     }
 #endif
@@ -445,7 +445,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     auto pd = new IRT2::CherenkovPhotonDetector(0, 0);
 
     // FIXME: '0' stands for the unknown (and irrelevant) G4LogicalVolume;
-    geometry->AddPhotonDetector(cdet, 0, pd);
+    geometry->AddPhotonDetector(cdet, (G4LogicalVolume*)0x10, pd);
 
     // Cannot access GEANT shapes in the reconstruction code -> store this value;
     pd->SetActiveAreaSize(_HRPPD_ACTIVE_AREA_SIZE_ / mm);
@@ -466,7 +466,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                           nx, ny);
 
       auto radiator = geometry->AddFlatRadiator(cdet, "QuartzWindow", CherenkovDetector::Downstream,
-                                                0, (G4LogicalVolume*)(0x3), 0, surface,
+                                                0, (G4LogicalVolume*)(0x13), 0, surface,
                                                 _HRPPD_WINDOW_THICKNESS_ / mm);
       radiator->SetAlternativeMaterialName("AirOptical");
     }
