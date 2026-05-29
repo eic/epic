@@ -506,154 +506,117 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       } //for ix
     }
 
+    auto _READOUT_PCB_THICKNESS_ = description.constant<double>("READOUT_PCB_THICKNESS");
+    auto _READOUT_PCB_SIZE_      = description.constant<double>("READOUT_PCB_SIZE");
+
+    // Build one shared HRPPD logical volume and place it repeatedly with per-module physVolIDs.
+    Box hrppd_Solid(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2,
+                    _HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2);
+    Volume hrppdVol_air(detName + "-hrppd", hrppd_Solid, air);
+
+    // A running variable to pack layers one after the other one;
+    double accu = -_HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2;
+
+    //
+    // Quartz Window
+    //
+    Box wnd_Solid(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2, _HRPPD_WINDOW_THICKNESS_ / 2);
+    Volume wndVol(detName + "-window", wnd_Solid, HRPPD_WindowMat);
+    wndVol.setVisAttributes(wndVis);
+    hrppdVol_air.placeVolume(wndVol, Position(0, 0, accu + _HRPPD_WINDOW_THICKNESS_ / 2));
+
+    accu += _HRPPD_WINDOW_THICKNESS_;
+
+    //
+    // Photocathode layer (sensitive volume)
+    //
+    auto pcBox = Box(_HRPPD_ACTIVE_AREA_SIZE_ / 2, _HRPPD_ACTIVE_AREA_SIZE_ / 2,
+                     _HRPPD_PHOTOCATHODE_THICKNESS_ / 2);
+    Volume pcVol(detName + "-photocathode", pcBox, HRPPD_pcMat);
+    pcVol.setSensitiveDetector(sens);
+    pcVol.setVisAttributes(pcVis);
+    hrppdVol_air.placeVolume(pcVol, Position(0.0, 0.0, accu + _HRPPD_PHOTOCATHODE_THICKNESS_ / 2));
+
+    //
+    // A fake absorber layer behind the photocathode; FIXME: make sure that reflection
+    // on the window and photocathode boundary still works correctly (no fake volume as
+    // in a standalone code);
+    //
+    Volume absVol(detName + "-absorber", pcBox, HRPPD_PCBMat);
+    hrppdVol_air.placeVolume(absVol, Position(0.0, 0.0,
+                                              accu + _HRPPD_PHOTOCATHODE_THICKNESS_ +
+                                                  _HRPPD_PHOTOCATHODE_THICKNESS_ / 2));
+
+    //
+    // Ceramic body (sidewall and anode)
+    //
+    {
+      Box cerbox(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2, _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
+      Box cutbox(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
+                 _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
+
+      SubtractionSolid ceramic(cerbox, cutbox, Position(0, 0, -_HRPPD_BASEPLATE_THICKNESS_));
+      Volume ceramicVol(detName + "-ceramic", ceramic, HRPPD_CeramicMat);
+
+      ceramicVol.setVisAttributes(bodyVis);
+      hrppdVol_air.placeVolume(ceramicVol,
+                               Position(0.0, 0.0, accu + _HRPPD_CERAMIC_BODY_THICKNESS_ / 2));
+    }
+
+    //
+    // Effective anode plating layer
+    //
+    {
+      Box plating_solid(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
+                        _HRPPD_PLATING_LAYER_THICKNESS_ / 2);
+      Volume platingVol(detName + "-plating", plating_solid, HRPPD_PlatingMat);
+      // Place somewhere in the middle of the ceramic body gap;
+      hrppdVol_air.placeVolume(platingVol,
+                               Position(0.0, 0.0, accu + _HRPPD_CERAMIC_BODY_THICKNESS_ / 2));
+    }
+
+    //
+    // Effective MCP layer
+    //
+    {
+      Box mcp_solid(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
+                    _EFFECTIVE_MCP_THICKNESS_ / 2);
+      Volume mcpVol(detName + "-mcp", mcp_solid, HRPPD_MCPMat);
+      hrppdVol_air.placeVolume(mcpVol, Position(0.0, 0.0,
+                                                accu + _HRPPD_CERAMIC_BODY_THICKNESS_ / 2 +
+                                                    _HRPPD_PLATING_LAYER_THICKNESS_ +
+                                                    _EFFECTIVE_MCP_THICKNESS_ / 2));
+    }
+
+    accu += _HRPPD_CERAMIC_BODY_THICKNESS_;
+
+    //
+    // PCB
+    //
+    {
+      Box pcb_solid(_READOUT_PCB_SIZE_ / 2, _READOUT_PCB_SIZE_ / 2, _READOUT_PCB_THICKNESS_ / 2);
+      Volume pcbVol(detName + "-pcb", pcb_solid, HRPPD_PCBMat);
+      hrppdVol_air.placeVolume(pcbVol, Position(0.0, 0.0, accu + _READOUT_PCB_THICKNESS_ / 2));
+    }
+
     unsigned imod = 0;
 
-    //
-    // It looks like each HRPPD should be a new object rather than a copy of the same volume,
-    // because otherwise one cannot make photocathodes sensitive (this is done on a PlacedVolume
-    // level);
-    //
-    for (auto xyptr : coord) {
-      auto& xy = xyptr.first;
-
-      uint64_t sensorID = 0x0;
-
-      //
-      // HRPPD container volume
-      //
-      Box hrppd_Solid(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2,
-                      _HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2);
-      TString hrppdName;
-      hrppdName.Form("%s-hrppd-%02d", detName.c_str(), imod);
-      // FIXME: may want to use AirOptical here, but then return a dummy absorber
-      // layer behind the actual photocathode;
-      Volume hrppdVol_air(hrppdName.Data(), hrppd_Solid, air);
-
-      // A running variable to pack layers one after the other one;
-      double accu = -_HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2;
-
-      //
-      // Quartz Window
-      //
-      Box wnd_Solid(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2, _HRPPD_WINDOW_THICKNESS_ / 2);
-      TString wndName;
-      wndName.Form("%s-window-%02d", detName.c_str(), imod);
-      Volume wndVol(wndName.Data(), wnd_Solid, HRPPD_WindowMat);
-      wndVol.setVisAttributes(wndVis);
-      hrppdVol_air.placeVolume(wndVol, Position(0, 0, accu + _HRPPD_WINDOW_THICKNESS_ / 2));
-
-      accu += _HRPPD_WINDOW_THICKNESS_;
-
-      //
-      // Photocathode layer (sensitive volume)
-      //
-      {
-        auto pcBox = Box(_HRPPD_ACTIVE_AREA_SIZE_ / 2, _HRPPD_ACTIVE_AREA_SIZE_ / 2,
-                         _HRPPD_PHOTOCATHODE_THICKNESS_ / 2);
-        TString pcName;
-        pcName.Form("%s-photocathode-%02d", detName.c_str(), imod);
-        Volume pcVol(pcName.Data(), pcBox, HRPPD_pcMat);
-        pcVol.setSensitiveDetector(sens);
-
-        pcVol.setVisAttributes(pcVis);
-        PlacedVolume pcPV = hrppdVol_air.placeVolume(
-            pcVol, Position(0.0, 0.0, accu + _HRPPD_PHOTOCATHODE_THICKNESS_ / 2));
-        {
-          pcPV.addPhysVolID("hrppd", imod);
-
-          // sensor DetElement
-          sensorID = encodeSensorID(pcPV.volIDs());
-          TString deName;
-          deName.Form("%s-sensor-%02d", detName.c_str(), imod);
-          DetElement pcDE(sdet, deName.Data(), sensorID);
-          pcDE.setPlacement(pcPV);
-        }
-
-        //
-        // A fake absorber layer behind the photocathode; FIXME: make sure that reflection
-        // on the window and photocathode boundary still works correctly (no fake volume as
-        // in a standalone code);
-        //
-        {
-          TString absName;
-          absName.Form("%s-absorber-%02d", detName.c_str(), imod);
-          // Recycle the same pcBox shape; do not mind to use PCB material;
-          Volume absVol(absName.Data(), pcBox, HRPPD_PCBMat);
-          hrppdVol_air.placeVolume(absVol, Position(0.0, 0.0,
-                                                    accu + _HRPPD_PHOTOCATHODE_THICKNESS_ +
-                                                        _HRPPD_PHOTOCATHODE_THICKNESS_ / 2));
-        }
-      }
-
-      //
-      // Ceramic body (sidewall and anode)
-      //
-      {
-        Box cerbox(_HRPPD_TILE_SIZE_ / 2, _HRPPD_TILE_SIZE_ / 2,
-                   _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
-        Box cutbox(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
-                   _HRPPD_CERAMIC_BODY_THICKNESS_ / 2);
-
-        SubtractionSolid ceramic(cerbox, cutbox, Position(0, 0, -_HRPPD_BASEPLATE_THICKNESS_));
-
-        TString cerName;
-        cerName.Form("%s-ceramic-%02d", detName.c_str(), imod);
-        Volume ceramicVol(cerName.Data(), ceramic, HRPPD_CeramicMat);
-
-        ceramicVol.setVisAttributes(bodyVis);
-        hrppdVol_air.placeVolume(ceramicVol,
-                                 Position(0.0, 0.0, accu + _HRPPD_CERAMIC_BODY_THICKNESS_ / 2));
-      }
-
-      //
-      // Effective anode plating layer
-      //
-      {
-        Box plating_solid(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
-                          _HRPPD_PLATING_LAYER_THICKNESS_ / 2);
-        TString pltName;
-        pltName.Form("%s-plating-%02d", detName.c_str(), imod);
-        Volume platingVol(pltName.Data(), plating_solid, HRPPD_PlatingMat);
-        // Place somewhere in the middle of the ceramic body gap;
-        hrppdVol_air.placeVolume(platingVol,
-                                 Position(0.0, 0.0, accu + _HRPPD_CERAMIC_BODY_THICKNESS_ / 2));
-      }
-
-      //
-      // Effective MCP layer
-      //
-      {
-        Box mcp_solid(_HRPPD_OPEN_AREA_SIZE_ / 2, _HRPPD_OPEN_AREA_SIZE_ / 2,
-                      _EFFECTIVE_MCP_THICKNESS_ / 2);
-        TString mcpName;
-        mcpName.Form("%s-mcp-%02d", detName.c_str(), imod);
-        Volume mcpVol(mcpName.Data(), mcp_solid, HRPPD_MCPMat);
-        hrppdVol_air.placeVolume(mcpVol, Position(0.0, 0.0,
-                                                  accu + _HRPPD_CERAMIC_BODY_THICKNESS_ / 2 +
-                                                      _HRPPD_PLATING_LAYER_THICKNESS_ +
-                                                      _EFFECTIVE_MCP_THICKNESS_ / 2));
-      }
-
-      accu += _HRPPD_CERAMIC_BODY_THICKNESS_;
-
-      //
-      // PCB
-      //
-      {
-        auto _READOUT_PCB_THICKNESS_ = description.constant<double>("READOUT_PCB_THICKNESS");
-        auto _READOUT_PCB_SIZE_      = description.constant<double>("READOUT_PCB_SIZE");
-
-        Box pcb_solid(_READOUT_PCB_SIZE_ / 2, _READOUT_PCB_SIZE_ / 2, _READOUT_PCB_THICKNESS_ / 2);
-        TString pcbName;
-        pcbName.Form("%s-pcb-%02d", detName.c_str(), imod);
-        Volume pcbVol(pcbName.Data(), pcb_solid, HRPPD_PCBMat);
-        hrppdVol_air.placeVolume(pcbVol, Position(0.0, 0.0, accu + _READOUT_PCB_THICKNESS_ / 2));
-      }
+    for (const auto& xyptr : coord) {
+      const auto& xy = xyptr.first;
 
       // Eventually place the whole HRPPD container volume;
       double dz =
           _FIDUCIAL_VOLUME_LENGTH_ / 2 - _SENSOR_AREA_LENGTH_ + _HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2;
-      pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz));
+      auto hrppdPV = pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz))
+                         .addPhysVolID("hrppd", imod);
+
+      auto sensorID =
+          encodeSensorID(std::vector<std::pair<std::string, int>>{{"hrppd", int(imod)}});
+      TString deName;
+      deName.Form("%s-sensor-%02d", detName.c_str(), imod);
+      DetElement pcDE(sdet, deName.Data(), sensorID);
+      // Use the concrete HRPPD placement, which carries the per-module physVolID.
+      pcDE.setPlacement(hrppdPV);
 
 #ifdef WITH_IRT2_SUPPORT
       {
