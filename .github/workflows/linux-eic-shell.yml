@@ -549,7 +549,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        particle: [pi, e, geantino]
+        particle: [pi-, e-, geantino]
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
@@ -565,7 +565,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
     - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
@@ -673,7 +673,7 @@ jobs:
     needs: [build, npsim-gun]
     strategy:
       matrix:
-        particle: [pi, e]
+        particle: [pi-, e-]
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
