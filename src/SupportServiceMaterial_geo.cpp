@@ -16,14 +16,41 @@
 #include <XML/Utilities.h>
 
 #include <cassert>
+#include <map>
 
 using namespace std;
 using namespace dd4hep;
 
 namespace {
+struct SharedSupportVolume {
+  Volume volume;
+  Transform3D transform;
+  std::string type;
+  double phimin;
+  double phimax;
+};
+
+std::string component_volume_name(const std::string& parent_name, const xml_comp_t& x_child) {
+  return parent_name + "_" + getAttrOrDefault<std::string>(x_child, _U(name), "support_vol");
+}
+
+bool can_share_support_volume(const SharedSupportVolume& cached, const xml_comp_t& x_support,
+                              double& delta_phi) {
+  if (cached.type != x_support.attr<std::string>(_U(type))) {
+    return false;
+  }
+
+  const double phimin = getAttrOrDefault<double>(x_support, _Unicode(phimin), 0.0 * deg);
+  const double phimax = getAttrOrDefault<double>(x_support, _Unicode(phimax), 360.0 * deg);
+  const double epsilon{TGeoShape::Tolerance()};
+  delta_phi = phimin - cached.phimin;
+  return fabs((phimax - cached.phimax) - delta_phi) <= epsilon;
+}
+
 std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_t& x_det,
                                            const xml_comp_t& x_support, const xml_comp_t& x_child,
-                                           const double offset = 0) {
+                                           const double offset = 0,
+                                           const std::string& volume_name = "") {
   // Get Initial rotation/translation info
   xml_dim_t x_pos(x_child.child(_U(position), false));
   xml_dim_t x_rot(x_child.child(_U(rotation), false));
@@ -149,7 +176,11 @@ std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_
   // Materials
   Material mat = descr.material(getAttrOrDefault<std::string>(x_child, _U(material), "Air"));
   // Create our volume
-  Volume vol{getAttrOrDefault<std::string>(x_child, _U(name), "support_vol"), solid, mat};
+  const std::string resolved_volume_name = volume_name.empty()
+                                               ? getAttrOrDefault<std::string>(x_child, _U(name),
+                                                                               "support_vol")
+                                               : volume_name;
+  Volume vol{resolved_volume_name, solid, mat};
 
   // Create full transformation
   Transform3D tr(rot3D, pos3D);
@@ -269,8 +300,9 @@ std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xm
 }
 
 std::pair<Volume, Transform3D> build_shape(const Detector& descr, const xml_det_t& x_det,
-                                           const xml_comp_t& x_support, const double offset = 0) {
-  return build_shape(descr, x_det, x_support, x_support, offset);
+                                           const xml_comp_t& x_support, const double offset = 0,
+                                           const std::string& volume_name = "") {
+  return build_shape(descr, x_det, x_support, x_support, offset, volume_name);
 }
 } // namespace
 
@@ -290,23 +322,53 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
   DetElement det(det_name, det_id);
   Assembly assembly(det_name + "_assembly");
 
+  std::map<std::string, SharedSupportVolume> shared_support_volumes;
+  std::map<std::string, std::size_t> support_occurrences;
+
   // Loop over the supports
   for (xml_coll_t su{x_det, _U(support)}; su; ++su) {
-    xml_comp_t x_sup   = su;
-    const double rot_z = getAttrOrDefault(x_sup, _U(phi0), 0.);
+    xml_comp_t x_sup                  = su;
+    const std::string support_name    = x_sup.nameStr();
+    const std::size_t support_instance = ++support_occurrences[support_name];
+    const double rot_z                = getAttrOrDefault(x_sup, _U(phi0), 0.);
     RotationZ rot(rot_z);
     Transform3D tr_rot(
         rot, Position(0, 0, 0)); // additional rotation of the module after position offset
 
-    auto [vol, tr]           = build_shape(description, x_det, x_sup);
+    auto cache_it = shared_support_volumes.find(support_name);
+    if (cache_it != shared_support_volumes.end()) {
+      double delta_phi = 0;
+      if (can_share_support_volume(cache_it->second, x_sup, delta_phi)) {
+        Transform3D tr_phi(RotationZ(delta_phi), Position(0, 0, 0));
+        [[maybe_unused]] auto pv = assembly.placeVolume(cache_it->second.volume,
+                                                        tr_rot * tr_phi * cache_it->second.transform);
+        continue;
+      }
+    }
+
+    std::string support_volume_name = support_name;
+    if (support_instance > 1) {
+      support_volume_name += "_" + std::to_string(support_instance);
+    }
+
+    auto [vol, tr]           = build_shape(description, x_det, x_sup, 0, support_volume_name);
     [[maybe_unused]] auto pv = assembly.placeVolume(vol, tr_rot * tr);
     // Loop over support components, if any
     double cumulative_thickness = 0;
     for (xml_coll_t com{x_sup, _U(component)}; com; ++com) {
       xml_comp_t x_com = com;
-      auto [cvol, ctr] = build_shape(description, x_det, x_sup, x_com, cumulative_thickness);
+      auto [cvol, ctr] = build_shape(description, x_det, x_sup, x_com, cumulative_thickness,
+                                     component_volume_name(support_volume_name, x_com));
       vol.placeVolume(cvol, ctr);
       cumulative_thickness += x_com.thickness();
+    }
+
+    if (support_instance == 1) {
+      shared_support_volumes.emplace(
+          support_name,
+          SharedSupportVolume{vol, tr, x_sup.attr<std::string>(_U(type)),
+                              getAttrOrDefault<double>(x_sup, _Unicode(phimin), 0.0 * deg),
+                              getAttrOrDefault<double>(x_sup, _Unicode(phimax), 360.0 * deg)});
     }
   }
   // Loop over any subtraction volumes
