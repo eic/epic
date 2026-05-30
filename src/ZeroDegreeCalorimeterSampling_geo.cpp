@@ -37,8 +37,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // z of the front face of the current layer group, relative to envelope centre
   double z_env = -totWidth / 2.0;
-  // 0-based layer counter used for physVolID
-  int layer_num = 0;
+  // 1-based layer counter used for physVolID (preserves existing cell IDs)
+  int layer_num = 1;
   int lg        = 0; // layer-group counter used for unique volume naming
 
   // Read layer groups from XML
