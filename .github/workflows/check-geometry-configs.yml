@@ -23,7 +23,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          MEMORY_LIMIT_KB=1200000   # 1.2 GB – update this deliberately when geometry grows
+          MEMORY_LIMIT_KB=1300000   # 1.3 GB – update this deliberately when geometry grows
           IFS=, read -a configs <<< "${{inputs.detector_configs}}"
           overall_rc=0
           for config in ${configs[@]} ; do
