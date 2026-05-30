@@ -23,9 +23,21 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
+          MEMORY_LIMIT_KB=4000000   # 4 GB – update this deliberately when geometry grows
           IFS=, read -a configs <<< "${{inputs.detector_configs}}"
+          overall_rc=0
           for config in ${configs[@]} ; do
             echo "::group::${config}" ;
-            checkGeometry -c ${DETECTOR_PATH}/${config}.xml ;
+            /usr/bin/time -v -o /tmp/time_${config}.txt \
+              checkGeometry -c ${DETECTOR_PATH}/${config}.xml
+            rc=$?
+            peak_rss_kb=$(grep "Maximum resident set size" /tmp/time_${config}.txt | awk '{print $NF}')
+            echo "Peak RSS for ${config}: ${peak_rss_kb} kB (limit: ${MEMORY_LIMIT_KB} kB)"
+            if [ "${peak_rss_kb}" -gt "${MEMORY_LIMIT_KB}" ]; then
+              echo "::error::Memory limit exceeded for ${config}: ${peak_rss_kb} kB > ${MEMORY_LIMIT_KB} kB"
+              overall_rc=1
+            fi
+            [ $rc -ne 0 ] && overall_rc=$rc
             echo "::endgroup::" ;
           done
+          exit $overall_rc
