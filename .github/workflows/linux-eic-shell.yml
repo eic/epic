@@ -557,7 +557,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        particle: [e, pi, geantino]
+        particle: [e, pi, geantino, chargedgeantino]
         detector_config: [epic_craterlake]
         include:
           - particle: e
@@ -567,6 +567,8 @@ jobs:
           - particle: geantino
             charge: ""
             extra_args: '--filter.tracker "" --filter.calo ""'
+          - particle: chargedgeantino
+            charge: ""
     steps:
     - uses: actions/checkout@v6
     - uses: actions/download-artifact@v8
