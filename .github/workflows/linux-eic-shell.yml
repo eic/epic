@@ -566,9 +566,12 @@ jobs:
             charge: "-"
           - particle: geantino
             charge: ""
+            sim: ddsim
             extra_args: '--filter.tracker "" --filter.calo ""'
           - particle: chargedgeantino
             charge: ""
+            sim: ddsim
+            extra_args: '--filter.tracker "" --filter.calo ""'
     steps:
     - uses: actions/checkout@v6
     - uses: actions/download-artifact@v8
@@ -583,7 +586,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
+          ${{ matrix.sim || 'npsim' }} --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
     - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
