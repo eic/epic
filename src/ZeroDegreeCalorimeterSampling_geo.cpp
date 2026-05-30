@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2026 Wouter Deconinck
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
@@ -23,70 +24,77 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   xml_dim_t dim = x_det.dimensions();
   double Width  = dim.x();
-  // double     Length     = dim.z();
 
   xml_dim_t pos = x_det.position();
-  double z      = pos.z();
   xml_dim_t rot = x_det.rotation();
-
-  Material Vacuum = desc.material("Vacuum");
 
   double totWidth = Layering(x_det).totalThickness();
 
   Box envelope(Width / 2.0, Width / 2.0, totWidth / 2.0);
-  Volume envelopeVol(detName + "_envelope", envelope, Vacuum);
+  Volume envelopeVol(detName + "_envelope", envelope, desc.material("Vacuum"));
   envelopeVol.setVisAttributes(desc.visAttributes(x_det.visStr()));
   PlacedVolume pv;
 
-  int layer_num = 1;
-  // Read layers
+  // z of the front face of the current layer group, relative to envelope centre
+  double z_env = -totWidth / 2.0;
+  // 0-based layer counter used for physVolID
+  int layer_num = 0;
+  int lg        = 0; // layer-group counter used for unique volume naming
+
+  // Read layer groups from XML
   for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
     int repeat         = x_layer.repeat();
-    double layerWidth  = 0;
+    if (repeat <= 0)
+      continue;
+    ++lg;
 
+    double layerWidth = 0;
     for (xml_coll_t l(x_layer, _U(slice)); l; ++l)
       layerWidth += xml_comp_t(l).thickness();
 
-    // Loop over repeat#
-    for (int i = 0; i < repeat; i++) {
-      double zlayer     = z;
-      string layer_name = detName + _toString(layer_num, "_layer%d");
-      Volume layer_vol(layer_name, Box(Width / 2.0, Width / 2.0, layerWidth / 2.0), Vacuum);
+    // Build ONE layer template volume per layer group (not one per repetition).
+    // All `repeat` copies share this single TGeoVolume, reducing unique
+    // TGeoVolume count from  repeat * (1 + nSlices)  to  1 + nSlices.
+    string layer_name = detName + _toString(lg, "_lg%d");
+    Volume layer_vol(layer_name, Box(Width / 2.0, Width / 2.0, layerWidth / 2.0),
+                     desc.material("Vacuum"));
 
-      int slice_num = 1;
-      // Loop over slices
-      for (xml_coll_t l(x_layer, _U(slice)); l; ++l) {
-        xml_comp_t x_slice = l;
-        double w           = x_slice.thickness();
-        string slice_name  = layer_name + _toString(slice_num, "slice%d");
-        Material slice_mat = desc.material(x_slice.materialStr());
-        Volume slice_vol(slice_name, Box(Width / 2.0, Width / 2.0, w / 2.0), slice_mat);
+    // Place slice volumes into the template once; their positions are in
+    // layer-local coordinates, identical for every repetition.
+    int slice_num  = 1;
+    double z_slice = -layerWidth / 2.0; // front face of current slice (layer-local)
+    for (xml_coll_t l(x_layer, _U(slice)); l; ++l, ++slice_num) {
+      xml_comp_t x_slice = l;
+      double w           = x_slice.thickness();
+      string slice_name  = layer_name + _toString(slice_num, "_sl%d");
+      Material slice_mat = desc.material(x_slice.materialStr());
+      Volume slice_vol(slice_name, Box(Width / 2.0, Width / 2.0, w / 2.0), slice_mat);
 
-        if (x_slice.isSensitive()) {
-          sens.setType("calorimeter");
-          slice_vol.setSensitiveDetector(sens);
-        }
-
-        slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-        pv = layer_vol.placeVolume(
-            slice_vol, Transform3D(RotationZYX(0, 0, 0),
-                                   Position(0.0, 0.0, z - zlayer - layerWidth / 2.0 + w / 2.0)));
-        pv.addPhysVolID("slice", slice_num);
-        z += w;
-        ++slice_num;
+      if (x_slice.isSensitive()) {
+        sens.setType("calorimeter");
+        slice_vol.setSensitiveDetector(sens);
       }
-
-      string layer_vis =
-          dd4hep::getAttrOrDefault<std::string>(x_layer, _Unicode(vis), "InvisibleWithDaughters");
-      layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), layer_vis);
-      pv = envelopeVol.placeVolume(
-          layer_vol,
-          Transform3D(RotationZYX(0, 0, 0),
-                      Position(0, 0, zlayer - pos.z() - totWidth / 2.0 + layerWidth / 2.0)));
-      pv.addPhysVolID("layer", layer_num);
-      ++layer_num;
+      slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+      pv = layer_vol.placeVolume(slice_vol, Position(0.0, 0.0, z_slice + w / 2.0));
+      pv.addPhysVolID("slice", slice_num);
+      z_slice += w;
     }
+
+    string layer_vis =
+        dd4hep::getAttrOrDefault<std::string>(x_layer, _Unicode(vis), "InvisibleWithDaughters");
+    layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), layer_vis);
+
+    // Place the shared template `repeat` times.  Using the same TGeoVolume
+    // for all copies avoids creating `repeat` identical TGeoVolume objects.
+    for (int i = 0; i < repeat; ++i) {
+      double z_center = z_env + (i + 0.5) * layerWidth;
+      pv              = envelopeVol.placeVolume(layer_vol, Position(0.0, 0.0, z_center));
+      pv.addPhysVolID("layer", layer_num + i);
+    }
+
+    z_env += repeat * layerWidth;
+    layer_num += repeat;
   }
 
   DetElement det(detName, detID);
