@@ -33,11 +33,11 @@ jobs:
             rc=$?
             peak_rss_kb=$(grep "Maximum resident set size" /tmp/time_${config}.txt | awk '{print $NF}')
             echo "Peak RSS for ${config}: ${peak_rss_kb} kB (limit: ${MEMORY_LIMIT_KB} kB)"
+            echo "::endgroup::"
             if [ "${peak_rss_kb}" -gt "${MEMORY_LIMIT_KB}" ]; then
               echo "::error::Memory limit exceeded for ${config}: ${peak_rss_kb} kB > ${MEMORY_LIMIT_KB} kB"
               overall_rc=1
             fi
             [ $rc -ne 0 ] && overall_rc=$rc
-            echo "::endgroup::" ;
           done
           exit $overall_rc
