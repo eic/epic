@@ -22,6 +22,7 @@ jobs:
         platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
+          export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
           IFS=, read -a configs <<< "${{inputs.detector_configs}}"
           for config in ${configs[@]} ; do
             echo "::group::${config}" ;
