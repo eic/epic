@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2026 Whitney Armstrong, Aditya Yalavatti, Sam Henry
 
 /** \addtogroup Trackers Trackers
  * \brief Type: **BarrelTrackerWithFrame**.
