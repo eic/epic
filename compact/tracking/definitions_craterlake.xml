@@ -215,7 +215,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/e4042d004e28ce252e969a7cde5e21b8/material-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/7fd67bf071879ed912b76d57f2aa6b5e/material-map.cbor"/>
 
     </plugin>
   </plugins>
