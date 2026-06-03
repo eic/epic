@@ -58,14 +58,7 @@ function patch_acts() {
   local file="$(basename "$1")"
   if [ ! -e "$file" ]; then
     wget "$url"
-    # Prefer git apply (does not attempt to set file owner). Fallback to patch if git is unavailable or fails.
-    if command -v git >/dev/null 2>&1 \
-       && git rev-parse --git-dir >/dev/null 2>&1 \
-       && git apply --check --whitespace=nowarn "$file" 2>/dev/null; then
-      git apply --whitespace=nowarn "$file"
-    else
-      patch -p1 --forward --input="$file"
-    fi
+    patch -p1 --forward --input="$file" || git apply --whitespace=nowarn "$file"
   fi
 }
 patch_acts https://github.com/acts-project/acts/pull/4931.diff
