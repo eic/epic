@@ -30,6 +30,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name);
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   xml::Component pos = x_det.position();
   xml::Component rot = x_det.rotation();
 
