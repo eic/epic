@@ -58,7 +58,7 @@ function patch_acts() {
   local file="$(basename "$1")"
   if [ ! -e "$file" ]; then
     wget "$url"
-    patch -p1 --forward --input="$file"
+    patch -p1 --forward --input="$file" || git apply --whitespace=nowarn "$file"
   fi
 }
 patch_acts https://github.com/acts-project/acts/pull/5359.diff # landed in 46.3.0
