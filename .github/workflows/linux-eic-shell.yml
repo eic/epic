@@ -138,6 +138,14 @@ jobs:
     with:
       detector_configs: ${{needs.list-detector-configs.outputs.configs_csv}}
 
+  check-geometry-configs-geant4:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/check-geometry-configs-geant4.yml
+    with:
+      detector_configs: "epic_craterlake"
+
   check-tracking-geometry:
     needs: build
     uses: ./.github/workflows/check-tracking-geometry.yml

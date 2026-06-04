@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v44.4.0"
+ACTS_VERSION="v45.3.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -61,9 +61,7 @@ function patch_acts() {
     patch -p1 --forward --input="$file" || git apply --whitespace=nowarn "$file"
   fi
 }
-patch_acts https://github.com/acts-project/acts/pull/4931.diff
-patch_acts https://github.com/acts-project/acts/pull/5046.diff
-patch_acts https://github.com/acts-project/acts/pull/5359.diff
+patch_acts https://github.com/acts-project/acts/pull/5359.diff # landed in 46.3.0
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
