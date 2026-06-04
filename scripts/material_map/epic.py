@@ -17,7 +17,7 @@ def getDetector(
     logLevel=acts.logging.WARNING,
 ):
     customLogLevel = acts.examples.defaultLogging(logLevel=logLevel)
-    logger = acts.logging.getLogger("epic.getDetector")
+    logger = acts.getDefaultLogger("epic.getDetector", logLevel)
 
     matDeco = None
     if len(jsonFile)>0:
