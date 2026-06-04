@@ -61,9 +61,7 @@ function patch_acts() {
     patch -p1 --forward --input="$file"
   fi
 }
-patch_acts https://github.com/acts-project/acts/pull/4931.diff
-patch_acts https://github.com/acts-project/acts/pull/5046.diff
-patch_acts https://github.com/acts-project/acts/pull/5359.diff
+patch_acts https://github.com/acts-project/acts/pull/5359.diff # landed in 46.3.0
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
