@@ -31,9 +31,10 @@
     </comment>
     <constant name="SiEndcapRSU_width"                       value="19.564*mm"/>
     <constant name="SiEndcapRSU_length"                      value="21.666*mm"/>
-    <constant name="SiEndcapRSU_periphery_width"             value="0.398*mm"/>
+    <constant name="SiEndcapRSU_periphery_width"             value="0.525*mm"/>
     <constant name="SiEndcapRSU_bias_width"                  value="0.06*mm"/>
-    <constant name="SiEndcapRSU_backbone_width"              value="0.09*mm"/>
+    <constant name="SiEndcapRSU_backbone_width"              value="0.06*mm"/>
+    <constant name="SiEndcapRSU_powerswitch_width"           value="0.02*mm"/>
 
     <constant name="SiEndcapModule_width_corrugated"         value="32.0*mm"/>
     <constant name="SiEndcapModule_inner_width_corrugated"   value="29.0*mm"/>
@@ -457,7 +458,7 @@
   <readouts>
     <readout name="TrackerEndcapHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
-      <id>system:8,layer:4,module:12,sensor:5,x:32:-16,y:-16</id>
+      <id>system:8,layer:4,module:12,sensor:7,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 

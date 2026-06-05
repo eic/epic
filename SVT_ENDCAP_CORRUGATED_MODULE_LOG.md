@@ -482,3 +482,63 @@ Roadmap:
 
 Validation:
 - Documentation-only update; no geometry or XML validation required.
+
+## 2026-06-05 19:13 UTC - RSU 12-tile detail decision
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the next RSU-detail implementation choice before changing geometry code.
+
+Implementation plan:
+- Use `1RSU_top_half.png` as the current RSU architecture reference.
+- Keep the existing six-RSU corrugated module and two-by-two RSU-half structure.
+- Refine each RSU x-half from one active rectangle into three active tile columns.
+- Add passive power-switch strips using the existing `SiEndcapRSU_powerswitch_width` constant.
+- Preserve passive backbone, biasing, and readout/periphery silicon regions.
+- Keep only active tile regions sensitive.
+
+Expected geometry change:
+- Each RSU changes from `2 x-halves * 2 y-halves = 4` sensitive regions to
+  `2 x-halves * 3 tile columns * 2 y-halves = 12` sensitive regions.
+- A 6-RSU module therefore changes from 24 sensitive regions to 72 sensitive regions.
+
+Validation to run:
+- Check XML parsing and whitespace.
+- Check C++ diff formatting.
+- Increase the `sensor` ID bitfield if needed for 72 sensitive regions per module.
+- Rebuild/export and rerun overlap checks in the configured DD4hep environment before relying on the new geometry.
+
+## 2026-06-05 19:13 UTC - Implement RSU 12-tile approximation
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_rsu_twelve_tile_2026-06-05.sh`
+
+Intent:
+- Refine the corrugated RSU sensitive-region model to better match `1RSU_top_half.png`.
+
+Implementation:
+- Renamed the RSU component flag from `rsu_four_region_pattern` to `rsu_twelve_tile_pattern`.
+- Split each local-x half-RSU into three active tile columns.
+- Added passive silicon power-switch strips after each tile column using `SiEndcapRSU_powerswitch_width`.
+- Preserved passive silicon backbone, bias, and periphery/readout strips.
+- Kept only active tile rectangles sensitive.
+- Expanded `TrackerEndcapHits` from `sensor:5` to `sensor:7` to cover 72 sensitive regions in each 6-RSU corrugated module.
+- Updated project/drawing documentation to describe the 12-tile approximation and current dimensions.
+
+Validation:
+- Created and ran `tmp/validate_rsu_twelve_tile_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- Confirmed the old `rsu_four_region_pattern` name is absent.
+- Confirmed the new powerswitch constant, `rsu_twelve_tile_pattern`, and `sensor:7` hooks are present.
+
+Known limitations / next step:
+- This has not yet been compiled, exported with `dd_web_display`, or overlap-checked in the configured DD4hep environment.
+- Visual inspection should confirm that the 12 active tile regions per RSU and passive power-switch strips are clear before moving to FEC/LEC details.

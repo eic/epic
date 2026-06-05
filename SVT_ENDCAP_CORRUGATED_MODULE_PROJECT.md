@@ -66,9 +66,9 @@ Silicon sensor, sensitive
 Current corrugated prototype:
 
 - `EIC_LAS_6RSU_CORR` is implemented separately from the legacy `EIC_LAS_6RSU`.
-- `ComponentTemplate` supports local component offsets, `x_repeat`, and `rsu_four_region_pattern`.
+- `ComponentTemplate` supports local component offsets, `x_repeat`, and `rsu_twelve_tile_pattern`.
 - The corrugated 6-RSU sensor band is split into six RSU pitches.
-- Each RSU pitch is approximated as four active silicon rectangles with inactive silicon bias, periphery/readout, and backbone regions.
+- Each RSU pitch is approximated as twelve active silicon tile rectangles with inactive silicon bias, power-switch, periphery/readout, and backbone regions.
 - Left/right handedness is parsed from CSV and included in the prototype cache key. The current implementation swaps the sensor-band start side using the left/right end-extension and sensor-margin constants. More detailed asymmetric FPC/readout/end features are still deferred.
 
 ## Target Geometry Concept
@@ -154,7 +154,7 @@ Do model:
 - Different local box sizes for support, glue/adhesive, and sensor bands when the design specifies them.
 - Separate passive support/readout/FPC regions where they matter for material or geometry.
 - RSU active regions and inactive silicon gaps at a useful granularity.
-- Four active regions per RSU if using the vertex-barrel-style 12-tile approximation.
+- Twelve active tile regions per RSU using the current RSU architecture approximation.
 
 Do not over-model at first:
 
@@ -309,27 +309,34 @@ Validation:
 - Confirm mirrored local `y` offsets and asymmetric end features.
 - Confirm sensitive surfaces remain attached correctly.
 
-### Phase 5: RSU Four-Region Active Pattern
+### Phase 5: RSU Active Pattern
 
-Update each RSU to use the vertex-barrel-style approximation:
+Initial implementation used a vertex-barrel-style approximation:
 
 ```text
 12 physical tiles -> 4 active rectangular regions
 inactive gaps/regions -> passive Silicon
 ```
 
+This has now been refined using `1RSU_top_half.png`:
+
+```text
+2 local-x halves * 3 tile columns * 2 local-y halves
+= 12 active rectangular tile regions per RSU
+```
+
 Implementation notes:
 
-- Use the vertex-barrel dimensions as the current approximation:
-  `active_x = RSU_length/2 - backbone_width`
+- Use the RSU architecture dimensions as the current approximation:
+  `tile_x = (RSU_length/2 - backbone_width - 3 * powerswitch_width) / 3`
   and `active_y = RSU_width/2 - bias_width - periphery_width`.
 - Keep inactive silicon regions passive, using the same silicon material but without the sensitive detector.
-- Put bias strips at the internal boundary between the two local-y halves, and periphery/readout strips at the outer edges, following the vertex-barrel `upper`/`lower` convention.
+- Put bias strips at the internal boundary between the two local-y halves, periphery/readout strips at the outer edges, backbone strips at the start of each x-half, and power-switch strips after each tile column.
 - Keep all dimensions driven by XML constants so later design updates do not require C++ rewrites.
 
 Validation:
 
-- Confirm each RSU produces four sensitive volumes.
+- Confirm each RSU produces twelve sensitive volumes.
 - Confirm inactive silicon is present but not sensitive.
 - Confirm sensor IDs and `VolPlane` entries are sensible.
 

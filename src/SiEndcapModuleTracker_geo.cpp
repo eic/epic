@@ -44,7 +44,7 @@ struct ComponentTemplate {
   double x_offset{0.0};
   double y_offset{0.0};
   int x_repeat{1};
-  bool rsu_four_region_pattern{false};
+  bool rsu_twelve_tile_pattern{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -780,14 +780,17 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       ++sensor_id;
     };
 
-    if (component.rsu_four_region_pattern) {
+    if (component.rsu_twelve_tile_pattern) {
       const double rsu_pitch_x    = comp_x / x_repeat;
       const double half_rsu_x     = rsu_pitch_x / 2.0;
       const double half_rsu_y     = comp_y / 2.0;
       const double bias_width     = description.constant<double>("SiEndcapRSU_bias_width");
       const double periphery_width = description.constant<double>("SiEndcapRSU_periphery_width");
       const double backbone_width = description.constant<double>("SiEndcapRSU_backbone_width");
-      const double active_x       = std::max(0.0, half_rsu_x - backbone_width);
+      const double powerswitch_width =
+          description.constant<double>("SiEndcapRSU_powerswitch_width");
+      const double tile_x =
+          std::max(0.0, (half_rsu_x - backbone_width - 3.0 * powerswitch_width) / 3.0);
       const double active_y       = std::max(0.0, half_rsu_y - bias_width - periphery_width);
 
       auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
@@ -814,33 +817,46 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         for (int x_half = 0; x_half < 2; ++x_half) {
           const double half_x_min       = rsu_x_min + x_half * half_rsu_x;
           const double backbone_x_center = half_x_min + backbone_width / 2.0;
-          const double active_x_center  = half_x_min + backbone_width + active_x / 2.0;
 
           place_box(base_name + _toString(x_half + 1, "_xhalf%d_backbone"), backbone_width,
                     comp_y, backbone_x_center, 0.0, "SVTReadoutVis", false);
 
-          for (int y_half = 0; y_half < 2; ++y_half) {
-            const double half_y_min = -comp_y / 2.0 + y_half * half_rsu_y;
-            const bool lower_half = y_half == 0;
-            const double first_passive_width  = lower_half ? periphery_width : bias_width;
-            const double second_passive_width = lower_half ? bias_width : periphery_width;
-            const double first_passive_y_center = half_y_min + first_passive_width / 2.0;
-            const double active_y_center =
-                half_y_min + first_passive_width + active_y / 2.0;
-            const double second_passive_y_center =
-                half_y_min + first_passive_width + active_y + second_passive_width / 2.0;
-            const string tile_name =
-                base_name + _toString(x_half + 1, "_xhalf%d") +
-                _toString(y_half + 1, "_yhalf%d");
+          for (int tile_idx = 0; tile_idx < 3; ++tile_idx) {
+            const double tile_x_min =
+                half_x_min + backbone_width + tile_idx * (tile_x + powerswitch_width);
+            const double tile_x_center = tile_x_min + tile_x / 2.0;
+            const double powerswitch_x_center =
+                tile_x_min + tile_x + powerswitch_width / 2.0;
 
-            place_box(tile_name + (lower_half ? "_periphery" : "_bias"), active_x,
-                      first_passive_width, active_x_center, first_passive_y_center,
+            place_box(base_name + _toString(x_half + 1, "_xhalf%d") +
+                          _toString(tile_idx + 1, "_tile%d_powerswitch"),
+                      powerswitch_width, comp_y, powerswitch_x_center, 0.0,
                       "SVTReadoutVis", false);
-            place_box(tile_name + "_sensor", active_x, active_y, active_x_center,
-                      active_y_center, component.vis, true);
-            place_box(tile_name + (lower_half ? "_bias" : "_periphery"), active_x,
-                      second_passive_width, active_x_center, second_passive_y_center,
-                      "SVTReadoutVis", false);
+
+            for (int y_half = 0; y_half < 2; ++y_half) {
+              const double half_y_min = -comp_y / 2.0 + y_half * half_rsu_y;
+              const bool lower_half = y_half == 0;
+              const double first_passive_width  = lower_half ? periphery_width : bias_width;
+              const double second_passive_width = lower_half ? bias_width : periphery_width;
+              const double first_passive_y_center = half_y_min + first_passive_width / 2.0;
+              const double active_y_center =
+                  half_y_min + first_passive_width + active_y / 2.0;
+              const double second_passive_y_center =
+                  half_y_min + first_passive_width + active_y + second_passive_width / 2.0;
+              const string tile_name =
+                  base_name + _toString(x_half + 1, "_xhalf%d") +
+                  _toString(tile_idx + 1, "_tile%d") +
+                  _toString(y_half + 1, "_yhalf%d");
+
+              place_box(tile_name + (lower_half ? "_periphery" : "_bias"), tile_x,
+                        first_passive_width, tile_x_center, first_passive_y_center,
+                        "SVTReadoutVis", false);
+              place_box(tile_name + "_sensor", tile_x, active_y, tile_x_center,
+                        active_y_center, component.vis, true);
+              place_box(tile_name + (lower_half ? "_bias" : "_periphery"), tile_x,
+                        second_passive_width, tile_x_center, second_passive_y_center,
+                        "SVTReadoutVis", false);
+            }
           }
         }
       }

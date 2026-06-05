@@ -134,42 +134,44 @@ RSU length ~= 21.67
 
 ## RSU Inactive-Region Assumptions
 
-The current geometry implementation uses a simplified vertex-barrel-style RSU approximation. This is an implementation assumption, not a fully detailed extraction from `rsu.pdf`.
+The current geometry implementation uses a simplified tile-level RSU approximation informed by `1RSU_top_half.png`. This is still an approximation: fine routing traces and detailed metal features are not modeled.
 
 Each RSU is represented as:
 
 ```text
-2 divisions along local x  x  2 divisions along local y
-= 4 active rectangular silicon regions
+2 divisions along local x  x  3 tile columns per x-half  x  2 divisions along local y
+= 12 active rectangular silicon tile regions
 ```
 
 The inactive pieces are represented as passive silicon around or between those active regions:
 
 ```text
-backbone width:  0.09
-bias width:      0.06
-periphery width: 0.398
+backbone width:     0.06
+power-switch width: 0.02
+bias width:         0.06
+periphery width:    0.525
 ```
 
 Interpretation:
 
-- `backbone`: narrow inactive strip separating the two local-x halves of an RSU. In the current model it runs across the full RSU width in local `y`.
+- `backbone`: narrow inactive strip at the start of each local-x half-RSU. In the current model it runs across the full RSU width in local `y`.
+- `power-switch`: narrow inactive strip after each tile column within a local-x half-RSU.
 - `bias`: narrow inactive strip at the internal boundary between the two local-y halves. It follows the vertex-barrel convention where bias regions sit near the central boundary.
-- `periphery`: inactive strip near the outer local-y edges of the RSU, representing non-sensitive edge/readout/periphery area.
+- `periphery`: inactive strip near the outer local-y edges of the RSU, representing the readout periphery plus pads/dicing lane. The current `0.525 mm` value corresponds to `0.200 + 0.325 mm` from the RSU architecture drawing.
 
 With the current constants, each active rectangle is:
 
 ```text
-active_x = RSU_length/2 - backbone_width
-         = 21.666/2 - 0.09
-         = 10.743
+tile_x = (RSU_length/2 - backbone_width - 3 * power-switch_width) / 3
+       = (21.666/2 - 0.06 - 3 * 0.02) / 3
+       = 3.571
 
 active_y = RSU_width/2 - bias_width - periphery_width
-         = 19.564/2 - 0.06 - 0.398
-         = 9.324
+         = 19.564/2 - 0.06 - 0.525
+         = 9.197
 ```
 
-This approximation captures the tracking-relevant active versus inactive silicon pattern without modeling every physical tile, readout, or edge-detail feature.
+This approximation captures the tracking-relevant active versus inactive silicon pattern while representing the drawing's 12-tile RSU structure. A 6-RSU module therefore has `6 * 12 = 72` sensitive silicon regions.
 
 ## Implementation Notes
 
