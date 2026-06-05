@@ -462,3 +462,23 @@ Validation:
 
 Known limitations / next step:
 - This has not yet been visually checked with `dd_web_display` in the configured DD4hep environment.
+
+## 2026-05-28 UTC - Updated remaining implementation roadmap
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Update the project documentation with the agreed remaining workflow after successful visual inspection and overlap checks.
+
+Roadmap:
+- Phase 6: migrate the real placement CSV to `EIC_LAS_6RSU_CORR` with explicit `left/right` handedness.
+- Phase 6 validation: rebuild/export, carefully inspect handedness, and rerun both overlap checks.
+- Phase 7: run a more thorough `eicrecon`/ACTS validation to catch reconstruction-level issues.
+- Phase 8: add simple, parameterized FEC/LEC details.
+- Repeat geometry, overlap, handedness, and `eicrecon` validation after FEC/LEC details are added.
+- Phase 9: cleanup temporary XML switches, the test CSV, and working markdown files before PR unless any are intentionally promoted to permanent documentation.
+
+Validation:
+- Documentation-only update; no geometry or XML validation required.

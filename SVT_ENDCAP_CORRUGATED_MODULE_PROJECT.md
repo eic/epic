@@ -333,40 +333,76 @@ Validation:
 - Confirm inactive silicon is present but not sensitive.
 - Confirm sensor IDs and `VolPlane` entries are sensible.
 
-### Phase 6: CSV Migration
+### Phase 6: Production CSV Migration
 
-Update placement rows to use:
+Update the real placement CSV to use corrugated module names and explicit handedness.
+
+Initial target:
 
 ```text
 EIC_LAS_6RSU_CORR
-EIC_LAS_5RSU_CORR
 ```
 
-and explicit handedness if needed.
-For corrugated modules, handedness should always be explicit.
+Later, add `EIC_LAS_5RSU_CORR` only after the 6-RSU implementation is stable and the 5-RSU dimensions/handedness assumptions are clear.
+
+Rules:
+
+- Corrugated module rows must always provide explicit `left` or `right` handedness.
+- Do not infer handedness from row, disk side, `x/y`, or `dz`.
+- Keep the temporary test CSV available only until the production CSV path is validated.
 
 Validation:
 
-- Full geometry export.
-- Overlap checks.
-- Spot-check disk module placement visually.
-- Confirm tracking readout/segmentation IDs remain stable enough for reconstruction expectations.
+- Full geometry export from the production CSV path.
+- Careful visual inspection of left/right handedness.
+- Confirm the RSU sensor band moves to the intended handed side.
+- Confirm the inactive RSU regions, glue, support, and active sensors remain visually distinguishable.
+- Run both overlap checks again.
+- Confirm the expanded `sensor` bitfield remains sufficient for all sensitive volumes.
 
-### Phase 7: Material Refinement
+### Phase 7: Reconstruction / ACTS Validation
 
-Refine materials/thicknesses only after the geometry shape is stable.
+Run a more thorough reconstruction validation after the production CSV migration.
 
-Examples:
+Goal:
 
-- FPC material or approximation.
-- LEC/REC chip material.
-- CF vs adhesive vs glue thickness.
-- Optional bottom-edge support cutouts.
+- Catch ACTS surface, volume manager, readout-ID, or reconstruction issues that are not visible in DD4hep geometry export or overlap checks.
 
 Validation:
 
-- Material budget sanity checks.
-- Comparison to previous reference values if available.
+- Run an agreed `eicrecon` workflow using the updated detector geometry.
+- Save the run script and relevant logs under `tmp/` or another project-local validation area.
+- Record command, detector XML/config, input events, and result summary in the implementation log.
+
+### Phase 8: FEC / LEC Detail Pass
+
+Add more detail to the front-end/readout features after the baseline corrugated module and production placement path are validated.
+
+Scope:
+
+- Add simple, parameterized FEC/LEC approximations.
+- Use placeholder materials already agreed for now:
+  `Kapton` for FPC/base flex, `Copper` for optional metal/readout traces, and `Silicon` for chip-like placeholders.
+- Keep these features passive.
+- Avoid CAD-level detail unless it is needed for material budget, envelope, overlap, or tracking performance.
+
+Validation:
+
+- Repeat full geometry export.
+- Re-check left/right handedness.
+- Re-run both overlap checks.
+- Re-run the `eicrecon`/ACTS validation.
+- Compare against the pre-FEC/LEC validation results.
+
+### Phase 9: Cleanup and PR Preparation
+
+After production placement, geometry validation, overlap checks, and reconstruction validation pass:
+
+- Revert temporary XML test switches.
+- Remove the temporary corrugated test CSV.
+- Remove or trim working markdown files unless any are intentionally promoted to permanent documentation.
+- Inspect the final diff for unrelated changes.
+- Prepare a concise PR summary with validation results, assumptions, known approximations, and deferred details.
 
 ## Open Questions
 
@@ -407,6 +443,8 @@ dd_web_display --export ${DETECTOR_PATH}/{detector_config}.xml
 checkOverlaps --option m --t 0.01 -c ${DETECTOR_PATH}/{detector_config}.xml
 python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/{detector_config}.xml
 ```
+
+For reconstruction validation, use the agreed local `eicrecon` workflow and first write a small run script for reproducibility. Record the script path, detector XML/config, input sample, and result summary in `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`.
 
 Use the narrowest validation that exercises the current change before running broader checks.
 
