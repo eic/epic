@@ -156,26 +156,34 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         } // end if Homogeneous_Scfi<=1
 
         if (Homogeneous_Scfi == 2) {
-          //4 rows of towers
+          //4 rows of towers — use paramVolume1D (uniform Y spacing, copy number = y ID)
           Box trow(blocksize / 2.0, blocksize / 8.0, slice_thickness / 2.0);
           Volume trow_vol("FEMCTowerRow", trow, air);
           trow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-          for (int tr = 0; tr < 4; tr++) {
-            pv = block_vol.placeVolume(
-                trow_vol,
-                Transform3D(RotationZYX(0, 0, 0), Position(0.0, (tr - 1.5) * blocksize / 4, 0)));
-            pv.addPhysVolID("y", tr);
+          {
+            Assembly trow_asm("FEMCTowerRowAsm");
+            trow_asm.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
+                                   x_slice.visStr());
+            trow_asm.placeVolume(trow_vol, Position(0, 0, 0));
+            pv = block_vol.paramVolume1D(Transform3D(Position(0.0, -1.5 * blocksize / 4.0, 0.0)),
+                                         trow_asm, static_cast<size_t>(4),
+                                         Transform3D(Position(0.0, blocksize / 4.0, 0.0)));
+            pv.addPhysVolID("y", 0);
           }
 
-          //4 towers in a row - finally a W powder volume, not air
+          //4 towers in a row — use paramVolume1D (uniform X spacing, copy number = x ID)
           Box tower(blocksize / 8.0, blocksize / 8.0, slice_thickness / 2.0);
           Volume tower_vol("FEMCTower", tower, Wpowder);
           tower_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-          for (int tc = 0; tc < 4; tc++) {
-            pv = trow_vol.placeVolume(
-                tower_vol,
-                Transform3D(RotationZYX(0, 0, 0), Position((tc - 1.5) * blocksize / 4, 0, 0)));
-            pv.addPhysVolID("x", tc);
+          {
+            Assembly tower_asm("FEMCTowerAsm");
+            tower_asm.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
+                                    x_slice.visStr());
+            tower_asm.placeVolume(tower_vol, Position(0, 0, 0));
+            pv = trow_vol.paramVolume1D(Transform3D(Position(-1.5 * blocksize / 4.0, 0.0, 0.0)),
+                                        tower_asm, static_cast<size_t>(4),
+                                        Transform3D(Position(blocksize / 4.0, 0.0, 0.0)));
+            pv.addPhysVolID("x", 0);
           }
 
           //rows of fibers
@@ -197,16 +205,20 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             pv.addPhysVolID("fiber_y", iy);
           }
 
-          //columns of fibers, with 1/2 fiber distance shifted each row
+          //columns of fibers — use paramVolume1D (uniform X spacing, copy number = fiber_x ID)
           Box fcol(fiberDistanceX / 2.0, blocksize / 8.0 / ny, slice_thickness / 2.0);
           Volume fcol_vol("FEMCFiberCol", fcol, Wpowder);
           fcol_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-          for (int ix = 0; ix < nx; ix++) {
-            double xx = (ix - nx / 2.0 + 0.5) * fiberDistanceX;
-            pv        = frow_vol.placeVolume(fcol_vol,
-                                             Transform3D(RotationZYX(0, 0, 0), Position(xx, 0, 0)));
-            //printf("ix=%2d dx=%8.4f xx=%8.4f x0=%8.4f x1=%8.4f\n",ix,fiberDistanceX,xx,xx-fiberDistanceX/2,xx+fiberDistanceX/2);
-            pv.addPhysVolID("fiber_x", ix);
+          {
+            Assembly fcol_asm("FEMCFiberColAsm");
+            fcol_asm.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
+                                   x_slice.visStr());
+            fcol_asm.placeVolume(fcol_vol, Position(0, 0, 0));
+            double fcol_start = (-nx / 2.0 + 0.5) * fiberDistanceX;
+            pv = frow_vol.paramVolume1D(Transform3D(Position(fcol_start, 0, 0)), fcol_asm,
+                                        static_cast<size_t>(nx),
+                                        Transform3D(Position(fiberDistanceX, 0, 0)));
+            pv.addPhysVolID("fiber_x", 0);
           }
 
           //a fiber (with coating material, not sensitive yet)
@@ -247,23 +259,18 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                                     Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
           pv.addPhysVolID("blockrow", r);
 
-          //column of blocks
-          double xcol = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
-          for (int c = 0; c < nColBlock; c++) {
-            Box col(bsize / 2.0, bsize / 2.0, slice_thickness / 2.0);
-            std::string col_name = row_name + _toString(c, "C%02d");
-            Volume col_vol(col_name, col, air);
-            col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-            pv = row_vol.placeVolume(col_vol,
-                                     Transform3D(RotationZYX(0, 0, 0), Position(xcol, 0, 0)));
-            pv.addPhysVolID("blockcol", c);
-            //printf("r=%2d dx=%8.3f x=%8.3f y=%8.3f   c=%2d %8.3f  mapx=%8.3f\n",r,dxrow,xrow,yrow,c,xcol,map->xBlock(ns,r,c));
-            xcol += pm[ns] * bsize;
-
-            //a block inside with air gap
-            pv = col_vol.placeVolume(block_vol,
-                                     Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
-          } //end loop block col
+          // Place columns of blocks using parameterised placement (G4PVParameterised),
+          // reducing nColBlock individual G4PVPlacement objects to one per row.
+          // Copy number (0..nColBlock-1) serves as the blockcol physVolID.
+          // Use Assembly as parameterised template (Volume+Box with daughters crashes TGeo).
+          Assembly col_vol(row_name + "_col");
+          col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          col_vol.placeVolume(block_vol, Position(0, 0, 0));
+          double xcol_start = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
+          pv = row_vol.paramVolume1D(Transform3D(Position(xcol_start, 0, 0)), col_vol,
+                                     static_cast<size_t>(nColBlock),
+                                     Transform3D(Position(pm[ns] * bsize, 0, 0)));
+          pv.addPhysVolID("blockcol", 0);
         } //end loop block raw
       } //end if isSensitive
     } //end loop over ns
