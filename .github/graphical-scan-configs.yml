@@ -27,7 +27,7 @@ scans:
     zMin: -700
     zMax:  700
     nSlices:  5
-    nBins:  200
+    nBins:  500
     nSamples: 10
     label: XY
 
@@ -41,7 +41,7 @@ scans:
     zMin: -700
     zMax:  700
     nSlices:  1
-    nBins:  200
+    nBins:  500
     nSamples: 10
     label: ZY
 
