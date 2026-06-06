@@ -25,7 +25,7 @@ ROOT.gStyle.SetOptStat(0)
 ROOT.gStyle.SetPalette(ROOT.kRainBow)
 
 # White-on-transparent logo works well over COLZ colour-scale plots.
-LOGO_URL = 'https://zenodo.org/records/14058463/files/2560px-EPIC-logo_white_transparent.png?download=1'
+LOGO_URL = 'https://zenodo.org/records/14058463/files/2560px-EPIC-logo_black_transparent.png?download=1'
 # Logo width as a fraction of the canvas width; placed in the bottom-right corner.
 LOGO_WIDTH_FRACTION = 0.18
 LOGO_MARGIN = 20  # pixels from the canvas edge
