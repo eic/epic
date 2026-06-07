@@ -139,6 +139,20 @@ def render_root_file(input_path, output_dir, logo):
             else:
                 hist_for_log = hist
 
+            # For labmda/X0 histograms, suppress non-zero values for vacuum
+            is_lambda_hist = any(keyword in hist_name for keyword in ['lambda', 'X0'])
+
+            if is_lambda_hist:
+                # Create a clone and suppress below threshold values
+                hist_for_log = hist.Clone(f'{hist_name}_log')
+                for i in range(1, hist_for_log.GetNbinsX() + 1):
+                    for j in range(1, hist_for_log.GetNbinsY() + 1):
+                        val = hist_for_log.GetBinContent(i, j)
+                        if val < 1e-5:
+                            hist_for_log.SetBinContent(i, j, 0)
+            else:
+                hist_for_log = hist
+
             png_name_log = f'{slice_name}_{hist_name}_{safe_title}_logz.png'
             output_path_log = os.path.join(output_dir, png_name_log)
             print(f'Rendering {slice_name}/{hist_name} (log) -> {output_path_log}')
