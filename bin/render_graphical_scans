@@ -126,10 +126,23 @@ def render_root_file(input_path, output_dir, logo):
                 overlay_logo(output_path_linear, logo)
 
             # Render with logarithmic scale
+            # For field histograms (B field), take absolute value first
+            is_field_hist = any(keyword in hist_name for keyword in ['Bx', 'By', 'Bz'])
+
+            if is_field_hist:
+                # Create a clone and take absolute values
+                hist_for_log = hist.Clone(f'{hist_name}_abs')
+                for i in range(1, hist_for_log.GetNbinsX() + 1):
+                    for j in range(1, hist_for_log.GetNbinsY() + 1):
+                        val = hist_for_log.GetBinContent(i, j)
+                        hist_for_log.SetBinContent(i, j, abs(val))
+            else:
+                hist_for_log = hist
+
             png_name_log = f'{slice_name}_{hist_name}_{safe_title}_logz.png'
             output_path_log = os.path.join(output_dir, png_name_log)
             print(f'Rendering {slice_name}/{hist_name} (log) -> {output_path_log}')
-            render_histogram(hist, output_path_log, log_z=True)
+            render_histogram(hist_for_log, output_path_log, log_z=True)
             if logo is not None:
                 overlay_logo(output_path_log, logo)
 
