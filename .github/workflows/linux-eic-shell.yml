@@ -138,6 +138,14 @@ jobs:
     with:
       detector_configs: ${{needs.list-detector-configs.outputs.configs_csv}}
 
+  check-geometry-configs-geant4:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/check-geometry-configs-geant4.yml
+    with:
+      detector_configs: "epic_craterlake"
+
   check-tracking-geometry:
     needs: build
     uses: ./.github/workflows/check-tracking-geometry.yml
@@ -549,8 +557,21 @@ jobs:
     needs: build
     strategy:
       matrix:
-        particle: [pi, e]
+        particle: [e, pi, geantino, chargedgeantino]
         detector_config: [epic_craterlake]
+        include:
+          - particle: e
+            charge: "-"
+          - particle: pi
+            charge: "-"
+          - particle: geantino
+            charge: ""
+            sim: ddsim
+            extra_args: '--filter.tracker "" --filter.calo ""'
+          - particle: chargedgeantino
+            charge: ""
+            sim: ddsim
+            extra_args: '--filter.tracker "" --filter.calo ""'
     steps:
     - uses: actions/checkout@v6
     - uses: actions/download-artifact@v8
@@ -565,7 +586,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+          ${{ matrix.sim || 'npsim' }} --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
     - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
@@ -673,7 +694,7 @@ jobs:
     needs: [build, npsim-gun]
     strategy:
       matrix:
-        particle: [pi, e]
+        particle: [e, pi]
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
@@ -702,7 +723,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v20
+      uses: dawidd6/action-download-artifact@v21
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -768,7 +789,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v20
+      uses: dawidd6/action-download-artifact@v21
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/

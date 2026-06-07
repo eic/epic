@@ -118,6 +118,7 @@
 
   <regions>
     <region name="EcalBarrelRegion"/>
+    <region name="EcalBarrelScFiLayerRegion"/>
   </regions>
 
   <display>
@@ -335,6 +336,7 @@
       <sectors vis="EcalBarrelSectorVis"/>
 
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
+             region="EcalBarrelScFiLayerRegion"
              space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_FrontSupportThickness + EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
         <slice material="SciFiPb_PbGlue_Edge" thickness="EcalBarrel_RadiatorEdgeThickness" vis="EcalBarrelSliceVis"/>
@@ -354,6 +356,7 @@
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
+             region="EcalBarrelScFiLayerRegion"
              space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween">
         <slice material="SciFiPb_PbGlue_Edge" thickness="EcalBarrel_RadiatorEdgeThickness" vis="EcalBarrelSliceVis"/>
         <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
@@ -370,7 +373,8 @@
         </slice>
       </layer>
 
-      <layer repeat="EcalBarrel_FiberBulkLayers_num-2" vis="EcalBarelLayerVis">
+      <layer repeat="EcalBarrel_FiberBulkLayers_num-2" vis="EcalBarelLayerVis"
+             region="EcalBarrelScFiLayerRegion">
         <slice material="SciFiPb_PbGlue"
           thickness="EcalBarrel_RadiatorThickness"
           vis="EcalBarrelFiberLayerVis">
@@ -387,7 +391,8 @@
         </slice>
       </layer>
 
-      <layer repeat="1" vis="EcalBarrelLayerVis">
+      <layer repeat="1" vis="EcalBarrelLayerVis"
+             region="EcalBarrelScFiLayerRegion">
         <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
           <fiber material="SciFiPb_Scintillator"
             sensitive="yes"
