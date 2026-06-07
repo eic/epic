@@ -116,6 +116,16 @@ struct CorrugatedFrameConfig {
   double half_pitch{15.8 * mm};
   double y0{0.0};
   double z_center_offset{0.0};
+  string rowwise_placement;
+};
+
+// One positive-y corrugation cell. The builder mirrors nonzero rows to negative y.
+struct CorrugationRow {
+  double row_y{0.0};
+  double height{0.0};
+  double theta{0.0};
+  double half_pitch{0.0};
+  int csv_line{0};
 };
 
 // Axis-aligned y footprint used to require full containment in the disk x-y cross-section.
@@ -447,7 +457,123 @@ bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
   config.y0         = getAttrOrDefault(x_frame, _Unicode(y0), config.y0);
   config.z_center_offset =
       getAttrOrDefault(x_frame, _Unicode(z_center_offset), config.z_center_offset);
+  config.rowwise_placement =
+      getAttrOrDefault<string>(x_frame, _Unicode(rowwise_placement), config.rowwise_placement);
   return true;
+}
+
+vector<CorrugationRow> load_corrugation_rows(const string& file_name, const string& disk_key) {
+  std::ifstream input(file_name);
+  if (!input) {
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("could not open corrugation row CSV '{}'", file_name));
+    return {};
+  }
+
+  map<string, size_t> header_index;
+  bool header_loaded = false;
+  vector<CorrugationRow> shared_rows;
+  vector<CorrugationRow> disk_rows;
+  string line;
+  int line_number = 0;
+  while (std::getline(input, line)) {
+    ++line_number;
+    string trimmed = trim(line);
+    if (trimmed.empty() || trimmed[0] == '#') {
+      continue;
+    }
+
+    vector<string> fields = split_csv_line(line);
+    if (!header_loaded) {
+      for (size_t idx = 0; idx < fields.size(); ++idx) {
+        header_index[fields[idx]] = idx;
+      }
+
+      const vector<string> required_headers{"disk", "row_y_mm", "h_mm", "theta_deg"};
+      bool missing_header = false;
+      for (const auto& header : required_headers) {
+        if (!header_index.count(header)) {
+          printout(WARNING, "SiEndcapModuleTracker",
+                   fmt::format("corrugation row CSV '{}' is missing required header '{}'",
+                               file_name, header));
+          missing_header = true;
+        }
+      }
+      if (!header_index.count("d_mm") && !header_index.count("half_pitch_mm") &&
+          !header_index.count("pitch_mm")) {
+        printout(WARNING, "SiEndcapModuleTracker",
+                 fmt::format("corrugation row CSV '{}' needs one of d_mm, half_pitch_mm, or "
+                             "pitch_mm",
+                             file_name));
+        missing_header = true;
+      }
+      if (missing_header) {
+        return {};
+      }
+      header_loaded = true;
+      continue;
+    }
+
+    auto get_field = [&](const string& key) -> string {
+      auto iter = header_index.find(key);
+      if (iter == header_index.end() || iter->second >= fields.size()) {
+        return "";
+      }
+      return fields[iter->second];
+    };
+
+    string row_disk = get_field("disk");
+    const bool shared_row = row_disk == "*" || row_disk == "all";
+    const bool disk_row   = row_disk == disk_key;
+    if (!(shared_row || disk_row)) {
+      continue;
+    }
+    string enabled_value = get_field("enabled");
+    if (!enabled_value.empty() && !parse_bool(enabled_value)) {
+      continue;
+    }
+
+    try {
+      CorrugationRow row;
+      row.csv_line = line_number;
+      row.row_y    = std::stod(get_field("row_y_mm")) * mm;
+      row.height   = std::stod(get_field("h_mm")) * mm;
+      row.theta    = std::stod(get_field("theta_deg")) * degree;
+      string half_pitch_value = get_field("d_mm");
+      if (half_pitch_value.empty()) {
+        half_pitch_value = get_field("half_pitch_mm");
+      }
+      if (!half_pitch_value.empty()) {
+        row.half_pitch = std::stod(half_pitch_value) * mm;
+      } else {
+        row.half_pitch = std::stod(get_field("pitch_mm")) * mm / 2.0;
+      }
+
+      if (row.row_y < -1.0e-9 * mm) {
+        printout(WARNING, "SiEndcapModuleTracker",
+                 fmt::format("skipping corrugation row CSV line {} in '{}': row_y_mm must be "
+                             "non-negative for mirrored-row mode",
+                             line_number, file_name));
+        continue;
+      }
+      if (disk_row) {
+        disk_rows.push_back(row);
+      } else {
+        shared_rows.push_back(row);
+      }
+    } catch (const std::exception&) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping malformed corrugation row CSV line {} in '{}'", line_number,
+                           file_name));
+    }
+  }
+
+  auto rows = disk_rows.empty() ? shared_rows : disk_rows;
+  std::sort(rows.begin(), rows.end(),
+            [](const CorrugationRow& lhs, const CorrugationRow& rhs) {
+              return lhs.row_y < rhs.row_y;
+            });
+  return rows;
 }
 
 // Place the corrugated carbon frame as an insensitive layer component.
@@ -470,7 +596,7 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   const double y_step       = config.height / std::tan(config.theta);
   const double flat_length  = config.half_pitch - y_step;
   const double center_delta = config.height - config.thickness;
-  if (flat_length <= 0.0 || center_delta <= 0.0) {
+  if (config.rowwise_placement.empty() && (flat_length <= 0.0 || center_delta <= 0.0)) {
     printout(WARNING, "SiEndcapModuleTracker",
              fmt::format("skipping corrugated frame for disk '{}': flat length is non-positive",
                          disk.disk_key));
@@ -478,14 +604,6 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   }
 
   Material frame_material = description.material(config.material);
-  const double z_low      = config.z_center_offset - center_delta / 2.0;
-  const double z_high     = config.z_center_offset + center_delta / 2.0;
-  const double web_angle  = std::atan2(center_delta, y_step);
-  const double web_length = std::hypot(center_delta, y_step);
-  const int n_min =
-      static_cast<int>(std::floor((-disk.rmax - config.y0) / (2.0 * config.half_pitch))) - 2;
-  const int n_max =
-      static_cast<int>(std::ceil((disk.rmax - config.y0) / (2.0 * config.half_pitch))) + 2;
 
   int placed_count = 0;
   int frame_index  = 0;
@@ -531,26 +649,81 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
     }
   };
 
-  const double flat_y_half = flat_length / 2.0;
-  const double flat_z_half = config.thickness / 2.0;
-  const double web_y_half  = web_length / 2.0;
-  const double web_z_half  = config.thickness / 2.0;
-  const double web_y_projection =
-      std::abs(std::cos(web_angle)) * web_y_half + std::abs(std::sin(web_angle)) * web_z_half;
+  auto place_corrugation_cell = [&](const string& row_tag, double lower_y, double height,
+                                    double half_pitch, double theta) {
+    if (height <= config.thickness || half_pitch <= 0.0 || theta <= 0.0) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping corrugation row '{}' for disk '{}': invalid dimensions",
+                           row_tag, disk.disk_key));
+      return;
+    }
+
+    const double row_y_step       = height / std::tan(theta);
+    const double row_flat_length  = half_pitch - row_y_step;
+    const double row_center_delta = height - config.thickness;
+    if (row_flat_length <= 0.0 || row_center_delta <= 0.0) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping corrugation row '{}' for disk '{}': flat length is "
+                           "non-positive",
+                           row_tag, disk.disk_key));
+      return;
+    }
+
+    const double z_low       = config.z_center_offset - row_center_delta / 2.0;
+    const double z_high      = config.z_center_offset + row_center_delta / 2.0;
+    const double web_angle   = std::atan2(row_center_delta, row_y_step);
+    const double web_length  = std::hypot(row_center_delta, row_y_step);
+    const double flat_y_half = row_flat_length / 2.0;
+    const double flat_z_half = config.thickness / 2.0;
+    const double web_y_half  = web_length / 2.0;
+    const double web_z_half  = config.thickness / 2.0;
+    const double web_y_projection =
+        std::abs(std::cos(web_angle)) * web_y_half + std::abs(std::sin(web_angle)) * web_z_half;
+    const double upper_y = lower_y + half_pitch;
+
+    place_piece(row_tag + "_lower_flat", lower_y, flat_y_half, z_low, flat_y_half, flat_z_half,
+                0.0);
+    place_piece(row_tag + "_upper_flat", upper_y, flat_y_half, z_high, flat_y_half, flat_z_half,
+                0.0);
+
+    const double positive_web_y = lower_y + row_flat_length / 2.0 + row_y_step / 2.0;
+    const double negative_web_y = lower_y - row_flat_length / 2.0 - row_y_step / 2.0;
+    place_piece(row_tag + "_web_pos", positive_web_y, web_y_projection, config.z_center_offset,
+                web_y_half, web_z_half, web_angle);
+    place_piece(row_tag + "_web_neg", negative_web_y, web_y_projection, config.z_center_offset,
+                web_y_half, web_z_half, -web_angle);
+  };
+
+  if (!config.rowwise_placement.empty()) {
+    const auto rows =
+        load_corrugation_rows(resolve_input_file(config.rowwise_placement), disk.disk_key);
+    if (!rows.empty()) {
+      for (const auto& row : rows) {
+        const string row_tag = fmt::format("row{}", row.csv_line);
+        place_corrugation_cell(row_tag, config.y0 + row.row_y, row.height, row.half_pitch,
+                               row.theta);
+        if (std::abs(row.row_y) > 1.0e-9 * mm) {
+          place_corrugation_cell(row_tag + "_mirror", config.y0 - row.row_y, row.height,
+                                 row.half_pitch, row.theta);
+        }
+      }
+      return placed_count;
+    }
+
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("no corrugation rows from '{}' matched disk '{}'; using XML fallback",
+                         config.rowwise_placement, disk.disk_key));
+  }
+
+  const int n_min =
+      static_cast<int>(std::floor((-disk.rmax - config.y0) / (2.0 * config.half_pitch))) - 2;
+  const int n_max =
+      static_cast<int>(std::ceil((disk.rmax - config.y0) / (2.0 * config.half_pitch))) + 2;
 
   for (int n = n_min; n <= n_max; ++n) {
     const double lower_y = config.y0 + 2.0 * n * config.half_pitch;
-    const double upper_y = config.y0 + (2.0 * n + 1.0) * config.half_pitch;
-
-    place_piece("lower_flat", lower_y, flat_y_half, z_low, flat_y_half, flat_z_half, 0.0);
-    place_piece("upper_flat", upper_y, flat_y_half, z_high, flat_y_half, flat_z_half, 0.0);
-
-    const double positive_web_y = lower_y + flat_length / 2.0 + y_step / 2.0;
-    const double negative_web_y = lower_y - flat_length / 2.0 - y_step / 2.0;
-    place_piece("web_pos", positive_web_y, web_y_projection, config.z_center_offset, web_y_half,
-                web_z_half, web_angle);
-    place_piece("web_neg", negative_web_y, web_y_projection, config.z_center_offset, web_y_half,
-                web_z_half, -web_angle);
+    place_corrugation_cell(_toString(n, "uniform%d"), lower_y, config.height, config.half_pitch,
+                           config.theta);
   }
 
   return placed_count;

@@ -472,13 +472,13 @@ Files changed:
 Intent:
 - Update the project documentation with the agreed remaining workflow after successful visual inspection and overlap checks.
 
-Roadmap:
-- Phase 6: migrate the real placement CSV to `EIC_LAS_6RSU_CORR` with explicit `left/right` handedness.
-- Phase 6 validation: rebuild/export, carefully inspect handedness, and rerun both overlap checks.
-- Phase 7: run a more thorough `eicrecon`/ACTS validation to catch reconstruction-level issues.
-- Phase 8: add simple, parameterized LEC/REC details.
+Roadmap at the time, superseded by the later Phase 6/7/8 reorder entries:
+- Migrate the real placement CSV to `EIC_LAS_6RSU_CORR` with explicit `left/right` handedness.
+- Rebuild/export, carefully inspect handedness, and rerun both overlap checks.
+- Run a more thorough `eicrecon`/ACTS validation to catch reconstruction-level issues.
+- Add simple, parameterized LEC/REC details.
 - Repeat geometry, overlap, handedness, and `eicrecon` validation after LEC/REC details are added.
-- Phase 9: cleanup temporary XML switches, the test CSV, and working markdown files before PR unless any are intentionally promoted to permanent documentation.
+- Cleanup temporary XML switches, the test CSV, and working markdown files before PR unless any are intentionally promoted to permanent documentation.
 
 Validation:
 - Documentation-only update; no geometry or XML validation required.
@@ -554,8 +554,8 @@ Intent:
 
 Roadmap:
 - Phase 6: add simple passive LEC/REC detail.
-- Phase 7: add FPC and AncASIC detail.
-- Phase 8: make corrugation geometry flexible by allowing row-wise `h`, `d`, and `theta` values for each disk through a dedicated corrugation CSV.
+- Phase 7: make corrugation geometry flexible by allowing row-wise `h`, `d`, and `theta` values for each disk through a dedicated corrugation CSV.
+- Phase 8: add FPC and AncASIC detail.
 - Phase 9: update the real placement CSV for corrugated-informed geometry and change the placement reference point from the bottom-left corner to the midpoint at the RSU-LEC boundary.
 - Phase 10: run `eicrecon`/ACTS compatibility and performance checks.
 - Phase 11: cleanup temporary files and prepare the pull request.
@@ -699,3 +699,77 @@ Validation:
 
 Known limitations / next step:
 - Rebuild/export and confirm `component2_lec` and `component2_rec` are present in the visualization or exported geometry tree.
+
+## 2026-06-07 UTC - Phase 7a corrugation row CSV scaffold
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make corrugated support construction row-configurable so users can provide row-wise pitch, angle, and height values.
+
+Implementation:
+- Added `rowwise_placement` support to corrugated XML `<frame>` blocks.
+- Added `CorrugationRow` and a dedicated CSV loader for corrugation rows.
+- Supported exact disk keys plus `*` / `all` rows for shared tooling tables. Exact disk rows override shared rows for that disk.
+- Supported CSV columns:
+  `disk,row_y_mm,h_mm,d_mm,theta_deg,enabled,comment`.
+- Also allowed `half_pitch_mm` or full `pitch_mm` in place of `d_mm`.
+- Interpreted `row_y_mm` as the positive-y lower-flat center for one corrugation cell.
+- Mirrored nonzero rows to negative y; `row_y_mm = 0` is placed only once.
+- Kept XML `h`, `d`, and `theta` as fallback behavior if no row CSV is configured or no rows match a disk.
+- Added `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv`, an explicit-row table using the current uniform values `h=6.0 mm`, `d=17.385 mm`, and `theta=35 deg`.
+- Pointed all existing corrugated frame blocks in `silicon_disks_modules.xml` at the uniform reference CSV.
+
+Validation:
+- Created and ran `tmp/validate_phase8_corrugation_rows_2026-06-07.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- Confirmed the uniform corrugation row CSV has seven fields on each row.
+- Confirmed source hooks for `rowwise_placement`, `CorrugationRow`, `load_corrugation_rows`, mirrored row placement, and `pitch_mm` fallback are present.
+- Confirmed all corrugated frame blocks in `silicon_disks_modules.xml` reference `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv`.
+
+Known limitations / next step:
+- Phase 7a is intended to reproduce the previous uniform corrugation while exercising the CSV path. A follow-up nonuniform test CSV should vary at least one row and be checked visually before using this to drive production placement generation.
+
+## 2026-06-07 UTC - Rename corrugation CSV XML hook
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_phase8_corrugation_rows_2026-06-07.sh`
+
+Intent:
+- Use clearer naming for the corrugation row CSV XML attribute.
+
+Implementation:
+- Renamed the corrugated-frame XML attribute from `row_file` to `rowwise_placement`.
+- Renamed the corresponding C++ configuration field to `rowwise_placement`.
+- Updated the Phase 7 validation script to check the new name.
+
+Validation:
+- Run the Phase 7 validation script after this entry.
+
+## 2026-06-07 UTC - Normalize phase numbering
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Avoid future confusion after deciding to implement flexible corrugation before FPC/AncASIC detail.
+
+Implementation:
+- Renumbered flexible corrugation geometry as Phase 7.
+- Renumbered FPC / AncASIC detail as Phase 8.
+- Kept production placement CSV migration as Phase 9, reconstruction/ACTS validation as Phase 10, and cleanup/PR preparation as Phase 11.
+- Updated the Phase 7a corrugation row CSV scaffold log entry.
+- Marked the older May roadmap entry as superseded instead of leaving conflicting phase numbers.
+
+Validation:
+- Documentation-only update; run `git diff --check`.

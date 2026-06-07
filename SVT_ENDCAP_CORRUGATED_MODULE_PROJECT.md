@@ -362,9 +362,50 @@ Validation:
 - Confirm active RSU tile regions remain the only sensitive silicon volumes.
 - Run overlap checks before building further electronics detail on top.
 
-### Phase 7: FPC / AncASIC Detail Pass
+### Phase 7: Flexible Corrugation Geometry
 
-Add the next layer of passive electronics detail after the LEC/REC model is stable.
+Make the corrugated support geometry row-configurable instead of using one fixed corrugation shape per disk/layer.
+
+Target design:
+
+- Add a dedicated corrugation CSV.
+- Allow `h`, `d`, and `theta` to be specified for each row for a given disk.
+- Keep the XML defaults as fallbacks for simple configurations and early debugging.
+- Keep the corrugation CSV separate from the module placement CSV so support-shape parameters and module placement data remain auditable independently.
+- Use positive-y row definitions and mirror nonzero rows to negative y.
+- Allow `disk="*"` rows for a shared tooling table across all disks, while also supporting exact disk-key rows for maximum flexibility.
+
+Initial CSV schema:
+
+```csv
+disk,row_y_mm,h_mm,d_mm,theta_deg,enabled,comment
+```
+
+Column meanings:
+
+- `disk`: exact disk key, or `*` / `all` for rows shared by all disks. Exact disk rows override shared rows for that disk.
+- `row_y_mm`: positive-y lower-flat center for one corrugation cell. Nonzero rows are mirrored to negative y.
+- `h_mm`: corrugation height.
+- `d_mm`: half-pitch, matching the existing XML `d` convention. The parser also accepts `half_pitch_mm` or full `pitch_mm`.
+- `theta_deg`: web angle in degrees.
+- `enabled`: optional row on/off switch.
+- `comment`: free-form provenance/debug text.
+
+Phase 7a implementation:
+
+- Add row CSV parsing and mirrored row placement.
+- Add `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv` as an explicit-row reference table that reproduces the current uniform corrugation dimensions.
+- Point the existing frame XML blocks at the uniform reference CSV.
+
+Validation:
+
+- Confirm row-wise `h`, `d`, and `theta` values are parsed and applied to the intended disk rows.
+- Confirm corrugated support pieces remain inside their disk volumes.
+- Run geometry export and overlap checks with at least one non-uniform test configuration.
+
+### Phase 8: FPC / AncASIC Detail Pass
+
+Add the next layer of passive electronics detail after the LEC/REC model and flexible corrugation scaffold are stable.
 
 Scope:
 
@@ -377,23 +418,6 @@ Validation:
 
 - Repeat geometry export, visual handedness inspection, and overlap checks.
 - Confirm the added passive features do not change sensitive-volume placement or sensor IDs unexpectedly.
-
-### Phase 8: Flexible Corrugation Geometry
-
-Make the corrugated support geometry row-configurable instead of using one fixed corrugation shape per disk/layer.
-
-Target design:
-
-- Add a dedicated corrugation CSV.
-- Allow `h`, `d`, and `theta` to be specified for each row for a given disk.
-- Keep the XML defaults as fallbacks for simple configurations and early debugging.
-- Keep the corrugation CSV separate from the module placement CSV so support-shape parameters and module placement data remain auditable independently.
-
-Validation:
-
-- Confirm row-wise `h`, `d`, and `theta` values are parsed and applied to the intended disk rows.
-- Confirm corrugated support pieces remain inside their disk volumes.
-- Run geometry export and overlap checks with at least one non-uniform test configuration.
 
 ### Phase 9: Production Placement CSV Migration
 
