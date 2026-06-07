@@ -476,8 +476,8 @@ Roadmap:
 - Phase 6: migrate the real placement CSV to `EIC_LAS_6RSU_CORR` with explicit `left/right` handedness.
 - Phase 6 validation: rebuild/export, carefully inspect handedness, and rerun both overlap checks.
 - Phase 7: run a more thorough `eicrecon`/ACTS validation to catch reconstruction-level issues.
-- Phase 8: add simple, parameterized FEC/LEC details.
-- Repeat geometry, overlap, handedness, and `eicrecon` validation after FEC/LEC details are added.
+- Phase 8: add simple, parameterized LEC/REC details.
+- Repeat geometry, overlap, handedness, and `eicrecon` validation after LEC/REC details are added.
 - Phase 9: cleanup temporary XML switches, the test CSV, and working markdown files before PR unless any are intentionally promoted to permanent documentation.
 
 Validation:
@@ -541,4 +541,161 @@ Validation:
 
 Known limitations / next step:
 - This has not yet been compiled, exported with `dd_web_display`, or overlap-checked in the configured DD4hep environment.
-- Visual inspection should confirm that the 12 active tile regions per RSU and passive power-switch strips are clear before moving to FEC/LEC details.
+- Visual inspection should confirm that the 12 active tile regions per RSU and passive power-switch strips are clear before moving to LEC/REC details.
+
+## 2026-06-05 UTC - Updated remaining phase order
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the revised implementation order after completing the RSU 12-tile approximation.
+
+Roadmap:
+- Phase 6: add simple passive LEC/REC detail.
+- Phase 7: add FPC and AncASIC detail.
+- Phase 8: make corrugation geometry flexible by allowing row-wise `h`, `d`, and `theta` values for each disk through a dedicated corrugation CSV.
+- Phase 9: update the real placement CSV for corrugated-informed geometry and change the placement reference point from the bottom-left corner to the midpoint at the RSU-LEC boundary.
+- Phase 10: run `eicrecon`/ACTS compatibility and performance checks.
+- Phase 11: cleanup temporary files and prepare the pull request.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
+Known limitations / next step:
+- Before implementing Phase 6, confirm practical first-pass dimensions and placement conventions for the LEC/REC boxes.
+
+## 2026-06-05 UTC - Phase 6 LEC/REC XML scaffold
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add XML-driven dimensions for first-pass passive LEC/REC geometry before changing the C++ module builder.
+
+Implementation:
+- Added LEC/REC lengths, widths, and thicknesses.
+- Set `SiEndcapLEC_length = 4.5 mm` and `SiEndcapREC_length = 1.5 mm`, matching the `136.02 = 4.50 + 6 * 21.67 + 1.50` strip-length decomposition.
+- Set LEC/REC widths to `SiEndcapRSU_width` for the first approximation.
+- Set LEC/REC thicknesses to `50*um` as chip-like silicon placeholders.
+- Removed the temporary FEC aliases and kept REC naming in the XML.
+- Removed zero-valued LEC/REC gap constants because they are not needed until a nonzero physical separation is specified.
+- Left FPC geometry for the next phase, as planned.
+
+Validation:
+- XML-only change; run `xmllint` and `git diff --check` before implementation continues.
+
+Known limitations / next step:
+- The LEC/REC dimensions are first-pass interpretations of the strip-length margins. The next C++ step should place simple passive boxes and visually verify whether this convention matches the drawing and handed module behavior.
+
+## 2026-06-05 UTC - Normalize LEC/REC naming
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Remove ambiguous FEC naming introduced during the Phase 6 scaffold and keep the implementation aligned with the LEC/REC terminology used in the design notes.
+
+Implementation:
+- Removed temporary `SiEndcapFEC_*` aliases.
+- Kept `SiEndcapLEC_length = 4.5 mm` and `SiEndcapREC_length = 1.5 mm`.
+- Kept `SiEndcapLECFPC_width` and `SiEndcapRECFPC_width`.
+- Removed zero-valued LEC/REC gap constants; these can be reintroduced later if a real physical gap is specified.
+- Updated the current roadmap wording from LEC/FEC to LEC/REC.
+
+Validation:
+- XML and whitespace checks should be rerun after this cleanup.
+
+## 2026-06-05 UTC - Phase 6 LEC/REC passive boxes
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Implement the first-pass LEC/REC geometry using the XML constants added for Phase 6.
+
+Implementation:
+- Added `LocalBoxTemplate` for passive boxes that are placed inside a stack component without adding to the total module thickness.
+- Added LEC and REC passive silicon boxes to the corrugated 6-RSU sensor/electronics layer.
+- Used `SVTReadoutVis` for the LEC/REC boxes.
+- Kept LEC/REC non-sensitive; no sensor IDs or surfaces are created for them.
+- Used handed placement:
+  - `left`: LEC before the RSU chain, REC after it.
+  - `right`: REC before the RSU chain, LEC after it.
+
+Validation:
+- Created and ran `tmp/validate_phase6_lec_rec_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- Confirmed the LEC/REC XML constants and C++ local-box hooks are present.
+- Confirmed no `SiEndcapFEC_*` or zero-gap constants remain in the XML/C++ implementation.
+
+Known limitations / next step:
+- This is still a simple rectangular approximation. It needs DD4hep export, visual handedness inspection, and overlap checks before moving to FPC/AncASIC detail.
+
+## 2026-06-06 UTC - Make LEC/REC visible in display
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/display.xml`
+- `compact/display_detailed.xml`
+- `compact/display_geoviewer.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Address visual inspection feedback that LEC/REC boxes were not visible in the DD4hep display.
+
+Implementation:
+- Changed the corrugated 6-RSU module volume from `TrackerModuleVis` to `SVTModuleVis`.
+- Added `SVTModuleVis` with `showDaughters="true"` in the standard, detailed, and geoviewer display XMLs.
+- Added `SVTElectronicsVis` in the same display XMLs.
+- Changed LEC/REC local boxes from `SVTReadoutVis` to `SVTElectronicsVis` so they are visually distinct from inactive RSU readout/periphery strips.
+
+Validation:
+- Updated and ran `tmp/validate_phase6_lec_rec_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout` passed for:
+  - `compact/tracking/silicon_disks_modules.xml`
+  - `compact/display.xml`
+  - `compact/display_detailed.xml`
+  - `compact/display_geoviewer.xml`
+- Confirmed `SVTModuleVis`, `SVTElectronicsVis`, and LEC/REC local-box hooks are present.
+
+Known limitations / next step:
+- If LEC/REC are still absent after rebuilding/exporting, confirm the geometry was rebuilt from this source and inspect the exported ROOT geometry for `component2_lec` and `component2_rec` volumes.
+
+## 2026-06-07 UTC - Move LEC/REC into RSU pattern placement
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `tmp/validate_phase6_lec_rec_2026-06-05.sh`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix visual/export feedback that component 2 contained backbone, powerswitch, and periphery volumes but no LEC/REC volumes.
+
+Implementation:
+- Removed the generic `LocalBoxTemplate` / `local_boxes` scaffold.
+- Added explicit `rsu_end_electronics` and `lec_after_rsu` flags to `ComponentTemplate`.
+- Placed `component2_lec` and `component2_rec` directly inside the `rsu_twelve_tile_pattern` branch using the same `place_box(...)` helper that creates the visible RSU backbone, powerswitch, bias, periphery, and sensor boxes.
+- Used `SiEndcapLEC_thickness` and `SiEndcapREC_thickness` explicitly for those boxes.
+- Preserved handedness:
+  - `left`: LEC before the RSU chain, REC after it.
+  - `right`: REC before the RSU chain, LEC after it.
+- Kept `SVTElectronicsVis` for LEC/REC.
+
+Validation:
+- Updated and ran `tmp/validate_phase6_lec_rec_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout` passed for the tracking and display XML files.
+- Confirmed the direct `component%d_lec` / `component%d_rec` placement hooks are present.
+- Confirmed the removed `LocalBoxTemplate` / `local_boxes` scaffold is absent.
+
+Known limitations / next step:
+- Rebuild/export and confirm `component2_lec` and `component2_rec` are present in the visualization or exported geometry tree.

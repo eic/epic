@@ -45,6 +45,8 @@ struct ComponentTemplate {
   double y_offset{0.0};
   int x_repeat{1};
   bool rsu_twelve_tile_pattern{false};
+  bool rsu_end_electronics{false};
+  bool lec_after_rsu{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -207,7 +209,7 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   auto build = [&](const string& name, double x_size, double y_size) {
     ModuleTemplate module_template;
     module_template.name   = name;
-    module_template.vis    = "TrackerModuleVis";
+    module_template.vis    = "SVTModuleVis";
     module_template.x_size = x_size;
     module_template.y_size = y_size;
 
@@ -240,7 +242,6 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         description.constant<double>("SiEndcapModule6RSU_left_extension") +
         description.constant<double>("SiEndcapModule6RSU_sensor_left_margin") +
         rsu_chain_length / 2.0;
-
     const array<ComponentTemplate, 3> components{{
         {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber",
          "SVTSupportVis", false, -1.0, -1.0},
@@ -248,7 +249,7 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
          "SVTGlueVis", false, -1.0, -1.0},
         {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "SVTSensorVis",
          true, rsu_chain_length, description.constant<double>("SiEndcapRSU_width"),
-         sensor_x_offset, 0.0, 6, true},
+         sensor_x_offset, 0.0, 6, true, true},
     }};
 
     for (const auto& component : components) {
@@ -289,6 +290,9 @@ ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate 
   for (auto& component : module_template.components) {
     if (component.sensitive) {
       component.x_offset = sensor_x_offset;
+    }
+    if (component.rsu_end_electronics) {
+      component.lec_after_rsu = handedness == "right";
     }
   }
   return module_template;
@@ -793,12 +797,13 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           std::max(0.0, (half_rsu_x - backbone_width - 3.0 * powerswitch_width) / 3.0);
       const double active_y       = std::max(0.0, half_rsu_y - bias_width - periphery_width);
 
-      auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
-                           double pos_y, const string& vis, bool sensitive) {
+      auto place_box_with_thickness = [&](const string& name, double box_x, double box_y,
+                                          double box_thickness, double pos_x, double pos_y,
+                                          const string& vis, bool sensitive) {
         if (box_x <= 0.0 || box_y <= 0.0) {
           return;
         }
-        Box box_solid(box_x / 2.0, box_y / 2.0, component.thickness / 2.0);
+        Box box_solid(box_x / 2.0, box_y / 2.0, box_thickness / 2.0);
         Volume box_volume(name, box_solid, material);
         box_volume.setVisAttributes(description.visAttributes(vis));
         PlacedVolume pv = prototype.volume.placeVolume(
@@ -808,6 +813,33 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           attach_sensitive(box_volume, pv);
         }
       };
+      auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
+                           double pos_y, const string& vis, bool sensitive) {
+        place_box_with_thickness(name, box_x, box_y, component.thickness, pos_x, pos_y, vis,
+                                 sensitive);
+      };
+
+      if (component.rsu_end_electronics) {
+        const double lec_length = description.constant<double>("SiEndcapLEC_length");
+        const double rec_length = description.constant<double>("SiEndcapREC_length");
+        const double lec_width  = description.constant<double>("SiEndcapLEC_width");
+        const double rec_width  = description.constant<double>("SiEndcapREC_width");
+        const double lec_thickness = description.constant<double>("SiEndcapLEC_thickness");
+        const double rec_thickness = description.constant<double>("SiEndcapREC_thickness");
+        const double lec_x =
+            component.lec_after_rsu ? comp_x / 2.0 + lec_length / 2.0
+                                    : -comp_x / 2.0 - lec_length / 2.0;
+        const double rec_x =
+            component.lec_after_rsu ? -comp_x / 2.0 - rec_length / 2.0
+                                    : comp_x / 2.0 + rec_length / 2.0;
+
+        place_box_with_thickness(_toString(component_id, "component%d_lec"), lec_length,
+                                 lec_width, lec_thickness, lec_x, 0.0, "SVTElectronicsVis",
+                                 false);
+        place_box_with_thickness(_toString(component_id, "component%d_rec"), rec_length,
+                                 rec_width, rec_thickness, rec_x, 0.0, "SVTElectronicsVis",
+                                 false);
+      }
 
       for (int repeat_idx = 0; repeat_idx < x_repeat; ++repeat_idx) {
         const double rsu_x_min = -comp_x / 2.0 + repeat_idx * rsu_pitch_x;
@@ -872,6 +904,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         attach_sensitive(component_volume, pv);
       }
     }
+
     z_position += component.thickness / 2.0;
     thickness_so_far += component.thickness;
     ++component_id;

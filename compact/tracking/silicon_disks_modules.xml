@@ -54,6 +54,23 @@
     <constant name="SiEndcapFPC_thickness"                   value="115*um"/>
     <constant name="SiEndcapAdhesive_thickness"              value="80*um"/>
     <constant name="SiEndcapModuleCF_thickness"              value="150*um"/>
+
+    <comment>
+      First-pass passive electronics placeholders for the corrugated module.
+      LEC/REC dimensions are intentionally XML-driven because the mechanical
+      design is still evolving. The first implementation should keep these
+      as simple passive boxes and avoid detailed chip/FPC routing.
+    </comment>
+    <constant name="SiEndcapLEC_length"                      value="4.5*mm"/>
+    <constant name="SiEndcapREC_length"                      value="1.5*mm"/>
+    <constant name="SiEndcapLEC_width"                       value="SiEndcapRSU_width"/>
+    <constant name="SiEndcapREC_width"                       value="SiEndcapRSU_width"/>
+    <constant name="SiEndcapLEC_thickness"                   value="50*um"/>
+    <constant name="SiEndcapREC_thickness"                   value="50*um"/>
+
+    <comment>
+      FPC dimensions are kept separate from LEC/REC chip-like placeholders.
+    </comment>
     <constant name="SiEndcapLECFPC_width"                    value="7.0*mm"/>
     <constant name="SiEndcapRECFPC_width"                    value="4.0*mm"/>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>

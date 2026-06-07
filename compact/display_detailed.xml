@@ -26,8 +26,10 @@
 
     <vis name="SVTSensorVis"       ref="AnlGold"        visible="true"  showDaughters="true" />
     <vis name="SVTReadoutVis"      ref="AnlDarkGreen"   visible="true"  showDaughters="true" />
+    <vis name="SVTElectronicsVis"  ref="AnlOrange"      visible="true"  showDaughters="true" />
     <vis name="SVTSupportVis"      ref="AnlLightGray"   visible="true"  showDaughters="false" />
     <vis name="SVTGlueVis"         ref="AnlViolet"      visible="true"  showDaughters="true" />
+    <vis name="SVTModuleVis"       ref="TrackerLayerVis" visible="true" showDaughters="true" />
     <vis name="VertexLayerVis"        ref="AnlGray"         visible="true"  showDaughters="false" />
     <vis name="VertexSupportLayerVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
     <vis name="VertexSupportVis"      ref="VertexSupportLayerVis" visible="true"  showDaughters="true" />

@@ -67,8 +67,10 @@ Current corrugated prototype:
 
 - `EIC_LAS_6RSU_CORR` is implemented separately from the legacy `EIC_LAS_6RSU`.
 - `ComponentTemplate` supports local component offsets, `x_repeat`, and `rsu_twelve_tile_pattern`.
+- `ComponentTemplate` can also carry passive local boxes that share a stack layer without adding to the total module thickness.
 - The corrugated 6-RSU sensor band is split into six RSU pitches.
 - Each RSU pitch is approximated as twelve active silicon tile rectangles with inactive silicon bias, power-switch, periphery/readout, and backbone regions.
+- First-pass passive LEC/REC boxes are placed beside the RSU chain. In `left` handed modules, LEC is before the RSU chain and REC is after it; in `right` handed modules this is mirrored.
 - Left/right handedness is parsed from CSV and included in the prototype cache key. The current implementation swaps the sensor-band start side using the left/right end-extension and sensor-margin constants. More detailed asymmetric FPC/readout/end features are still deferred.
 
 ## Target Geometry Concept
@@ -340,9 +342,62 @@ Validation:
 - Confirm inactive silicon is present but not sensitive.
 - Confirm sensor IDs and `VolPlane` entries are sensible.
 
-### Phase 6: Production CSV Migration
+### Phase 6: LEC / REC Detail Pass
 
-Update the real placement CSV to use corrugated module names and explicit handedness.
+Add first-pass detail for the local/end electronics before changing the production placement CSV.
+
+Scope:
+
+- Add simple, parameterized LEC and REC approximations.
+- Place LEC/REC as passive local boxes in the sensor/electronics layer so they do not inflate the full module stack thickness.
+- Keep these features passive.
+- Use placeholder materials already agreed for now:
+  `Kapton` for FPC/base flex, `Copper` for optional metal/readout traces, and `Silicon` for chip-like placeholders.
+- Avoid CAD-level detail unless it is needed for material budget, envelope, overlap, or tracking performance.
+
+Validation:
+
+- Confirm geometry export succeeds.
+- Visually inspect left/right handedness and asymmetric end features.
+- Confirm active RSU tile regions remain the only sensitive silicon volumes.
+- Run overlap checks before building further electronics detail on top.
+
+### Phase 7: FPC / AncASIC Detail Pass
+
+Add the next layer of passive electronics detail after the LEC/REC model is stable.
+
+Scope:
+
+- Add simple, parameterized FPC geometry.
+- Add simple, parameterized AncASIC placeholders.
+- Keep materials and dimensions XML-driven where practical.
+- Preserve handedness behavior: all asymmetric electronics features should move consistently with the module handedness.
+
+Validation:
+
+- Repeat geometry export, visual handedness inspection, and overlap checks.
+- Confirm the added passive features do not change sensitive-volume placement or sensor IDs unexpectedly.
+
+### Phase 8: Flexible Corrugation Geometry
+
+Make the corrugated support geometry row-configurable instead of using one fixed corrugation shape per disk/layer.
+
+Target design:
+
+- Add a dedicated corrugation CSV.
+- Allow `h`, `d`, and `theta` to be specified for each row for a given disk.
+- Keep the XML defaults as fallbacks for simple configurations and early debugging.
+- Keep the corrugation CSV separate from the module placement CSV so support-shape parameters and module placement data remain auditable independently.
+
+Validation:
+
+- Confirm row-wise `h`, `d`, and `theta` values are parsed and applied to the intended disk rows.
+- Confirm corrugated support pieces remain inside their disk volumes.
+- Run geometry export and overlap checks with at least one non-uniform test configuration.
+
+### Phase 9: Production Placement CSV Migration
+
+Update the real placement CSV to use corrugated-informed geometry and the new reference point convention.
 
 Initial target:
 
@@ -356,54 +411,38 @@ Rules:
 
 - Corrugated module rows must always provide explicit `left` or `right` handedness.
 - Do not infer handedness from row, disk side, `x/y`, or `dz`.
+- Update the placement reference point from the current bottom-left corner convention to the midpoint at the RSU-LEC boundary.
+- Regenerate or migrate placements using the corrugated module envelope and the row-wise corrugation geometry, rather than simply renaming legacy `EIC_LAS_6RSU` rows.
 - Keep the temporary test CSV available only until the production CSV path is validated.
 
 Validation:
 
 - Full geometry export from the production CSV path.
 - Careful visual inspection of left/right handedness.
-- Confirm the RSU sensor band moves to the intended handed side.
-- Confirm the inactive RSU regions, glue, support, and active sensors remain visually distinguishable.
+- Confirm the new placement reference point lands at the RSU-LEC boundary midpoint.
+- Confirm the RSU sensor band, electronics, glue, support, and active sensors remain visually distinguishable.
 - Run both overlap checks again.
 - Confirm the expanded `sensor` bitfield remains sufficient for all sensitive volumes.
 
-### Phase 7: Reconstruction / ACTS Validation
+### Phase 10: Reconstruction / ACTS Validation
 
-Run a more thorough reconstruction validation after the production CSV migration.
+Run a more thorough reconstruction validation after the updated production placement and corrugated geometry migration.
 
 Goal:
 
 - Catch ACTS surface, volume manager, readout-ID, or reconstruction issues that are not visible in DD4hep geometry export or overlap checks.
+- Check reconstruction compatibility and performance against an agreed reference workflow.
 
 Validation:
 
 - Run an agreed `eicrecon` workflow using the updated detector geometry.
 - Save the run script and relevant logs under `tmp/` or another project-local validation area.
 - Record command, detector XML/config, input events, and result summary in the implementation log.
+- Compare compatibility/performance against the previous reference geometry or agreed baseline.
 
-### Phase 8: FEC / LEC Detail Pass
+### Phase 11: Cleanup and PR Preparation
 
-Add more detail to the front-end/readout features after the baseline corrugated module and production placement path are validated.
-
-Scope:
-
-- Add simple, parameterized FEC/LEC approximations.
-- Use placeholder materials already agreed for now:
-  `Kapton` for FPC/base flex, `Copper` for optional metal/readout traces, and `Silicon` for chip-like placeholders.
-- Keep these features passive.
-- Avoid CAD-level detail unless it is needed for material budget, envelope, overlap, or tracking performance.
-
-Validation:
-
-- Repeat full geometry export.
-- Re-check left/right handedness.
-- Re-run both overlap checks.
-- Re-run the `eicrecon`/ACTS validation.
-- Compare against the pre-FEC/LEC validation results.
-
-### Phase 9: Cleanup and PR Preparation
-
-After production placement, geometry validation, overlap checks, and reconstruction validation pass:
+After electronics detail, flexible corrugation geometry, production placement, overlap checks, and reconstruction validation pass:
 
 - Revert temporary XML test switches.
 - Remove the temporary corrugated test CSV.
