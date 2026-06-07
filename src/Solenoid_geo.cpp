@@ -86,21 +86,17 @@ static Ref_t create_detector(Detector& description, xml_h e,
                               x_slice.visStr());
           if (s_inner_z > 0) {
             Position s_pos(0, 0, 0.5 * (s_outer_z + s_inner_z));
-            PlacedVolume pv1 = l_vol.placeVolume(s_vol, -s_pos);
-            PlacedVolume pv2 = l_vol.placeVolume(s_vol, +s_pos);
-            pv1.addPhysVolID("slice", i_slice);
-            pv2.addPhysVolID("slice", i_slice);
+            l_vol.placeVolume(s_vol, -s_pos);
+            l_vol.placeVolume(s_vol, +s_pos);
           } else {
             outer_r += l_thickness;
-            PlacedVolume pv = l_vol.placeVolume(s_vol);
-            pv.addPhysVolID("slice", i_slice);
+            l_vol.placeVolume(s_vol);
           }
         }
         l_tub.setDimensions(inner_r, outer_r, outer_z);
         l_vol.setVisAttributes(description, x_layer.visStr());
 
         PlacedVolume layer_pv = comp_assembly.placeVolume(l_vol);
-        layer_pv.addPhysVolID("layer", i_layer);
         layer.setPlacement(layer_pv);
       }
 
@@ -131,13 +127,11 @@ static Ref_t create_detector(Detector& description, xml_h e,
         if (!reflect) {
           layer    = DetElement(comp_det, l_nam + "_pos", l_num);
           layer_pv = comp_assembly.placeVolume(l_vol, Position(0, 0, zmin + layerWidth / 2.));
-          layer_pv.addPhysVolID("layer", l_num);
           layer.setPlacement(layer_pv);
         } else {
           layer    = DetElement(comp_det, l_nam + "_neg", l_num);
           layer_pv = comp_assembly.placeVolume(
               l_vol, Transform3D(RotationY(M_PI), Position(0, 0, -zmin - layerWidth / 2)));
-          layer_pv.addPhysVolID("layer", l_num);
           layer.setPlacement(layer_pv);
         }
 
@@ -158,7 +152,6 @@ static Ref_t create_detector(Detector& description, xml_h e,
           s_vol.setAttributes(description, x_slice.regionStr(), x_slice.limitsStr(),
                               x_slice.visStr());
           PlacedVolume pv = l_vol.placeVolume(s_vol, Position(0, 0, tot_thickness + thick / 2));
-          pv.addPhysVolID("slice", s_num);
           slice_de.setPlacement(pv);
           tot_thickness = tot_thickness + thick;
         }
@@ -167,7 +160,6 @@ static Ref_t create_detector(Detector& description, xml_h e,
 
     // Place component assembly in envelope
     PlacedVolume comp_pv = envelope_vol.placeVolume(comp_assembly);
-    comp_pv.addPhysVolID("component", component_num);
     comp_det.setPlacement(comp_pv);
   }
 
@@ -175,7 +167,6 @@ static Ref_t create_detector(Detector& description, xml_h e,
   xml::Component x_pos = x_det.position();
   Position pos(x_pos.x(), x_pos.y(), x_pos.z());
   PlacedVolume pv = description.pickMotherVolume(sdet).placeVolume(envelope_vol, pos);
-  pv.addPhysVolID("system", sdet.id());
   sdet.setPlacement(pv);
   return sdet;
 }
