@@ -14,20 +14,30 @@
     <comment> Main tracker disk setup </comment>
 
     <comment>
-      EIC-LAS based endcap module stack.
       The endcap module footprints/types are built in epic/src/SiEndcapModuleTracker_geo.cpp,
       (module structure: build_module_prototype. load placement: load_module_rows)
       so there are intentionally no local &lt;module&gt; declarations in this file.
+    </comment>
+
+    <comment>
+      Legacy flat EIC-LAS module stack.
+      These constants are used only by the legacy EIC_LAS_6RSU and EIC_LAS_5RSU
+      templates in SiEndcapModuleTracker_geo.cpp. They are intentionally kept
+      separate from the newer corrugated-module constants below.
     </comment>
     <constant name="SiEndcapModuleGlue_thickness"           value="60*um"/>
     <constant name="SiEndcapModuleFlatSheetCF_thickness"    value="0.15*mm"/>
     <constant name="SiTrackerSensor_thickness"              value="40*um"/>
 
     <comment>
-      Corrugated EIC-LAS endcap module constants.
-      These are not used by the legacy EIC_LAS_6RSU / EIC_LAS_5RSU module
-      templates yet. They provide the parameter scaffold for the new
-      EIC_LAS_6RSU_CORR implementation.
+      Current corrugated EIC-LAS 6-RSU module parameters.
+      These constants define the active EIC_LAS_6RSU_CORR implementation.
+      Keep future corrugated-module dimensions in this block unless they are
+      row/disk-level parameters such as corrugation pitch/height/angle.
+    </comment>
+
+    <comment>
+      RSU tile/readout pattern.
     </comment>
     <constant name="SiEndcapRSU_width"                       value="19.564*mm"/>
     <constant name="SiEndcapRSU_length"                      value="21.666*mm"/>
@@ -36,15 +46,23 @@
     <constant name="SiEndcapRSU_backbone_width"              value="0.06*mm"/>
     <constant name="SiEndcapRSU_powerswitch_width"           value="0.02*mm"/>
 
+    <comment>
+      Six-RSU package envelope and handed end dimensions.
+      The left/right extensions are also used for bridge-FPC placement.
+    </comment>
     <constant name="SiEndcapModule_width_corrugated"         value="32.0*mm"/>
-
     <constant name="SiEndcapModule6RSU_package_length"       value="152.02*mm"/>
     <constant name="SiEndcapModule6RSU_left_extension"       value="11.0*mm"/>
     <constant name="SiEndcapModule6RSU_right_extension"      value="5.0*mm"/>
     <constant name="SiEndcapModule6RSU_sensor_left_margin"   value="4.5*mm"/>
     <constant name="SiEndcapModule6RSU_sensor_right_margin"  value="1.5*mm"/>
 
-    <constant name="SiEndcapSensor_thickness"                value="50*um"/>
+    <comment>
+      Current corrugated module material stack.
+      Do not confuse these with the legacy flat-module stack above.
+    </comment>
+    <comment> Effective thickness from Nikki's disk material budget, 2026-06-09. </comment>
+    <constant name="SiEndcapSensor_thickness"                value="65*um"/>
     <constant name="SiEndcapAdhesive_thickness"              value="80*um"/>
     <constant name="SiEndcapModuleCF_thickness"              value="150*um"/>
 
@@ -58,8 +76,8 @@
     <constant name="SiEndcapREC_length"                      value="1.5*mm"/>
     <constant name="SiEndcapLEC_width"                       value="SiEndcapRSU_width"/>
     <constant name="SiEndcapREC_width"                       value="SiEndcapRSU_width"/>
-    <constant name="SiEndcapLEC_thickness"                   value="50*um"/>
-    <constant name="SiEndcapREC_thickness"                   value="50*um"/>
+    <constant name="SiEndcapLEC_thickness"                   value="SiEndcapSensor_thickness"/>
+    <constant name="SiEndcapREC_thickness"                   value="SiEndcapSensor_thickness"/>
 
     <comment>
       FPC dimensions are kept separate from LEC/REC chip-like placeholders.
@@ -79,7 +97,7 @@
     <constant name="SiEndcapRightBridgeFPC_bottomAl_thickness" value="0.0*um"/>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
 
-    <constant name="SiEndcapCorrugationCF_thickness"        value="0.2*mm"/>
+    <constant name="SiEndcapCorrugationCF_thickness"        value="0.15*mm"/>
     <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
     <constant name="SiEndcapCorrugation_theta"              value="35*deg"/>
     <constant name="SiEndcapCorrugation_d"                  value="34.77*mm/2"/>

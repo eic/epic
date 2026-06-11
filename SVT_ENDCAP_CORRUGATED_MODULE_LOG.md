@@ -980,6 +980,25 @@ Validation:
 - Run an active-reference audit for all `SiEndcap...` constants in `compact/tracking/silicon_disks_modules.xml`.
 - Run `git diff --check`.
 
+## 2026-06-10 UTC - Update corrugated sensor and endcap thickness convention
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Align the corrugated sensor/electronics layer thickness with the latest disk material-budget estimate.
+- Avoid maintaining independent LEC/REC thickness constants that can drift from the layer they occupy.
+
+Implementation:
+- Updated `SiEndcapSensor_thickness` to `65*um` as an effective thickness from Nikki's disk material budget dated 2026-06-09.
+- Set `SiEndcapLEC_thickness` and `SiEndcapREC_thickness` to `SiEndcapSensor_thickness`.
+- This keeps LEC/REC in the same local z layer as the RSU sensor/electronics layer and makes their thickness follow future sensor-layer updates automatically.
+- Updated `SiEndcapCorrugationCF_thickness` to `0.15*mm`.
+
+Validation:
+- Run `git diff --check`.
+
 ## 2026-06-10 UTC - Phase 8 bridge FPC y-placement follow-up
 
 To-do:
