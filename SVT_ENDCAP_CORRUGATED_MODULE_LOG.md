@@ -789,7 +789,7 @@ Implementation notes:
 - Phase 8 should start with simple, parameterized bridge FPC geometry.
 - The left bridge FPC can use a first-pass rectangular approximation of `27.432 mm x 10.0 mm`.
 - The right bridge FPC can use a first-pass rectangular approximation of `19.7612 mm x 4.0 mm`.
-- The bridge FPC stack can be approximated as `80 um` Kapton plus effective aluminum layers from the reported fill factors.
+- The bridge FPC stack can be approximated as `80 um` Kapton plus `30 um` Aluminum.
 - The main FPC should be treated as a later row-level geometry feature, not a fixed module-local box.
 
 Main FPC to-do:
@@ -811,12 +811,10 @@ Intent:
 - Keep main FPC implementation deferred because its length is row-dependent.
 
 Implementation:
-- Added shared bridge FPC Kapton and nominal aluminum thickness constants.
+- Added shared bridge FPC Kapton and aluminum thickness constants.
 - Added left bridge FPC rectangular-approximation dimensions: `27.432 mm x 10.0 mm`.
-- Added left bridge FPC effective aluminum thicknesses from the report fill factors: `0.69 * 15 um` and `0.94 * 15 um`.
 - Added right bridge FPC rectangular-approximation dimensions: `19.7612 mm x 4.0 mm`.
-- Added right bridge FPC effective aluminum thicknesses from the report fill factors: `0.42 * 15 um` and `0.0 um`.
-- Bridge FPC thickness is represented by explicit Kapton and effective aluminum layer constants.
+- Bridge FPC thickness is represented by explicit `80 um` Kapton and `30 um` Aluminum layer constants.
 
 Validation:
 - Run `git diff --check`.
@@ -838,10 +836,7 @@ Implementation:
 - Used report `height` as the local-y span and report `width` as the local-x span.
 - Placed the left bridge FPC on the LEC side and the right bridge FPC on the REC side.
 - Mirrored the FPC side assignment with the existing module handedness convention.
-- Built each bridge FPC as layered boxes:
-  - bottom effective aluminum, skipped when the thickness is zero
-  - Kapton
-  - top effective aluminum
+- Built each bridge FPC as layered Kapton and Aluminum boxes.
 - Used `Kapton` and `Aluminum` materials with `SVTReadoutVis`.
 
 Assumptions:
@@ -995,6 +990,28 @@ Implementation:
 - Set `SiEndcapLEC_thickness` and `SiEndcapREC_thickness` to `SiEndcapSensor_thickness`.
 - This keeps LEC/REC in the same local z layer as the RSU sensor/electronics layer and makes their thickness follow future sensor-layer updates automatically.
 - Updated `SiEndcapCorrugationCF_thickness` to `0.15*mm`.
+
+Validation:
+- Run `git diff --check`.
+
+## 2026-06-11 UTC - Simplify bridge FPC material stack
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Replace detailed bridge-FPC top/bottom fill-factor aluminum layers with a simple material-budget approximation.
+
+Implementation:
+- Use the same FPC material stack for all bridge FPCs:
+  - `80 um` Kapton
+  - `30 um` Aluminum
+- Removed left/right top/bottom aluminum thickness constants from XML.
+- Simplified bridge FPC placement to create one Kapton box and one Aluminum box per bridge FPC.
 
 Validation:
 - Run `git diff --check`.

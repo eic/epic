@@ -414,9 +414,8 @@ Scope:
 Current FPC assumptions from `FPC Design Report 20260331.pdf`:
 
 - Left bridge FPC first-pass rectangular approximation: `27.432 mm x 10.0 mm`.
-- Left bridge FPC stack approximation: `80 um` Kapton plus effective aluminum layers of `0.69 * 15 um` and `0.94 * 15 um`.
+- Bridge FPC stack approximation: `80 um` Kapton plus `30 um` Aluminum.
 - Right bridge FPC first-pass rectangular approximation: `19.7612 mm x 4.0 mm`.
-- Right bridge FPC stack approximation: `80 um` Kapton plus an effective aluminum layer of `0.42 * 15 um`; the bottom metal fill factor is zero in the report table.
 - Main FPC reference values from page 2 should be logged for later implementation: connector width `12.5476 mm`, body width `9.1186 mm`, sensor-to-main-FPC center distance about `17.385-17.392 mm`, RSU overlap `1 mm`, and top/bottom fill factors `0.45/0.68`.
 
 Main FPC to-do:

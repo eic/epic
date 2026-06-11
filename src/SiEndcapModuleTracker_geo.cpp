@@ -253,15 +253,9 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         description.constant<double>("SiEndcapModule6RSU_left_extension") +
         description.constant<double>("SiEndcapModule6RSU_sensor_left_margin") +
         rsu_chain_length / 2.0;
-    const double left_bridge_fpc_stack =
-        description.constant<double>("SiEndcapLeftBridgeFPC_bottomAl_thickness") +
+    const double bridge_fpc_stack =
         description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
-        description.constant<double>("SiEndcapLeftBridgeFPC_topAl_thickness");
-    const double right_bridge_fpc_stack =
-        description.constant<double>("SiEndcapRightBridgeFPC_bottomAl_thickness") +
-        description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
-        description.constant<double>("SiEndcapRightBridgeFPC_topAl_thickness");
-    const double bridge_fpc_stack = std::max(left_bridge_fpc_stack, right_bridge_fpc_stack);
+        description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
     const array<ComponentTemplate, 4> components{{
         {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber", "SVTSupportVis",
          false, -1.0, -1.0},
@@ -1093,21 +1087,19 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       };
 
       auto place_bridge_fpc = [&](const string& name, double box_x, double box_y, double pos_x,
-                                  double pos_y, double bottom_al_thickness,
-                                  double top_al_thickness) {
+                                  double pos_y) {
         const double kapton_thickness =
             description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
-        const double stack_thickness = bottom_al_thickness + kapton_thickness + top_al_thickness;
+        const double aluminum_thickness =
+            description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+        const double stack_thickness = kapton_thickness + aluminum_thickness;
         double layer_z               = z_position - stack_thickness / 2.0;
 
-        place_passive_box(name + "_bottom_al", box_x, box_y, bottom_al_thickness, pos_x, pos_y,
-                          layer_z + bottom_al_thickness / 2.0, "Aluminum", "SVTReadoutVis");
-        layer_z += bottom_al_thickness;
         place_passive_box(name + "_kapton", box_x, box_y, kapton_thickness, pos_x, pos_y,
                           layer_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
         layer_z += kapton_thickness;
-        place_passive_box(name + "_top_al", box_x, box_y, top_al_thickness, pos_x, pos_y,
-                          layer_z + top_al_thickness / 2.0, "Aluminum", "SVTReadoutVis");
+        place_passive_box(name + "_aluminum", box_x, box_y, aluminum_thickness, pos_x, pos_y,
+                          layer_z + aluminum_thickness / 2.0, "Aluminum", "SVTReadoutVis");
       };
 
       auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
@@ -1134,13 +1126,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           bridge_fpc_x_geometry(!lec_after_rsu, rec_side_span, right_bridge_x);
 
       place_bridge_fpc(_toString(component_id, "component%d_left_bridge_fpc"), left_bridge_box_x,
-                       left_bridge_y, left_bridge_pos_x, 0.0,
-                       description.constant<double>("SiEndcapLeftBridgeFPC_bottomAl_thickness"),
-                       description.constant<double>("SiEndcapLeftBridgeFPC_topAl_thickness"));
+                       left_bridge_y, left_bridge_pos_x, 0.0);
       place_bridge_fpc(_toString(component_id, "component%d_right_bridge_fpc"), right_bridge_box_x,
-                       right_bridge_y, right_bridge_pos_x, 0.0,
-                       description.constant<double>("SiEndcapRightBridgeFPC_bottomAl_thickness"),
-                       description.constant<double>("SiEndcapRightBridgeFPC_topAl_thickness"));
+                       right_bridge_y, right_bridge_pos_x, 0.0);
     } else {
       string component_name = _toString(component_id, "component%d");
       Box comp_solid(comp_x / 2.0, comp_y / 2.0, component.thickness / 2.0);

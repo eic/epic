@@ -126,14 +126,12 @@ Bridge FPCs are good candidates for the next simple module-local approximation b
 left bridge FPC:
   implemented rectangular approximation: 27.432 mm x 10.0 mm
   stack approximation:    80 um Kapton
-                          + (0.69 * 15 um) effective aluminum
-                          + (0.94 * 15 um) effective aluminum
+                          + 30 um Aluminum
 
 right bridge FPC:
   implemented rectangular approximation: 19.7612 mm x 4.0 mm
   stack approximation:    80 um Kapton
-                          + (0.42 * 15 um) effective aluminum
-                          + no bottom metal layer in the current table
+                          + 30 um Aluminum
 ```
 
 The left-bridge width was rounded to `10.0 mm` so it fits the `11.0 mm` LEC-side span with `0.5 mm` clearance to the LEC and `0.5 mm` clearance to the module edge. The right-bridge width was rounded to `4.0 mm` so it fits the `5.0 mm` REC-side span with the same two `0.5 mm` clearances. These are rectangular material-equivalent approximations, not exact outline models.
