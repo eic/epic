@@ -556,9 +556,11 @@ Roadmap:
 - Phase 6: add simple passive LEC/REC detail.
 - Phase 7: make corrugation geometry flexible by allowing row-wise `h`, `d`, and `theta` values for each disk through a dedicated corrugation CSV.
 - Phase 8: add FPC and AncASIC detail.
-- Phase 9: update the real placement CSV for corrugated-informed geometry and change the placement reference point from the bottom-left corner to the midpoint at the RSU-LEC boundary.
-- Phase 10: run `eicrecon`/ACTS compatibility and performance checks.
-- Phase 11: cleanup temporary files and prepare the pull request.
+- Phase 9: localized adhesive pass. This supersedes the earlier Phase 9 numbering below.
+- Phase 10: fine-tune bridge-FPC dimensions and add a simplified AncASIC on the left bridge FPC.
+- Phase 11: update the real placement CSV for corrugated-informed geometry and change the placement reference point from the bottom-left corner to the midpoint at the RSU-LEC boundary.
+- Phase 12: run `eicrecon`/ACTS compatibility and performance checks.
+- Phase 13: cleanup temporary files and prepare the pull request.
 
 Validation:
 - Documentation-only update. No geometry build or overlap checks run.
@@ -767,7 +769,7 @@ Intent:
 Implementation:
 - Renumbered flexible corrugation geometry as Phase 7.
 - Renumbered FPC / AncASIC detail as Phase 8.
-- Kept production placement CSV migration as Phase 9, reconstruction/ACTS validation as Phase 10, and cleanup/PR preparation as Phase 11.
+- Kept production placement CSV migration as Phase 9, reconstruction/ACTS validation as Phase 10, and cleanup/PR preparation as Phase 11 at that time. This numbering is superseded by the 2026-06-11 localized-adhesive Phase 9 update.
 - Updated the Phase 7a corrugation row CSV scaffold log entry.
 - Marked the older May roadmap entry as superseded instead of leaving conflicting phase numbers.
 
@@ -1024,3 +1026,146 @@ To-do:
 - In the real design, the top edge of the left bridge FPC should align with the top edge of the RSU.
 - Because the left bridge FPC y span is larger than the RSU/module y span, that alignment will force the lower part of the left bridge FPC to extend below the current module envelope.
 - Before implementing this, decide whether the module parent volume should be enlarged in y for this passive feature, or whether the FPC should be represented outside the module-local prototype in a higher-level placement.
+
+## 2026-06-11 UTC - Phase 9 localized adhesive roadmap
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make localized adhesive the new Phase 9 before production placement migration.
+- Avoid overestimating passive material by smearing glue over the full carbon fiber sheet.
+
+Roadmap update:
+- Phase 9: localized adhesive pass.
+- Phase 10: FPC dimension tuning and AncASIC detail.
+- Phase 11: production placement CSV migration and reference-point update.
+- Phase 12: reconstruction / ACTS validation.
+- Phase 13: cleanup and PR preparation.
+
+Implementation plan:
+- Remove the full-footprint corrugated adhesive layer.
+- Add localized adhesive under the RSU silicon/electronics band.
+- Add localized adhesive under LEC and REC.
+- Add localized adhesive under bridge FPCs.
+- Keep `SiEndcapAdhesive_thickness` as the shared XML-driven adhesive thickness for now.
+
+Validation:
+- Run geometry export and visual inspection after localized adhesive boxes are added.
+- Run overlap checks after the localized adhesive model is complete.
+
+## 2026-06-11 UTC - Phase 9a remove full-footprint corrugated adhesive
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Start the localized adhesive pass by removing the full-module corrugated adhesive sheet.
+
+Implementation:
+- Removed the full-footprint `SiEndcapAdhesive_thickness` component from the `EIC_LAS_6RSU_CORR` module stack.
+- Kept `SiEndcapAdhesive_thickness` in XML for the next step, where it should be used by localized adhesive boxes under RSU, LEC, REC, and bridge FPC features.
+- Added an XML comment making this transitional use explicit.
+
+Validation:
+- Run `git diff --check`.
+- Next validation should rebuild/export and confirm the continuous glue sheet is gone.
+
+## 2026-06-11 UTC - Phase 9b add localized RSU-band adhesive
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add back adhesive material only under the RSU silicon/electronics band instead of across the full carbon fiber support sheet.
+
+Implementation:
+- Added an `SVT_Endcap_Glue` component to the corrugated 6-RSU stack with local dimensions:
+  - x: `6 * SiEndcapRSU_length`
+  - y: `SiEndcapRSU_width`
+  - x offset: the same handed RSU-chain center used by the sensor/electronics band
+- Kept `SiEndcapAdhesive_thickness` as the glue thickness.
+- Used the existing default local component placement path, so the adhesive is a single passive box rather than a tiled sensitive pattern.
+- This restores the adhesive layer in the z stack for the RSU band without reintroducing a full-footprint glue sheet.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm the glue volume is localized under the RSU band.
+- Later Phase 9 steps should add separate localized adhesive under LEC, REC, and bridge FPCs.
+
+## 2026-06-11 UTC - Phase 9c add localized LEC/REC adhesive
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add localized adhesive under the LEC and REC passive electronics boxes.
+- Keep LEC/REC glue placement tied to the same handedness convention as the LEC/REC boxes themselves.
+
+Implementation:
+- Added a corrugated adhesive placement pattern for the glue component.
+- The pattern places:
+  - one RSU-band glue box,
+  - one LEC glue box,
+  - one REC glue box.
+- LEC/REC glue boxes use the same x/y dimensions as the corresponding LEC/REC electronics boxes.
+- LEC/REC glue x offsets use the same `left`/`right` handedness swap as the electronics layer.
+- Kept all adhesive boxes in the `SiEndcapAdhesive_thickness` z layer and material `SVT_Endcap_Glue`.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm LEC/REC glue appears under the LEC/REC boxes and mirrors with handedness.
+- Next Phase 9 step should add localized bridge-FPC adhesive.
+
+## 2026-06-11 UTC - Phase 9d add localized bridge FPC adhesive
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add localized adhesive under the left and right bridge FPC footprints.
+- Keep bridge-FPC glue tied to the same handed x-placement as the bridge FPC material boxes.
+
+Implementation:
+- Extended the corrugated adhesive placement pattern to add:
+  - one left bridge FPC glue box,
+  - one right bridge FPC glue box.
+- Reused the bridge-FPC side-span and `SiEndcapModuleEndClearance` placement convention.
+- Bridge-FPC glue boxes use the same x/y dimensions as the corresponding bridge FPC material footprints.
+- Kept the current centered-y approximation; the known left-FPC y-alignment follow-up still applies.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm bridge-FPC glue appears under the bridge FPC boxes and mirrors with handedness.
+
+## 2026-06-11 UTC - Add Phase 10 FPC dimension tuning and AncASIC detail
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the next geometry phase while Phase 9 tests are running.
+- Keep FPC fine-tuning and the first AncASIC approximation separate from production CSV migration.
+
+Roadmap update:
+- Added Phase 10: FPC dimension tuning and AncASIC detail.
+- Renumbered production placement CSV migration to Phase 11.
+- Renumbered reconstruction / ACTS validation to Phase 12.
+- Renumbered cleanup and PR preparation to Phase 13.
+
+Phase 10 scope:
+- Fine-tune left/right bridge-FPC dimensions against the latest drawing/report interpretation.
+- Revisit the known left bridge-FPC y-placement issue and decide whether the module parent y-envelope must grow.
+- Add a simplified passive AncASIC box/material approximation on the left bridge FPC.
+- Keep the bridge-FPC material stack simple: one Kapton layer plus one effective aluminum layer.
+- Keep main FPC implementation deferred until row-dependent length handling is clearer.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.

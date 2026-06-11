@@ -63,6 +63,7 @@
     </comment>
     <comment> Effective thickness from Nikki's disk material budget, 2026-06-09. </comment>
     <constant name="SiEndcapSensor_thickness"                value="65*um"/>
+    <comment> Used for localized glue boxes in the Phase 9 adhesive pass. </comment>
     <constant name="SiEndcapAdhesive_thickness"              value="80*um"/>
     <constant name="SiEndcapModuleCF_thickness"              value="150*um"/>
 

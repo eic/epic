@@ -429,7 +429,58 @@ Validation:
 - Repeat geometry export, visual handedness inspection, and overlap checks.
 - Confirm the added passive features do not change sensitive-volume placement or sensor IDs unexpectedly.
 
-### Phase 9: Production Placement CSV Migration
+### Phase 9: Localized Adhesive Pass
+
+Replace the current full-footprint adhesive approximation with localized glue/adhesive boxes tied to the passive or sensitive features they bond.
+
+Scope:
+
+- Remove the full-module adhesive layer from `EIC_LAS_6RSU_CORR`.
+- Add localized adhesive under the RSU silicon/electronics band.
+- Add localized adhesive under LEC and REC.
+- Add localized adhesive under bridge FPCs.
+- Keep `SiEndcapAdhesive_thickness` as the shared XML-driven adhesive thickness unless a later design gives separate values.
+- Preserve sensitive-volume IDs and surfaces while adjusting the passive local material model.
+
+Implementation notes:
+
+- The first implementation step removes the full-footprint corrugated adhesive component.
+- Later steps should add local adhesive boxes in the same placement helpers that place RSU, LEC, REC, and bridge FPC geometry.
+- Validate z placement carefully because adhesive changes the material stack and module envelope.
+- Decide separately how to handle adhesive for future main FPC / AncASIC geometry.
+
+Validation:
+
+- Geometry export and visual inspection should confirm adhesive is no longer a full sheet.
+- Confirm localized adhesive appears only under intended module parts.
+- Run overlap checks after localized adhesive boxes are added.
+- Confirm sensitive surfaces and sensor IDs are unchanged unless an intentional z-envelope update is made.
+
+### Phase 10: FPC Dimension Tuning and AncASIC Detail
+
+Refine the bridge-FPC approximations after the localized adhesive pass, before migrating the production placement CSV.
+
+Scope:
+
+- Fine-tune left/right bridge-FPC dimensions against the latest drawing/report interpretation.
+- Revisit the known left bridge-FPC y-placement issue:
+  - align the top edge of the left bridge FPC with the top edge of the RSU,
+  - decide whether the module parent volume needs a y-envelope update if the FPC extends below the current module footprint.
+- Add a simplified passive AncASIC representation on the left bridge FPC.
+- Keep the material model simple unless the design requires more detail:
+  - one Kapton layer,
+  - one effective aluminum layer,
+  - one simple AncASIC material/box approximation.
+- Keep the main FPC deferred until row-dependent lengths and ownership in the geometry builder are clearer.
+
+Validation:
+
+- Geometry export and visual inspection of both handedness cases.
+- Confirm the left bridge FPC and AncASIC mirror correctly with handedness.
+- Confirm FPC/AncASIC additions do not overlap LEC, REC, RSUs, or the module parent volume.
+- Run overlap checks before moving to production placement CSV migration.
+
+### Phase 11: Production Placement CSV Migration
 
 Update the real placement CSV to use corrugated-informed geometry and the new reference point convention.
 
@@ -458,7 +509,7 @@ Validation:
 - Run both overlap checks again.
 - Confirm the expanded `sensor` bitfield remains sufficient for all sensitive volumes.
 
-### Phase 10: Reconstruction / ACTS Validation
+### Phase 12: Reconstruction / ACTS Validation
 
 Run a more thorough reconstruction validation after the updated production placement and corrugated geometry migration.
 
@@ -474,7 +525,7 @@ Validation:
 - Record command, detector XML/config, input events, and result summary in the implementation log.
 - Compare compatibility/performance against the previous reference geometry or agreed baseline.
 
-### Phase 11: Cleanup and PR Preparation
+### Phase 13: Cleanup and PR Preparation
 
 After electronics detail, flexible corrugation geometry, production placement, overlap checks, and reconstruction validation pass:
 

@@ -48,6 +48,7 @@ struct ComponentTemplate {
   bool rsu_end_electronics{false};
   bool lec_after_rsu{false};
   bool rsu_bridge_fpc_pattern{false};
+  bool rsu_adhesive_pattern{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -260,7 +261,8 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber", "SVTSupportVis",
          false, -1.0, -1.0},
         {description.constant<double>("SiEndcapAdhesive_thickness"), "SVT_Endcap_Glue",
-         "SVTGlueVis", false, -1.0, -1.0},
+         "SVTGlueVis", false, rsu_chain_length, description.constant<double>("SiEndcapRSU_width"),
+         sensor_x_offset, 0.0, 1, false, true, false, false, true},
         {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "SVTSensorVis", true,
          rsu_chain_length, description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
          6, true, true},
@@ -311,10 +313,16 @@ ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate 
     if (component.rsu_bridge_fpc_pattern) {
       component.x_offset = sensor_x_offset;
     }
+    if (component.rsu_adhesive_pattern) {
+      component.x_offset = sensor_x_offset;
+    }
     if (component.rsu_end_electronics) {
       component.lec_after_rsu = handedness == "right";
     }
     if (component.rsu_bridge_fpc_pattern) {
+      component.lec_after_rsu = handedness == "right";
+    }
+    if (component.rsu_adhesive_pattern) {
       component.lec_after_rsu = handedness == "right";
     }
   }
@@ -1070,6 +1078,64 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           }
         }
       }
+    } else if (component.rsu_adhesive_pattern) {
+      auto place_adhesive_box = [&](const string& name, double box_x, double box_y, double pos_x,
+                                    double pos_y) {
+        if (box_x <= 0.0 || box_y <= 0.0) {
+          return;
+        }
+        Box box_solid(box_x / 2.0, box_y / 2.0, component.thickness / 2.0);
+        Volume box_volume(name, box_solid, material);
+        box_volume.setVisAttributes(description.visAttributes(component.vis));
+        prototype.volume.placeVolume(
+            box_volume,
+            Position(component.x_offset + pos_x, component.y_offset + pos_y, z_position));
+      };
+
+      place_adhesive_box(_toString(component_id, "component%d_rsu_glue"), comp_x, comp_y, 0.0,
+                         0.0);
+
+      const double lec_length = description.constant<double>("SiEndcapLEC_length");
+      const double rec_length = description.constant<double>("SiEndcapREC_length");
+      const double lec_width  = description.constant<double>("SiEndcapLEC_width");
+      const double rec_width  = description.constant<double>("SiEndcapREC_width");
+      const double lec_x      = component.lec_after_rsu ? comp_x / 2.0 + lec_length / 2.0
+                                                        : -comp_x / 2.0 - lec_length / 2.0;
+      const double rec_x      = component.lec_after_rsu ? -comp_x / 2.0 - rec_length / 2.0
+                                                        : comp_x / 2.0 + rec_length / 2.0;
+
+      place_adhesive_box(_toString(component_id, "component%d_lec_glue"), lec_length, lec_width,
+                         lec_x, 0.0);
+      place_adhesive_box(_toString(component_id, "component%d_rec_glue"), rec_length, rec_width,
+                         rec_x, 0.0);
+
+      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
+        const double clearance   = description.constant<double>("SiEndcapModuleEndClearance");
+        const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
+        const double available_x = side_span - 2.0 * clearance;
+        const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
+        const double box_center =
+            after_rsu ? module_edge - clearance - box_x / 2.0
+                      : module_edge + clearance + box_x / 2.0;
+        return std::make_tuple(box_x, box_center - component.x_offset);
+      };
+
+      const double lec_side_span = description.constant<double>("SiEndcapModule6RSU_left_extension");
+      const double rec_side_span = description.constant<double>("SiEndcapModule6RSU_right_extension");
+      const double left_bridge_x  = description.constant<double>("SiEndcapLeftBridgeFPC_width");
+      const double left_bridge_y  = description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const double right_bridge_x = description.constant<double>("SiEndcapRightBridgeFPC_width");
+      const double right_bridge_y = description.constant<double>("SiEndcapRightBridgeFPC_length");
+      const bool lec_after_rsu    = component.lec_after_rsu;
+      const auto [left_bridge_box_x, left_bridge_pos_x] =
+          bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, left_bridge_x);
+      const auto [right_bridge_box_x, right_bridge_pos_x] =
+          bridge_fpc_x_geometry(!lec_after_rsu, rec_side_span, right_bridge_x);
+
+      place_adhesive_box(_toString(component_id, "component%d_left_bridge_fpc_glue"),
+                         left_bridge_box_x, left_bridge_y, left_bridge_pos_x, 0.0);
+      place_adhesive_box(_toString(component_id, "component%d_right_bridge_fpc_glue"),
+                         right_bridge_box_x, right_bridge_y, right_bridge_pos_x, 0.0);
     } else if (component.rsu_bridge_fpc_pattern) {
       auto place_passive_box = [&](const string& name, double box_x, double box_y,
                                    double box_thickness, double pos_x, double pos_y,
