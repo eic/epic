@@ -37,21 +37,14 @@
     <constant name="SiEndcapRSU_powerswitch_width"           value="0.02*mm"/>
 
     <constant name="SiEndcapModule_width_corrugated"         value="32.0*mm"/>
-    <constant name="SiEndcapModule_inner_width_corrugated"   value="29.0*mm"/>
-    <constant name="SiEndcapRSU_y_margin"                    value="6.22*mm"/>
-    <constant name="SiEndcapModule_support_bottom_cut_width" value="3.0*mm"/>
 
-    <constant name="SiEndcapModule6RSU_strip_length"         value="136.02*mm"/>
     <constant name="SiEndcapModule6RSU_package_length"       value="152.02*mm"/>
     <constant name="SiEndcapModule6RSU_left_extension"       value="11.0*mm"/>
     <constant name="SiEndcapModule6RSU_right_extension"      value="5.0*mm"/>
     <constant name="SiEndcapModule6RSU_sensor_left_margin"   value="4.5*mm"/>
     <constant name="SiEndcapModule6RSU_sensor_right_margin"  value="1.5*mm"/>
-    <constant name="SiEndcapModule6RSU_left_cut_length"      value="11.0*mm"/>
-    <constant name="SiEndcapModule6RSU_right_cut_length"     value="5.0*mm"/>
 
     <constant name="SiEndcapSensor_thickness"                value="50*um"/>
-    <constant name="SiEndcapFPC_thickness"                   value="115*um"/>
     <constant name="SiEndcapAdhesive_thickness"              value="80*um"/>
     <constant name="SiEndcapModuleCF_thickness"              value="150*um"/>
 
@@ -70,9 +63,20 @@
 
     <comment>
       FPC dimensions are kept separate from LEC/REC chip-like placeholders.
+      Bridge FPCs are local end/readout features. Main FPC geometry is
+      row-dependent and intentionally deferred until the placement-reference
+      migration is stable.
     </comment>
-    <constant name="SiEndcapLECFPC_width"                    value="7.0*mm"/>
-    <constant name="SiEndcapRECFPC_width"                    value="4.0*mm"/>
+    <constant name="SiEndcapBridgeFPC_Kapton_thickness"      value="80*um"/>
+    <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="15*um"/>
+    <constant name="SiEndcapLeftBridgeFPC_length"            value="27.432*mm"/>
+    <constant name="SiEndcapLeftBridgeFPC_width"             value="10.0*mm"/>
+    <constant name="SiEndcapLeftBridgeFPC_topAl_thickness"   value="0.69*SiEndcapBridgeFPC_Aluminum_thickness"/>
+    <constant name="SiEndcapLeftBridgeFPC_bottomAl_thickness" value="0.94*SiEndcapBridgeFPC_Aluminum_thickness"/>
+    <constant name="SiEndcapRightBridgeFPC_length"           value="19.7612*mm"/>
+    <constant name="SiEndcapRightBridgeFPC_width"            value="4.0*mm"/>
+    <constant name="SiEndcapRightBridgeFPC_topAl_thickness"  value="0.42*SiEndcapBridgeFPC_Aluminum_thickness"/>
+    <constant name="SiEndcapRightBridgeFPC_bottomAl_thickness" value="0.0*um"/>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
 
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.2*mm"/>

@@ -181,9 +181,9 @@ Implementation:
 - Added six-RSU corrugated package dimensions:
   - `SiEndcapModule_width_corrugated = 32.0*mm`
   - `SiEndcapModule6RSU_package_length = 152.02*mm`
-  - `SiEndcapModule6RSU_strip_length = 136.02*mm`
-  - end extensions, sensor-strip margins, and retained cutout dimensions.
-- Added new corrugated-module thickness constants for sensor, FPC, adhesive, and CF.
+  - end extensions and sensor-strip margins.
+- Kept strip decomposition, CF cutout dimensions, and y-margin values as drawing/documentation notes until they are wired into geometry.
+- Added new corrugated-module thickness constants for sensor, adhesive, and CF.
 - Recorded placeholder material choices in the project guide:
   - FPC/base flex: `Kapton`
   - optional metal traces/readout strips: `Copper`
@@ -603,7 +603,7 @@ Intent:
 Implementation:
 - Removed temporary `SiEndcapFEC_*` aliases.
 - Kept `SiEndcapLEC_length = 4.5 mm` and `SiEndcapREC_length = 1.5 mm`.
-- Kept `SiEndcapLECFPC_width` and `SiEndcapRECFPC_width`.
+- Removed unused legacy LEC/REC FPC width constants after the bridge FPC constants were introduced.
 - Removed zero-valued LEC/REC gap constants; these can be reintroduced later if a real physical gap is specified.
 - Updated the current roadmap wording from LEC/FEC to LEC/REC.
 
@@ -773,3 +773,218 @@ Implementation:
 
 Validation:
 - Documentation-only update; run `git diff --check`.
+
+## 2026-06-08 UTC - Phase 8 FPC planning notes
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the FPC design-report dimensions before implementing Phase 8 geometry.
+- Keep the main FPC explicitly deferred because its length is row-dependent.
+
+Implementation notes:
+- Phase 8 should start with simple, parameterized bridge FPC geometry.
+- The left bridge FPC can use a first-pass rectangular approximation of `27.432 mm x 10.0 mm`.
+- The right bridge FPC can use a first-pass rectangular approximation of `19.7612 mm x 4.0 mm`.
+- The bridge FPC stack can be approximated as `80 um` Kapton plus effective aluminum layers from the reported fill factors.
+- The main FPC should be treated as a later row-level geometry feature, not a fixed module-local box.
+
+Main FPC to-do:
+- Preserve page-2 reference values for later implementation: connector width `12.5476 mm`, body width `9.1186 mm`, sensor-to-main-FPC center distance about `17.385-17.392 mm`, RSU overlap `1 mm`, and top/bottom fill factors `0.45/0.68`.
+- Decide whether main FPC length should be derived from the production placement CSV or a dedicated row-level FPC CSV.
+- Implement and validate main FPC only after the row placement/reference-point migration is stable.
+
+Validation:
+- Documentation-only update; run `git diff --check`.
+
+## 2026-06-08 UTC - Phase 8a bridge FPC XML scaffold
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add explicit XML constants for first-pass bridge FPC geometry before touching the DD4hep placement code.
+- Keep main FPC implementation deferred because its length is row-dependent.
+
+Implementation:
+- Added shared bridge FPC Kapton and nominal aluminum thickness constants.
+- Added left bridge FPC rectangular-approximation dimensions: `27.432 mm x 10.0 mm`.
+- Added left bridge FPC effective aluminum thicknesses from the report fill factors: `0.69 * 15 um` and `0.94 * 15 um`.
+- Added right bridge FPC rectangular-approximation dimensions: `19.7612 mm x 4.0 mm`.
+- Added right bridge FPC effective aluminum thicknesses from the report fill factors: `0.42 * 15 um` and `0.0 um`.
+- Bridge FPC thickness is represented by explicit Kapton and effective aluminum layer constants.
+
+Validation:
+- Run `git diff --check`.
+- Next implementation step should wire these constants into the corrugated module builder as passive, non-sensitive local boxes.
+
+## 2026-06-08 UTC - Phase 8b bridge FPC passive boxes
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Place the first-pass bridge FPC material in the corrugated 6-RSU module prototype.
+- Keep bridge FPCs passive and separate from sensitive RSU tile volumes.
+
+Implementation:
+- Added a dedicated bridge-FPC component pattern to the module-template builder.
+- Placed bridge FPCs as a separate passive layer above the sensor layer so the FPC stack does not inflate the active sensor thickness.
+- Used report `height` as the local-y span and report `width` as the local-x span.
+- Placed the left bridge FPC on the LEC side and the right bridge FPC on the REC side.
+- Mirrored the FPC side assignment with the existing module handedness convention.
+- Built each bridge FPC as layered boxes:
+  - bottom effective aluminum, skipped when the thickness is zero
+  - Kapton
+  - top effective aluminum
+- Used `Kapton` and `Aluminum` materials with `SVTReadoutVis`.
+
+Assumptions:
+- The bridge FPC rectangular equivalents are material approximations, not exact outlines.
+- The main FPC remains deferred because its length depends on row-level module placement.
+
+Validation:
+- Run `git diff --check`.
+- Next validation should rebuild/export and visually confirm the bridge FPC volumes move with left/right handedness.
+
+Local validation note:
+- `git diff --check` passed in the plain login-shell environment.
+- A build/install validation script was added at `tmp/validate_phase8_bridge_fpc_2026-06-08.sh`.
+- Running the build script from the plain shell was blocked because the configured EPIC toolchain file `/opt/local/etc/cmake/find_package_resolve_symlinks.cmake` was not available.
+- Re-run the script from the usual `eic-shell`/container environment before visual inspection.
+
+## 2026-06-08 UTC - Phase 8b bridge FPC x-placement refinement
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix the visual-export warning where a bridge FPC was centered in a short `6.524 mm` end gap.
+- Keep bridge FPC boxes inside the module parent envelope while allowing them to overlap inward over the RSU footprint in their own passive z-layer.
+
+Implementation:
+- Replaced the side-gap-centering helper with an edge-aware x-placement helper.
+- If a bridge FPC fits inside the local end gap, it remains centered in that gap.
+- If it is wider than the local end gap, it is placed flush with the package edge and allowed to extend inward over the RSU footprint.
+- Removed the warning for this expected oversized-end-gap case.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export again and confirm the previous bridge-FPC width warning is gone.
+
+## 2026-06-10 UTC - Phase 8b bridge FPC handedness and clearance fix
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix visual-inspection feedback that the bridge FPC x offsets were not mirroring correctly.
+- Enforce the intended `0.5 mm` gap between each endcap piece and its bridge FPC, and another `0.5 mm` gap between each bridge FPC and the module edge.
+
+Root cause:
+- The bridge-FPC component used the default left-handed RSU-chain `x_offset`.
+- `with_corrugated_handedness(...)` updated the sensitive RSU component offset, but did not update the bridge-FPC component offset.
+- As a result, the LEC/REC boxes and bridge FPC boxes could be referenced to different RSU-chain centers after handedness was applied.
+- The previous edge-aware helper also did not explicitly place FPCs between the LEC/REC outer edge and the module edge with the requested clearances.
+
+Implementation:
+- Updated the bridge-FPC component `x_offset` with the same handed RSU-chain offset used by the sensitive RSU component.
+- Replaced the bridge-FPC x placement helper with one that uses:
+  - the handed RSU-chain edge,
+  - the LEC or REC length,
+  - the module edge,
+  - and `SiEndcapModuleEndClearance`.
+- Left bridge FPC is placed between the LEC outer edge and the nearest module edge.
+- Right bridge FPC is placed between the REC outer edge and the nearest module edge.
+- The implemented FPC widths are chosen to preserve both `0.5 mm` gaps.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm:
+  - left/right FPCs move with handedness,
+  - each FPC is between its corresponding endcap and module edge,
+  - the `0.5 mm` endcap-FPC and FPC-edge gaps are visible.
+
+## 2026-06-10 UTC - Phase 8b remove handedness-dependent FPC width
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Remove the small handedness-dependent bridge-FPC x span caused by recomputing the available end space from rounded RSU/endcap dimensions.
+
+Root cause:
+- The FPC placement helper used the actual RSU-chain edge plus LEC/REC length to infer the remaining end space.
+- The constants are slightly over-constrained: `6 * 21.666 + 4.5 + 1.5 = 135.996 mm`, while the drawing-level strip length is `136.02 mm`.
+- That `0.024 mm` difference made the inferred LEC-side and REC-side clear spans differ by handedness after mirroring.
+
+Implementation:
+- Bridge FPC x placement now uses the nominal side spans directly:
+  - LEC side: `SiEndcapModule6RSU_left_extension`
+  - REC side: `SiEndcapModule6RSU_right_extension`
+- This makes the placed FPC x span independent of handedness.
+- With `SiEndcapModuleEndClearance = 0.5 mm`, the LEC-side available bridge-FPC x span is `10.0 mm`.
+- The implemented left bridge FPC x span is therefore set to `10.0 mm`, so the dimensions remain exactly mirrored under handedness.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and confirm the FPC dimensions and offsets are mirrored exactly.
+
+## 2026-06-10 UTC - Remove unused legacy FPC width constants
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `SVT_ENDCAP_CORRUGATED_RSU_HANDOFF.md`
+
+Intent:
+- Remove obsolete LEC/REC FPC width names now that bridge FPC dimensions are represented by explicit left/right bridge constants.
+
+Implementation:
+- Deleted the obsolete legacy LEC/REC FPC width constants from the active XML.
+- Updated old documentation/log references so they do not preserve the dead constant names as active implementation guidance.
+
+Validation:
+- Run `git diff --check`.
+- Search for the obsolete legacy names to confirm no references remain.
+
+## 2026-06-10 UTC - Audit and remove unused corrugated XML constants
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_RSU_HANDOFF.md`
+
+Intent:
+- Remove `SiEndcap...` constants that were only scaffolding and had no active C++ or XML-attribute references.
+- Keep drawing-derived values in documentation when they are useful for future implementation, but stop presenting them as active XML variables.
+
+Removed active XML constants:
+- Generic FPC thickness, superseded by explicit bridge FPC Kapton/aluminum layer constants.
+- Corrugated inner/support cutout dimensions that are not yet modeled.
+- Drawing-level strip length, since current placement derives RSU-chain and end features from the active package/extension/margin constants.
+- Left/right CF bottom-cut lengths, since the cutouts are intentionally ignored at this stage.
+- RSU y margin, since current code directly uses the RSU width and package width.
+
+Validation:
+- Run an active-reference audit for all `SiEndcap...` constants in `compact/tracking/silicon_disks_modules.xml`.
+- Run `git diff --check`.
+
+## 2026-06-10 UTC - Phase 8 bridge FPC y-placement follow-up
+
+To-do:
+- Revisit the left/LEC-side bridge FPC y placement.
+- The current implementation centers the rectangular left bridge FPC in local y, so the whole FPC remains contained within the module parent volume and its center aligns with the RSU band.
+- In the real design, the top edge of the left bridge FPC should align with the top edge of the RSU.
+- Because the left bridge FPC y span is larger than the RSU/module y span, that alignment will force the lower part of the left bridge FPC to extend below the current module envelope.
+- Before implementing this, decide whether the module parent volume should be enlarged in y for this passive feature, or whether the FPC should be represented outside the module-local prototype in a higher-level placement.

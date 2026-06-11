@@ -116,6 +116,41 @@ Additional left-side FPC/readout-looking feature callouts:
 diameter 1.50
 ```
 
+## FPC Geometry Considerations
+
+The bridge and main FPC dimensions should be treated separately in the geometry model.
+
+Bridge FPCs are good candidates for the next simple module-local approximation because their dimensions are tied to the local end/readout features:
+
+```text
+left bridge FPC:
+  implemented rectangular approximation: 27.432 mm x 10.0 mm
+  stack approximation:    80 um Kapton
+                          + (0.69 * 15 um) effective aluminum
+                          + (0.94 * 15 um) effective aluminum
+
+right bridge FPC:
+  implemented rectangular approximation: 19.7612 mm x 4.0 mm
+  stack approximation:    80 um Kapton
+                          + (0.42 * 15 um) effective aluminum
+                          + no bottom metal layer in the current table
+```
+
+The left-bridge width was rounded to `10.0 mm` so it fits the `11.0 mm` LEC-side span with `0.5 mm` clearance to the LEC and `0.5 mm` clearance to the module edge. The right-bridge width was rounded to `4.0 mm` so it fits the `5.0 mm` REC-side span with the same two `0.5 mm` clearances. These are rectangular material-equivalent approximations, not exact outline models.
+
+Main FPC should be deferred from the module-local RSU implementation. Page 2 gives useful reference values:
+
+```text
+connector-end width:          12.5476 mm
+body width:                    9.1186 mm
+reference total length:      514.83 mm
+sensor-to-main-FPC distance:  17.385 mm theoretical, 17.392 mm practical
+RSU overlap:                   1.0 mm
+top/bottom fill factors:       0.45 / 0.68
+```
+
+Because the main FPC length varies row by row with the number of modules, it should probably be implemented later as row-level disk geometry, either derived from the production placement CSV or controlled by a dedicated FPC/corrugation-style CSV.
+
 ## Constants Already Matching the Drawing
 
 The existing XML constants in `compact/tracking/silicon_disks_modules.xml` match the drawing well:
@@ -187,18 +222,22 @@ full package width:      30.00
 Candidate constants for implementation:
 
 ```xml
-<constant name="SiEndcapModule6RSU_strip_length"        value="136.02*mm"/>
 <constant name="SiEndcapModule6RSU_package_length"      value="152.02*mm"/>
-<constant name="SiEndcapModule_width_corrugated"        value="30.0*mm"/>
-<constant name="SiEndcapModule_inner_width_corrugated"  value="29.0*mm"/>
-<constant name="SiEndcapModule_support_bottom_cut_width" value="3.0*mm"/>
-<constant name="SiEndcapModule6RSU_left_cut_length"     value="11.0*mm"/>
-<constant name="SiEndcapModule6RSU_right_cut_length"    value="5.0*mm"/>
-<constant name="SiEndcapRSU_y_margin"                   value="6.22*mm"/>
+<constant name="SiEndcapModule_width_corrugated"        value="32.0*mm"/>
 <constant name="SiEndcapModule6RSU_left_extension"      value="11.0*mm"/>
 <constant name="SiEndcapModule6RSU_right_extension"     value="5.0*mm"/>
 <constant name="SiEndcapModule6RSU_sensor_left_margin"  value="4.5*mm"/>
 <constant name="SiEndcapModule6RSU_sensor_right_margin" value="1.5*mm"/>
+```
+
+Drawing-only values not currently represented as active XML constants:
+
+```text
+sensor/readout strip length: 136.02 mm
+carbon fiber inner width:    29.0 mm
+bottom cut width:             3.0 mm
+left/right bottom cuts:      11.0 mm / 5.0 mm
+RSU y margin:                 6.22 mm
 ```
 
 Open validation items before final geometry implementation:
@@ -209,3 +248,5 @@ Open validation items before final geometry implementation:
 - Confirm which end features correspond to LEC, REC, FPC, or mechanical support.
 - Confirm material choices for the non-sensitive package extensions.
 - Confirm whether the small left-side detail dimensions should be represented in DD4hep or treated as simplified envelope material.
+- Confirm bridge FPC orientation and anchoring relative to LEC/REC before implementing the rectangular approximations.
+- Defer main FPC implementation until row-level length and placement conventions are defined.

@@ -223,22 +223,18 @@ Decision:
 
 Add XML constants for the corrugated module dimensions and thicknesses.
 
-Likely constants:
+Active constants:
 
 ```xml
 SiEndcapModule6RSU_package_length
-SiEndcapModule6RSU_strip_length
 SiEndcapModule_width_corrugated = 32.0*mm
-SiEndcapModule_inner_width_corrugated
-SiEndcapRSU_y_margin
-SiEndcapModule_support_bottom_cut_width
-SiEndcapModule6RSU_left_cut_length
-SiEndcapModule6RSU_right_cut_length
 SiEndcapSensor_thickness
-SiEndcapFPC_thickness
 SiEndcapAdhesive_thickness
 SiEndcapModuleCF_thickness
 ```
+
+Drawing-only values such as CF cutouts, RSU y margins, and strip decomposition
+should stay in documentation until they are actually wired into the geometry.
 
 Validation:
 
@@ -409,10 +405,25 @@ Add the next layer of passive electronics detail after the LEC/REC model and fle
 
 Scope:
 
-- Add simple, parameterized FPC geometry.
+- Add simple, parameterized bridge FPC geometry first.
+- Defer main FPC implementation until a row-level model is defined. The main FPC length depends on the number of modules in a row, so it should not be hard-coded as a fixed module-local feature.
 - Add simple, parameterized AncASIC placeholders.
 - Keep materials and dimensions XML-driven where practical.
 - Preserve handedness behavior: all asymmetric electronics features should move consistently with the module handedness.
+
+Current FPC assumptions from `FPC Design Report 20260331.pdf`:
+
+- Left bridge FPC first-pass rectangular approximation: `27.432 mm x 10.0 mm`.
+- Left bridge FPC stack approximation: `80 um` Kapton plus effective aluminum layers of `0.69 * 15 um` and `0.94 * 15 um`.
+- Right bridge FPC first-pass rectangular approximation: `19.7612 mm x 4.0 mm`.
+- Right bridge FPC stack approximation: `80 um` Kapton plus an effective aluminum layer of `0.42 * 15 um`; the bottom metal fill factor is zero in the report table.
+- Main FPC reference values from page 2 should be logged for later implementation: connector width `12.5476 mm`, body width `9.1186 mm`, sensor-to-main-FPC center distance about `17.385-17.392 mm`, RSU overlap `1 mm`, and top/bottom fill factors `0.45/0.68`.
+
+Main FPC to-do:
+
+- Decide whether the main FPC belongs in the disk/row builder rather than the module prototype builder.
+- Add a row-level CSV or derive main FPC length from the production placement CSV after the corrugated reference point migration.
+- Validate row-dependent main FPC lengths with visual inspection and overlap checks before using it in production geometry.
 
 Validation:
 

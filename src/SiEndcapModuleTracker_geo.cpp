@@ -47,6 +47,7 @@ struct ComponentTemplate {
   bool rsu_twelve_tile_pattern{false};
   bool rsu_end_electronics{false};
   bool lec_after_rsu{false};
+  bool rsu_bridge_fpc_pattern{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -252,7 +253,16 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         description.constant<double>("SiEndcapModule6RSU_left_extension") +
         description.constant<double>("SiEndcapModule6RSU_sensor_left_margin") +
         rsu_chain_length / 2.0;
-    const array<ComponentTemplate, 3> components{{
+    const double left_bridge_fpc_stack =
+        description.constant<double>("SiEndcapLeftBridgeFPC_bottomAl_thickness") +
+        description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
+        description.constant<double>("SiEndcapLeftBridgeFPC_topAl_thickness");
+    const double right_bridge_fpc_stack =
+        description.constant<double>("SiEndcapRightBridgeFPC_bottomAl_thickness") +
+        description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
+        description.constant<double>("SiEndcapRightBridgeFPC_topAl_thickness");
+    const double bridge_fpc_stack = std::max(left_bridge_fpc_stack, right_bridge_fpc_stack);
+    const array<ComponentTemplate, 4> components{{
         {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber", "SVTSupportVis",
          false, -1.0, -1.0},
         {description.constant<double>("SiEndcapAdhesive_thickness"), "SVT_Endcap_Glue",
@@ -260,6 +270,9 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         {description.constant<double>("SiEndcapSensor_thickness"), "Silicon", "SVTSensorVis", true,
          rsu_chain_length, description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
          6, true, true},
+        {bridge_fpc_stack, "Kapton", "SVTReadoutVis", false, rsu_chain_length,
+         description.constant<double>("SiEndcapModule_width_corrugated"), sensor_x_offset, 0.0, 1,
+         false, false, false, true},
     }};
 
     for (const auto& component : components) {
@@ -301,7 +314,13 @@ ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate 
     if (component.sensitive) {
       component.x_offset = sensor_x_offset;
     }
+    if (component.rsu_bridge_fpc_pattern) {
+      component.x_offset = sensor_x_offset;
+    }
     if (component.rsu_end_electronics) {
+      component.lec_after_rsu = handedness == "right";
+    }
+    if (component.rsu_bridge_fpc_pattern) {
       component.lec_after_rsu = handedness == "right";
     }
   }
@@ -1057,6 +1076,71 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           }
         }
       }
+    } else if (component.rsu_bridge_fpc_pattern) {
+      auto place_passive_box = [&](const string& name, double box_x, double box_y,
+                                   double box_thickness, double pos_x, double pos_y,
+                                   double local_z, const string& material_name,
+                                   const string& vis) {
+        if (box_x <= 0.0 || box_y <= 0.0 || box_thickness <= 0.0) {
+          return;
+        }
+        Box box_solid(box_x / 2.0, box_y / 2.0, box_thickness / 2.0);
+        Volume box_volume(name, box_solid, description.material(material_name));
+        box_volume.setVisAttributes(description.visAttributes(vis));
+        prototype.volume.placeVolume(
+            box_volume,
+            Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
+      };
+
+      auto place_bridge_fpc = [&](const string& name, double box_x, double box_y, double pos_x,
+                                  double pos_y, double bottom_al_thickness,
+                                  double top_al_thickness) {
+        const double kapton_thickness =
+            description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
+        const double stack_thickness = bottom_al_thickness + kapton_thickness + top_al_thickness;
+        double layer_z               = z_position - stack_thickness / 2.0;
+
+        place_passive_box(name + "_bottom_al", box_x, box_y, bottom_al_thickness, pos_x, pos_y,
+                          layer_z + bottom_al_thickness / 2.0, "Aluminum", "SVTReadoutVis");
+        layer_z += bottom_al_thickness;
+        place_passive_box(name + "_kapton", box_x, box_y, kapton_thickness, pos_x, pos_y,
+                          layer_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
+        layer_z += kapton_thickness;
+        place_passive_box(name + "_top_al", box_x, box_y, top_al_thickness, pos_x, pos_y,
+                          layer_z + top_al_thickness / 2.0, "Aluminum", "SVTReadoutVis");
+      };
+
+      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
+        const double clearance = description.constant<double>("SiEndcapModuleEndClearance");
+        const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
+        const double available_x = side_span - 2.0 * clearance;
+        const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
+        const double box_center =
+            after_rsu ? module_edge - clearance - box_x / 2.0
+                      : module_edge + clearance + box_x / 2.0;
+        return std::make_tuple(box_x, box_center - component.x_offset);
+      };
+
+      const double lec_side_span = description.constant<double>("SiEndcapModule6RSU_left_extension");
+      const double rec_side_span = description.constant<double>("SiEndcapModule6RSU_right_extension");
+      const double left_bridge_x  = description.constant<double>("SiEndcapLeftBridgeFPC_width");
+      const double left_bridge_y  = description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const double right_bridge_x = description.constant<double>("SiEndcapRightBridgeFPC_width");
+      const double right_bridge_y = description.constant<double>("SiEndcapRightBridgeFPC_length");
+      const bool lec_after_rsu    = component.lec_after_rsu;
+      const auto [left_bridge_box_x, left_bridge_pos_x] =
+          bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, left_bridge_x);
+      const auto [right_bridge_box_x, right_bridge_pos_x] =
+          bridge_fpc_x_geometry(!lec_after_rsu, rec_side_span, right_bridge_x);
+
+      place_bridge_fpc(_toString(component_id, "component%d_left_bridge_fpc"), left_bridge_box_x,
+                       left_bridge_y, left_bridge_pos_x, 0.0,
+                       description.constant<double>("SiEndcapLeftBridgeFPC_bottomAl_thickness"),
+                       description.constant<double>("SiEndcapLeftBridgeFPC_topAl_thickness"));
+      place_bridge_fpc(_toString(component_id, "component%d_right_bridge_fpc"), right_bridge_box_x,
+                       right_bridge_y, right_bridge_pos_x, 0.0,
+                       description.constant<double>("SiEndcapRightBridgeFPC_bottomAl_thickness"),
+                       description.constant<double>("SiEndcapRightBridgeFPC_topAl_thickness"));
     } else {
       string component_name = _toString(component_id, "component%d");
       Box comp_solid(comp_x / 2.0, comp_y / 2.0, component.thickness / 2.0);
