@@ -566,6 +566,97 @@ Roadmap:
 Validation:
 - Documentation-only update. No geometry build or overlap checks run.
 
+## 2026-06-18 UTC - Phase 11a add corrugated 6-RSU template to disk-layout scripts
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Start production placement migration by teaching the disk-layout tooling about the `EIC_LAS_6RSU_CORR` module footprint.
+- Keep this first step limited to module dimensions/thickness and CLI aliases.
+
+Implementation:
+- Added an `EIC_LAS_6RSU_CORR` built-in module template to the shared layout helper.
+- Read corrugated package dimensions from XML constants:
+  - `SiEndcapModule6RSU_package_length`
+  - `SiEndcapModule_width_corrugated`
+- Matched the layout/checker thickness estimate to the current DD4hep corrugated stack:
+  - carbon fiber,
+  - adhesive,
+  - effective sensor/readout silicon layer,
+  - bridge-FPC Kapton,
+  - bridge-FPC Aluminum.
+- Added `6RSU_CORR` and `EIC_LAS_6RSU_CORR` as accepted module choices in both layout generators.
+- Updated the disk-layout README with the new corrugated module support and noted that handedness/reference-point CSV support remains a follow-up Phase 11 step.
+
+Validation:
+- `git diff --check` passed.
+- Lightweight template sanity check:
+  - `EIC_LAS_6RSU_CORR` resolves to `152.020 mm x 32.000 mm`.
+  - Estimated total thickness resolves to `0.405 mm`.
+- Generated a one-disk candidate CSV:
+  - `tmp/phase11a_6rsu_corr_candidate.csv`
+  - command used `--module 6RSU_CORR --disk InnerTrackerEndcapN_disk1`.
+- Ran the standalone intrusion checker on that candidate:
+  - total rows: 66
+  - ok rows: 66
+  - invalid rows: 0
+
+Known limitation / next step:
+- The generated CSV still uses the old schema without explicit handedness. The next Phase 11 step should add handedness output and/or the new RSU-LEC-boundary reference-point convention before using generated `_CORR` rows in DD4hep.
+
+## 2026-06-19 UTC - Phase 11b add explicit handedness output to disk-layout generators
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make generated `_CORR` placement rows directly usable by the DD4hep parser requirement that corrugated modules provide explicit `left`/`right` handedness.
+- Keep handedness generation configurable so the placement workflow can be adjusted after visual inspection.
+
+Implementation:
+- Added shared helper functions:
+  - `module_requires_handedness(...)`
+  - `placement_handedness(...)`
+- Added `--corr-handedness-mode` to both disk-layout generators.
+- Supported handedness modes:
+  - `alternate-row`: sort each disk row by x and write `left`, `right`, `left`, `right`, ...
+  - `split-x`: write `left` for module x-center `< 0`, otherwise `right`
+  - `left`: force all generated corrugated rows to `left`
+  - `right`: force all generated corrugated rows to `right`
+- Updated CSV writing so generated `_CORR` layouts include:
+  - `disk,module,x_min_mm,y_min_mm,dz_mm,facing,handedness,enabled,comment`
+- Left non-corrugated CSV output backward compatible without a handedness column.
+- Recorded the handedness mode in the corrugation-generator summary file.
+
+Validation:
+- `git diff --check` passed inside `disk_layout/scripts`.
+- Generated a one-disk handed candidate:
+  - `tmp/phase11b_6rsu_corr_handed_candidate.csv`
+  - command used `--module 6RSU_CORR --disk InnerTrackerEndcapN_disk1`.
+  - default handedness mode: `alternate-row`.
+- Candidate handedness counts:
+  - left: 39
+  - right: 27
+- Row-wise alternation check:
+  - rows checked: 25
+  - violations: 0
+- Ran the standalone intrusion checker on that candidate:
+  - total rows: 66
+  - ok rows: 66
+  - invalid rows: 0
+
+Known limitation / next step:
+- The generated CSV still uses bottom-left `x_min_mm/y_min_mm`. The next Phase 11 step should add the RSU-LEC boundary midpoint reference-point convention, or explicitly decide to keep bottom-left until after visual placement validation.
+
 Known limitations / next step:
 - Before implementing Phase 6, confirm practical first-pass dimensions and placement conventions for the LEC/REC boxes.
 
