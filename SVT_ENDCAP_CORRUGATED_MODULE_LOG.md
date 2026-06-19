@@ -557,10 +557,11 @@ Roadmap:
 - Phase 7: make corrugation geometry flexible by allowing row-wise `h`, `d`, and `theta` values for each disk through a dedicated corrugation CSV.
 - Phase 8: add FPC and AncASIC detail.
 - Phase 9: localized adhesive pass. This supersedes the earlier Phase 9 numbering below.
-- Phase 10: fine-tune bridge-FPC dimensions and add a simplified AncASIC on the left bridge FPC.
+- Phase 10: fine-tune bridge-FPC dimensions and y offsets.
 - Phase 11: update the real placement CSV for corrugated-informed geometry and change the placement reference point from the bottom-left corner to the midpoint at the RSU-LEC boundary.
 - Phase 12: run `eicrecon`/ACTS compatibility and performance checks.
-- Phase 13: cleanup temporary files and prepare the pull request.
+- Phase 13: add a simplified AncASIC on the left bridge FPC and any remaining FPC detail.
+- Phase 14: cleanup temporary files and prepare the pull request.
 
 Validation:
 - Documentation-only update. No geometry build or overlap checks run.
@@ -1039,10 +1040,11 @@ Intent:
 
 Roadmap update:
 - Phase 9: localized adhesive pass.
-- Phase 10: FPC dimension tuning and AncASIC detail.
+- Phase 10: bridge-FPC dimension/y-offset tuning.
 - Phase 11: production placement CSV migration and reference-point update.
 - Phase 12: reconstruction / ACTS validation.
-- Phase 13: cleanup and PR preparation.
+- Phase 13: remaining FPC tuning and AncASIC detail.
+- Phase 14: cleanup and PR preparation.
 
 Implementation plan:
 - Remove the full-footprint corrugated adhesive layer.
@@ -1144,28 +1146,72 @@ Validation:
 - Run `git diff --check`.
 - Rebuild/export and visually confirm bridge-FPC glue appears under the bridge FPC boxes and mirrors with handedness.
 
-## 2026-06-11 UTC - Add Phase 10 FPC dimension tuning and AncASIC detail
+## 2026-06-11 UTC - Add Phase 10 FPC dimension tuning and AncASIC phase
 
 Files changed:
 - `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
 - `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
 
 Intent:
-- Record the next geometry phase while Phase 9 tests are running.
+- Record the FPC fine-tuning geometry phase while Phase 9 tests are running.
 - Keep FPC fine-tuning and the first AncASIC approximation separate from production CSV migration.
 
 Roadmap update:
-- Added Phase 10: FPC dimension tuning and AncASIC detail.
-- Renumbered production placement CSV migration to Phase 11.
-- Renumbered reconstruction / ACTS validation to Phase 12.
-- Renumbered cleanup and PR preparation to Phase 13.
+- Added the FPC dimension tuning and AncASIC detail phase as Phase 10 at that time.
+- The first bridge-FPC dimension/y-offset tuning step remains Phase 10.
+- The later AncASIC/detail portion is deferred to Phase 13 after placement and reconstruction checks.
+- Renumbered cleanup and PR preparation to Phase 14.
 
-Phase 10 scope:
+FPC/AncASIC scope:
 - Fine-tune left/right bridge-FPC dimensions against the latest drawing/report interpretation.
 - Revisit the known left bridge-FPC y-placement issue and decide whether the module parent y-envelope must grow.
 - Add a simplified passive AncASIC box/material approximation on the left bridge FPC.
 - Keep the bridge-FPC material stack simple: one Kapton layer plus one effective aluminum layer.
 - Keep main FPC implementation deferred until row-dependent length handling is clearer.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
+## 2026-06-11 UTC - Phase 10a add bridge-FPC y offsets
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Apply the updated bridge-FPC y-position offsets while keeping the dimensions and placement parameters XML-driven.
+- Interpret the offsets as signed distances from the module top y edge to the corresponding FPC top edge, not as FPC center positions.
+
+Implementation:
+- Added `SiEndcapLeftBridgeFPC_y_offset = -7.5 mm`.
+- Added `SiEndcapRightBridgeFPC_y_offset = -6.22 mm`.
+- Converted the top-edge offsets into FPC center positions using `module_y/2 + offset - FPC_length/2`.
+- Applied those derived y centers to the left and right bridge-FPC Kapton/Aluminum stack placements.
+- Applied the same derived y centers to the matching bridge-FPC glue boxes so adhesive and FPC material stay aligned.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm the bridge-FPC y offsets for both handedness cases.
+- Run overlap checks after visual placement is accepted.
+
+## 2026-06-18 UTC - Increment remaining phase numbers after Phase 10a
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Avoid confusion after the first bridge-FPC dimension/y-offset tuning step was implemented as Phase 10a.
+- Make production placement migration the next phase rather than reusing Phase 10.
+- Keep the remaining AncASIC/FPC fine-tuning deferred until after placement and reconstruction checks.
+
+Roadmap update:
+- Phase 10: bridge-FPC dimension/y-offset tuning.
+- Phase 11: production placement CSV migration and reference-point update.
+- Phase 12: reconstruction / ACTS validation.
+- Phase 13: remaining FPC tuning and AncASIC detail.
+- Phase 14: cleanup and PR preparation.
 
 Validation:
 - Documentation-only update. No geometry build or overlap checks run.

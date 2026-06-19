@@ -88,10 +88,14 @@
     </comment>
     <constant name="SiEndcapBridgeFPC_Kapton_thickness"      value="80*um"/>
     <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="30*um"/>
-    <constant name="SiEndcapLeftBridgeFPC_length"            value="27.432*mm"/>
+    <constant name="SiEndcapLeftBridgeFPC_length"            value="24.5*mm"/>
     <constant name="SiEndcapLeftBridgeFPC_width"             value="10.0*mm"/>
-    <constant name="SiEndcapRightBridgeFPC_length"           value="19.7612*mm"/>
+    <comment> Signed distance from the module top y edge to the left bridge-FPC top edge. </comment>
+    <constant name="SiEndcapLeftBridgeFPC_y_offset"          value="-7.5*mm"/>
+    <constant name="SiEndcapRightBridgeFPC_length"           value="25.78*mm"/>
     <constant name="SiEndcapRightBridgeFPC_width"            value="4.0*mm"/>
+    <comment> Signed distance from the module top y edge to the right bridge-FPC top edge. </comment>
+    <constant name="SiEndcapRightBridgeFPC_y_offset"         value="-6.22*mm"/>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
 
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.15*mm"/>

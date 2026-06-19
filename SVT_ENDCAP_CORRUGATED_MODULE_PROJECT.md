@@ -456,29 +456,24 @@ Validation:
 - Run overlap checks after localized adhesive boxes are added.
 - Confirm sensitive surfaces and sensor IDs are unchanged unless an intentional z-envelope update is made.
 
-### Phase 10: FPC Dimension Tuning and AncASIC Detail
+### Phase 10: FPC Dimension Tuning, Part 1
 
-Refine the bridge-FPC approximations after the localized adhesive pass, before migrating the production placement CSV.
+Fine-tune bridge-FPC dimensions and y-placement before migrating the production placement CSV.
 
 Scope:
 
-- Fine-tune left/right bridge-FPC dimensions against the latest drawing/report interpretation.
-- Revisit the known left bridge-FPC y-placement issue:
-  - align the top edge of the left bridge FPC with the top edge of the RSU,
-  - decide whether the module parent volume needs a y-envelope update if the FPC extends below the current module footprint.
-- Add a simplified passive AncASIC representation on the left bridge FPC.
-- Keep the material model simple unless the design requires more detail:
-  - one Kapton layer,
-  - one effective aluminum layer,
-  - one simple AncASIC material/box approximation.
-- Keep the main FPC deferred until row-dependent lengths and ownership in the geometry builder are clearer.
+- Update left/right bridge-FPC dimensions against the latest drawing/report interpretation.
+- Add XML-driven bridge-FPC y offsets.
+- Interpret bridge-FPC y offsets as signed distances from the module top y edge to the corresponding FPC top edge.
+- Apply the same y placement to the matching FPC glue volumes.
+- Defer AncASIC and any further FPC detail until after placement and reconstruction checks.
 
 Validation:
 
 - Geometry export and visual inspection of both handedness cases.
-- Confirm the left bridge FPC and AncASIC mirror correctly with handedness.
-- Confirm FPC/AncASIC additions do not overlap LEC, REC, RSUs, or the module parent volume.
-- Run overlap checks before moving to production placement CSV migration.
+- Confirm the left/right bridge FPC and bridge-FPC glue remain aligned.
+- Confirm FPC changes do not overlap LEC, REC, RSUs, or the module parent volume.
+- Run overlap checks before committing the FPC tuning step.
 
 ### Phase 11: Production Placement CSV Migration
 
@@ -525,7 +520,31 @@ Validation:
 - Record command, detector XML/config, input events, and result summary in the implementation log.
 - Compare compatibility/performance against the previous reference geometry or agreed baseline.
 
-### Phase 13: Cleanup and PR Preparation
+### Phase 13: FPC Dimension Tuning, Part 2 and AncASIC Detail
+
+Refine the bridge-FPC approximations after the production placement and reconstruction/ACTS checks are stable.
+
+Scope:
+
+- Fine-tune left/right bridge-FPC dimensions against the latest drawing/report interpretation.
+- Revisit the known left bridge-FPC y-placement issue:
+  - align the top edge of the left bridge FPC with the top edge of the RSU,
+  - decide whether the module parent volume needs a y-envelope update if the FPC extends below the current module footprint.
+- Add a simplified passive AncASIC representation on the left bridge FPC.
+- Keep the material model simple unless the design requires more detail:
+  - one Kapton layer,
+  - one effective aluminum layer,
+  - one simple AncASIC material/box approximation.
+- Keep the main FPC deferred until row-dependent lengths and ownership in the geometry builder are clearer.
+
+Validation:
+
+- Geometry export and visual inspection of both handedness cases.
+- Confirm the left bridge FPC and AncASIC mirror correctly with handedness.
+- Confirm FPC/AncASIC additions do not overlap LEC, REC, RSUs, or the module parent volume.
+- Run overlap checks after FPC/AncASIC updates.
+
+### Phase 14: Cleanup and PR Preparation
 
 After electronics detail, flexible corrugation geometry, production placement, overlap checks, and reconstruction validation pass:
 
