@@ -210,13 +210,11 @@ Volume createScintillatorTower(Detector& desc, std::string basename, double w_to
 //************************************************************************************************************
 //************************** create scintillator plate with separations for 8M *******************************
 //************************************************************************************************************
-Assembly createScintillatorPlateEightM(Detector& desc, std::string basename,
-                                       //                                         int modID,
-                                       int layerID, double h_mod, double w_mod, double t_mod_tp,
-                                       double t_mod_sp, double t_slice, double w_notch,
-                                       double t_foil, Material slice_mat, int roLayer,
-                                       std::string region, std::string limit, std::string vis,
-                                       SensitiveDetector sens, bool renderComp) {
+Assembly createScintillatorPlateEightM(Detector& desc, std::string basename, double h_mod,
+                                       double w_mod, double t_mod_tp, double t_mod_sp,
+                                       double t_slice, double w_notch, double t_foil,
+                                       Material slice_mat, std::string region, std::string limit,
+                                       std::string vis, SensitiveDetector sens, bool renderComp) {
   // Tower placement in 8M module
   //======================================================================
   //||              ||              ||                ||                ||
@@ -273,12 +271,11 @@ Assembly createScintillatorPlateEightM(Detector& desc, std::string basename,
       ExtrudedPolygon(xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
   Box foil_t((w_plate + 2 * t_foil) / 2., t_foil / 2., t_slice / 2.);
   Box foil_s(t_foil / 2., h_plate / 2., t_slice / 2.);
-  Volume foilgrid_vol(basename + "_ESRFoil_" + _toString(layerID, "_layer_%d"), foilgrid,
-                      slice_mat);
-  Volume foil_t_vol(basename + "_ESRFoilT_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
-  Volume foil_b_vol(basename + "_ESRFoilB_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
-  Volume foil_l_vol(basename + "_ESRFoilL_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
-  Volume foil_r_vol(basename + "_ESRFoilR_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  Volume foilgrid_vol(basename + "_ESRFoil", foilgrid, slice_mat);
+  Volume foil_t_vol(basename + "_ESRFoilT", foil_t, slice_mat);
+  Volume foil_b_vol(basename + "_ESRFoilB", foil_t, slice_mat);
+  Volume foil_l_vol(basename + "_ESRFoilL", foil_s, slice_mat);
+  Volume foil_r_vol(basename + "_ESRFoilR", foil_s, slice_mat);
   // Setting slice attributes
   if (renderComp) {
     foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
@@ -298,8 +295,6 @@ Assembly createScintillatorPlateEightM(Detector& desc, std::string basename,
   pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(1.5 * t_foil + h_tow), 0));
   pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(3.5 * t_foil + 2 * w_tow), 0, 0));
   pvm = modScintAssembly.placeVolume(foil_r_vol, Position((3.5 * t_foil + 2 * w_tow), 0, 0));
-
-  // 8M module placement of scintillator for tower
   double rotZ[8] = {0, 0, 0, 0, 0, 0, 0, 0};
   double rotY[8] = {0, 0, 0, 0, 0, 0, 0, 0};
   double rotX[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -327,11 +322,7 @@ Assembly createScintillatorPlateEightM(Detector& desc, std::string basename,
     towery = 0;
     if (i > 3)
       towery = 1;
-    pvm.addPhysVolID("towerx", towerx)
-        .addPhysVolID("towery", towery)
-        .addPhysVolID("layerz", layerID)
-        .addPhysVolID("passive", 0)
-        .addPhysVolID("rlayerz", roLayer);
+    pvm.addPhysVolID("towerx", towerx).addPhysVolID("towery", towery).addPhysVolID("passive", 0);
   }
   return modScintAssembly;
 }
@@ -339,13 +330,11 @@ Assembly createScintillatorPlateEightM(Detector& desc, std::string basename,
 //************************************************************************************************************
 //************************** create scintillator plate with separations for 4M *******************************
 //************************************************************************************************************
-Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
-                                      //                                         int modID,
-                                      int layerID, double h_mod, double w_mod, double t_mod_tp,
-                                      double t_mod_sp, double t_slice, double w_notch,
-                                      double t_foil, Material slice_mat, int roLayer,
-                                      std::string region, std::string limit, std::string vis,
-                                      SensitiveDetector sens, bool renderComp) {
+Assembly createScintillatorPlateFourM(Detector& desc, std::string basename, double h_mod,
+                                      double w_mod, double t_mod_tp, double t_mod_sp,
+                                      double t_slice, double w_notch, double t_foil,
+                                      Material slice_mat, std::string region, std::string limit,
+                                      std::string vis, SensitiveDetector sens, bool renderComp) {
   // Tower placement in 4M module
   //--------------------------------
   //|              ||              |
@@ -401,12 +390,11 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
       ExtrudedPolygon(xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
   Box foil_t((w_plate + 2 * t_foil) / 2., t_foil / 2., t_slice / 2.);
   Box foil_s(t_foil / 2., h_plate / 2., t_slice / 2.);
-  Volume foilgrid_vol(basename + "_ESRFoil_" + _toString(layerID, "_layer_%d"), foilgrid,
-                      slice_mat);
-  Volume foil_t_vol(basename + "_ESRFoilT_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
-  Volume foil_b_vol(basename + "_ESRFoilB_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
-  Volume foil_l_vol(basename + "_ESRFoilL_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
-  Volume foil_r_vol(basename + "_ESRFoilR_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  Volume foilgrid_vol(basename + "_ESRFoil", foilgrid, slice_mat);
+  Volume foil_t_vol(basename + "_ESRFoilT", foil_t, slice_mat);
+  Volume foil_b_vol(basename + "_ESRFoilB", foil_t, slice_mat);
+  Volume foil_l_vol(basename + "_ESRFoilL", foil_s, slice_mat);
+  Volume foil_r_vol(basename + "_ESRFoilR", foil_s, slice_mat);
   // Setting slice attributes
   if (renderComp) {
     foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
@@ -452,11 +440,7 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
     towery = 0;
     if (i > 1)
       towery = 1;
-    pvm.addPhysVolID("towerx", towerx)
-        .addPhysVolID("towery", towery)
-        .addPhysVolID("layerz", layerID)
-        .addPhysVolID("passive", 0)
-        .addPhysVolID("rlayerz", roLayer);
+    pvm.addPhysVolID("towerx", towerx).addPhysVolID("towery", towery).addPhysVolID("passive", 0);
   }
   return modScintAssembly;
 }
@@ -576,6 +560,15 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
                    mod_params.mod_FWThick; // Keeps track of layers' local z locations
+
+  // Pre-build one template per slice type. All readout sections share identical slice geometry
+  // (same materials and thicknesses), so a single template can be reused for all placements.
+  // layerz and rlayerz physVolIDs are set at placement time on each placed instance.
+  Volume absTemplate, fillTemplate;
+  Assembly scintTemplate;
+  // Store first-occurrence parameters to validate consistency of subsequent slices.
+  sliceParamsStrct absTemplateParams, fillTemplateParams, scintTemplateParams;
+
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
     slice_z += sl_params[i].slice_offset +
@@ -586,16 +579,26 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
     //*************************************************
     Material slice_mat = desc.material(sl_params[i].slice_matStr);
     if (sl_params[i].slice_partID == 1) {
-      Volume modAbsAssembly = createAbsorberPlate(
-          desc, baseName + "_Abs" + _toString(sl_params[i].layer_ID, "_layer_%d"),
-          mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
-          mod_params.mod_notchHeight, slice_mat, sl_params[i].slice_regStr,
-          sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      if (!absTemplate.isValid()) {
+        absTemplateParams = sl_params[i];
+        absTemplate       = createAbsorberPlate(
+            desc, baseName + "_Abs", mod_params.mod_height, mod_params.mod_width,
+            mod_params.mod_TWThick, mod_params.mod_SWThick, sl_params[i].slice_thick,
+            mod_params.mod_notchDepth, mod_params.mod_notchHeight, slice_mat,
+            sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr,
+            renderComp);
+      } else if (sl_params[i].slice_thick != absTemplateParams.slice_thick ||
+                 sl_params[i].slice_matStr != absTemplateParams.slice_matStr ||
+                 sl_params[i].slice_regStr != absTemplateParams.slice_regStr ||
+                 sl_params[i].slice_limStr != absTemplateParams.slice_limStr ||
+                 sl_params[i].slice_visStr != absTemplateParams.slice_visStr) {
+        throw std::runtime_error(
+            "LFHCAL 8M: absorber slice parameters differ from template — cannot reuse volume");
+      }
       // Placing slice within layer
       if (allSen)
-        modAbsAssembly.setSensitiveDetector(sens);
-      pvm = vol_mod.placeVolume(modAbsAssembly,
+        absTemplate.setSensitiveDetector(sens);
+      pvm = vol_mod.placeVolume(absTemplate,
                                 Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
       if (allSen)
         pvm.addPhysVolID("towerx", 0)
@@ -607,20 +610,27 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       // air & kapton & PCB & ESR
       //*************************************************
     } else if (sl_params[i].slice_partID == 2) {
-      Volume modFillAssembly =
-          createFillerPlate(desc,
-                            baseName + "_Fill" + _toString(sl_params[i].layer_ID, "_layer_%d") +
-                                _toString(sl_params[i].slice_ID, "slice_%d"),
-                            mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-                            mod_params.mod_SWThick, sl_params[i].slice_thick,
-                            mod_params.mod_notchDepth, slice_mat, sl_params[i].slice_regStr,
-                            sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      if (!fillTemplate.isValid()) {
+        fillTemplateParams = sl_params[i];
+        fillTemplate       = createFillerPlate(
+            desc, baseName + "_Fill", mod_params.mod_height, mod_params.mod_width,
+            mod_params.mod_TWThick, mod_params.mod_SWThick, sl_params[i].slice_thick,
+            mod_params.mod_notchDepth, slice_mat, sl_params[i].slice_regStr,
+            sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      } else if (sl_params[i].slice_thick != fillTemplateParams.slice_thick ||
+                 sl_params[i].slice_matStr != fillTemplateParams.slice_matStr ||
+                 sl_params[i].slice_regStr != fillTemplateParams.slice_regStr ||
+                 sl_params[i].slice_limStr != fillTemplateParams.slice_limStr ||
+                 sl_params[i].slice_visStr != fillTemplateParams.slice_visStr) {
+        throw std::runtime_error(
+            "LFHCAL 8M: filler slice parameters differ from template — cannot reuse volume");
+      }
       // Placing slice within layer
       if (allSen)
-        modFillAssembly.setSensitiveDetector(sens);
+        fillTemplate.setSensitiveDetector(sens);
       pvm = vol_mod.placeVolume(
-          modFillAssembly, Transform3D(RotationZYX(0, 0, 0),
-                                       Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
+          fillTemplate, Transform3D(RotationZYX(0, 0, 0),
+                                    Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
       if (allSen)
         pvm.addPhysVolID("towerx", 1)
             .addPhysVolID("towery", 0)
@@ -631,17 +641,28 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       // scintillator
       //*************************************************
     } else {
-      Assembly modScintAssembly = createScintillatorPlateEightM(
-          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
-          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
-          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
-          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
-          renderComp);
-      // Placing slice within layer
+      if (!scintTemplate.isValid()) {
+        scintTemplateParams = sl_params[i];
+        scintTemplate       = createScintillatorPlateEightM(
+            desc, baseName + "_ScintAssembly", mod_params.mod_height, mod_params.mod_width,
+            mod_params.mod_TWThick, mod_params.mod_SWThick, sl_params[i].slice_thick,
+            mod_params.mod_notchDepth, mod_params.mod_foilThick, slice_mat,
+            sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
+            renderComp);
+      } else if (sl_params[i].slice_thick != scintTemplateParams.slice_thick ||
+                 sl_params[i].slice_matStr != scintTemplateParams.slice_matStr ||
+                 sl_params[i].slice_regStr != scintTemplateParams.slice_regStr ||
+                 sl_params[i].slice_limStr != scintTemplateParams.slice_limStr ||
+                 sl_params[i].slice_visStr != scintTemplateParams.slice_visStr) {
+        throw std::runtime_error(
+            "LFHCAL 8M: scintillator slice parameters differ from template — cannot reuse volume");
+      }
+      // Placing slice within layer; set layerz and rlayerz on each placed instance
       pvm = vol_mod.placeVolume(
-          modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
-                                        Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+          scintTemplate, Transform3D(RotationZYX(0, 0, 0),
+                                     Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+      pvm.addPhysVolID("layerz", layer_num)
+          .addPhysVolID("rlayerz", sl_params[i].slice_readoutLayer);
     }
     slice_z += sl_params[i].slice_thick / 2.;
   }
@@ -834,6 +855,14 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   double slice_z = -length / 2 + mod_params.mod_MPThick +
                    mod_params.mod_FWThick; // Keeps track of layers' local z locations
 
+  // Pre-build one template per slice type. All readout sections share identical slice geometry
+  // (same materials and thicknesses), so a single template can be reused for all placements.
+  // layerz and rlayerz physVolIDs are set at placement time on each placed instance.
+  Volume absTemplate, fillTemplate;
+  Assembly scintTemplate;
+  // Store first-occurrence parameters to validate consistency of subsequent slices.
+  sliceParamsStrct absTemplateParams, fillTemplateParams, scintTemplateParams;
+
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
     slice_z += sl_params[i].slice_offset +
@@ -844,16 +873,26 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
     //*************************************************
     Material slice_mat = desc.material(sl_params[i].slice_matStr);
     if (sl_params[i].slice_partID == 1) {
-      Volume modAbsAssembly = createAbsorberPlate(
-          desc, baseName + "_Abs" + _toString(sl_params[i].layer_ID, "_layer_%d"),
-          mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
-          mod_params.mod_notchHeight, slice_mat, sl_params[i].slice_regStr,
-          sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      if (!absTemplate.isValid()) {
+        absTemplateParams = sl_params[i];
+        absTemplate       = createAbsorberPlate(
+            desc, baseName + "_Abs", mod_params.mod_height, mod_params.mod_width,
+            mod_params.mod_TWThick, mod_params.mod_SWThick, sl_params[i].slice_thick,
+            mod_params.mod_notchDepth, mod_params.mod_notchHeight, slice_mat,
+            sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr,
+            renderComp);
+      } else if (sl_params[i].slice_thick != absTemplateParams.slice_thick ||
+                 sl_params[i].slice_matStr != absTemplateParams.slice_matStr ||
+                 sl_params[i].slice_regStr != absTemplateParams.slice_regStr ||
+                 sl_params[i].slice_limStr != absTemplateParams.slice_limStr ||
+                 sl_params[i].slice_visStr != absTemplateParams.slice_visStr) {
+        throw std::runtime_error(
+            "LFHCAL 4M: absorber slice parameters differ from template — cannot reuse volume");
+      }
       // Placing slice within layer
       if (allSen)
-        modAbsAssembly.setSensitiveDetector(sens);
-      pvm = vol_mod.placeVolume(modAbsAssembly,
+        absTemplate.setSensitiveDetector(sens);
+      pvm = vol_mod.placeVolume(absTemplate,
                                 Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
       if (allSen)
         pvm.addPhysVolID("towerx", 0)
@@ -865,20 +904,27 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       // air & kapton & PCB & ESR
       //*************************************************
     } else if (sl_params[i].slice_partID == 2) {
-      Volume modFillAssembly =
-          createFillerPlate(desc,
-                            baseName + "_Fill" + _toString(sl_params[i].layer_ID, "_layer_%d") +
-                                _toString(sl_params[i].slice_ID, "slice_%d"),
-                            mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-                            mod_params.mod_SWThick, sl_params[i].slice_thick,
-                            mod_params.mod_notchDepth, slice_mat, sl_params[i].slice_regStr,
-                            sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      if (!fillTemplate.isValid()) {
+        fillTemplateParams = sl_params[i];
+        fillTemplate       = createFillerPlate(
+            desc, baseName + "_Fill", mod_params.mod_height, mod_params.mod_width,
+            mod_params.mod_TWThick, mod_params.mod_SWThick, sl_params[i].slice_thick,
+            mod_params.mod_notchDepth, slice_mat, sl_params[i].slice_regStr,
+            sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      } else if (sl_params[i].slice_thick != fillTemplateParams.slice_thick ||
+                 sl_params[i].slice_matStr != fillTemplateParams.slice_matStr ||
+                 sl_params[i].slice_regStr != fillTemplateParams.slice_regStr ||
+                 sl_params[i].slice_limStr != fillTemplateParams.slice_limStr ||
+                 sl_params[i].slice_visStr != fillTemplateParams.slice_visStr) {
+        throw std::runtime_error(
+            "LFHCAL 4M: filler slice parameters differ from template — cannot reuse volume");
+      }
       // Placing slice within layer
       if (allSen)
-        modFillAssembly.setSensitiveDetector(sens);
+        fillTemplate.setSensitiveDetector(sens);
       pvm = vol_mod.placeVolume(
-          modFillAssembly, Transform3D(RotationZYX(0, 0, 0),
-                                       Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
+          fillTemplate, Transform3D(RotationZYX(0, 0, 0),
+                                    Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
       if (allSen)
         pvm.addPhysVolID("towerx", 1)
             .addPhysVolID("towery", 0)
@@ -889,17 +935,28 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       // scintillator
       //*************************************************
     } else {
-      Assembly modScintAssembly = createScintillatorPlateFourM(
-          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
-          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
-          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
-          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
-          renderComp);
-      // Placing slice within layer
+      if (!scintTemplate.isValid()) {
+        scintTemplateParams = sl_params[i];
+        scintTemplate       = createScintillatorPlateFourM(
+            desc, baseName + "_ScintAssembly", mod_params.mod_height, mod_params.mod_width,
+            mod_params.mod_TWThick, mod_params.mod_SWThick, sl_params[i].slice_thick,
+            mod_params.mod_notchDepth, mod_params.mod_foilThick, slice_mat,
+            sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
+            renderComp);
+      } else if (sl_params[i].slice_thick != scintTemplateParams.slice_thick ||
+                 sl_params[i].slice_matStr != scintTemplateParams.slice_matStr ||
+                 sl_params[i].slice_regStr != scintTemplateParams.slice_regStr ||
+                 sl_params[i].slice_limStr != scintTemplateParams.slice_limStr ||
+                 sl_params[i].slice_visStr != scintTemplateParams.slice_visStr) {
+        throw std::runtime_error(
+            "LFHCAL 4M: scintillator slice parameters differ from template — cannot reuse volume");
+      }
+      // Placing slice within layer; set layerz and rlayerz on each placed instance
       pvm = vol_mod.placeVolume(
-          modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
-                                        Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+          scintTemplate, Transform3D(RotationZYX(0, 0, 0),
+                                     Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+      pvm.addPhysVolID("layerz", layer_num)
+          .addPhysVolID("rlayerz", sl_params[i].slice_readoutLayer);
     }
     slice_z += sl_params[i].slice_thick / 2.;
   }
