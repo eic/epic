@@ -12,7 +12,10 @@ parser.add_argument('-d', '--dir', type=str, default='templates', help='Template
 parser.add_argument('-t', '--template', type=str, help='Template to render.')
 parser.add_argument('-o', '--output', type=str, help='Output file to write.')
 parser.add_argument('-c', '--config', type=str, help='Config file to load.')
+parser.add_argument('-p', '--print', action='store_true', help='Print the list of configurations to be created without creating them.')
 args = parser.parse_args()
+
+outputs = [args.output]
 
 # template
 env = jinja2.Environment(
@@ -27,5 +30,45 @@ if args.config is not None:
         config = yaml.safe_load(f)
 
 # render the template
-with open(args.output, 'w') as output:
-    output.write(template.render(**config))
+if not args.print:
+    with open(args.output, 'w') as output:
+        output.write(template.render(**config))
+
+# If the config contains far_forward or far_backward create new xml files with ebeam and pbeam set
+if 'features' in config and ('far_forward' in config['features'] or 'far_backward' in config['features']):
+
+    # Dictonary of potential ebeam and pbeam values
+    ebeam_pbeam_values = [
+        {'ebeam': '5', 'pbeam': '41'},
+        {'ebeam': '5', 'pbeam': '100'},
+        {'ebeam': '10', 'pbeam': '100'},
+        {'ebeam': '10', 'pbeam': '100_Au197'},
+        {'ebeam': '10', 'pbeam': '115_Cu63'},
+        {'ebeam': '10', 'pbeam': '115_Ru96'},
+        {'ebeam': '10', 'pbeam': '130'},
+        {'ebeam': '10', 'pbeam': '130_H2'},
+        {'ebeam': '10', 'pbeam': '166_He3'},
+        {'ebeam': '10', 'pbeam': '250'},
+        {'ebeam': '10', 'pbeam': '275'},
+        {'ebeam': '18', 'pbeam': '110_Au'},
+        {'ebeam': '18', 'pbeam': '110_He3'},
+        {'ebeam': '18', 'pbeam': '275'},
+    ]
+
+    for values in ebeam_pbeam_values:
+        # Create a new output filename based on the ebeam and pbeam values
+        new_output = args.output.replace('.xml', f"_{values['ebeam']}x{values['pbeam']}.xml")
+        outputs.append(new_output)
+
+        # Create a new config dictionary with the current ebeam and pbeam values
+        new_config = config.copy()
+        new_config.update(values)
+
+        if not args.print:
+            with open(new_output, 'w') as output:
+                output.write(template.render(**new_config))
+
+if args.print:
+    for output in outputs:
+        # Print the output configuration name without the xml extension
+        print(os.path.basename(output).replace('.xml', ''))
