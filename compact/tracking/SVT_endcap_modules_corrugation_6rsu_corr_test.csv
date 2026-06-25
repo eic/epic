@@ -1,0 +1,12 @@
+disk,module,x_min_mm,y_min_mm,dz_mm,facing,handedness,enabled,comment
+# Minimal visualization test for EIC_LAS_6RSU_CORR. The production XML still
+# points at SVT_endcap_modules_corrugation_all.csv; temporarily point
+# <module_placements file=...> at this file to visualize the new prototype.
+# Rows use InnerTrackerEndcapN_disk1 and are intentionally sparse.
+InnerTrackerEndcapN_disk1,EIC_LAS_6RSU_CORR,-180.000,-120.000,3.125,+z,left,true,corrugated_6rsu_test_left_side
+InnerTrackerEndcapN_disk1,EIC_LAS_6RSU_CORR,20.000,-120.000,-3.125,+z,right,true,corrugated_6rsu_test_right_side
+InnerTrackerEndcapN_disk1,EIC_LAS_6RSU_CORR,-180.000,-70.000,4.125,+z,left,true,corrugated_6rsu_test_offset_positive_dz
+InnerTrackerEndcapN_disk1,EIC_LAS_6RSU_CORR,20.000,-70.000,-4.125,+z,right,true,corrugated_6rsu_test_offset_negative_dz
+# Disabled legacy rows can be re-enabled for footprint comparison.
+InnerTrackerEndcapN_disk1,EIC_LAS_6RSU,-180.000,0.000,3.125,+z,,false,legacy_6rsu_comparison_disabled
+InnerTrackerEndcapN_disk1,EIC_LAS_5RSU,20.000,0.000,-3.125,+z,,false,legacy_5rsu_comparison_disabled
