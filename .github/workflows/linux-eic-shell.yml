@@ -56,13 +56,32 @@ jobs:
           - CC: gcc
             CXX: g++
             release: nightly
+            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
+            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
+            artifact_tag: ''
+            cmake_sanitize_flags: ''
+          # Sanitized build (ASAN+UBSAN): only npsim and eicrecon jobs consume this artifact
+          - CC: gcc
+            CXX: g++
+            release: nightly
+            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
+            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
+            artifact_tag: '-asan'
+            cmake_sanitize_flags: '-DUSE_ASAN=ON -DUSE_UBSAN=ON'
           - CC: clang
             CXX: clang++
             release: nightly
+            CXXFLAGS: -Werror -Wall -Wextra
+            artifact_tag: ''
+            cmake_sanitize_flags: ''
           # Used for material map generation
           - CC: gcc
             CXX: g++
             release: 25.07.0-stable
+            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
+            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
+            artifact_tag: ''
+            cmake_sanitize_flags: ''
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
@@ -75,9 +94,10 @@ jobs:
       uses: actions/cache@v5
       with:
         path: .ccache
-        key: ccache-${{ matrix.CC }}-${{ matrix.release }}-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        key: ccache-${{ matrix.CC }}-${{ matrix.release }}${{ matrix.artifact_tag }}-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
-             ccache-${{ matrix.CC }}-${{ matrix.release }}-${{ github.ref_name }}-
+             ccache-${{ matrix.CC }}-${{ matrix.release }}${{ matrix.artifact_tag }}-${{ github.ref_name }}-
+             ccache-${{ matrix.CC }}-${{ matrix.release }}${{ matrix.artifact_tag }}-
              ccache-${{ matrix.CC }}-${{ matrix.release }}-
              ccache-${{ matrix.CC }}-
              ccache-
@@ -99,11 +119,11 @@ jobs:
       with:
         platform-release: "eic_xl:${{ matrix.release }}"
         run: |
-          CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} CXXFLAGS="${{ matrix.CXXFLAGS }}" cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ${{ matrix.cmake_sanitize_flags }}
           cmake --build build -- -k -j $(getconf _NPROCESSORS_ONLN) install
     - uses: actions/upload-artifact@v7
       with:
-        name: build-${{ matrix.CC }}-${{ matrix.release }}-full-eic-shell
+        name: build-${{ matrix.CC }}-${{ matrix.release }}${{ matrix.artifact_tag }}-full-eic-shell
         path: install/
         if-no-files-found: error
     - run: |
@@ -113,7 +133,7 @@ jobs:
           ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
     - uses: actions/upload-artifact@v7
       with:
-        name: build-${{ matrix.CC }}-${{ matrix.release }}-fast-eic-shell
+        name: build-${{ matrix.CC }}-${{ matrix.release }}${{ matrix.artifact_tag }}-fast-eic-shell
         path: install/
         if-no-files-found: error
 
@@ -172,7 +192,7 @@ jobs:
           pushd scripts/material_map
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
           export DETECTOR_CONFIG=epic_craterlake_material_map
-          ./run_material_map_validation.sh
+          env -u LD_PRELOAD ./run_material_map_validation.sh
           popd
     - uses: actions/upload-artifact@v7
       with:
@@ -576,7 +596,7 @@ jobs:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
-        name: build-gcc-nightly-full-eic-shell
+        name: build-gcc-nightly-asan-full-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Produce simulation files
@@ -635,7 +655,7 @@ jobs:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
-        name: build-gcc-nightly-full-eic-shell
+        name: build-gcc-nightly-asan-full-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Produce simulation files
@@ -646,8 +666,10 @@ jobs:
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
           url=root://dtn-eic.jlab.org//volatile/eic/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
+          env -u LD_PRELOAD \
           gprofng collect app -o sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er \
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --random.enableEventSeed --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+          env -u LD_PRELOAD \
           gprofng display text -ctree sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er > sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
     - name: Upload ROOT output
       uses: actions/upload-artifact@v7
@@ -700,7 +722,7 @@ jobs:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
-        name: build-gcc-nightly-full-eic-shell
+        name: build-gcc-nightly-asan-full-eic-shell
         path: install/
     - uses: actions/download-artifact@v8
       with:
@@ -766,7 +788,7 @@ jobs:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
-        name: build-gcc-nightly-full-eic-shell
+        name: build-gcc-nightly-asan-full-eic-shell
         path: install/
     - uses: actions/download-artifact@v8
       with:
