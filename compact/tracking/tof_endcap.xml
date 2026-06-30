@@ -16,7 +16,9 @@
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
-    <constant name="TOFEndcapSensor_thickness"      value="300*um" />
+    <constant name="TOFEndcapSensor_Active_thickness"  value="30*um" />
+    <constant name="TOFEndcapSensor_Base_thickness"    value="400*um" />
+    <constant name="TOFEndcapSensor_thickness"      value="TOFEndcapSensor_Active_thickness+TOFEndcapSensor_Base_thickness" />
     <constant name="TOFEndcapService_thickness"     value="5.00/100*9.37*cm-TOFEndcapSensor_thickness" />
     <constant name="TOFEndcapMod_count"             value="36" />
     <constant name="TOFEndcapMod_dz"                value="0" />
@@ -116,7 +118,8 @@
     <constant name="ForwardTOFMod_x2"           value="2 * ForwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
     <constant name="ForwardTOFMod_y"            value="ForwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - ForwardTOFMod_rmin" />
 
-   <constant name="EndcapTOF_Sensor_thickness"       value="0.3*mm"/>
+   <constant name="EndcapTOF_Sensor_Active_thickness" value="0.03*mm"/>
+   <constant name="EndcapTOF_Sensor_Base_thickness"   value="0.4*mm"/>
     <constant name="EndcapTOF_Hybrid_thickness"       value="0.008125*cm"/>
     <constant name="EndcapTOF_HybridTrace_thickness"  value="0.002500*cm"/>
     <constant name="EndcapTOF_HybridPCB_thickness"    value="0.1*cm"/>
@@ -225,16 +228,28 @@
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Up_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Up_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+        </module_component>
+        <module_component name="sensorBase1" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensorBase2" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensorBase3" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensorBase4" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis" >
           <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
         <module_component name="moduleBoard" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_ModuleBoard_thickness" vis="AnlGray" >
@@ -255,16 +270,28 @@
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Down_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Down_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+        </module_component>
+        <module_component name="sensorBase1" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensorBase2" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensorBase3" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensorBase4" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis" >
           <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
 
@@ -277,18 +304,31 @@
         <module_component name="moduleBoard" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_ModuleBoard_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensorBase1" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Down_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensorBase2" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Down_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensorBase3" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+        <module_component name="sensorBase4" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis" >
           <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
+        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+        </module_component>
+
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
@@ -307,21 +347,37 @@
         <module_component name="moduleBoard" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_ModuleBoard_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensorBase1" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Up_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensorBase2" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Up_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+        <module_component name="sensorBase3" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis"  keep_layer="true">
           <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
-        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+        <module_component name="sensorBase4" material="Silicon" sensitive="false" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Base_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+        </module_component>
+        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_Active_thickness" vis="TOFSensorVis" >
           <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
+        <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+
         <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>

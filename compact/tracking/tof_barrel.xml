@@ -15,8 +15,8 @@
       Barrel TOF Parameters
       --------------------------
     </comment>
-    <constant name="BarrelTOF_Sensor_Base_thickness"    value="0.27*mm"/>
-    <constant name="BarrelTOF_Sensor_Active_thickness"  value="0.03*mm"/>
+    <constant name="BarrelTOF_Sensor_Base_thickness"    value="0.40*mm"/>
+    <constant name="BarrelTOF_Sensor_Active_thickness"  value="0.05*mm"/>
     <constant name="BarrelTOF_Hybrid_thickness"       value="2*0.008125*cm"/>
     <constant name="BarrelTOF_CFSkin_thickness"       value="2*0.0075*cm"/>
     <constant name="BarrelTOF_CFoam_thickness"        value="2*0.29*cm"/>
