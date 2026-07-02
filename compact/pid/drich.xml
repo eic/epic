@@ -62,7 +62,7 @@
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
 </define>
- 
+
 <regions>
   <region name="DRICHRegion"/>
 </regions>
