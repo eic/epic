@@ -62,6 +62,10 @@
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
 </define>
+ 
+<regions>
+  <region name="DRICHRegion"/>
+</regions>
 
 
 <detectors>
@@ -75,6 +79,7 @@
   id="ForwardRICH_ID"
   name="DRICH"
   type="epic_DRICH"
+  region="DRICHRegion"
   readout="DRICHHits"
   gas="C2F6_DRICH"
   material="Aluminum"
