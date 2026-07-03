@@ -77,10 +77,16 @@
   </materials>
 
   <limits>
+    <limitset name="DIRCRegionLimits">
+      <limit name="time_max" particles="opticalphoton" value="150.0" unit="ns"/>
+      <limit name="track_length_max" particles="opticalphoton" value="30000.0" unit="mm"/>
+    </limitset>
   </limits>
 
   <regions>
-    <region name="DIRCRegion"/>
+    <region name="DIRCRegion">
+      <limitsetref name="DIRCRegionLimits"/>
+    </region>
   </regions>
 
   <display>
