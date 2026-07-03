@@ -17,8 +17,8 @@
     <constant name="SiBarrelStave2Service_thickness" value="0.11*mm" />
     <constant name="SiBarrelStave1Frame_thickness" value="0.20*mm" />
     <constant name="SiBarrelStave2Frame_thickness" value="0.19*mm" />
-    <constant name="SiBarrelStave1_width" value="3.888*cm" />
-    <constant name="SiBarrelStave2_width" value="3.888*cm" />
+    <constant name="SiBarrelStave1_width" value="3.848*cm" />
+    <constant name="SiBarrelStave2_width" value="3.848*cm" />
 
    <constant name="SiBarrel1_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
    <constant name="SiBarrel2_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
@@ -26,22 +26,22 @@
     <constant name="SiBarrelStave1_length" value="50.3*cm - SiBarrel1_Length_Trim"/>
     <constant name="SiBarrelStave2_length" value="79.3*cm - SiBarrel2_Length_Trim" />
 
-    <constant name="SiBarrelSingleModule1_length" value="13.0*cm"/>
+    <constant name="SiBarrelSingleModule1_length" value="12.9996*cm"/>
     <constant name="SiBarrelSingleModule2_length" value="10.833*cm" />
 
-   <constant name="SiBarrel1_Module0_Position" value="-186.98*mm" />
-   <constant name="SiBarrel1_Module1_Position" value="-62.64*mm" />
-   <constant name="SiBarrel1_Module2_Position" value="62.69*mm" />
-   <constant name="SiBarrel1_Module3_Position" value="187.03*mm" />
+   <constant name="SiBarrel1_Module0_Position" value="-187.126*mm" />
+   <constant name="SiBarrel1_Module1_Position" value="-62.7931*mm" />
+   <constant name="SiBarrel1_Module2_Position" value="62.5436*mm" />
+   <constant name="SiBarrel1_Module3_Position" value="186.8764*mm" />
 
-   <constant name="SiBarrel2_Module0_Position" value="-343.2*mm" />
-   <constant name="SiBarrel2_Module1_Position" value="-245.39*mm" />
-   <constant name="SiBarrel2_Module2_Position" value="-147.58*mm" />
-   <constant name="SiBarrel2_Module3_Position" value="-49.77*mm" />
-   <constant name="SiBarrel2_Module4_Position" value="49.04*mm" />
-   <constant name="SiBarrel2_Module5_Position" value="146.85*mm" />
-   <constant name="SiBarrel2_Module6_Position" value="244.66*mm" />
-   <constant name="SiBarrel2_Module7_Position" value="342.47*mm" />
+   <constant name="SiBarrel2_Module0_Position" value="-342.83*mm" />
+   <constant name="SiBarrel2_Module1_Position" value="-245.026*mm" />
+   <constant name="SiBarrel2_Module2_Position" value="-147.216*mm" />
+   <constant name="SiBarrel2_Module3_Position" value="-49.4071*mm" />
+   <constant name="SiBarrel2_Module4_Position" value="49.4072*mm" />
+   <constant name="SiBarrel2_Module5_Position" value="147.2164*mm" />
+   <constant name="SiBarrel2_Module6_Position" value="245.0257*mm" />
+   <constant name="SiBarrel2_Module7_Position" value="342.8342*mm" />
 
     <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" />
@@ -80,9 +80,9 @@
     <constant name="SiBarrel2_Brace4_Position_Y" value="SiBarrelStave2_length/2-SiBarrelBrace_width/2" /> <!-- to align last brace edge with module edge, the center should be 79.3/2-1/2=39.15cm-->
 
 <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
-<constant name="SiBarrelSiliconCurveRadius" value="90.035*mm" />
-<constant name="SiBarrelSiliconSpace1" value="0.815*mm"/>
-<constant name="SiBarrelSiliconSpace2" value="0.791*mm"/>
+<constant name="SiBarrelSiliconCurveRadius" value="90.075*mm" />
+<constant name="SiBarrelSiliconSpace1" value="0.7774*mm"/>
+<constant name="SiBarrelSiliconSpace2" value="0.7924*mm"/>
 
 <constant name="SiBarrelSiliconCurveHeight1" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave1_width/2)^2)" />
 <constant name="SiBarrelSiliconCurveHeight2" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave2_width/2)^2)" />
