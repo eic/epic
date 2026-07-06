@@ -135,6 +135,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Volume pfRICH_volume(detName, pfRICH_volume_shape, vesselGas);
   auto gasvolVis = description.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
   pfRICH_volume.setVisAttributes(gasvolVis);
+  pfRICH_volume.setRegion(description, detElem.regionStr());
 
   Volume mother                 = description.pickMotherVolume(sdet);
   auto _FIDUCIAL_VOLUME_OFFSET_ = description.constant<double>("FIDUCIAL_VOLUME_OFFSET");
