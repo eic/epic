@@ -49,4 +49,6 @@ macro(set_git_version VERSION)
         "Could not parse a numeric version from \"${${VERSION}_FULL}\". Falling back to \"${${VERSION}}\"."
     )
   endif()
+  unset(_git_version_stripped)
+  unset(_git_version_clean)
 endmacro()
