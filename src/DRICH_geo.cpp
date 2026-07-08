@@ -415,7 +415,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       aerogelVol.placeVolume(crownVol, Position(0., 0., 0.));
     }
 
-    // Create and place individual segment volumes
+    // Create one segment logical volume per crown ring and place it with azimuthal rotations
     for (int i = 0; i < numCrowns - 1; i++) {
       int N = numSegments[i];
 
@@ -427,18 +427,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       double segmentSpacing      = 2 * M_PI / N;
       double segmentAngularWidth = coronasThickness / rMin_Zminus;
 
+      ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus, rMax_Zplus,
+                               0.0, segmentAngularWidth);
+      std::string segName = "CarbonSegment_" + std::to_string(i);
+      Volume segVol(segName, segmentSolid, coronasMat);
+      segVol.setVisAttributes(coronasVis);
+
       for (int p = 0; p < N; p++) {
-        double phiStart = p * segmentSpacing;
-        double phiEnd   = phiStart + segmentAngularWidth;
-
-        ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
-                                 rMax_Zplus, phiStart, phiEnd);
-        std::string segName = "CarbonSegment_" + std::to_string(i) + "_" + std::to_string(p);
-        Volume segVol(segName, segmentSolid, coronasMat);
-        segVol.setVisAttributes(coronasVis);
-
-        // Place segment volume directly in aerogel
-        aerogelVol.placeVolume(segVol, Position(0., 0., 0.));
+        aerogelVol.placeVolume(segVol,
+                               Transform3D(RotationZ(p * segmentSpacing), Position(0., 0., 0.)));
       }
     } //crown
   } //trapezoidal
