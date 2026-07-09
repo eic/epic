@@ -1,0 +1,118 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 ePIC Collaboration -->
+
+<global_alignment print="true">
+
+  <comment>
+    Sample misalignment deltas for the ePIC silicon tracking detectors.
+
+    This file defines rigid-body displacement deltas for each silicon tracker
+    layer relative to the ideal (nominal) geometry.  The values are physically
+    motivated by typical silicon-detector assembly tolerances:
+      - Translations : O(50-200 um), expressed in mm
+      - Rotations    : O(0.1-0.5 mrad), expressed in radians
+
+    Detectors covered (with full DetElement paths as found in the geometry):
+      /world/MiddleSiBarrelSubAssembly/SagittaSiBarrel         (layer 1)
+      /world/OuterSiBarrelSubAssembly/OuterSiBarrel            (layer 2)
+      /world/InnerSiTrackerSubAssembly/InnerTrackerEndcapP     (layer 1_P)
+      /world/InnerSiTrackerSubAssembly/InnerTrackerEndcapN     (layer 1_N)
+      /world/MiddleSiEndcapSubAssembly/MiddleTrackerEndcapP    (layer 1_P)
+      /world/MiddleSiEndcapSubAssembly/MiddleTrackerEndcapN    (layer 1_N)
+      /world/OuterSiEndcapSubAssembly/OuterTrackerEndcapP      (layers 2_P, 3_P, 4_P)
+      /world/OuterSiEndcapSubAssembly/OuterTrackerEndcapN      (layers 2_N, 3_N, 4_N)
+
+    IMPORTANT: Absolute paths (starting with /world/) are required because the
+    silicon detectors are nested inside SubAssembly envelope elements and are
+    not direct children of /world.  Endcap layer names carry a _P/_N suffix.
+
+    Usage: include this file via the compact glue file
+    calibrations/alignment/silicon_misalignment_compact.xml which is passed as
+    an additional --compactFile argument to ddsim AFTER the main geometry:
+
+      ddsim --compactFile $DETECTOR_PATH/epic_craterlake.xml \
+            calibrations/alignment/silicon_misalignment_compact.xml \
+            -N 100 -G --gun.distribution uniform
+
+    The open_transaction / close_transaction pair buffers all deltas and
+    applies them atomically; it also auto-installs the GlobalAlignmentCache so
+    no separate DD4hep_GlobalAlignmentInstall plugin call is needed.
+  </comment>
+
+  <open_transaction/>
+
+  <subdetectors>
+
+    <comment>Silicon Inner Barrel (SagittaSiBarrel, layer 1)</comment>
+    <detelement path="/world/MiddleSiBarrelSubAssembly/SagittaSiBarrel/SagittaSiBarrel_layer1">
+      <comment>100 um shift in x, 50 um in z; 0.2 mrad tilt about x-axis</comment>
+      <position x="0.100*mm" y="0.0*mm" z="0.050*mm"/>
+      <rotation x="0.0002"   y="0.0"    z="0.0"/>
+    </detelement>
+
+    <comment>Silicon Outer Barrel (OuterSiBarrel, layer 2)</comment>
+    <detelement path="/world/OuterSiBarrelSubAssembly/OuterSiBarrel/OuterSiBarrel_layer2">
+      <comment>150 um shift in y, -75 um in z; 0.15 mrad tilt about y-axis</comment>
+      <position x="0.0*mm"  y="0.150*mm" z="-0.075*mm"/>
+      <rotation x="0.0"     y="0.00015"  z="0.0"/>
+    </detelement>
+
+    <comment>Inner Tracker Endcap +z (InnerTrackerEndcapP, layer 1)</comment>
+    <detelement path="/world/InnerSiTrackerSubAssembly/InnerTrackerEndcapP/InnerTrackerEndcapP_layer1_P">
+      <comment>80 um axial (z) shift; 0.1 mrad tilt about x, 0.05 mrad about y</comment>
+      <position x="0.050*mm" y="0.0*mm"  z="0.080*mm"/>
+      <rotation x="0.0001"   y="0.00005" z="0.0"/>
+    </detelement>
+
+    <comment>Inner Tracker Endcap -z (InnerTrackerEndcapN, layer 1)</comment>
+    <detelement path="/world/InnerSiTrackerSubAssembly/InnerTrackerEndcapN/InnerTrackerEndcapN_layer1_N">
+      <comment>Independent misalignment on the -z side</comment>
+      <position x="-0.060*mm" y="0.030*mm" z="-0.100*mm"/>
+      <rotation x="-0.00015"  y="0.0001"   z="0.0"/>
+    </detelement>
+
+    <comment>Middle Tracker Endcap +z (MiddleTrackerEndcapP, layer 1)</comment>
+    <detelement path="/world/MiddleSiEndcapSubAssembly/MiddleTrackerEndcapP/MiddleTrackerEndcapP_layer1_P">
+      <position x="0.120*mm" y="-0.080*mm" z="0.060*mm"/>
+      <rotation x="0.00008"  y="-0.0002"   z="0.00005"/>
+    </detelement>
+
+    <comment>Middle Tracker Endcap -z (MiddleTrackerEndcapN, layer 1)</comment>
+    <detelement path="/world/MiddleSiEndcapSubAssembly/MiddleTrackerEndcapN/MiddleTrackerEndcapN_layer1_N">
+      <position x="-0.090*mm" y="0.110*mm" z="-0.070*mm"/>
+      <rotation x="0.0002"    y="0.00012"  z="-0.00008"/>
+    </detelement>
+
+    <comment>Outer Tracker Endcap +z (OuterTrackerEndcapP, layers 2-4)</comment>
+    <detelement path="/world/OuterSiEndcapSubAssembly/OuterTrackerEndcapP/OuterTrackerEndcapP_layer2_P">
+      <position x="0.200*mm" y="0.0*mm"  z="0.100*mm"/>
+      <rotation x="0.0003"   y="0.00025" z="0.0"/>
+    </detelement>
+    <detelement path="/world/OuterSiEndcapSubAssembly/OuterTrackerEndcapP/OuterTrackerEndcapP_layer3_P">
+      <position x="-0.150*mm" y="0.200*mm" z="0.080*mm"/>
+      <rotation x="-0.0002"   y="0.00030"  z="0.00010"/>
+    </detelement>
+    <detelement path="/world/OuterSiEndcapSubAssembly/OuterTrackerEndcapP/OuterTrackerEndcapP_layer4_P">
+      <position x="0.100*mm" y="-0.080*mm" z="0.060*mm"/>
+      <rotation x="0.00015"  y="-0.0002"   z="0.0"/>
+    </detelement>
+
+    <comment>Outer Tracker Endcap -z (OuterTrackerEndcapN, layers 2-4)</comment>
+    <detelement path="/world/OuterSiEndcapSubAssembly/OuterTrackerEndcapN/OuterTrackerEndcapN_layer2_N">
+      <position x="0.170*mm" y="0.080*mm"  z="-0.120*mm"/>
+      <rotation x="0.00025"  y="-0.00015"  z="0.00010"/>
+    </detelement>
+    <detelement path="/world/OuterSiEndcapSubAssembly/OuterTrackerEndcapN/OuterTrackerEndcapN_layer3_N">
+      <position x="-0.130*mm" y="0.160*mm" z="-0.050*mm"/>
+      <rotation x="0.0001"    y="0.00030"  z="-0.00005"/>
+    </detelement>
+    <detelement path="/world/OuterSiEndcapSubAssembly/OuterTrackerEndcapN/OuterTrackerEndcapN_layer4_N">
+      <position x="0.050*mm" y="-0.120*mm" z="-0.160*mm"/>
+      <rotation x="-0.00020" y="0.00010"   z="0.00015"/>
+    </detelement>
+
+  </subdetectors>
+
+  <close_transaction/>
+
+</global_alignment>
