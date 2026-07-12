@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <info name="epic_field_test" title="EPIC Field Test Geometry" author="field_benchmark" url="auto" status="test" version="test">
+    <comment>Minimal geometry for field performance testing</comment>
+  </info>
+
+  <includes>
+    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
+    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/materials.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_side" value="10*m"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="world_side"/>
+  </define>
+
+  <materials>
+    <material name="Vacuum">
+      <D type="density" unit="g/cm3" value="0.00000001" />
+      <fraction n="1" ref="H"/>
+    </material>
+  </materials>
+
+  <detectors>
+    <detector name="WorldBox" type="DD4hep_BoxSegment" vis="InvisibleWithChildren">
+      <material name="Vacuum"/>
+      <box dx="world_x" dy="world_y" dz="world_z"/>
+    </detector>
+  </detectors>
+
+  <include ref="{field_config_file}"/>
+
+  <fields>
+    <!-- Field configuration loaded from included file -->
+  </fields>
+
+</lccdd>
