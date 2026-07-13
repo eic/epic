@@ -146,7 +146,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv" format="csv"/>
       <comment>
         Module geometry comes from the plugin. This detector uses the
         corrugation-aware placement CSV so modules sit on both sides of the frame.
@@ -182,7 +182,7 @@
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <comment><module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/></comment>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv" format="csv"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="InnerTrackerEndcap_active_rmin"
@@ -276,7 +276,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv" format="csv"/>
       <layer id="1" name="MiddleTrackerEndcapP_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -307,7 +307,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv" format="csv"/>
       <layer id="1" name="MiddleTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -338,7 +338,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv" format="csv"/>
       <layer id="2" name="OuterTrackerEndcapP_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"
@@ -411,7 +411,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv" format="csv"/>
       <layer id="2" name="OuterTrackerEndcapN_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"

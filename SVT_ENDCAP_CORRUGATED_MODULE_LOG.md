@@ -657,6 +657,105 @@ Validation:
 Known limitation / next step:
 - The generated CSV still uses bottom-left `x_min_mm/y_min_mm`. The next Phase 11 step should add the RSU-LEC boundary midpoint reference-point convention, or explicitly decide to keep bottom-left until after visual placement validation.
 
+## 2026-06-23 UTC - Phase 11b generated full corrugated test CSV
+
+Files changed:
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`
+- `tmp/generate_phase11b_corrugated_test_csv.sh`
+- `tmp/phase11b_6rsu_corr_generated_test.log`
+- `tmp/phase11b_6rsu_corr_generated_test_summary.txt`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Create a full all-disk test CSV using the current corrugated 6-RSU package footprint and row-wise alternating handedness before switching the placement workflow to the future `rsu_lec_boundary_midpoint` reference convention.
+
+Implementation:
+- Added a reproducible generation script at `tmp/generate_phase11b_corrugated_test_csv.sh`.
+- Generated `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+- The generated CSV still uses the current `x_min_mm` / `y_min_mm` schema for this temporary testing pass.
+- The generated CSV includes explicit row-wise alternating `handedness`.
+
+Validation:
+- Generator wrote 1892 rows.
+- Standalone intrusion checker result:
+  - total rows: 1892
+  - ok rows: 1892
+  - invalid rows: 0
+- Row-wise handedness alternation check:
+  - row groups: 410
+  - left rows: 1054
+  - right rows: 838
+  - alternation violations: 0
+
+Known limitation / next step:
+- This is a temporary test CSV. The next implementation step should switch the placement-reference convention to `rsu_lec_boundary_midpoint` and regenerate the production candidate from that schema.
+
+## 2026-06-23 UTC - Phase 11b fix corrugated test CSV z reference
+
+Files changed:
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `tmp/generate_phase11b_corrugated_test_csv.sh`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix visual overlap between generated modules and the corrugated frame.
+- Treat the corrugated frame surface as the module inner-face contact plane rather than the module center plane.
+
+Implementation:
+- Changed the corrugation generator default from `center-at-frame-surface` to `inner-face-on-frame-surface`.
+- Updated the temporary generation script to pass `--module-z-reference inner-face-on-frame-surface` explicitly.
+- Documented why `center-at-frame-surface` is only useful as a diagnostic comparison for this geometry.
+
+Validation:
+- Regenerate `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+- Confirm `dz_mm` magnitudes increase by approximately half the corrugated-module thickness.
+- Rerun standalone intrusion and row-wise handedness checks.
+
+## 2026-06-23 UTC - Phase 11b add row-wise facing alternation
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`
+- `tmp/phase11b_6rsu_corr_generated_test.log`
+- `tmp/phase11b_6rsu_corr_generated_test_summary.txt`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make adjacent modules in a row alternate both handedness and facing direction.
+- Keep the facing alternation synchronized with the handedness alternation.
+
+Implementation:
+- Added `placement_facing_map(...)` to the disk-layout helper.
+- Added `--corr-facing-mode` to both disk-layout generators.
+- The default mode is `alternate-row`.
+- For corrugated rows, modules are sorted left-to-right within each row:
+  - even index: requested `--facing` value and `left` handedness
+  - odd index: opposite facing value and `right` handedness
+- Retained `--corr-facing-mode constant` for diagnostic comparisons.
+- Regenerated `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+
+Validation:
+- Generated rows: 1892.
+- Standalone intrusion checker:
+  - ok rows: 1892
+  - invalid rows: 0
+- Row-wise alternation checks:
+  - row groups: 410
+  - handedness violations: 0
+  - facing violations: 0
+  - combined pair violations: 0
+- Facing totals:
+  - `+z`: 1054
+  - `-z`: 838
+- Handedness totals:
+  - `left`: 1054
+  - `right`: 838
+- `dz_mm` values remain `[-4.203, -3.203, 3.203, 4.203]`.
+
 Known limitations / next step:
 - Before implementing Phase 6, confirm practical first-pass dimensions and placement conventions for the LEC/REC boxes.
 
