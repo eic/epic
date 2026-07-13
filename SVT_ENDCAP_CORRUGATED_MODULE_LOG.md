@@ -566,6 +566,24 @@ Roadmap:
 Validation:
 - Documentation-only update. No geometry build or overlap checks run.
 
+## 2026-07-13 UTC - Add pre-PR test CSV cleanup reminder
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record a concrete Phase 14 cleanup item before merging or opening a PR.
+- Avoid accidentally committing production XML that depends on a local generated test CSV.
+
+Phase 14 pre-PR checklist addition:
+- Audit `compact/tracking/silicon_disks_modules.xml` for temporary test placement switches.
+- In particular, confirm whether any `<module_placements file=...>` entries still point to `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+- Before PR, either promote the generated CSV to an intentional tracked production/reference file or revert the XML entries to the intended tracked placement CSV.
+- Keep this check separate from ordinary geometry validation because it is a reproducibility/CI hygiene issue, not a detector-overlap issue.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
 ## 2026-06-18 UTC - Phase 11a add corrugated 6-RSU template to disk-layout scripts
 
 Files changed:
