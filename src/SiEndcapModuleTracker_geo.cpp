@@ -1086,13 +1086,11 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Box box_solid(box_x / 2.0, box_y / 2.0, component.thickness / 2.0);
         Volume box_volume(name, box_solid, material);
         box_volume.setVisAttributes(description.visAttributes(component.vis));
-        prototype.volume.placeVolume(
-            box_volume,
-            Position(component.x_offset + pos_x, component.y_offset + pos_y, z_position));
+        prototype.volume.placeVolume(box_volume, Position(component.x_offset + pos_x,
+                                                          component.y_offset + pos_y, z_position));
       };
 
-      place_adhesive_box(_toString(component_id, "component%d_rsu_glue"), comp_x, comp_y, 0.0,
-                         0.0);
+      place_adhesive_box(_toString(component_id, "component%d_rsu_glue"), comp_x, comp_y, 0.0, 0.0);
 
       const double lec_length = description.constant<double>("SiEndcapLEC_length");
       const double rec_length = description.constant<double>("SiEndcapREC_length");
@@ -1113,26 +1111,27 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
         const double available_x = side_span - 2.0 * clearance;
         const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
-        const double box_center =
-            after_rsu ? module_edge - clearance - box_x / 2.0
-                      : module_edge + clearance + box_x / 2.0;
+        const double box_center  = after_rsu ? module_edge - clearance - box_x / 2.0
+                                             : module_edge + clearance + box_x / 2.0;
         return std::make_tuple(box_x, box_center - component.x_offset);
       };
       auto bridge_fpc_y_center = [&](double box_y, double top_edge_offset) {
         return y_size / 2.0 + top_edge_offset - box_y / 2.0;
       };
 
-      const double lec_side_span = description.constant<double>("SiEndcapModule6RSU_left_extension");
-      const double rec_side_span = description.constant<double>("SiEndcapModule6RSU_right_extension");
-      const double left_bridge_x  = description.constant<double>("SiEndcapLeftBridgeFPC_width");
-      const double left_bridge_y  = description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const double lec_side_span =
+          description.constant<double>("SiEndcapModule6RSU_left_extension");
+      const double rec_side_span =
+          description.constant<double>("SiEndcapModule6RSU_right_extension");
+      const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
+      const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const double left_bridge_pos_y = bridge_fpc_y_center(
           left_bridge_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
       const double right_bridge_x = description.constant<double>("SiEndcapRightBridgeFPC_width");
       const double right_bridge_y = description.constant<double>("SiEndcapRightBridgeFPC_length");
       const double right_bridge_pos_y = bridge_fpc_y_center(
           right_bridge_y, description.constant<double>("SiEndcapRightBridgeFPC_y_offset"));
-      const bool lec_after_rsu    = component.lec_after_rsu;
+      const bool lec_after_rsu = component.lec_after_rsu;
       const auto [left_bridge_box_x, left_bridge_pos_x] =
           bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, left_bridge_x);
       const auto [right_bridge_box_x, right_bridge_pos_x] =
@@ -1141,12 +1140,12 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       place_adhesive_box(_toString(component_id, "component%d_left_bridge_fpc_glue"),
                          left_bridge_box_x, left_bridge_y, left_bridge_pos_x, left_bridge_pos_y);
       place_adhesive_box(_toString(component_id, "component%d_right_bridge_fpc_glue"),
-                         right_bridge_box_x, right_bridge_y, right_bridge_pos_x, right_bridge_pos_y);
+                         right_bridge_box_x, right_bridge_y, right_bridge_pos_x,
+                         right_bridge_pos_y);
     } else if (component.rsu_bridge_fpc_pattern) {
       auto place_passive_box = [&](const string& name, double box_x, double box_y,
-                                   double box_thickness, double pos_x, double pos_y,
-                                   double local_z, const string& material_name,
-                                   const string& vis) {
+                                   double box_thickness, double pos_x, double pos_y, double local_z,
+                                   const string& material_name, const string& vis) {
         if (box_x <= 0.0 || box_y <= 0.0 || box_thickness <= 0.0) {
           return;
         }
@@ -1154,8 +1153,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Volume box_volume(name, box_solid, description.material(material_name));
         box_volume.setVisAttributes(description.visAttributes(vis));
         prototype.volume.placeVolume(
-            box_volume,
-            Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
+            box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
       };
 
       auto place_bridge_fpc = [&](const string& name, double box_x, double box_y, double pos_x,
@@ -1175,30 +1173,31 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       };
 
       auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
-        const double clearance = description.constant<double>("SiEndcapModuleEndClearance");
+        const double clearance   = description.constant<double>("SiEndcapModuleEndClearance");
         const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
         const double available_x = side_span - 2.0 * clearance;
         const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
-        const double box_center =
-            after_rsu ? module_edge - clearance - box_x / 2.0
-                      : module_edge + clearance + box_x / 2.0;
+        const double box_center  = after_rsu ? module_edge - clearance - box_x / 2.0
+                                             : module_edge + clearance + box_x / 2.0;
         return std::make_tuple(box_x, box_center - component.x_offset);
       };
       auto bridge_fpc_y_center = [&](double box_y, double top_edge_offset) {
         return y_size / 2.0 + top_edge_offset - box_y / 2.0;
       };
 
-      const double lec_side_span = description.constant<double>("SiEndcapModule6RSU_left_extension");
-      const double rec_side_span = description.constant<double>("SiEndcapModule6RSU_right_extension");
-      const double left_bridge_x  = description.constant<double>("SiEndcapLeftBridgeFPC_width");
-      const double left_bridge_y  = description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const double lec_side_span =
+          description.constant<double>("SiEndcapModule6RSU_left_extension");
+      const double rec_side_span =
+          description.constant<double>("SiEndcapModule6RSU_right_extension");
+      const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
+      const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const double left_bridge_pos_y = bridge_fpc_y_center(
           left_bridge_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
       const double right_bridge_x = description.constant<double>("SiEndcapRightBridgeFPC_width");
       const double right_bridge_y = description.constant<double>("SiEndcapRightBridgeFPC_length");
       const double right_bridge_pos_y = bridge_fpc_y_center(
           right_bridge_y, description.constant<double>("SiEndcapRightBridgeFPC_y_offset"));
-      const bool lec_after_rsu    = component.lec_after_rsu;
+      const bool lec_after_rsu = component.lec_after_rsu;
       const auto [left_bridge_box_x, left_bridge_pos_x] =
           bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, left_bridge_x);
       const auto [right_bridge_box_x, right_bridge_pos_x] =
