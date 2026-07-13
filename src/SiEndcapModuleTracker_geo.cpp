@@ -543,7 +543,7 @@ vector<CorrugationRow> load_corrugation_rows(const string& file_name, const stri
       return fields[iter->second];
     };
 
-    string row_disk = get_field("disk");
+    string row_disk       = get_field("disk");
     const bool shared_row = row_disk == "*" || row_disk == "all";
     const bool disk_row   = row_disk == disk_key;
     if (!(shared_row || disk_row)) {
@@ -556,10 +556,10 @@ vector<CorrugationRow> load_corrugation_rows(const string& file_name, const stri
 
     try {
       CorrugationRow row;
-      row.csv_line = line_number;
-      row.row_y    = std::stod(get_field("row_y_mm")) * mm;
-      row.height   = std::stod(get_field("h_mm")) * mm;
-      row.theta    = std::stod(get_field("theta_deg")) * degree;
+      row.csv_line            = line_number;
+      row.row_y               = std::stod(get_field("row_y_mm")) * mm;
+      row.height              = std::stod(get_field("h_mm")) * mm;
+      row.theta               = std::stod(get_field("theta_deg")) * degree;
       string half_pitch_value = get_field("d_mm");
       if (half_pitch_value.empty()) {
         half_pitch_value = get_field("half_pitch_mm");
@@ -590,10 +590,9 @@ vector<CorrugationRow> load_corrugation_rows(const string& file_name, const stri
   }
 
   auto rows = disk_rows.empty() ? shared_rows : disk_rows;
-  std::sort(rows.begin(), rows.end(),
-            [](const CorrugationRow& lhs, const CorrugationRow& rhs) {
-              return lhs.row_y < rhs.row_y;
-            });
+  std::sort(rows.begin(), rows.end(), [](const CorrugationRow& lhs, const CorrugationRow& rhs) {
+    return lhs.row_y < rhs.row_y;
+  });
   return rows;
 }
 
