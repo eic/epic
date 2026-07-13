@@ -3,7 +3,12 @@
 
 <lccdd>
   <define>
-    <constant name="SiVertexSensor_thickness" value="40*um" />
+    <constant name="SiVertexSensorCu_thickness"         value="2.5*um" />
+    <constant name="SiVertexSensorActiveSi_thickness"   value="14*um" />
+    <constant name="SiVertexSensorInactiveSi_thickness" value="36*um" />
+    <constant name="SiVertexSensor_thickness"
+      value="SiVertexSensorCu_thickness + SiVertexSensorActiveSi_thickness + SiVertexSensorInactiveSi_thickness" />
+    <comment>Radial order: inactive Si, active Si, then Cu at larger R.</comment>
 
     <comment>
       1 RSU              = 2x6 tiles with inactive areas == 2x2 sections
@@ -49,9 +54,9 @@
     <documentation>
       for the segmentation. Assume sensors are placed at the inner most surface for each layer
     </documentation>
-    <constant name="VertexBarrelSegL0_r" value="VertexBarrelModL0_rmin+SiVertexSensor_thickness/2.0" />
-    <constant name="VertexBarrelSegL1_r" value="VertexBarrelModL1_rmin+SiVertexSensor_thickness/2.0" />
-    <constant name="VertexBarrelSegL2_r" value="VertexBarrelModL2_rmin+SiVertexSensor_thickness/2.0" />
+    <constant name="VertexBarrelSegL0_r" value="VertexBarrelModL0_rmin+SiVertexSensorInactiveSi_thickness+SiVertexSensorActiveSi_thickness/2.0" />
+    <constant name="VertexBarrelSegL1_r" value="VertexBarrelModL1_rmin+SiVertexSensorInactiveSi_thickness+SiVertexSensorActiveSi_thickness/2.0" />
+    <constant name="VertexBarrelSegL2_r" value="VertexBarrelModL2_rmin+SiVertexSensorInactiveSi_thickness+SiVertexSensorActiveSi_thickness/2.0" />
 
     <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/> <comment>place holder, not used for now bur required for CI checks</comment>
     <documentation>
@@ -105,8 +110,22 @@
       length="VertexBarrelMod_length">
         <module_component name="RSU" type="upper"
           material="Silicon"
+          sensitive="false"
+          thickness="SiVertexSensorInactiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="upper"
+          material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"
+          thickness="SiVertexSensorActiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="upper"
+          material="Copper"
+          sensitive="false"
+          thickness="SiVertexSensorCu_thickness"
           width="Section_width"
           length="Section_length"
           vis="VertexLayerVis" />
@@ -115,8 +134,22 @@
       length="VertexBarrelMod_length">
         <module_component name="RSU" type="lower"
           material="Silicon"
+          sensitive="false"
+          thickness="SiVertexSensorInactiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="lower"
+          material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"
+          thickness="SiVertexSensorActiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="lower"
+          material="Copper"
+          sensitive="false"
+          thickness="SiVertexSensorCu_thickness"
           width="Section_width"
           length="Section_length"
           vis="VertexLayerVis" />
@@ -126,8 +159,22 @@
       length="VertexBarrelMod_length">
         <module_component name="RSU" type="upper"
           material="Silicon"
+          sensitive="false"
+          thickness="SiVertexSensorInactiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="upper"
+          material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"
+          thickness="SiVertexSensorActiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="upper"
+          material="Copper"
+          sensitive="false"
+          thickness="SiVertexSensorCu_thickness"
           width="Section_width"
           length="Section_length"
           vis="VertexLayerVis" />
@@ -136,8 +183,22 @@
       length="VertexBarrelMod_length">
         <module_component name="RSU" type="lower"
           material="Silicon"
+          sensitive="false"
+          thickness="SiVertexSensorInactiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="lower"
+          material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"
+          thickness="SiVertexSensorActiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="lower"
+          material="Copper"
+          sensitive="false"
+          thickness="SiVertexSensorCu_thickness"
           width="Section_width"
           length="Section_length"
           vis="VertexLayerVis" />
@@ -147,8 +208,22 @@
       length="VertexBarrelMod_length">
         <module_component name="RSU" type="upper"
           material="Silicon"
+          sensitive="false"
+          thickness="SiVertexSensorInactiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="upper"
+          material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"
+          thickness="SiVertexSensorActiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="upper"
+          material="Copper"
+          sensitive="false"
+          thickness="SiVertexSensorCu_thickness"
           width="Section_width"
           length="Section_length"
           vis="VertexLayerVis" />
@@ -157,8 +232,22 @@
       length="VertexBarrelMod_length">
         <module_component name="RSU" type="lower"
           material="Silicon"
+          sensitive="false"
+          thickness="SiVertexSensorInactiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="lower"
+          material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"
+          thickness="SiVertexSensorActiveSi_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+        <module_component name="RSU" type="lower"
+          material="Copper"
+          sensitive="false"
+          thickness="SiVertexSensorCu_thickness"
           width="Section_width"
           length="Section_length"
           vis="VertexLayerVis" />

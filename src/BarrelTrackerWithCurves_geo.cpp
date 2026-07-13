@@ -144,6 +144,21 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       throw runtime_error("Logics error in building modules.");
     }
 
+    const bool sensor_stack = getAttrOrDefault<bool>(x_mod, _Unicode(sensor_stack), false);
+    const double copper_thickness =
+        getAttrOrDefault<double>(x_mod, _Unicode(sensor_cu_thickness), 0.0);
+    const double active_si_thickness =
+        getAttrOrDefault<double>(x_mod, _Unicode(sensor_active_si_thickness), 0.0);
+    const double inactive_si_thickness =
+        getAttrOrDefault<double>(x_mod, _Unicode(sensor_inactive_si_thickness), 0.0);
+    const double sensor_thickness =
+        copper_thickness + active_si_thickness + inactive_si_thickness;
+
+    if (sensor_stack &&
+        (copper_thickness <= 0 || active_si_thickness <= 0 || inactive_si_thickness <= 0)) {
+      throw runtime_error("CurvedTrackerBarrel: sensor stack thicknesses must be positive");
+    }
+
     int ncomponents        = 0;
     int sensor_number      = 1;
     double total_thickness = 0;
@@ -198,77 +213,106 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
 
       Volume c_vol;
       if (x_comp.nameStr().find("Curved") != std::string::npos) {
-        double c_rmin = x_comp.radius(); // radius of curvature in cm
-        double c_phi0 =
-            x_comp.phi0(); // start and stop angle of segment in rad - zero is centre of stave
-        double c_phi1 = x_comp.phi1();
-        double c_Nseg = x_comp.nsegments(); //  number of flat segments used to approximate cylinder
-        double dphi   = (c_phi1 - c_phi0) / (double)c_Nseg;
-        vector<double> Xp, Zp;
-        double phiP = c_phi0;
+        const bool build_sensor_stack =
+            sensor_stack && x_comp.nameStr().find("CurvedSi") != std::string::npos;
+        vector<string> layer_names       = {"Sensor"};
+        vector<string> layer_materials   = {x_comp.materialStr()};
+        vector<double> layer_thicknesses = {x_comp.thickness()};
+        vector<double> layer_offsets     = {0.0};
+        vector<bool> layer_sensitivities = {x_comp.isSensitive()};
 
-        for (int i = 0; i < c_Nseg + 1; ++i) {
-          Xp.push_back(c_rmin * sin(phiP));
-          Zp.push_back(c_rmin * cos(phiP));
-          phiP += dphi;
-        }
-        phiP = c_phi0 + dphi / 2;
-        for (int i = 0; i < c_Nseg; ++i) {
-          double segwidth = sqrt((Xp[i + 1] - Xp[i]) * (Xp[i + 1] - Xp[i]) +
-                                 (Zp[i + 1] - Zp[i]) * (Zp[i + 1] - Zp[i]));
-          double midX     = 0.5 * (Xp[i] + Xp[i + 1]);
-          double midZ     = 0.5 * (Zp[i] + Zp[i + 1]);
-          Box seg_box((segwidth / 2) * ((c_rmin - x_comp.thickness() / 2) / c_rmin),
-                      x_comp.length() / 2, x_comp.thickness() / 2);
-          string seg_nam = c_nam + "." + _toString(i);
-          Volume seg_vol(seg_nam, seg_box, description.material(x_comp.materialStr()));
-
-          if (x_pos && x_rot) {
-            Position c_pos(midX + x_pos.x(0), x_pos.y(0), midZ + x_pos.z(0));
-            RotationZYX c_rot(x_rot.z(0), phiP + x_rot.y(0), x_rot.x(0));
-            pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
-          } else if (x_rot) {
-            Position c_pos(midX, 0, midZ);
-            pv = m_vol.placeVolume(
-                seg_vol,
-                Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0) + phiP, x_rot.x(0)), c_pos));
-          } else if (x_pos) {
-            RotationZYX c_rot(0, phiP, 0);
-            Position c_pos(midX + x_pos.x(0), x_pos.y(0), x_pos.z(0) + midZ);
-            pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
-          } else {
-            RotationZYX c_rot(0, phiP, 0);
-            Position c_pos(midX, 0, midZ);
-            pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+        if (build_sensor_stack) {
+          if (fabs(x_comp.thickness() - sensor_thickness) > 1e-9 * mm) {
+            throw runtime_error("CurvedTrackerBarrel: component and sensor-stack thickness differ");
           }
-          phiP += dphi;
-          seg_vol.setRegion(description, x_comp.regionStr());
-          seg_vol.setLimitSet(description, x_comp.limitsStr());
-          seg_vol.setVisAttributes(description, x_comp.visStr());
-          if (x_comp.isSensitive()) {
-            pv.addPhysVolID("sensor", sensor_number++);
-            seg_vol.setSensitiveDetector(sens);
-            sensitives[m_nam].push_back(pv);
-            //        module_thicknesses[m_nam] = {x_comp.innerthickness(),x_comp.outerthickness()};
+          layer_names       = {"InactiveSi", "ActiveSi", "Copper"};
+          layer_materials   = {"Silicon", "Silicon", "Copper"};
+          layer_thicknesses = {inactive_si_thickness, active_si_thickness, copper_thickness};
+          // Increasing curvature radius is away from the stave support for both sensor surfaces.
+          layer_offsets       = {inactive_si_thickness / 2.0 - sensor_thickness / 2.0,
+                                 inactive_si_thickness + active_si_thickness / 2.0 -
+                                     sensor_thickness / 2.0,
+                                 sensor_thickness / 2.0 - copper_thickness / 2.0};
+          layer_sensitivities = {false, x_comp.isSensitive(), false};
+        }
 
-            // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-            Vector3D u(-1., 0., 0.);
-            Vector3D v(0., -1., 0.);
-            Vector3D n(0., 0., 1.);
-            //    Vector3D o( 0. , 0. , 0. ) ;
+        for (size_t layer = 0; layer < layer_names.size(); ++layer) {
+          double c_rmin = x_comp.radius() + layer_offsets[layer]; // radius of curvature in cm
+          double c_phi0 =
+              x_comp.phi0(); // start and stop angle of segment in rad - zero is centre of stave
+          double c_phi1 = x_comp.phi1();
+          double c_Nseg = x_comp.nsegments(); //  number of flat segments used to approximate cylinder
+          double dphi   = (c_phi1 - c_phi0) / (double)c_Nseg;
+          vector<double> Xp, Zp;
+          double phiP = c_phi0;
 
-            // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-            // depending on wether the support is above or below the sensor
-            double inner_thickness =
-                getAttrOrDefault<double>(x_comp, _Unicode(innerthickness), 0.5 * mm);
-            double outer_thickness =
-                getAttrOrDefault<double>(x_comp, _Unicode(outerthickness), 0.5 * mm);
-            SurfaceType type(SurfaceType::Sensitive);
+          for (int i = 0; i < c_Nseg + 1; ++i) {
+            Xp.push_back(c_rmin * sin(phiP));
+            Zp.push_back(c_rmin * cos(phiP));
+            phiP += dphi;
+          }
+          phiP = c_phi0 + dphi / 2;
+          for (int i = 0; i < c_Nseg; ++i) {
+            double segwidth = sqrt((Xp[i + 1] - Xp[i]) * (Xp[i + 1] - Xp[i]) +
+                                   (Zp[i + 1] - Zp[i]) * (Zp[i + 1] - Zp[i]));
+            double midX     = 0.5 * (Xp[i] + Xp[i + 1]);
+            double midZ     = 0.5 * (Zp[i] + Zp[i + 1]);
+            Box seg_box((segwidth / 2) *
+                            ((c_rmin - layer_thicknesses[layer] / 2) / c_rmin),
+                        x_comp.length() / 2, layer_thicknesses[layer] / 2);
+            string seg_nam = c_nam;
+            if (build_sensor_stack)
+              seg_nam += "_" + layer_names[layer];
+            seg_nam += "." + _toString(i);
+            Volume seg_vol(seg_nam, seg_box, description.material(layer_materials[layer]));
 
-            VolPlane surf(seg_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-            volplane_surfaces[m_nam].push_back(surf);
+            if (x_pos && x_rot) {
+              Position c_pos(midX + x_pos.x(0), x_pos.y(0), midZ + x_pos.z(0));
+              RotationZYX c_rot(x_rot.z(0), phiP + x_rot.y(0), x_rot.x(0));
+              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+            } else if (x_rot) {
+              Position c_pos(midX, 0, midZ);
+              pv = m_vol.placeVolume(
+                  seg_vol,
+                  Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0) + phiP, x_rot.x(0)), c_pos));
+            } else if (x_pos) {
+              RotationZYX c_rot(0, phiP, 0);
+              Position c_pos(midX + x_pos.x(0), x_pos.y(0), x_pos.z(0) + midZ);
+              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+            } else {
+              RotationZYX c_rot(0, phiP, 0);
+              Position c_pos(midX, 0, midZ);
+              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+            }
+            phiP += dphi;
+            seg_vol.setRegion(description, x_comp.regionStr());
+            seg_vol.setLimitSet(description, x_comp.limitsStr());
+            seg_vol.setVisAttributes(description, x_comp.visStr());
+            if (layer_sensitivities[layer]) {
+              pv.addPhysVolID("sensor", sensor_number++);
+              seg_vol.setSensitiveDetector(sens);
+              sensitives[m_nam].push_back(pv);
+              //        module_thicknesses[m_nam] = {x_comp.innerthickness(),x_comp.outerthickness()};
 
-            //--------------------------------------------
+              // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+              Vector3D u(-1., 0., 0.);
+              Vector3D v(0., -1., 0.);
+              Vector3D n(0., 0., 1.);
+              //    Vector3D o( 0. , 0. , 0. ) ;
+
+              // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+              // depending on wether the support is above or below the sensor
+              double inner_thickness =
+                  getAttrOrDefault<double>(x_comp, _Unicode(innerthickness), 0.5 * mm);
+              double outer_thickness =
+                  getAttrOrDefault<double>(x_comp, _Unicode(outerthickness), 0.5 * mm);
+              SurfaceType type(SurfaceType::Sensitive);
+
+              VolPlane surf(seg_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+              volplane_surfaces[m_nam].push_back(surf);
+
+              //--------------------------------------------
+            }
           }
         }
         // thickness of curved layer is height of curve
