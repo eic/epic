@@ -1,99 +1,77 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 - 2026 Sylvester Joosten, Wouter Deconinck, Shujie Li, Aditya Yalavatti, Sam Henry -->
+<!-- Copyright (C) 2022 - 2025 Sylvester Joosten, Wouter Deconinck, Shujie Li, Aditya Yalavatti, Sam Henry -->
 
 <lccdd>
   <define>
     <comment>
-         This version is for the curved_modular_OB version, in which the curved surface of the active silicon is modelled by a series of flat strips, with separate modules on
-         the top and bottom of the stave.  The passive material is the same as flat_OB with carbon fiber braces to  reproduce the peaks in the material thickness scan.
-         17 April 2026. Sam Henry
+         This version is for the flat_OB geometry - a more accurate model with carbon fiber braces to
+         reproduce the peaks in the material thickness scan.
+
+         Presentation: https://indico.bnl.gov/event/29542
     </comment>
 
     <constant name="SiBarrelSensor_thickness" value="40*um" />
     <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness*2.7" /> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
     <constant name="SiBarrelSiliconGap_width" value="1*mm" />
 
-    <constant name="SiBarrelStave1Service_thickness" value="0.07875*mm" />
-    <constant name="SiBarrelStave2Service_thickness" value="0.066045*mm" />
-    <constant name="SiBarrelStave1Frame_thickness" value="0.06*mm" />
-    <constant name="SiBarrelStave2Frame_thickness" value="0.12*mm" />
-    <constant name="SiBarrelStave1_width" value="3.888*cm" />
-    <constant name="SiBarrelStave2_width" value="3.888*cm" />
+    <constant name="SiBarrelMod1Service_thickness" value="0.07875*mm" />
+    <constant name="SiBarrelMod2Service_thickness" value="0.066045*mm" />
+    <constant name="SiBarrelMod1Frame_thickness" value="0.06*mm" />
+    <constant name="SiBarrelMod2Frame_thickness" value="0.12*mm" />
+    <constant name="SiBarrelStave1_width" value="3.8*cm" />
+    <constant name="SiBarrelStave2_width" value="3.8*cm" /> <!--UPDATED from 3.9 to 3.8-->
 
-   <constant name="SiBarrel1_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
-   <constant name="SiBarrel2_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
-
-    <constant name="SiBarrelStave1_length" value="50.3*cm - SiBarrel1_Length_Trim"/>
-    <constant name="SiBarrelStave2_length" value="79.3*cm - SiBarrel2_Length_Trim" />
-
-    <constant name="SiBarrelSingleModule1_length" value="13.0*cm"/>
-    <constant name="SiBarrelSingleModule2_length" value="10.833*cm" />
-
-   <constant name="SiBarrel1_Module0_Position" value="-186.98*mm" />
-   <constant name="SiBarrel1_Module1_Position" value="-62.64*mm" />
-   <constant name="SiBarrel1_Module2_Position" value="62.69*mm" />
-   <constant name="SiBarrel1_Module3_Position" value="187.03*mm" />
-
-   <constant name="SiBarrel2_Module0_Position" value="-343.2*mm" />
-   <constant name="SiBarrel2_Module1_Position" value="-245.39*mm" />
-   <constant name="SiBarrel2_Module2_Position" value="-147.58*mm" />
-   <constant name="SiBarrel2_Module3_Position" value="-49.77*mm" />
-   <constant name="SiBarrel2_Module4_Position" value="49.04*mm" />
-   <constant name="SiBarrel2_Module5_Position" value="146.85*mm" />
-   <constant name="SiBarrel2_Module6_Position" value="244.66*mm" />
-   <constant name="SiBarrel2_Module7_Position" value="342.47*mm" />
-
-    <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
-    <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" />
+    <constant name="SiBarrelLayer1_length" value="1000*mm" />
+    <constant name="SiBarrelLayer2_length" value="1000*mm" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness" value="1.6*cm" />
-    <constant name="SiBarrelStave1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
-    <constant name="SiBarrelStave2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
-   <constant name="SiBarrelLayer1_rmin" value="SiBarrelStave1_rc - SiBarrelLayer_thickness / 2" />
+    <constant name="SiBarrelLayer_thickness" value="1.5*cm" />
+    <constant name="SiBarrelMod1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
+    <constant name="SiBarrelMod2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
+   <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rc - SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
-    <constant name="SiBarrelLayer2_rmin" value="SiBarrelStave2_rc -  SiBarrelLayer_thickness / 2 " />
+    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rc -  SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
-    <constant name="SiBarrelStave1_count" value="44" />
+    <constant name="SiBarrelStave1_count" value="46" />
     <constant name="SiBarrelStave2_count" value="70" />
     <constant name="SiBarrel1_radius_castellation" value="6*mm" />
     <constant name="SiBarrel2_radius_castellation" value="6*mm" />
-    <constant name="SiBarrelStave1Lower_rc"         value="SiBarrelStave1_rc-SiBarrel1_radius_castellation/2" /> <!--get rmin of the lower modules -->
-    <constant name="SiBarrelStave2Lower_rc"         value="SiBarrelStave2_rc-SiBarrel2_radius_castellation/2"/>
-
-
-    <constant name="SiBarrelBrace_width" value="10*mm" />
-    <constant name="SiBarrelBrace_thickness" value="2*mm" />
-    <constant name="SiBarrelBrace_StaveWidthFraction" value="0.9" />
-    <constant name="SiBarrelBrace_Position_X" value="-1*mm" />
-
-    <constant name="SiBarrel1_Brace0_Position_Y" value="0.0" />
-    <constant name="SiBarrel1_Brace1_Position_Y" value="13.20*cm" />
-    <constant name="SiBarrel1_Brace2_Position_Y" value="24.0*cm" />
-    <constant name="SiBarrel2_Brace0_Position_Y" value="0.0" />
-    <constant name="SiBarrel2_Brace1_Position_Y" value="11.3*cm" />
-    <constant name="SiBarrel2_Brace2_Position_Y" value="21.6*cm" />
-    <constant name="SiBarrel2_Brace3_Position_Y" value="32.8*cm" />
-    <constant name="SiBarrel2_Brace4_Position_Y" value="SiBarrelStave2_length/2-SiBarrelBrace_width/2" /> <!-- to align last brace edge with module edge, the center should be 79.3/2-1/2=39.15cm-->
-
+    <constant name="SiBarrelMod1Lower_rc"         value="SiBarrelMod1_rc-SiBarrel1_radius_castellation/2" /> <!--get rmin of the lower modules -->
+    <constant name="SiBarrelMod2Lower_rc"         value="SiBarrelMod2_rc-SiBarrel2_radius_castellation/2"/>
+ <constant name="SiBarrelBrace_thickness" value="2*mm" />
 <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
-<constant name="SiBarrelSiliconCurveRadius" value="90.035*mm" />
-<constant name="SiBarrelSiliconSpace1" value="0.815*mm"/>
-<constant name="SiBarrelSiliconSpace2" value="0.791*mm"/>
-
+<constant name="SiBarrelSiliconCurveRadius" value="100*mm" />
+<constant name="SiBarrelSiliconSpace" value="1.26*mm"/>
 <constant name="SiBarrelSiliconCurveHeight1" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave1_width/2)^2)" />
 <constant name="SiBarrelSiliconCurveHeight2" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave2_width/2)^2)" />
-<constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight1 - SiBarrelStave1Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace1" />
-<constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight2 - SiBarrelStave2Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace2" />
-<constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight1 + SiBarrelStave1Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace1" />
-<constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight2 + SiBarrelStave2Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace2" />
+<constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight1 - SiBarrelMod1Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace" />
+<constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconCurveHeight2 - SiBarrelMod2Frame_thickness - 0.5*SiBarrelBrace_thickness - SiBarrelSiliconSpace" />
+<constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight1 + SiBarrelMod1Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace" />
+<constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconCurveHeight2 + SiBarrelMod2Service_thickness + 0.5*SiBarrelBrace_thickness + SiBarrelSiliconSpace" />
 <constant name="SiBarrelSiliconCurveHalfAngle1" value="asin(0.5*SiBarrelStave1_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconCurveHalfAngle2" value="asin(0.5*SiBarrelStave2_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconGapHalfAngle" value="atan(0.5*SiBarrelSiliconGap_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrel_ShortThickness" value="0.5*SiBarrelSensorMod_thickness" />
-<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelStave1Service_thickness + SiBarrelStave1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace1 + SiBarrelSiliconCurveHeight1"  />
-<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelStave2Service_thickness + SiBarrelStave2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace2 + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod1Service_thickness + SiBarrelMod1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelMod2Service_thickness + SiBarrelMod2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace + SiBarrelSiliconCurveHeight1"  />
+
+    <constant name="SiBarrel1_Module_Length" value="129.91*mm" />
+    <constant name="SiBarrel2_Module_Length" value="108.25*mm" />
+    
+    <constant name="SiBarrel1_Module0_Position_Y" value="-188.285*mm" />
+    <constant name="SiBarrel1_Module1_Position_Y" value="-60.376*mm" />
+    <constant name="SiBarrel1_Module2_Position_Y" value="60.375*mm" />
+    <constant name="SiBarrel1_Module3_Position_Y" value="188.375*mm" />
+
+    <constant name="SiBarrel2_Module0_Position_Y" value="-376.539*mm" />
+    <constant name="SiBarrel2_Module1_Position_Y" value="-264.001*mm" />
+    <constant name="SiBarrel2_Module2_Position_Y" value="-161.638*mm" />
+    <constant name="SiBarrel2_Module3_Position_Y" value="-53.1696*mm" />
+    <constant name="SiBarrel2_Module4_Position_Y" value="53.141*mm" />
+    <constant name="SiBarrel2_Module5_Position_Y" value="157.569*mm" />
+    <constant name="SiBarrel2_Module6_Position_Y" value="268.05*mm" />
+    <constant name="SiBarrel2_Module7_Position_Y" value="368.4*mm" />
 
 
   </define>
@@ -115,33 +93,33 @@
         length="SiBarrelLayer1_length" />
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis">
-
+      
          <module_component name="CurvedSi0C"
              material="Silicon"
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree - SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module0_Position + SiBarrel1_Length_Trim/2" z="SiBarrelLowerCurveAxis1" />
+             vis="TrackerLayerVis"> 
+        <position x="0" y="SiBarrel1_Module0_Position_Y" z="SiBarrelLowerCurveAxis1" />
         </module_component>
-
+     
         <module_component name="CurvedSi2C"
              material="Silicon"
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree - SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module2_Position" z="SiBarrelLowerCurveAxis1" />
+             length="SiBarrel1_Module_Length"
+             thickness="SiBarrelSensorMod_thickness"          
+             vis="TrackerLayerVis"> 
+        <position x="0" y="SiBarrel1_Module2_Position_Y" z="SiBarrelLowerCurveAxis1" />
         </module_component>
-
+      
         <module_component name="CurvedSi0R"
              material="Silicon"
              sensitive="true"
@@ -149,14 +127,14 @@
              outerthickness="SiBarrel1_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1"
+             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1" 
              phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module0_Position + SiBarrel1_Length_Trim/2" z="SiBarrelLowerCurveAxis1" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel1_Module0_Position_Y" z="SiBarrelLowerCurveAxis1" />
         </module_component>
-
+        
          <module_component name="CurvedSi0L"
              material="Silicon"
              sensitive="true"
@@ -164,14 +142,14 @@
              outerthickness="SiBarrel1_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree + SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module0_Position + SiBarrel1_Length_Trim/2" z="SiBarrelLowerCurveAxis1" />
+          vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel1_Module0_Position_Y" z="SiBarrelLowerCurveAxis1" />
         </module_component>
-
+      
         <module_component name="CurvedSi2R"
              material="Silicon"
              sensitive="true"
@@ -179,89 +157,28 @@
              outerthickness="SiBarrel1_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1"
+             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1" 
              phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module2_Position" z="SiBarrelLowerCurveAxis1" />
+          vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel1_Module2_Position_Y" z="SiBarrelLowerCurveAxis1" />
         </module_component>
-
+     
         <module_component name="CurvedSi2L"
              material="Silicon"
              sensitive="true"
              innerthickness="SiBarrel_ShortThickness"
              outerthickness="SiBarrel1_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconGapHalfAngle"
+             radius="SiBarrelSiliconCurveRadius"    
+             phi0="180*degree + SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrelSingleModule1_length"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module2_Position" z="SiBarrelLowerCurveAxis1" />
+          vis="TrackerLayerVis"> 
+        <position x="0" y="SiBarrel1_Module2_Position_Y" z="SiBarrelLowerCurveAxis1" />
         </module_component>
-
-
-        <module_component name="Frame"
-          material="CarbonFiber"
-          sensitive="false"
-          width="SiBarrelStave1_width"
-          length="SiBarrelStave1_length"
-          thickness="SiBarrelStave1Frame_thickness"
-          vis="TrackerSupportVis" >
-          <position x="0" y="0" z="-0.5*(SiBarrelBrace_thickness + SiBarrelStave1Frame_thickness)"/>
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel1_Brace0_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel1_Brace1_Position_Y" z="0" /> <!-- use z position here to shift this component relative to previous one. If zero, assume all components stacked on each other-->
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="-SiBarrel1_Brace1_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel1_Brace2_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="-SiBarrel1_Brace2_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Service"
-          material="Kapton"
-          sensitive="false"
-          width="SiBarrelStave1_width"
-          length="SiBarrelStave1_length"
-          thickness="SiBarrelStave1Service_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelStave1Service_thickness)" />
-          </module_component>
 
         <module_component name="CurvedSi1R"
              material="Silicon"
@@ -269,13 +186,13 @@
              innerthickness="SiBarrel1_LongThickness"
              outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle1"
+             radius="SiBarrelSiliconCurveRadius"       
+             phi0="-SiBarrelSiliconCurveHalfAngle1" 
              phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
+             vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel1_Module1_Position_Y" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
         <module_component name="CurvedSi1L"
@@ -285,12 +202,12 @@
              outerthickness="SiBarrel_ShortThickness"
           nsegments="SiBarrelSiliconCurveNoSegments"
           radius="SiBarrelSiliconCurveRadius"
-          phi0="SiBarrelSiliconGapHalfAngle"
+          phi0="SiBarrelSiliconGapHalfAngle" 
           phi1="SiBarrelSiliconCurveHalfAngle1"
-          length="SiBarrelSingleModule1_length"
+          length="SiBarrel1_Module_Length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
+          vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel1_Module1_Position_Y" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
         <module_component name="CurvedSi3R"
@@ -300,14 +217,14 @@
              outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle1"
+             phi0="-SiBarrelSiliconCurveHalfAngle1" 
              phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module3_Position - SiBarrel1_Length_Trim/2" z="SiBarrelUpperCurveAxis1" />
+             vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel1_Module3_Position_Y" z="SiBarrelUpperCurveAxis1" />
         </module_component>
-
+        
         <module_component name="CurvedSi3L"
           material="Silicon"
           sensitive="true"
@@ -315,40 +232,238 @@
           outerthickness="SiBarrel_ShortThickness"
           nsegments="SiBarrelSiliconCurveNoSegments"
           radius="SiBarrelSiliconCurveRadius"
-          phi0="SiBarrelSiliconGapHalfAngle"
+          phi0="SiBarrelSiliconGapHalfAngle" 
           phi1="SiBarrelSiliconCurveHalfAngle1"
-          length="SiBarrelSingleModule1_length  - SiBarrel1_Length_Trim"
+          length="SiBarrel1_Module_Length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module3_Position  - SiBarrel1_Length_Trim" z="SiBarrelUpperCurveAxis1" />
+          vis="TrackerLayerVis">  
+          <position x="0" y="SiBarrel1_Module3_Position_Y" z="SiBarrelUpperCurveAxis1" />
         </module_component>
-
+        
         <module_component name="CurvedSi1C"
              material="Silicon"
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
+             phi0="-SiBarrelSiliconGapHalfAngle" 
              phi1="+SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-             <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
+             vis="TrackerLayerVis">  
+             <position x="0" y="SiBarrel1_Module1_Position_Y" z="SiBarrelUpperCurveAxis1" />
         </module_component>
-
+        
          <module_component name="CurvedSi3C"
              material="Silicon"
              sensitive="false"
              nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
+             radius="SiBarrelSiliconCurveRadius"             
+             phi0="-SiBarrelSiliconGapHalfAngle" 
              phi1="+SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length - SiBarrel1_Length_Trim"
+             length="SiBarrel1_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module3_Position - SiBarrel1_Length_Trim/2" z="SiBarrelUpperCurveAxis1" />
+             vis="TrackerLayerVis">  
+        <position x="0" y="SiBarrel1_Module3_Position_Y" z="SiBarrelUpperCurveAxis1" />
         </module_component>
 
+
+
+        <module_component name="L3_FPC_(Mirror_#1)_ASCII.gdml" 
+                          matching_name="FPC"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_FPC_(Mirror_#1)_ASCII.gdml" />
+    
+        <module_component name="L3_FPC_ASCII.gdml" 
+                          matching_name="FPC"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_FPC_ASCII.gdml" />
+    
+        <module_component name="Kapton_ModuleSupport002_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Kapton_ModuleSupport002_ASCII.gdml" />
+    
+        <module_component name="Kapton_ModuleSupport003_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Kapton_ModuleSupport003_ASCII.gdml" />
+    
+        <module_component name="Kapton_ModuleSupport001_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Kapton_ModuleSupport001_ASCII.gdml" />
+    
+        <module_component name="Kapton_ModuleSupport_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Kapton_ModuleSupport_ASCII.gdml" />
+    
+        <module_component name="L3_Kapton_edge_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Kapton_edge_ASCII.gdml" />
+    
+        <module_component name="L3_Kapton_edge001_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Kapton_edge001_ASCII.gdml" />
+    
+        <module_component name="Module2_K9_CrossBraces_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module2_K9_CrossBraces_ASCII.gdml" />
+    
+        <module_component name="Module2_K9_CrossBraces001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module2_K9_CrossBraces001_ASCII.gdml" />
+    
+        <module_component name="Module3_K9_CrossBraces_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module3_K9_CrossBraces_ASCII.gdml" />
+    
+        <module_component name="Module3_K9_CrossBraces001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module3_K9_CrossBraces001_ASCII.gdml" />
+    
+        <module_component name="Module4_K9_CrossBraces_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module4_K9_CrossBraces_ASCII.gdml" />
+    
+        <module_component name="Module4_K9_CrossBraces001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module4_K9_CrossBraces001_ASCII.gdml" />
+    
+        <module_component name="Central_K9_CrossBraces_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Central_K9_CrossBraces_ASCII.gdml" />
+    
+        <module_component name="Central_K9_CrossBraces001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Central_K9_CrossBraces001_ASCII.gdml" />
+    
+        <module_component name="Module1_K9_CrossBraces_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module1_K9_CrossBraces_ASCII.gdml" />
+    
+        <module_component name="Module1_K9_CrossBraces001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Module1_K9_CrossBraces001_ASCII.gdml" />
+    
+        <module_component name="L3_Pair_of_RPV_Longerons_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Pair_of_RPV_Longerons_ASCII.gdml" />
+    
+        <module_component name="L3_Pair_of_RPV_Longerons001_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Pair_of_RPV_Longerons001_ASCII.gdml" />
+    
+        <module_component name="L3_Pair_of_RPV_Longerons002_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Pair_of_RPV_Longerons002_ASCII.gdml" />
+    
+        <module_component name="L3_Pair_of_RPV_Longerons003_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Pair_of_RPV_Longerons003_ASCII.gdml" />
+    
+        <module_component name="L3_Pair_of_RPV_Longerons004_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Pair_of_RPV_Longerons004_ASCII.gdml" />
+    
+        <module_component name="L3_Pair_of_RPV_Longerons005_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3_Pair_of_RPV_Longerons005_ASCII.gdml" />
+    
+        <module_component name="L3(approx)_Carbon_Composite_Stave_Skin_bottom001_ASCII.gdml" 
+                          matching_name="Carbon"
+                          material="CarbonFiber"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3(approx)_Carbon_Composite_Stave_Skin_bottom001_ASCII.gdml" />
+    
+        <module_component name="L3(approx)_Carbon_Composite_Stave_Skin_top001_ASCII.gdml" 
+                          matching_name="Carbon"
+                          material="CarbonFiber"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/L3(approx)_Carbon_Composite_Stave_Skin_top001_ASCII.gdml" />
+    
+        <module_component name="Ultem_End_Mount_CLEANED_ASCII.gdml" 
+                          matching_name="Ultem"
+                          material="Ultem"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Ultem_End_Mount_CLEANED_ASCII.gdml" />
+    
+        <module_component name="Ultem_End_Mount001_CLEANED_ASCII.gdml" 
+                          matching_name="Ultem"
+                          material="Ultem"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L3/L3/Ultem_End_Mount001_CLEANED_ASCII.gdml" />
+    
       </module>
       <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
@@ -356,9 +471,9 @@
           inner_r="SiBarrelLayer1_rmin"
           outer_r="SiBarrelLayer1_rmax"
           z_length="SiBarrelLayer1_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count*3"
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count"
           bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count*3"
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count"
           bins1="100" />
         <comment>
           phi0 : Starting phi of first module.
@@ -371,7 +486,7 @@
           dr : Radial displacement parameter, of every other module.
         </comment>
         <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave1_count" phi0="0.0"
-          rc="SiBarrelStave1Lower_rc" dr="SiBarrel1_radius_castellation" />
+          rc="SiBarrelMod1Lower_rc" dr="SiBarrel1_radius_castellation" />
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>
@@ -397,12 +512,12 @@
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree - SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length - SiBarrel2_Length_Trim"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Module0_Position + SiBarrel2_Length_Trim/2" z="SiBarrelLowerCurveAxis2" />
+             vis="TrackerLayerVis"> 
+        <position x="0" y="SiBarrel2_Module0_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi2C"
@@ -410,12 +525,12 @@
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree - SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module2_Position" z="SiBarrelLowerCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module2_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi4C"
@@ -423,25 +538,25 @@
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree - SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module4_Position" z="SiBarrelLowerCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module4_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
-
+        
          <module_component name="CurvedSi6C"
              material="Silicon"
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
+             phi0="180*degree - SiBarrelSiliconGapHalfAngle" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module6_Position" z="SiBarrelLowerCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module6_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi0R"
@@ -451,14 +566,14 @@
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
+             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length - SiBarrel2_Length_Trim"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module0_Position + SiBarrel2_Length_Trim/2" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module0_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
-
+   
         <module_component name="CurvedSi0L"
              material="Silicon"
              sensitive="true"
@@ -466,12 +581,12 @@
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
+             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length - SiBarrel2_Length_Trim"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module0_Position + SiBarrel2_Length_Trim/2" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module0_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi2R"
@@ -481,12 +596,12 @@
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
+             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module2_Position" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module2_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi2L"
@@ -496,12 +611,12 @@
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
+             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module2_Position" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module2_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi4R"
@@ -511,12 +626,12 @@
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
+             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module4_Position" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module4_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi4L"
@@ -525,13 +640,13 @@
              innerthickness="SiBarrel_ShortThickness"
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
+             radius="SiBarrelSiliconCurveRadius"    
+             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module4_Position" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module4_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi6R"
@@ -541,122 +656,28 @@
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
+             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module6_Position" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module6_Position_Y" z="SiBarrelLowerCurveAxis2" />
         </module_component>
-
+       
         <module_component name="CurvedSi6L"
              material="Silicon"
              sensitive="true"
              innerthickness="SiBarrel_ShortThickness"
              outerthickness="SiBarrel2_LongThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
+             radius="SiBarrelSiliconCurveRadius"       
+             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2" 
              phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module6_Position" z="SiBarrelLowerCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module6_Position_Y" z="SiBarrelLowerCurveAxis2" />
        </module_component>
-
-
-
-        <module_component name="Frame"
-          material="CarbonFiber"
-          sensitive="false"
-          width="SiBarrelStave2_width"
-          length="SiBarrelStave2_length"
-          thickness="SiBarrelStave2Frame_thickness"
-          vis="TrackerSupportVis" >
-          <position x="0" y="0" z="-0.5*(SiBarrelBrace_thickness + SiBarrelStave2Frame_thickness)"/>
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace0_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace1_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace1_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace2_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace2_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace3_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace3_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace4_Position_Y" z="0" />
-        </module_component>
-
-        <module_component name="Brace" material="CarbonFiber"
-          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
-          thickness="SiBarrelBrace_thickness"
-          length="SiBarrelBrace_width"
-          vis="TrackerSupportVis">
-          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace4_Position_Y" z="0" />
-        </module_component>
-
-      <module_component name="Service"
-          material="Kapton"
-          sensitive="false"
-          width="SiBarrelStave2_width"
-          length="SiBarrelStave2_length"
-          thickness="SiBarrelStave2Service_thickness"
-          vis="TrackerLayerVis" >
-          <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelStave1Service_thickness)" />
-        </module_component>
 
         <module_component name="CurvedSi1R"
              material="Silicon"
@@ -665,14 +686,14 @@
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
+             phi0="-SiBarrelSiliconCurveHalfAngle2" 
              phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module1_Position" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module1_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
-
+ 
         <module_component name="CurvedSi1L"
              material="Silicon"
              sensitive="true"
@@ -680,12 +701,12 @@
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
+             phi0="SiBarrelSiliconCurveHalfAngle2" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module1_Position" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module1_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi3R"
@@ -694,15 +715,15 @@
           innerthickness="SiBarrel2_LongThickness"
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
+             radius="SiBarrelSiliconCurveRadius"       
+             phi0="-SiBarrelSiliconCurveHalfAngle2" 
              phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module3_Position" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module3_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
-
+    
         <module_component name="CurvedSi3L"
              material="Silicon"
              sensitive="true"
@@ -710,12 +731,12 @@
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
+             phi0="SiBarrelSiliconCurveHalfAngle2" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module3_Position" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module3_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi5R"
@@ -725,14 +746,14 @@
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
+             phi0="-SiBarrelSiliconCurveHalfAngle2" 
              phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module5_Position" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module5_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
-
+    
         <module_component name="CurvedSi5L"
              material="Silicon"
              sensitive="true"
@@ -740,12 +761,12 @@
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
+             phi0="SiBarrelSiliconCurveHalfAngle2" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module5_Position" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module5_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi7R"
@@ -754,15 +775,15 @@
           innerthickness="SiBarrel2_LongThickness"
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
+             radius="SiBarrelSiliconCurveRadius"          
+             phi0="-SiBarrelSiliconCurveHalfAngle2" 
              phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length - SiBarrel2_Length_Trim"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module7_Position - SiBarrel2_Length_Trim/2" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module7_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
-
+    
         <module_component name="CurvedSi7L"
              material="Silicon"
              sensitive="true"
@@ -770,12 +791,12 @@
           outerthickness="SiBarrel_ShortThickness"
              nsegments="SiBarrelSiliconCurveNoSegments"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
+             phi0="SiBarrelSiliconCurveHalfAngle2" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length - SiBarrel2_Length_Trim"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module7_Position - SiBarrel2_Length_Trim/2" z="SiBarrelUpperCurveAxis2" />
+            vis="TrackerLayerVis"> 
+          <position x="0" y="SiBarrel2_Module7_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
 
         <module_component name="CurvedSi1C"
@@ -783,52 +804,361 @@
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
+             phi0="-SiBarrelSiliconGapHalfAngle" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module1_Position" z="SiBarrelUpperCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module1_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
-
+        
     <module_component name="CurvedSi3C"
            material="Silicon"
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
+             phi0="-SiBarrelSiliconGapHalfAngle" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module3_Position" z="SiBarrelUpperCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module3_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
-
+        
     <module_component name="CurvedSi5C"
            material="Silicon"
              sensitive="false"
              nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
+             radius="SiBarrelSiliconCurveRadius" 
+             phi0="-SiBarrelSiliconGapHalfAngle" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module5_Position" z="SiBarrelUpperCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module5_Position_Y" z="SiBarrelUpperCurveAxis2" />
     </module_component>
-
+               
     <module_component name="CurvedSi7C"
              material="Silicon"
              sensitive="false"
              nsegments="1"
              radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
+             phi0="-SiBarrelSiliconGapHalfAngle" 
              phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length - SiBarrel2_Length_Trim"
+             length="SiBarrel2_Module_Length"
              thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module7_Position - SiBarrel2_Length_Trim/2" z="SiBarrelUpperCurveAxis2" />
+             vis="TrackerLayerVis">  
+       <position x="0" y="SiBarrel2_Module7_Position_Y" z="SiBarrelUpperCurveAxis2" />
         </module_component>
+
+    <module_component name="FPC_Mockup_Top_ASCII.gdml" 
+                          matching_name="FPC"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/FPC_Mockup_Top_ASCII.gdml" />
+    
+        <module_component name="FPC_Mockup_Top001_ASCII.gdml" 
+                          matching_name="FPC"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/FPC_Mockup_Top001_ASCII.gdml" />
+    
+        <module_component name="Mirror_BottomFPC_Mockup_Bottom_ASCII.gdml" 
+                          matching_name="FPC"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Mirror_BottomFPC_Mockup_Bottom_ASCII.gdml" />
+    
+        <module_component name="Mirror_BottomFPC_Mockup_Bottom001_ASCII.gdml" 
+                          matching_name="FPC"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Mirror_BottomFPC_Mockup_Bottom001_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation001_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation001_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation002_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation002_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation003_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation003_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation004_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation004_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation005_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation005_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation006_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation006_ASCII.gdml" />
+    
+        <module_component name="Kapton_Electrical_Insulation007_ASCII.gdml" 
+                          matching_name="Kapton"
+                          material="Kapton"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Kapton_Electrical_Insulation007_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace001_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace002_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace002_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace003_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace003_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace004_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace004_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace005_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace005_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace006_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace006_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace007_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace007_ASCII.gdml" />
+    
+        <module_component name="K9_Split_CrossBrace_Sensor_4-5_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/K9_Split_CrossBrace_Sensor_4-5_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace001_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace001_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace002_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace002_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace_Sensor_4-5_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace_Sensor_4-5_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace003_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace003_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace004_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace004_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace005_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace005_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace006_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace006_ASCII.gdml" />
+    
+        <module_component name="MirrorK9_Split_CrossBrace007_ASCII.gdml" 
+                          matching_name="K9"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/MirrorK9_Split_CrossBrace007_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron001_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron001_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron002_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron002_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron003_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron003_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron005_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron005_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron006_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron006_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron007_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron007_ASCII.gdml" />
+    
+        <module_component name="RPV_Longeron008_ASCII.gdml" 
+                          matching_name="RPV"
+                          material="K9"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/RPV_Longeron008_ASCII.gdml" />
+    
+        <module_component name="Carbon_Compsite_Central_Spar_ASCII.gdml" 
+                          matching_name="Carbon"
+                          material="CarbonFiber"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Carbon_Compsite_Central_Spar_ASCII.gdml" />
+    
+        <module_component name="Carbon_Compsite_Central_Spar001_ASCII.gdml" 
+                          matching_name="Carbon"
+                          material="CarbonFiber"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Carbon_Compsite_Central_Spar001_ASCII.gdml" />
+    
+        <module_component name="Carbon_Composite_Stave_Skin_Top_ASCII.gdml" 
+                          matching_name="Carbon"
+                          material="CarbonFiber"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Carbon_Composite_Stave_Skin_Top_ASCII.gdml" />
+    
+        <module_component name="Carbon_Composite_Stave_Skin_Bottom_ASCII.gdml" 
+                          matching_name="Carbon"
+                          material="CarbonFiber"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Carbon_Composite_Stave_Skin_Bottom_ASCII.gdml" />
+    
+        <module_component name="Ultem_End_Mount_CLEANED_ASCII.gdml" 
+                          matching_name="Ultem"
+                          material="Ultem"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Ultem_End_Mount_CLEANED_ASCII.gdml" />
+    
+        <module_component name="Ultem_End_Mount001_CLEANED_ASCII.gdml" 
+                          matching_name="Ultem"
+                          material="Ultem"
+                          sensitive="false"
+                          vis="TrackerLayerVis"
+                          file="/data/cryoedm/users/henry/eic/CAD-2025/July-2025/L4/L4/Ultem_End_Mount001_CLEANED_ASCII.gdml" />
+    
 
       </module>
       <comment> Layers composed of many arrayed modules </comment>
@@ -837,8 +1167,8 @@
           inner_r="SiBarrelLayer2_rmin"
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave2_count*3" bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave2_count*3" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="128" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="128" bins1="100" />
         <comment>
           phi0 : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -850,7 +1180,7 @@
           dr : Radial displacement parameter, of every other module.
         </comment>
         <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave2_count" phi0="0.0"
-          rc="SiBarrelStave2Lower_rc" dr="SiBarrel2_radius_castellation" />
+          rc="SiBarrelMod2Lower_rc" dr="SiBarrel2_radius_castellation" />
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>

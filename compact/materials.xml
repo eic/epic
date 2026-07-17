@@ -252,6 +252,17 @@
     <composite n="2" ref="N"/>
     <composite n="5" ref="O"/>
   </material>
+  <material name="K9">
+    <D value="200" unit="kg/m3"/>
+    <fraction n="1" ref="C"/>
+  </material>
+   <material name="Ultem"> 
+    <D value="1.43" unit="g/cm3"/>
+    <composite n="37" ref="C"/>
+    <composite n="24" ref="H"/>
+    <composite n="2" ref="N"/>
+    <composite n="6" ref="O"/>
+  </material>
   <material name="PEEK">
     <D value="1.37" unit="g/cm3"/>
     <composite n="19" ref="C"/>
