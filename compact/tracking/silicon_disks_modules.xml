@@ -98,6 +98,18 @@
     <constant name="SiEndcapRightBridgeFPC_y_offset"         value="-6.22*mm"/>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
 
+    <comment>
+      First-pass AncASIC package on the left (LEC-side) bridge FPC.
+      Width is local x; length is local y. The outer-edge clearance is measured
+      from the FPC edge farthest from the LEC to the nearest ASIC edge.
+    </comment>
+    <constant name="SiEndcapAncASIC_width"                   value="3.3*mm"/>
+    <constant name="SiEndcapAncASIC_length"                  value="15.0*mm"/>
+    <constant name="SiEndcapAncASIC_thickness"               value="300*um"/>
+    <constant name="SiEndcapAncASICGlue_thickness"           value="80*um"/>
+    <constant name="SiEndcapAncASIC_top_clearance"           value="1.0*mm"/>
+    <constant name="SiEndcapAncASIC_outer_edge_clearance"    value="5.0*mm"/>
+
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.15*mm"/>
     <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
     <constant name="SiEndcapCorrugation_theta"              value="35*deg"/>

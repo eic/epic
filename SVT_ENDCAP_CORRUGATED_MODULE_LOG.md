@@ -1581,3 +1581,48 @@ Implementation follow-up:
   clearances/offsets.
 - Add the passive ASIC and its glue in the handed bridge-FPC placement helper.
 - Rebuild/export both handedness variants and rerun overlap checks.
+
+## 2026-07-17 UTC - Phase 13 implement passive AncASIC stack
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv`
+- `tmp/generate_phase11_complete_reference_csv.py`
+- `tmp/phase13_ancasic_reference_validation.json`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Implementation:
+- Added XML-driven AncASIC constants for its `3.3 mm` x `15.0 mm` footprint,
+  `300 um` package, separate `80 um` glue, `1.0 mm` top clearance, and
+  `5.0 mm` outer-edge clearance.
+- Added a separate outer AncASIC component to the corrugated 6-RSU module:
+  first the localized ASIC glue box (`SVT_Endcap_Glue` / `SVTGlueVis`), then
+  the passive silicon package (`Silicon` / `SVTElectronicsVis`).
+- Anchored the package to the handed left bridge FPC, rather than to an absolute
+  module coordinate. Its x offset mirrors automatically: `+1.65 mm` toward
+  the LEC for `left`, `-1.65 mm` toward the LEC for `right`.
+- The current FPC-relative y placement puts the ASIC center at module-local
+  `y = 0 mm`; the `1.0 mm` top clearance remains correct if the future
+  left-FPC y-envelope refinement moves the full FPC/ASIC assembly.
+- Added the `380 um` AncASIC glue/package stack to the corrugated module
+  thickness calculation. The total module thickness is now `785 um`.
+
+CSV z-reference update:
+- The layout generator defines `dz` as the module center with its inner face on
+  the corrugated support surface. Adding material only outward requires a
+  signed center shift of half the added stack: `+/-190 um`.
+- Regenerated the complete 1,892-row boundary-reference CSV with `dz` levels
+  shifted from `+/-3.203, +/-4.203 mm` to `+/-3.393, +/-4.393 mm`.
+- This preserves the pre-AncASIC carbon-fiber, glue, sensor, and bridge-FPC
+  world positions while placing the new ASIC stack outward.
+
+Validation:
+- The conversion inverse coordinate residual remains `2.842e-14 mm` maximum.
+- The standalone containment check reports `1,892` valid rows and `0` invalid
+  rows with the new `785 um` module thickness.
+- `python3 -m py_compile` passes for the updated layout helper/conversion
+  script, and both parent/nested `git diff --check` checks pass.
+- Next: rebuild/export the DD4hep geometry, visually inspect left/right ASIC
+  mirroring and local glue placement, then rerun both overlap checks.

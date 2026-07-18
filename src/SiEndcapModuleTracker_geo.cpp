@@ -49,6 +49,7 @@ struct ComponentTemplate {
   bool lec_after_rsu{false};
   bool rsu_bridge_fpc_pattern{false};
   bool rsu_adhesive_pattern{false};
+  bool rsu_ancasic_pattern{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -257,7 +258,9 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     const double bridge_fpc_stack =
         description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
         description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
-    const array<ComponentTemplate, 4> components{{
+    const double ancasic_stack = description.constant<double>("SiEndcapAncASICGlue_thickness") +
+                                 description.constant<double>("SiEndcapAncASIC_thickness");
+    const array<ComponentTemplate, 5> components{{
         {description.constant<double>("SiEndcapModuleCF_thickness"), "CarbonFiber", "SVTSupportVis",
          false, -1.0, -1.0},
         {description.constant<double>("SiEndcapAdhesive_thickness"), "SVT_Endcap_Glue",
@@ -269,6 +272,9 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         {bridge_fpc_stack, "Kapton", "SVTReadoutVis", false, rsu_chain_length,
          description.constant<double>("SiEndcapModule_width_corrugated"), sensor_x_offset, 0.0, 1,
          false, false, false, true},
+        {ancasic_stack, "Silicon", "SVTElectronicsVis", false, rsu_chain_length,
+         description.constant<double>("SiEndcapModule_width_corrugated"), sensor_x_offset, 0.0, 1,
+         false, false, false, false, false, true},
     }};
 
     for (const auto& component : components) {
@@ -327,6 +333,9 @@ ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate 
     if (component.rsu_adhesive_pattern) {
       component.x_offset = sensor_x_offset;
     }
+    if (component.rsu_ancasic_pattern) {
+      component.x_offset = sensor_x_offset;
+    }
     if (component.rsu_end_electronics) {
       component.lec_after_rsu = handedness == "right";
     }
@@ -334,6 +343,9 @@ ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate 
       component.lec_after_rsu = handedness == "right";
     }
     if (component.rsu_adhesive_pattern) {
+      component.lec_after_rsu = handedness == "right";
+    }
+    if (component.rsu_ancasic_pattern) {
       component.lec_after_rsu = handedness == "right";
     }
   }
@@ -1239,6 +1251,61 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
                        left_bridge_y, left_bridge_pos_x, left_bridge_pos_y);
       place_bridge_fpc(_toString(component_id, "component%d_right_bridge_fpc"), right_bridge_box_x,
                        right_bridge_y, right_bridge_pos_x, right_bridge_pos_y);
+    } else if (component.rsu_ancasic_pattern) {
+      auto place_passive_box = [&](const string& name, double box_x, double box_y,
+                                   double box_thickness, double pos_x, double pos_y, double local_z,
+                                   const string& material_name, const string& vis) {
+        if (box_x <= 0.0 || box_y <= 0.0 || box_thickness <= 0.0) {
+          return;
+        }
+        Box box_solid(box_x / 2.0, box_y / 2.0, box_thickness / 2.0);
+        Volume box_volume(name, box_solid, description.material(material_name));
+        box_volume.setVisAttributes(description.visAttributes(vis));
+        prototype.volume.placeVolume(
+            box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
+      };
+
+      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
+        const double clearance   = description.constant<double>("SiEndcapModuleEndClearance");
+        const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
+        const double available_x = side_span - 2.0 * clearance;
+        const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
+        const double box_center  = after_rsu ? module_edge - clearance - box_x / 2.0
+                                             : module_edge + clearance + box_x / 2.0;
+        return std::make_tuple(box_x, box_center - component.x_offset);
+      };
+      auto bridge_fpc_y_center = [&](double box_y, double top_edge_offset) {
+        return y_size / 2.0 + top_edge_offset - box_y / 2.0;
+      };
+
+      const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
+      const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const double left_bridge_pos_y = bridge_fpc_y_center(
+          left_bridge_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
+      const auto [left_bridge_box_x, left_bridge_pos_x] = bridge_fpc_x_geometry(
+          component.lec_after_rsu,
+          description.constant<double>("SiEndcapModule6RSU_left_extension"), left_bridge_x);
+
+      const double ancasic_x = description.constant<double>("SiEndcapAncASIC_width");
+      const double ancasic_y = description.constant<double>("SiEndcapAncASIC_length");
+      const double toward_lec = component.lec_after_rsu ? -1.0 : 1.0;
+      const double ancasic_pos_x = left_bridge_pos_x + toward_lec *
+              (-left_bridge_box_x / 2.0 +
+               description.constant<double>("SiEndcapAncASIC_outer_edge_clearance") + ancasic_x / 2.0);
+      const double ancasic_pos_y = left_bridge_pos_y + left_bridge_y / 2.0 -
+                                   description.constant<double>("SiEndcapAncASIC_top_clearance") -
+                                   ancasic_y / 2.0;
+
+      const double glue_thickness = description.constant<double>("SiEndcapAncASICGlue_thickness");
+      const double ancasic_thickness = description.constant<double>("SiEndcapAncASIC_thickness");
+      double layer_z = z_position - component.thickness / 2.0;
+      place_passive_box(_toString(component_id, "component%d_ancasic_glue"), ancasic_x, ancasic_y,
+                        glue_thickness, ancasic_pos_x, ancasic_pos_y,
+                        layer_z + glue_thickness / 2.0, "SVT_Endcap_Glue", "SVTGlueVis");
+      layer_z += glue_thickness;
+      place_passive_box(_toString(component_id, "component%d_ancasic"), ancasic_x, ancasic_y,
+                        ancasic_thickness, ancasic_pos_x, ancasic_pos_y,
+                        layer_z + ancasic_thickness / 2.0, "Silicon", "SVTElectronicsVis");
     } else {
       string component_name = _toString(component_id, "component%d");
       Box comp_solid(comp_x / 2.0, comp_y / 2.0, component.thickness / 2.0);
