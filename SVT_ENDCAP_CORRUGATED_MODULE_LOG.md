@@ -1423,3 +1423,161 @@ Roadmap update:
 
 Validation:
 - Documentation-only update. No geometry build or overlap checks run.
+
+## 2026-07-16 UTC - Phase 11 reference-point dimensional closure audit
+
+Files changed:
+- `tmp/phase11_reference_point_audit.py`
+- `tmp/phase11_reference_point_audit.md`
+- `compact/tracking/SVT_endcap_modules_phase11_reference_legacy.csv`
+- `compact/tracking/SVT_endcap_modules_phase11_reference_boundary.csv`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Validate the proposed `rsu_lec_boundary_midpoint` placement reference before
+  updating the production CSV parser and disk-layout generators.
+- Preserve the physical placement of the current corrugated-module geometry
+  exactly during the reference-convention migration.
+
+Reference convention:
+- The new reference point is the midpoint of the RSU--LEC boundary, at the
+  local y center of the RSU/LEC band.
+- It is handed: the LEC is on package -x for `left` modules and package +x for
+  `right` modules.
+- The local x offsets must be derived from the same C++ sensor-chain placement
+  expressions used by `corrugated_6rsu_sensor_x_offset(...)`, rather than from
+  a nominal mirrored package-edge formula.
+
+Dimensional closure note:
+- Current values account for `151.996 mm` of the `152.020 mm` package length:
+  - left extension + left sensor margin: `11.0 + 4.5 = 15.500 mm`,
+  - six-RSU chain: `6 * 21.666 = 129.996 mm`,
+  - right sensor margin + right extension: `1.5 + 5.0 = 6.500 mm`.
+- The resulting `0.024 mm` remainder is already present in the current
+  package/RSU parameterization, most likely from rounded mechanical inputs.
+- Consequently, the current built RSU--LEC boundary offsets are
+  `-60.510 mm` for `left` and `+60.486 mm` for `right`; their magnitudes differ
+  by `0.024 mm`.
+- This is not caused by the reference-point conversion. Phase 11 should retain
+  these derived offsets so a converted row reconstructs the existing module
+  center exactly. A later mechanical-dimension update can explicitly allocate
+  the closure remainder if exact mirror symmetry becomes a design requirement.
+
+Audit fixture:
+- Added a reproducible script that selects left/right-handed near-center and
+  outer-edge rows, writes legacy and boundary-reference CSV fixtures, and
+  verifies their reconstructed legacy lower-left residuals are zero.
+- The next Phase 11 implementation step is to add the new parser columns,
+  export both fixtures, and visually confirm coincident physical placement.
+
+## 2026-07-16 UTC - Phase 11 boundary-reference parser test pass
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `tmp/run_phase11_reference_export.sh`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Implementation:
+- Replaced the corrugated placement CSV input columns `x_min_mm` and
+  `y_min_mm` with `rsu_lec_boundary_x_mm` and `rsu_lec_boundary_y_mm`.
+- Added `corrugated_6rsu_lec_boundary_x(...)`, which derives the handed local
+  boundary offset from `corrugated_6rsu_sensor_x_offset(...)` and the six-RSU
+  chain length.
+- The parser converts the boundary reference into the existing internal package
+  lower-left representation. Disk-boundary rejection, z checks, and DD4hep
+  module-center placement therefore continue to use the same tested geometry
+  path.
+- Corrugated rows still require explicit `left` or `right` handedness.
+- Non-corrugated rows are rejected by this CSV path because an RSU--LEC
+  boundary is not defined for them; no `x_min_mm` / `y_min_mm` compatibility
+  path is retained.
+- Temporarily pointed the six disk blocks to the small boundary-reference
+  fixture. Restore the normal generated test CSV after comparison validation.
+
+Validation status:
+- `git diff --check` passes.
+- The reproducible audit fixture continues to reconstruct the original package
+  lower-left coordinates with zero numerical residual.
+- The legacy baseline export script refreshes the installed XML/CSV content.
+- C++ rebuild and both visual exports remain pending in the EIC container: the
+  host build cache requires `/opt/local/bin/gmake`, which is not available in
+  this shell. The recorded command is
+  `PHASE11_REBUILD=1 bash tmp/run_phase11_reference_export.sh boundary` after
+  entering the standard EIC environment.
+
+## 2026-07-17 UTC - Phase 11 complete boundary-reference CSV candidate
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `tmp/generate_phase11_complete_reference_csv.py`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv`
+- `tmp/phase11_complete_reference_validation.json`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Generate a complete corrugated placement candidate using the new explicit
+  RSU--LEC boundary midpoint convention after the four-module visual
+  comparison was accepted.
+- Keep the candidate separate from the temporary four-module XML fixture until
+  full geometry and overlap checks are explicitly started.
+
+Implementation:
+- Updated the disk-layout helper to derive the handed RSU--LEC boundary x
+  offsets from the same XML constants and six-RSU chain calculation used by
+  the DD4hep plugin.
+- Updated both layout CSV writers so corrugated output uses
+  `rsu_lec_boundary_x_mm` and `rsu_lec_boundary_y_mm` instead of the legacy
+  lower-left columns.
+- Updated the standalone CSV reader/checker to reconstruct the internal
+  package rectangle from the new reference fields before checking disk and z
+  containment.
+- Converted the accepted 1,892-row temporary corrugated layout directly, so
+  row membership, handedness, facing, z offsets, and comments are unchanged.
+
+Validation:
+- The conversion script verifies its inverse coordinate transformation for
+  every row; maximum residual: `2.842e-14 mm`.
+- `check_endcap_modules_intrusion.py` reports `1,892` valid rows, `0` invalid
+  rows, and `0` disabled rows for the complete candidate.
+- `python3 -m py_compile` passes for the changed layout scripts and conversion
+  script.
+- `git diff --check` passes.
+- Next: point the disk XML blocks to the complete candidate, export the full
+  geometry, inspect handedness/facing, and rerun both overlap checks.
+
+## 2026-07-17 UTC - Phase 13 AncASIC preliminary dimensions and placement
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Confirmed first-pass AncASIC specification:
+- Place one passive AncASIC on the left (LEC-side) bridge FPC.
+- Package footprint: `3.3 mm` x `15.0 mm`; package thickness: `300 um`.
+- Bond it using a separate localized `80 um` glue box. This is distinct from
+  the existing glue between the bridge FPC and its supporting surface.
+- Set the ASIC top edge `1.0 mm` below the left bridge-FPC top edge.
+- Set the ASIC edge `5.0 mm` from the left bridge-FPC vertical edge farthest
+  from the LEC, interpreted as an edge-to-edge distance.
+
+Derived current placement:
+- For the implemented `10.0 mm` x `24.5 mm` left bridge FPC, the ASIC center
+  is `+3.75 mm` from the FPC center along y and `1.65 mm` from the FPC center
+  toward the LEC along x.
+- The handed module-local x offset is therefore `+1.65 mm` for `left` and
+  `-1.65 mm` for `right`; it must mirror with the existing left bridge FPC.
+- With the current left-FPC y placement this happens to put the ASIC center at
+  module-local `y = 0 mm`. Keep the placement FPC-relative when the known
+  left-FPC top-edge/y-envelope refinement is made.
+- Add the `80 um` glue plus `300 um` package as new outer passive layers. The
+  corrugated module total stack will grow from `405 um` to `785 um`.
+
+Implementation follow-up:
+- Add XML constants for package dimensions, glue thickness, and FPC-relative
+  clearances/offsets.
+- Add the passive ASIC and its glue in the handed bridge-FPC placement helper.
+- Rebuild/export both handedness variants and rerun overlap checks.

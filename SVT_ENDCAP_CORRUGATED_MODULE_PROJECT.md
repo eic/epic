@@ -544,6 +544,36 @@ Validation:
 - Confirm FPC/AncASIC additions do not overlap LEC, REC, RSUs, or the module parent volume.
 - Run overlap checks after FPC/AncASIC updates.
 
+#### AncASIC Preliminary Geometry Specification
+
+The first-pass AncASIC model is a passive rectangular package bonded to the
+left (LEC-side) bridge FPC. Keep the following dimensions and placement
+parameters XML-driven when this phase is implemented:
+
+| Quantity | Value | Convention |
+| --- | ---: | --- |
+| package x width | `3.3 mm` | Along the bridge-FPC/package-end direction |
+| package y height | `15.0 mm` | Along the bridge-FPC long direction |
+| package thickness | `300 um` | Passive ASIC package thickness |
+| AncASIC glue thickness | `80 um` | Separate localized glue directly under the ASIC |
+| top clearance | `1.0 mm` | ASIC top edge below the left-FPC top edge |
+| outer-edge clearance | `5.0 mm` | ASIC edge from the left-FPC vertical edge farthest from the LEC |
+
+Placement derivation, assuming the `5.0 mm` outer-edge value is edge-to-edge:
+
+- ASIC y center relative to the left-FPC center:
+  `left_FPC_height / 2 - 1.0 mm - 15.0 mm / 2 = +3.75 mm`
+  for the current `24.5 mm` FPC height.
+- ASIC x center relative to the left-FPC center:
+  `5.0 mm + 3.3 mm / 2 - 10.0 mm / 2 = 1.65 mm` toward the LEC.
+- Therefore the local x offset is `+1.65 mm` for a `left` module and
+  `-1.65 mm` for a `right` module; y remains tied to the left-FPC top edge.
+- The current bridge-FPC y placement makes this ASIC center `y = 0 mm` in the
+  module frame. When the known FPC top-edge alignment is refined, preserve
+  these FPC-relative offsets rather than retaining that incidental module y.
+- Add the `80 um` ASIC glue and `300 um` ASIC package as outer passive layers,
+  increasing the current corrugated module stack from `405 um` to `785 um`.
+
 ### Phase 14: Cleanup and PR Preparation
 
 After electronics detail, flexible corrugation geometry, production placement, overlap checks, and reconstruction validation pass:

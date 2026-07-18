@@ -298,6 +298,17 @@ double corrugated_6rsu_sensor_x_offset(Detector& description, const ModuleTempla
   return -module_template.x_size / 2.0 + end_extension + sensor_margin + rsu_chain_length / 2.0;
 }
 
+// The placement CSV reference is the midpoint of the RSU--LEC boundary. Keep
+// this derived from the same handed sensor-chain placement as the built module.
+double corrugated_6rsu_lec_boundary_x(Detector& description, const ModuleTemplate& module_template,
+                                      const string& handedness) {
+  const double rsu_chain_length = 6.0 * description.constant<double>("SiEndcapRSU_length");
+  const double sensor_x_offset =
+      corrugated_6rsu_sensor_x_offset(description, module_template, handedness);
+  return sensor_x_offset + (handedness == "right" ? rsu_chain_length / 2.0
+                                                   : -rsu_chain_length / 2.0);
+}
+
 ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate module_template,
                                           const string& handedness) {
   if (module_template.name != "EIC_LAS_6RSU_CORR" || handedness.empty()) {
@@ -788,7 +799,7 @@ bool module_inside_layer_z(const ModuleRow& row, const ModuleTemplate& module_te
 // Load the placement CSV once for the detector and attach module dimensions from the
 // built-in template map. This routine is intentionally tolerant: malformed or unknown
 // rows are skipped with warnings instead of aborting the geometry build.
-vector<ModuleRow> load_module_rows(const string& file_name,
+vector<ModuleRow> load_module_rows(Detector& description, const string& file_name,
                                    const map<string, ModuleTemplate>& module_templates) {
   vector<ModuleRow> rows;
   std::ifstream input(file_name);
@@ -810,7 +821,7 @@ vector<ModuleRow> load_module_rows(const string& file_name,
     }
 
     // Allow a commented header line such as:
-    // # disk,module,x_min_mm,y_min_mm,dz_mm,facing
+    // # disk,module,rsu_lec_boundary_x_mm,rsu_lec_boundary_y_mm,dz_mm,facing,handedness
     if (!header_loaded && !stripped.empty() && stripped[0] == '#') {
       stripped = trim(stripped.substr(1));
     } else if (!stripped.empty() && stripped[0] == '#') {
@@ -822,7 +833,8 @@ vector<ModuleRow> load_module_rows(const string& file_name,
       for (size_t idx = 0; idx < fields.size(); ++idx) {
         header_index[fields[idx]] = idx;
       }
-      const array<string, 4> required_headers{"disk", "module", "x_min_mm", "y_min_mm"};
+      const array<string, 4> required_headers{"disk", "module", "rsu_lec_boundary_x_mm",
+                                               "rsu_lec_boundary_y_mm"};
       bool missing_header = false;
       for (const auto& header : required_headers) {
         if (!header_index.count(header)) {
@@ -873,8 +885,6 @@ vector<ModuleRow> load_module_rows(const string& file_name,
     try {
       // The CSV carries placement only. Geometry dimensions come from the built-in
       // module template selected by the row's module name.
-      row.x_min       = std::stod(get_field("x_min_mm")) * mm;
-      row.y_min       = std::stod(get_field("y_min_mm")) * mm;
       row.x_size      = module_iter->second.x_size;
       row.y_size      = module_iter->second.y_size;
       string dz_value = get_field("dz_mm");
@@ -912,6 +922,28 @@ vector<ModuleRow> load_module_rows(const string& file_name,
                fmt::format("skipping CSV line {} for corrugated module '{}' without explicit "
                            "left/right handedness in '{}'",
                            line_number, row.module_name, file_name));
+      continue;
+    }
+    if (!corrugated_module) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping CSV line {} for non-corrugated module '{}' in '{}': "
+                           "the placement CSV uses the corrugated RSU--LEC boundary reference",
+                           line_number, row.module_name, file_name));
+      continue;
+    }
+
+    try {
+      const double boundary_x = std::stod(get_field("rsu_lec_boundary_x_mm")) * mm;
+      const double boundary_y = std::stod(get_field("rsu_lec_boundary_y_mm")) * mm;
+      const double boundary_offset =
+          corrugated_6rsu_lec_boundary_x(description, module_iter->second, row.handedness);
+      const double x_center = boundary_x - boundary_offset;
+      row.x_min = x_center - row.x_size / 2.0;
+      row.y_min = boundary_y - row.y_size / 2.0;
+    } catch (const std::exception&) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping malformed RSU--LEC boundary reference on CSV line {} in '{}'",
+                           line_number, file_name));
       continue;
     }
 
@@ -1276,7 +1308,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
   vector<ModuleRow> module_rows;
   if (!module_file.empty()) {
-    module_rows = load_module_rows(resolve_input_file(module_file), module_templates);
+    module_rows = load_module_rows(description, resolve_input_file(module_file), module_templates);
   } else {
     printout(
         WARNING, "SiEndcapModuleTracker",
