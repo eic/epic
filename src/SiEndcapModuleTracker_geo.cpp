@@ -311,8 +311,8 @@ double corrugated_6rsu_lec_boundary_x(Detector& description, const ModuleTemplat
   const double rsu_chain_length = 6.0 * description.constant<double>("SiEndcapRSU_length");
   const double sensor_x_offset =
       corrugated_6rsu_sensor_x_offset(description, module_template, handedness);
-  return sensor_x_offset + (handedness == "right" ? rsu_chain_length / 2.0
-                                                   : -rsu_chain_length / 2.0);
+  return sensor_x_offset +
+         (handedness == "right" ? rsu_chain_length / 2.0 : -rsu_chain_length / 2.0);
 }
 
 ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate module_template,
@@ -846,7 +846,7 @@ vector<ModuleRow> load_module_rows(Detector& description, const string& file_nam
         header_index[fields[idx]] = idx;
       }
       const array<string, 4> required_headers{"disk", "module", "rsu_lec_boundary_x_mm",
-                                               "rsu_lec_boundary_y_mm"};
+                                              "rsu_lec_boundary_y_mm"};
       bool missing_header = false;
       for (const auto& header : required_headers) {
         if (!header_index.count(header)) {
@@ -950,8 +950,8 @@ vector<ModuleRow> load_module_rows(Detector& description, const string& file_nam
       const double boundary_offset =
           corrugated_6rsu_lec_boundary_x(description, module_iter->second, row.handedness);
       const double x_center = boundary_x - boundary_offset;
-      row.x_min = x_center - row.x_size / 2.0;
-      row.y_min = boundary_y - row.y_size / 2.0;
+      row.x_min             = x_center - row.x_size / 2.0;
+      row.y_min             = boundary_y - row.y_size / 2.0;
     } catch (const std::exception&) {
       printout(WARNING, "SiEndcapModuleTracker",
                fmt::format("skipping malformed RSU--LEC boundary reference on CSV line {} in '{}'",
@@ -1286,19 +1286,21 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           component.lec_after_rsu,
           description.constant<double>("SiEndcapModule6RSU_left_extension"), left_bridge_x);
 
-      const double ancasic_x = description.constant<double>("SiEndcapAncASIC_width");
-      const double ancasic_y = description.constant<double>("SiEndcapAncASIC_length");
+      const double ancasic_x  = description.constant<double>("SiEndcapAncASIC_width");
+      const double ancasic_y  = description.constant<double>("SiEndcapAncASIC_length");
       const double toward_lec = component.lec_after_rsu ? -1.0 : 1.0;
-      const double ancasic_pos_x = left_bridge_pos_x + toward_lec *
-              (-left_bridge_box_x / 2.0 +
-               description.constant<double>("SiEndcapAncASIC_outer_edge_clearance") + ancasic_x / 2.0);
+      const double ancasic_pos_x =
+          left_bridge_pos_x +
+          toward_lec * (-left_bridge_box_x / 2.0 +
+                        description.constant<double>("SiEndcapAncASIC_outer_edge_clearance") +
+                        ancasic_x / 2.0);
       const double ancasic_pos_y = left_bridge_pos_y + left_bridge_y / 2.0 -
                                    description.constant<double>("SiEndcapAncASIC_top_clearance") -
                                    ancasic_y / 2.0;
 
       const double glue_thickness = description.constant<double>("SiEndcapAncASICGlue_thickness");
       const double ancasic_thickness = description.constant<double>("SiEndcapAncASIC_thickness");
-      double layer_z = z_position - component.thickness / 2.0;
+      double layer_z                 = z_position - component.thickness / 2.0;
       place_passive_box(_toString(component_id, "component%d_ancasic_glue"), ancasic_x, ancasic_y,
                         glue_thickness, ancasic_pos_x, ancasic_pos_y,
                         layer_z + glue_thickness / 2.0, "SVT_Endcap_Glue", "SVTGlueVis");
