@@ -5,8 +5,8 @@
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
  *
  * - Designed to process "vertex_barrel.xml":
- *       - When the upper and lower modules are provided, will use the
- *         Build-in EIC-LAS RSU structure with four sections and inactive areas
+ *       - When the upper and lower modules are provided, builds the four-section
+ *         EIC-LAS RSU with three sensitive tiles and inactive gaps per section
  *
  *
  * \code
@@ -23,7 +23,9 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include <algorithm>
 #include <array>
+#include <cmath>
 #include "DD4hepDetectorHelper.h"
 
 using namespace std;
@@ -45,11 +47,31 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
   map<string, std::vector<VolPlane>> volplane_surfaces;
   map<string, std::vector<double>> module_length;
 
-  PlacedVolume pv, pv_frame;
+  PlacedVolume pv;
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
   auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
+
+  // The XML describes one quarter-RSU section. Upper/lower module prototypes mirror
+  // the r-phi ordering, while consecutive z placements provide the other two sections.
+  xml_comp_t x_rsu_layout   = x_det.child(_Unicode(rsu_layout));
+  int rsu_tiles_per_section = x_rsu_layout.attr<int>(_Unicode(tiles_per_section));
+  double rsu_backbone_z     = x_rsu_layout.attr<double>(_Unicode(backbone_z));
+  double rsu_biasing_rphi   = x_rsu_layout.attr<double>(_Unicode(biasing_rphi));
+  double rsu_readout_rphi   = x_rsu_layout.attr<double>(_Unicode(readout_rphi));
+  double rsu_power_z        = x_rsu_layout.attr<double>(_Unicode(power_z));
+  double rsu_tile_rphi      = x_rsu_layout.attr<double>(_Unicode(tile_rphi));
+  double rsu_tile_pitch_z   = x_rsu_layout.attr<double>(_Unicode(tile_pitch_z));
+  double rsu_tile_z         = x_rsu_layout.attr<double>(_Unicode(tile_z));
+
+  // VertexBarrelHits allocates two bits to the sensor field, with zero reserved.
+  if (rsu_tiles_per_section < 1 || rsu_tiles_per_section > 3 || rsu_backbone_z <= 0 ||
+      rsu_biasing_rphi <= 0 || rsu_readout_rphi <= 0 || rsu_power_z <= 0 || rsu_tile_rphi <= 0 ||
+      rsu_tile_pitch_z <= 0 || rsu_tile_z <= 0) {
+    printout(ERROR, "CurvedBarrelTracker", "Invalid RSU layout dimensions or tile count.");
+    throw runtime_error("Invalid RSU layout in vertex_barrel.xml.");
+  }
 
   // Add the volume boundary material if configured
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
@@ -92,7 +114,6 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
 
     double thickness_so_far = 0.0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-      Volume c_vol;
       xml_comp_t x_comp  = mci;
       const string c_nam = x_comp.nameStr(); // _toString(ncomponents, "component%d");
       const string c_mat = x_comp.materialStr();
@@ -102,87 +123,10 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
       double c_rmin      = m_rmin + thickness_so_far;
       double c_dphi      = c_width / c_rmin;
 
-      if (c_nam == "RSU") { // for RSU, create ONE upper or lower 3-tile sections.
-        // **** hard-coded RSU design with 12 tiles, plus backbones, readout pads, biasing
-        // Having issue including multiple sensitive surfaces in one Tube module (worked with box).
-        // Therefore use type "upper" and "lower" to create two mirrored tile sections. (left right is identical)
-        //
-        // "|" = backbone. Length alone z.
-        //
-        // | ------readout-------- | -------readout--------
-        // | tilex3                | tilex3
-        // | ------biasing-------- | -------biasing--------
-        // | ------biasing-------- | -------biasing--------
-        // | tilex3                | tilex3
-        // | ------readout-------- | -------readout--------
-        const string frame_vis        = "SVTReadoutVis";
-        const string c_type           = x_comp.typeStr();
-        const double BiasingWidth     = 0.06 * mm; // need to x2 for two sets
-        const double ReadoutPadsWidth = m_width - BiasingWidth - c_width;
-        const double BackboneLength   = m_length - c_length; //0.06*mm;
-
-        double px = 0, py = 0, pz = 0;
-        double c_z0 = -m_length / 2;
-        double c_z1 = c_z0 + BackboneLength;
-        double c_z2 = m_length / 2;
-        pz          = (c_z1 + c_z2) / 2; // section central z
-
-        double c_phi0 = 0;
-        double c_phi1, c_phi2;
-        double c_phi3 = m_width / m_rmin;
-        string c_nam1, c_nam2;
-        if (c_type == "upper") {
-          c_phi1 = BiasingWidth / c_rmin;
-          c_phi2 = c_phi1 + c_dphi;
-          c_nam1 = "biasing";
-          c_nam2 = "readout";
-        } else if (c_type == "lower") {
-          c_phi1 = ReadoutPadsWidth / c_rmin;
-          c_phi2 = c_phi1 + c_dphi;
-          c_nam1 = "readout";
-          c_nam2 = "biasing";
-        } else {
-          printout(ERROR, "CurvedBarrelTracker",
-                   string((string("Module ") + m_nam + string(": invalid RSU component type [") +
-                           c_type + string("], should be upper or lower")))
-                       .c_str());
-          throw runtime_error("Logics error in building modules.");
-        }
-
-        // *** inactive areas
-        // biasing and readout (horizontal)
-        Tube f_tube1(c_rmin, c_rmin + c_thickness, c_length / 2, c_phi0, c_phi1);
-        Volume f_vol1(c_nam1, f_tube1, description.material(c_mat));
-        pv_frame = m_vol.placeVolume(f_vol1, Position(px, py, pz));
-        f_vol1.setVisAttributes(description, frame_vis);
-
-        Tube f_tube2(c_rmin, c_rmin + c_thickness, c_length / 2, c_phi2, c_phi3);
-        Volume f_vol2(c_nam2, f_tube2, description.material(c_mat));
-        pv_frame = m_vol.placeVolume(f_vol2, Position(px, py, pz));
-        f_vol2.setVisAttributes(description, frame_vis);
-
-        // backbone (vertical)
-        Tube f_tube3(c_rmin, c_rmin + c_thickness, BackboneLength / 2, c_phi0, c_phi3);
-        Volume f_vol3("backbone", f_tube3, description.material(c_mat));
-        pv_frame = m_vol.placeVolume(f_vol3, Position(px, py, (c_z0 + c_z1) / 2));
-        f_vol3.setVisAttributes(description, frame_vis);
-
-        // *** sensitive tile
-        Tube c_tube(c_rmin, c_rmin + c_thickness, c_length / 2, c_phi1, c_phi2);
-        c_vol = Volume(c_nam + "_" + c_type, c_tube, description.material(c_mat));
-        pv    = m_vol.placeVolume(c_vol, Position(px, py, pz));
-      } else { // for regular component, no difference b/w upper/lower
-        Tube c_tube(c_rmin, c_rmin + c_thickness, c_length / 2, 0, c_dphi);
-        c_vol = Volume(c_nam, c_tube, description.material(c_mat));
-        pv    = m_vol.placeVolume(c_vol, Position(0, 0, 0));
-      }
-      c_vol.setRegion(description, x_comp.regionStr());
-      c_vol.setLimitSet(description, x_comp.limitsStr());
-      c_vol.setVisAttributes(description, x_comp.visStr());
-      if (x_comp.isSensitive()) {
-        pv.addPhysVolID("sensor", sensor_number++);
-        c_vol.setSensitiveDetector(sens);
-        sensitives[m_nam].push_back(pv);
+      auto attach_sensitive = [&](Volume& component_volume, PlacedVolume& component_pv) {
+        component_pv.addPhysVolID("sensor", sensor_number++);
+        component_volume.setSensitiveDetector(sens);
+        sensitives[m_nam].push_back(component_pv);
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
         Vector3D u(-1., 0., 0.);
         Vector3D v(0., -1., 0.);
@@ -193,8 +137,98 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
         double outer_thickness = total_thickness - inner_thickness;
 
         SurfaceType type(SurfaceType::Sensitive);
-        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+        VolPlane surf(component_volume, type, inner_thickness, outer_thickness, u, v, n);
         volplane_surfaces[m_nam].push_back(surf);
+      };
+
+      if (c_nam == "RSU") {
+        const string c_type = x_comp.typeStr();
+        if (c_type != "upper" && c_type != "lower") {
+          printout(ERROR, "CurvedBarrelTracker",
+                   string((string("Module ") + m_nam + string(": invalid RSU component type [") +
+                           c_type + string("], should be upper or lower")))
+                       .c_str());
+          throw runtime_error("Logics error in building modules.");
+        }
+
+        const double partition_area =
+            c_width * rsu_backbone_z +
+            (rsu_biasing_rphi + rsu_readout_rphi) * (c_length - rsu_backbone_z) +
+            rsu_tile_rphi * rsu_tiles_per_section * (rsu_tile_z + rsu_power_z);
+        const double length_tolerance = 1.0e-12 * std::max(c_width, c_length);
+        const double area_tolerance   = 1.0e-12 * c_width * c_length;
+        if (std::abs(rsu_biasing_rphi + rsu_tile_rphi + rsu_readout_rphi - c_width) >
+                length_tolerance ||
+            std::abs(rsu_backbone_z + rsu_tiles_per_section * rsu_tile_pitch_z - c_length) >
+                length_tolerance ||
+            std::abs(rsu_tile_z + rsu_power_z - rsu_tile_pitch_z) > length_tolerance ||
+            std::abs(partition_area - c_width * c_length) > area_tolerance) {
+          printout(ERROR, "CurvedBarrelTracker",
+                   string((string("Module ") + m_nam +
+                           string(": RSU pieces do not form a positive rectangular section.")))
+                       .c_str());
+          throw runtime_error("Invalid RSU section geometry.");
+        }
+
+        const string component_base = m_nam + _toString(ncomponents, "_component%d_") + c_type;
+        auto place_rsu_piece = [&](const string& piece_name, double rphi_start, double rphi_width,
+                                   double z_start, double z_width, const string& vis,
+                                   bool sensitive) {
+          Tube piece_solid(c_rmin, c_rmin + c_thickness, z_width / 2.0, rphi_start / c_rmin,
+                           (rphi_start + rphi_width) / c_rmin);
+          Volume piece_volume(component_base + "_" + piece_name, piece_solid,
+                              description.material(c_mat));
+          piece_volume.setRegion(description, x_comp.regionStr());
+          piece_volume.setLimitSet(description, x_comp.limitsStr());
+          piece_volume.setVisAttributes(description, vis);
+          PlacedVolume piece_pv = m_vol.placeVolume(
+              piece_volume, Position(0, 0, -c_length / 2.0 + z_start + z_width / 2.0));
+          if (sensitive) {
+            attach_sensitive(piece_volume, piece_pv);
+          }
+        };
+
+        if (x_comp.isSensitive()) {
+          // The backbone owns the two passive-band corner areas, so all pieces are disjoint.
+          place_rsu_piece("backbone", 0, c_width, 0, rsu_backbone_z, "SVTReadoutVis", false);
+
+          const double first_passive_rphi = c_type == "upper" ? rsu_biasing_rphi : rsu_readout_rphi;
+          const double second_passive_rphi =
+              c_type == "upper" ? rsu_readout_rphi : rsu_biasing_rphi;
+          const string first_passive_name  = c_type == "upper" ? "biasing" : "readout";
+          const string second_passive_name = c_type == "upper" ? "readout" : "biasing";
+          const double z_after_backbone    = c_length - rsu_backbone_z;
+          place_rsu_piece(first_passive_name, 0, first_passive_rphi, rsu_backbone_z,
+                          z_after_backbone, "SVTReadoutVis", false);
+          place_rsu_piece(second_passive_name, first_passive_rphi + rsu_tile_rphi,
+                          second_passive_rphi, rsu_backbone_z, z_after_backbone, "SVTReadoutVis",
+                          false);
+
+          for (int tile = 0; tile < rsu_tiles_per_section; ++tile) {
+            const double tile_z_start = rsu_backbone_z + tile * rsu_tile_pitch_z;
+            place_rsu_piece(_toString(tile + 1, "tile%d"), first_passive_rphi, rsu_tile_rphi,
+                            tile_z_start, rsu_tile_z, x_comp.visStr(), true);
+            place_rsu_piece(_toString(tile + 1, "power_gap%d"), first_passive_rphi, rsu_tile_rphi,
+                            tile_z_start + rsu_tile_z, rsu_power_z, "SVTReadoutVis", false);
+          }
+        } else {
+          // Inactive silicon and copper remain continuous across the complete section.
+          place_rsu_piece("full", 0, c_width, 0, c_length, x_comp.visStr(), false);
+        }
+
+        thickness_so_far += c_thickness;
+        continue;
+      }
+
+      // Regular components retain the original single-volume behavior.
+      Tube c_tube(c_rmin, c_rmin + c_thickness, c_length / 2, 0, c_dphi);
+      Volume c_vol(c_nam, c_tube, description.material(c_mat));
+      pv = m_vol.placeVolume(c_vol, Position(0, 0, 0));
+      c_vol.setRegion(description, x_comp.regionStr());
+      c_vol.setLimitSet(description, x_comp.limitsStr());
+      c_vol.setVisAttributes(description, x_comp.visStr());
+      if (x_comp.isSensitive()) {
+        attach_sensitive(c_vol, pv);
       }
       thickness_so_far += c_thickness;
     }
