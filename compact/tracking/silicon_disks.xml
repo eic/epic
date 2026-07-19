@@ -18,12 +18,7 @@
     <comment> Support/service thicknesses from ATHENA disks for now </comment>
     <constant name="SiTrackerEndcapAl_thickness"    value="0.15*mm"/>
     <constant name="SiTrackerEndcapCF_thickness"    value="0.12*mm"/>
-    <constant name="SiTrackerSensorCu_thickness"         value="2.5*um"/>
-    <constant name="SiTrackerSensorActiveSi_thickness"   value="14*um"/>
-    <constant name="SiTrackerSensorInactiveSi_thickness" value="36*um"/>
-    <constant name="SiTrackerSensor_thickness"
-      value="SiTrackerSensorCu_thickness + SiTrackerSensorActiveSi_thickness + SiTrackerSensorInactiveSi_thickness"/>
-    <comment>The reflected endcap geometry puts the last component toward z=0 on both sides.</comment>
+    <constant name="SiTrackerSensor_thickness"      value="40*um"/>
 
     <comment> Currently parametrized as 36 pie-shaped modules to approximate disk </comment>
     <constant name="SiTrackerEndcapMod_count"       value="36"/>
@@ -78,9 +73,7 @@
         <trd x1="InnerTrackerEndcapPMod1_x1/2" x2="InnerTrackerEndcapPMod1_x2/2" z="InnerTrackerEndcapPMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <layer id="1">
         <envelope vis="TrackerLayerVis"
@@ -110,9 +103,7 @@
         <trd x1="InnerTrackerEndcapNMod1_x1/2" x2="InnerTrackerEndcapNMod1_x2/2" z="InnerTrackerEndcapNMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <layer id="1">
         <envelope vis="TrackerLayerVis"
@@ -226,9 +217,7 @@
         <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <layer id="1">
         <envelope vis="TrackerLayerVis"
@@ -258,9 +247,7 @@
         <trd x1="TrackerEndcapNMod1_x1/2" x2="TrackerEndcapNMod1_x2/2" z="TrackerEndcapNMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <layer id="1">
         <envelope vis="TrackerLayerVis"
@@ -290,25 +277,19 @@
         <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <module name="Module3" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod3_x1/2" x2="TrackerEndcapPMod3_x2/2" z="TrackerEndcapPMod3_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <module name="Module4" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod4_x1/2" x2="TrackerEndcapPMod4_x2/2" z="TrackerEndcapPMod4_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <layer id="2">
         <envelope vis="TrackerLayerVis"
@@ -368,25 +349,19 @@
         <trd x1="TrackerEndcapNMod2_x1/2" x2="TrackerEndcapNMod2_x2/2" z="TrackerEndcapNMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <module name="Module3" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod3_x1/2" x2="TrackerEndcapNMod3_x2/2" z="TrackerEndcapNMod3_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
           <module name="Module4" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod4_x1/2" x2="TrackerEndcapNMod4_x2/2" z="TrackerEndcapNMod4_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensorInactiveSi_thickness" material="Silicon" sensitive="false" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorActiveSi_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-        <module_component thickness="SiTrackerSensorCu_thickness" material="Copper" sensitive="false" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
       <layer id="2">
         <envelope vis="TrackerLayerVis"
