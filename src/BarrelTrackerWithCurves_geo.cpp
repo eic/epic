@@ -151,8 +151,7 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
         getAttrOrDefault<double>(x_mod, _Unicode(sensor_active_si_thickness), 0.0);
     const double inactive_si_thickness =
         getAttrOrDefault<double>(x_mod, _Unicode(sensor_inactive_si_thickness), 0.0);
-    const double sensor_thickness =
-        copper_thickness + active_si_thickness + inactive_si_thickness;
+    const double sensor_thickness = copper_thickness + active_si_thickness + inactive_si_thickness;
 
     if (sensor_stack &&
         (copper_thickness <= 0 || active_si_thickness <= 0 || inactive_si_thickness <= 0)) {
@@ -241,8 +240,9 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
           double c_phi0 =
               x_comp.phi0(); // start and stop angle of segment in rad - zero is centre of stave
           double c_phi1 = x_comp.phi1();
-          double c_Nseg = x_comp.nsegments(); //  number of flat segments used to approximate cylinder
-          double dphi   = (c_phi1 - c_phi0) / (double)c_Nseg;
+          double c_Nseg =
+              x_comp.nsegments(); //  number of flat segments used to approximate cylinder
+          double dphi = (c_phi1 - c_phi0) / (double)c_Nseg;
           vector<double> Xp, Zp;
           double phiP = c_phi0;
 
@@ -257,8 +257,7 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
                                    (Zp[i + 1] - Zp[i]) * (Zp[i + 1] - Zp[i]));
             double midX     = 0.5 * (Xp[i] + Xp[i + 1]);
             double midZ     = 0.5 * (Zp[i] + Zp[i + 1]);
-            Box seg_box((segwidth / 2) *
-                            ((c_rmin - layer_thicknesses[layer] / 2) / c_rmin),
+            Box seg_box((segwidth / 2) * ((c_rmin - layer_thicknesses[layer] / 2) / c_rmin),
                         x_comp.length() / 2, layer_thicknesses[layer] / 2);
             string seg_nam = c_nam;
             if (build_sensor_stack)
