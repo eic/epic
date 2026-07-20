@@ -254,7 +254,7 @@
       <composite name="OuterTrackerEndcapN"/>
       <composite name="OuterTrackerEndcapP"/>
     </detector>
-    <!-- <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_5_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
@@ -292,7 +292,7 @@
       vis="TrackerSubAssemblyVis">
       <composite name="B0Tracker"/>
       <composite name="B0TrackerCompanion"/>
-    </detector> -->
+    </detector>
   </detectors>
 
   <documentation>

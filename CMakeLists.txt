@@ -105,7 +105,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_full.xml
 # Install the detector description files.
 install(DIRECTORY compact/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
-    FILES_MATCHING PATTERN "*.xml" PATTERN "*.gdml"
+    FILES_MATCHING PATTERN "*.xml" PATTERN "*.gdml" PATTERN "*.csv"
     )
 
 #-----------------------------------------------------------------------------------
