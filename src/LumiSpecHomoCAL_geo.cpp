@@ -39,7 +39,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Detector assembly
   Assembly assembly(det_name);
-  assembly.setVisAttributes(description.invisible());
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   // Create Modules
 

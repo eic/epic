@@ -31,6 +31,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Create an Assembly to hold all modules
   Assembly taggerAssembly("BackwardsTaggerAssembly");
+  taggerAssembly.setAttributes(desc, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   // Add Tagger stations (modules) to the Assembly
   for (xml_coll_t mod(x_det, _Unicode(module)); mod; ++mod) {
