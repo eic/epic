@@ -984,11 +984,11 @@ vector<ModuleRow> load_module_rows(Detector& description, const string& file_nam
 ModulePrototype build_module_prototype(Detector& description, SensitiveDetector& sens,
                                        const ModuleTemplate& module_template) {
   ModulePrototype prototype;
-  Material vacuum     = description.vacuum();
+  Material air        = description.material("Air");
   const double x_size = module_template.x_size;
   const double y_size = module_template.y_size;
   Box module_solid(x_size / 2.0, y_size / 2.0, module_template.total_thickness / 2.0);
-  prototype.volume = Volume(module_template.name, module_solid, vacuum);
+  prototype.volume = Volume(module_template.name, module_solid, air);
   prototype.volume.setVisAttributes(description.visAttributes(module_template.vis));
 
   double z_position       = -module_template.total_thickness / 2.0;
