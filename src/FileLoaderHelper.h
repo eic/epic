@@ -113,11 +113,13 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
                 success = true;
               } else if (fs::exists(hash_path)) {
                 printout(ERROR, "FileLoader",
-                         "symlink " + hash_path.string() + " already exists but points to wrong target");
+                         "symlink " + hash_path.string() +
+                             " already exists but points to wrong target");
                 std::exit(EXIT_FAILURE);
               } else {
                 printout(ERROR, "FileLoader",
-                         "unable to link from " + hash_path.string() + " to " + link_target.string());
+                         "unable to link from " + hash_path.string() + " to " +
+                             link_target.string());
                 printout(ERROR, "FileLoader", "check permissions and retry");
                 std::exit(EXIT_FAILURE);
               }
