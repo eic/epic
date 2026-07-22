@@ -108,10 +108,11 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
               fs::create_symlink(link_target, hash_path);
               success = true;
             } catch (const fs::filesystem_error&) {
-              if (fs::exists(hash_path) && fs::equivalent(hash_path, link_target)) {
+              const bool hash_path_exists = fs::exists(hash_path);
+              if (hash_path_exists && fs::equivalent(hash_path, link_target)) {
                 // Another process created the correct symlink concurrently; that is fine
                 success = true;
-              } else if (fs::exists(hash_path)) {
+              } else if (hash_path_exists) {
                 printout(ERROR, "FileLoader",
                          "symlink " + hash_path.string() +
                              " already exists but points to wrong target");
@@ -218,9 +219,10 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     // use new path from hash so file link is local
     fs::create_symlink(fs::path(hash), file_path);
   } catch (const fs::filesystem_error&) {
-    if (fs::exists(file_path) && fs::equivalent(file_path, hash_path)) {
+    const bool file_path_exists = fs::exists(file_path);
+    if (file_path_exists && fs::equivalent(file_path, hash_path)) {
       // Another process created the correct symlink concurrently; that is fine
-    } else if (fs::exists(file_path)) {
+    } else if (file_path_exists) {
       printout(ERROR, "FileLoader",
                "symlink " + file_path.string() + " already exists but points to wrong target");
       std::exit(EXIT_FAILURE);
