@@ -60,14 +60,14 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   std::string hash =
       fmt::format("{:016x}", dd4hep::detail::hash64(url)); // TODO: Use c++20 std::fmt
 
-  // create file parent path, if not exists
+  // create file parent path if not exists
   fs::path parent_path = file_path.parent_path();
-  if (!fs::exists(parent_path)) {
-    if (fs::create_directories(parent_path) == false) {
-      printout(ERROR, "FileLoader", "parent path " + parent_path.string() + " cannot be created");
-      printout(ERROR, "FileLoader", "hint: try running 'mkdir -p " + parent_path.string() + "'");
-      std::exit(EXIT_FAILURE);
-    }
+  try {
+    fs::create_directories(parent_path); // no-op (returns false) if already exists
+  } catch (const fs::filesystem_error&) {
+    printout(ERROR, "FileLoader", "parent path " + parent_path.string() + " cannot be created");
+    printout(ERROR, "FileLoader", "hint: try running 'mkdir -p " + parent_path.string() + "'");
+    std::exit(EXIT_FAILURE);
   }
 
   // if file exists and is symlink to correct hash
