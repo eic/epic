@@ -579,4 +579,11 @@
     <composite n="6"  ref="O"/>
     <composite n="2"  ref="N"/>
   </material>
+    <material name="SVT_Endcap_Glue">
+    <D type="density" value="1.180" unit="g / cm3"/>
+    <fraction n="0.091" ref="H"/>
+    <fraction n="0.822" ref="C"/>
+    <fraction n="0.032" ref="N"/>
+    <fraction n="0.055" ref="O"/>
+  </material>
 </materials>

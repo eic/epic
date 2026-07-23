@@ -1,0 +1,15 @@
+disk,row_y_mm,h_mm,d_mm,theta_deg,enabled,comment
+*,0.000,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,34.770,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,69.540,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,104.310,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,139.080,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,173.850,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,208.620,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,243.390,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,278.160,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,312.930,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,347.700,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,382.470,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,417.240,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
+*,452.010,6.000,17.385,35.000,true,uniform_reference_lower_flat_center
