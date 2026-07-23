@@ -46,6 +46,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
+find_package(G4OCCT QUIET)
 find_package(IRT2 2.1.1)
 
 #-----------------------------------------------------------------------------------
@@ -64,6 +65,10 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
+if(G4OCCT_FOUND)
+    target_link_libraries(${a_lib_name} PUBLIC G4OCCT::G4OCCT)
+    target_compile_definitions(${a_lib_name} PRIVATE WITH_G4OCCT_SUPPORT)
+endif()
 set(WITH_IRT1_SUPPORT TRUE CACHE STRING "Enable constant definitions used by EICrecon integration in IRT1")
 if(WITH_IRT1_SUPPORT)
     target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT1_SUPPORT)

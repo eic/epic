@@ -1,0 +1,111 @@
+name: g4occt-example
+
+on:
+  workflow_dispatch:
+    inputs:
+      reference_config:
+        description: "Reference detector config (baseline)"
+        required: true
+        default: epic_craterlake
+        type: string
+      candidate_config:
+        description: "Candidate detector config (for example: epic_craterlake_hcal_sector_g4occt)"
+        required: true
+        default: epic_craterlake
+        type: string
+      platform_release:
+        description: "CVMFS eic-shell release"
+        required: true
+        default: nightly
+        type: string
+      events:
+        description: "Number of events per simulation"
+        required: true
+        default: "25"
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PREFIX: ${{ github.workspace }}/install
+    steps:
+    - uses: actions/checkout@v7
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - name: Build detector geometry
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:${{ inputs.platform_release }}"
+        run: |
+          CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          cmake --build build -- -k -j $(getconf _NPROCESSORS_ONLN) install
+    - uses: actions/upload-artifact@v7
+      with:
+        name: build-g4occt-example
+        path: install/
+        if-no-files-found: error
+
+  simulate:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: reference
+            detector_config: ${{ inputs.reference_config }}
+          - label: candidate
+            detector_config: ${{ inputs.candidate_config }}
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/download-artifact@v8
+      with:
+        name: build-g4occt-example
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - name: Run simulation
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:${{ inputs.platform_release }}"
+        setup: install/bin/thisepic.sh
+        run: |
+          export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
+          ddsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml \
+            --random.seed 1 --random.enableEventSeed \
+            --gun.particle geantino --gun.energy "10*GeV" \
+            --filter.tracker "" --filter.calo "" \
+            -N ${{ inputs.events }} \
+            --outputFile sim_${{ matrix.label }}_${{ matrix.detector_config }}.edm4hep.root \
+            -v WARNING
+    - uses: actions/upload-artifact@v7
+      with:
+        name: sim-${{ matrix.label }}-${{ matrix.detector_config }}
+        path: sim_${{ matrix.label }}_${{ matrix.detector_config }}.edm4hep.root
+        if-no-files-found: error
+
+  compare:
+    runs-on: ubuntu-latest
+    needs: simulate
+    steps:
+    - uses: actions/download-artifact@v8
+      with:
+        name: sim-reference-${{ inputs.reference_config }}
+    - uses: actions/download-artifact@v8
+      with:
+        name: sim-candidate-${{ inputs.candidate_config }}
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - name: Capybara comparison
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:${{ inputs.platform_release }}"
+        run: |
+          mkdir -p capybara-reports
+          capybara bara \
+            sim_reference_${{ inputs.reference_config }}.edm4hep.root \
+            sim_candidate_${{ inputs.candidate_config }}.edm4hep.root
+          mv capybara-reports capybara_${{ inputs.reference_config }}_vs_${{ inputs.candidate_config }}
+    - uses: actions/upload-artifact@v7
+      with:
+        name: capybara-${{ inputs.reference_config }}-vs-${{ inputs.candidate_config }}
+        path: capybara_${{ inputs.reference_config }}_vs_${{ inputs.candidate_config }}/
+        if-no-files-found: error
