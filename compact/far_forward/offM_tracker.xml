@@ -19,11 +19,11 @@
     <constant name="ForwardOffMTracker_ShieldingAirLayerThickness" value="0.3*mm"/>
     <constant name="ForwardOffMTracker_LayerSeparationThickness" value="1.0*cm"/>
 
-	<!-- x-positions of the OMD -->
-	<constant name="OMD_layer_1_x" value="-941.0*mm + offset_OMD_x"/>
-	<constant name="OMD_layer_2_x" value="-941.0*mm + offset_OMD_x"/>
-	<constant name="OMD_layer_3_x" value="-1032.0*mm + offset_OMD_x"/>
-	<constant name="OMD_layer_4_x" value="-1032.0*mm + offset_OMD_x"/>
+        <!-- x-positions of the OMD -->
+        <constant name="OMD_layer_1_x" value="-941.0*mm + offset_OMD_x"/>
+        <constant name="OMD_layer_2_x" value="-941.0*mm + offset_OMD_x"/>
+        <constant name="OMD_layer_3_x" value="-1032.0*mm + offset_OMD_x"/>
+        <constant name="OMD_layer_4_x" value="-1032.0*mm + offset_OMD_x"/>
 
   </define>
 
