@@ -8,7 +8,7 @@
     <constant name="SiVertexSensorInactiveSi_thickness" value="36*um" />
     <constant name="SiVertexSensor_thickness"
       value="SiVertexSensorCu_thickness + SiVertexSensorActiveSi_thickness + SiVertexSensorInactiveSi_thickness" />
-    <comment>Radial order: inactive Si (substrate), active Si (epitaxial), then Cu (wire bond) at larger R.</comment>
+    <comment>Radial order: inactive Si (substrate), active Si (epitaxial), then Cu (metal layer) at larger R.</comment>
 
     <comment>
       One physical RSU is one module. Its 14 um silicon layer contains two rows
@@ -100,6 +100,7 @@
         twelve 2x6 tile regions are sensitive. Cu is always at larger radius.
       </comment>
       <rsu_layout
+        passive_vis="SVTReadoutVis"
         rows_rphi="RSURows_rphi"
         halves_z="RSUHalves_z"
         tiles_per_z_half="RSUTiles_per_z_half"
@@ -116,23 +117,17 @@
           material="Silicon"
           sensitive="false"
           thickness="SiVertexSensorInactiveSi_thickness"
-          width="RSU_width"
-          length="RSU_length"
           vis="VertexLayerVis" />
         <module_component name="ActiveSi"
           material="Silicon"
           sensitive="true"
           thickness="SiVertexSensorActiveSi_thickness"
-          width="RSU_width"
-          length="RSU_length"
           vis="VertexLayerVis" />
         <module_component name="Cu"
           material="Copper"
           sensitive="false"
           thickness="SiVertexSensorCu_thickness"
-          width="RSU_width"
-          length="RSU_length"
-          vis="VertexLayerVis" />
+          vis="SVTReadoutVis" />
       </module>
 
       <module name="Module1" rmin="VertexBarrelModL1_rmin" width="VertexBarrelStaveL1_width"
@@ -141,23 +136,17 @@
           material="Silicon"
           sensitive="false"
           thickness="SiVertexSensorInactiveSi_thickness"
-          width="RSU_width"
-          length="RSU_length"
           vis="VertexLayerVis" />
         <module_component name="ActiveSi"
           material="Silicon"
           sensitive="true"
           thickness="SiVertexSensorActiveSi_thickness"
-          width="RSU_width"
-          length="RSU_length"
           vis="VertexLayerVis" />
         <module_component name="Cu"
           material="Copper"
           sensitive="false"
           thickness="SiVertexSensorCu_thickness"
-          width="RSU_width"
-          length="RSU_length"
-          vis="VertexLayerVis" />
+          vis="SVTReadoutVis" />
       </module>
 
       <module name="Module2" rmin="VertexBarrelModL2_rmin" width="VertexBarrelStaveL2_width"
@@ -166,23 +155,17 @@
           material="Silicon"
           sensitive="false"
           thickness="SiVertexSensorInactiveSi_thickness"
-          width="RSU_width"
-          length="RSU_length"
           vis="VertexLayerVis" />
         <module_component name="ActiveSi"
           material="Silicon"
           sensitive="true"
           thickness="SiVertexSensorActiveSi_thickness"
-          width="RSU_width"
-          length="RSU_length"
           vis="VertexLayerVis" />
         <module_component name="Cu"
           material="Copper"
           sensitive="false"
           thickness="SiVertexSensorCu_thickness"
-          width="RSU_width"
-          length="RSU_length"
-          vis="VertexLayerVis" />
+          vis="SVTReadoutVis" />
       </module>
 
       <comment>Each layer places complete RSUs around phi and along z.</comment>

@@ -68,6 +68,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
   double rsu_tile_rphi     = x_rsu_layout.attr<double>(_Unicode(tile_rphi));
   double rsu_tile_pitch_z  = x_rsu_layout.attr<double>(_Unicode(tile_pitch_z));
   double rsu_tile_z        = x_rsu_layout.attr<double>(_Unicode(tile_z));
+  string rsu_passive_vis   = x_rsu_layout.attr<string>(_Unicode(passive_vis));
   int rsu_tiles            = rsu_rows_rphi * rsu_halves_z * rsu_tiles_per_z_half;
 
   // The formulas below describe this specific EIC-LAS RSU. Four sensor-ID bits
@@ -176,9 +177,9 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
         throw runtime_error("Partial full-RSU material layer.");
       }
 
+      Material component_material = description.material(x_comp.materialStr());
       Tube component_solid(component_rmin, component_rmax, module_length / 2.0, 0, module_dphi);
-      Volume component_volume(component_name, component_solid,
-                              description.material(x_comp.materialStr()));
+      Volume component_volume(component_name, component_solid, component_material);
       component_volume.setRegion(description, x_comp.regionStr());
       component_volume.setLimitSet(description, x_comp.limitsStr());
 
@@ -191,13 +192,13 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
 
       // Pattern for several sensitive areas in one module:
       // 1. Place one nonsensitive mother volume for the complete material layer.
-      // 2. Place one daughter volume inside it for each sensitive area.
-      // 3. Mark only the daughters sensitive and give each a sensor ID and surface.
+      // 2. Partition it into visible passive daughters and sensitive tile daughters.
+      // 3. Mark only the tiles sensitive and give each a sensor ID and surface.
       //
       // A daughter replaces the mother's material in its own region. Using the
       // same material therefore keeps one continuous silicon layer, while the
-      // parts of the mother outside the daughters form the inactive gaps. The
-      // daughters must be fully contained and must not overlap one another.
+      // passive daughters make the backbone, readout, bias, and power gaps
+      // visible. All daughters must be fully contained and mutually disjoint.
       // Here, sensitive="true" in the XML selects this component for tiling; it
       // does not make the full 14 um mother sensitive.
       component_volume.setVisAttributes(description.invisible());
@@ -205,7 +206,42 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
 
       double inner_thickness = thickness_so_far + component_thickness / 2.0;
       double outer_thickness = total_thickness - inner_thickness;
+      int passive_count      = 0;
       int sensor_id          = 1;
+
+      auto place_passive_piece = [&](const string& piece_name, double rphi_start, double rphi_width,
+                                     double z_start, double z_length) {
+        double phi_start = rphi_start / reference_radius;
+        double phi_end   = (rphi_start + rphi_width) / reference_radius;
+        Tube piece_solid(component_rmin, component_rmax, z_length / 2.0, phi_start, phi_end);
+        Volume piece_volume(module_name + "_" + piece_name, piece_solid, component_material);
+        piece_volume.setRegion(description, x_comp.regionStr());
+        piece_volume.setLimitSet(description, x_comp.limitsStr());
+        piece_volume.setVisAttributes(description, rsu_passive_vis);
+        component_volume.placeVolume(piece_volume, Position(0, 0, z_start + z_length / 2.0));
+        ++passive_count;
+      };
+
+      // Each z half starts with a full-width backbone. Outside the backbone,
+      // four passive r-phi bands surround the two tile rows.
+      for (int half_z_id = 0; half_z_id < rsu_halves_z; ++half_z_id) {
+        double half_z_start       = -half_z + half_z_id * half_z;
+        double after_backbone_z   = half_z_start + rsu_backbone_z;
+        double after_backbone_len = half_z - rsu_backbone_z;
+        string half_suffix        = _toString(half_z_id, "_h%d");
+
+        place_passive_piece("backbone" + half_suffix, 0, module_width, half_z_start,
+                            rsu_backbone_z);
+        place_passive_piece("readout_low" + half_suffix, 0, rsu_readout_rphi, after_backbone_z,
+                            after_backbone_len);
+        place_passive_piece("bias_low" + half_suffix, rsu_readout_rphi + rsu_tile_rphi,
+                            rsu_biasing_rphi, after_backbone_z, after_backbone_len);
+        place_passive_piece("bias_high" + half_suffix, half_rphi, rsu_biasing_rphi,
+                            after_backbone_z, after_backbone_len);
+        place_passive_piece("readout_high" + half_suffix,
+                            half_rphi + rsu_biasing_rphi + rsu_tile_rphi, rsu_readout_rphi,
+                            after_backbone_z, after_backbone_len);
+      }
 
       for (int row_id = 0; row_id < rsu_rows_rphi; ++row_id) {
         // From low to high r-phi: readout, tiles, two central bias bands,
@@ -221,10 +257,15 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
             double tile_phi_start = tile_rphi_start / reference_radius;
             double tile_phi_end   = (tile_rphi_start + rsu_tile_rphi) / reference_radius;
             string tile_name      = module_name + _toString(sensor_id, "_tile%02d");
+            string power_name = "power" + _toString(row_id, "_r%d") + _toString(half_z_id, "_h%d") +
+                                _toString(tile_id, "_t%d");
+
+            place_passive_piece(power_name, tile_rphi_start, rsu_tile_rphi,
+                                tile_z_start + rsu_tile_z, rsu_power_z);
 
             Tube tile_solid(component_rmin, component_rmax, rsu_tile_z / 2.0, tile_phi_start,
                             tile_phi_end);
-            Volume tile_volume(tile_name, tile_solid, description.material(x_comp.materialStr()));
+            Volume tile_volume(tile_name, tile_solid, component_material);
             tile_volume.setRegion(description, x_comp.regionStr());
             tile_volume.setLimitSet(description, x_comp.limitsStr());
             tile_volume.setVisAttributes(description, x_comp.visStr());
@@ -243,6 +284,11 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
                                             v, n);
           }
         }
+      }
+
+      int expected_passive_count = rsu_halves_z * (5 + rsu_rows_rphi * rsu_tiles_per_z_half);
+      if (passive_count != expected_passive_count) {
+        throw runtime_error("Incomplete passive vertex-barrel RSU partition.");
       }
 
       thickness_so_far += component_thickness;
