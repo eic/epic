@@ -1,0 +1,527 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
+<lccdd>
+  <comment>
+    Main parameters. June 2022 setup with symmetric disk locations.
+    Here to comply with the ACTS translation onion structure we have:
+      - the first disk in the inner tracking assembly,
+      - the second silicon disk in the middle silicon tracking assembly
+      - the and the following 3 disks in the outer silicon tracking assembly
+    in their own tracking assembly.
+  </comment>
+
+  <define>
+    <comment> Main tracker disk setup </comment>
+
+    <comment>
+      The endcap module footprints/types are built in epic/src/SiEndcapModuleTracker_geo.cpp,
+      (module structure: build_module_prototype. load placement: load_module_rows)
+      so there are intentionally no local &lt;module&gt; declarations in this file.
+    </comment>
+
+    <comment>
+      Legacy flat EIC-LAS module stack.
+      These constants are used only by the legacy EIC_LAS_6RSU and EIC_LAS_5RSU
+      templates in SiEndcapModuleTracker_geo.cpp. They are intentionally kept
+      separate from the newer corrugated-module constants below.
+    </comment>
+    <constant name="SiEndcapModuleGlue_thickness"           value="60*um"/>
+    <constant name="SiEndcapModuleFlatSheetCF_thickness"    value="0.15*mm"/>
+    <constant name="SiTrackerSensor_thickness"              value="40*um"/>
+
+    <comment>
+      Current corrugated EIC-LAS 6-RSU module parameters.
+      These constants define the active EIC_LAS_6RSU_CORR implementation.
+      Keep future corrugated-module dimensions in this block unless they are
+      row/disk-level parameters such as corrugation pitch/height/angle.
+    </comment>
+
+    <comment>
+      RSU tile/readout pattern.
+    </comment>
+    <constant name="SiEndcapRSU_width"                       value="19.564*mm"/>
+    <constant name="SiEndcapRSU_length"                      value="21.666*mm"/>
+    <constant name="SiEndcapRSU_periphery_width"             value="0.525*mm"/>
+    <constant name="SiEndcapRSU_bias_width"                  value="0.06*mm"/>
+    <constant name="SiEndcapRSU_backbone_width"              value="0.06*mm"/>
+    <constant name="SiEndcapRSU_powerswitch_width"           value="0.02*mm"/>
+
+    <comment>
+      Six-RSU package envelope and handed end dimensions.
+      The left/right extensions are also used for bridge-FPC placement.
+    </comment>
+    <constant name="SiEndcapModule_width_corrugated"         value="32.0*mm"/>
+    <constant name="SiEndcapModule6RSU_package_length"       value="152.02*mm"/>
+    <constant name="SiEndcapModule6RSU_left_extension"       value="11.0*mm"/>
+    <constant name="SiEndcapModule6RSU_right_extension"      value="5.0*mm"/>
+    <constant name="SiEndcapModule6RSU_sensor_left_margin"   value="4.5*mm"/>
+    <constant name="SiEndcapModule6RSU_sensor_right_margin"  value="1.5*mm"/>
+
+    <comment>
+      Current corrugated module material stack.
+      Do not confuse these with the legacy flat-module stack above.
+    </comment>
+    <comment> Effective thickness from Nikki's disk material budget, 2026-06-09. </comment>
+    <constant name="SiEndcapSensor_thickness"                value="65*um"/>
+    <comment> Used for localized glue boxes in the Phase 9 adhesive pass. </comment>
+    <constant name="SiEndcapAdhesive_thickness"              value="80*um"/>
+    <constant name="SiEndcapModuleCF_thickness"              value="150*um"/>
+
+    <comment>
+      First-pass passive electronics placeholders for the corrugated module.
+      LEC/REC dimensions are intentionally XML-driven because the mechanical
+      design is still evolving. The first implementation should keep these
+      as simple passive boxes and avoid detailed chip/FPC routing.
+    </comment>
+    <constant name="SiEndcapLEC_length"                      value="4.5*mm"/>
+    <constant name="SiEndcapREC_length"                      value="1.5*mm"/>
+    <constant name="SiEndcapLEC_width"                       value="SiEndcapRSU_width"/>
+    <constant name="SiEndcapREC_width"                       value="SiEndcapRSU_width"/>
+    <constant name="SiEndcapLEC_thickness"                   value="SiEndcapSensor_thickness"/>
+    <constant name="SiEndcapREC_thickness"                   value="SiEndcapSensor_thickness"/>
+
+    <comment>
+      FPC dimensions are kept separate from LEC/REC chip-like placeholders.
+      Bridge FPCs are local end/readout features. Main FPC geometry is
+      row-dependent and intentionally deferred until the placement-reference
+      migration is stable.
+    </comment>
+    <constant name="SiEndcapBridgeFPC_Kapton_thickness"      value="80*um"/>
+    <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="30*um"/>
+    <constant name="SiEndcapLeftBridgeFPC_length"            value="24.5*mm"/>
+    <constant name="SiEndcapLeftBridgeFPC_width"             value="10.0*mm"/>
+    <comment> Signed distance from the module top y edge to the left bridge-FPC top edge. </comment>
+    <constant name="SiEndcapLeftBridgeFPC_y_offset"          value="-7.5*mm"/>
+    <constant name="SiEndcapRightBridgeFPC_length"           value="25.78*mm"/>
+    <constant name="SiEndcapRightBridgeFPC_width"            value="4.0*mm"/>
+    <comment> Signed distance from the module top y edge to the right bridge-FPC top edge. </comment>
+    <constant name="SiEndcapRightBridgeFPC_y_offset"         value="-6.22*mm"/>
+    <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
+
+    <comment>
+      First-pass AncASIC package on the left (LEC-side) bridge FPC.
+      Width is local x; length is local y. The outer-edge clearance is measured
+      from the FPC edge farthest from the LEC to the nearest ASIC edge.
+    </comment>
+    <constant name="SiEndcapAncASIC_width"                   value="3.3*mm"/>
+    <constant name="SiEndcapAncASIC_length"                  value="15.0*mm"/>
+    <constant name="SiEndcapAncASIC_thickness"               value="300*um"/>
+    <constant name="SiEndcapAncASICGlue_thickness"           value="80*um"/>
+    <constant name="SiEndcapAncASIC_top_clearance"           value="1.0*mm"/>
+    <constant name="SiEndcapAncASIC_outer_edge_clearance"    value="5.0*mm"/>
+
+    <constant name="SiEndcapCorrugationCF_thickness"        value="0.15*mm"/>
+    <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
+    <constant name="SiEndcapCorrugation_theta"              value="35*deg"/>
+    <constant name="SiEndcapCorrugation_d"                  value="34.77*mm/2"/>
+
+    <comment> Global Si endcap variables </comment>
+    <!-- <constant name="SiTrackerEndcapMod_thickness"   value="SiEndcapModuleFlatSheetCF_thickness + SiEndcapModuleGlue_thickness + SiTrackerSensor_thickness" /> -->
+
+    <comment>
+      Corrugated carbon support:
+        - h is the surface-to-surface corrugation envelope
+        - d is the half-pitch; same-surface flat centers are separated by 2*d
+        - module placements use compact/tracking/SVT_endcap_modules_corrugation_all.csv
+        - module rows align to opposite-side flat centers and use dz to choose the disk side
+    </comment>
+
+    <comment>
+      Per-disk beampipe openings from scripts/beampipe_envelope_circles.py.
+      The module mother volume subtracts the explicit lepton and hadron beampipe
+      openings in the plugin. The same circles are also used for placement rejection.
+      For reflected N-side layers, hadron_center_x is expressed in the local layer frame.
+    </comment>
+  </define>
+
+  <comment>
+    Inner silicon tracker disks
+  </comment>
+  <define>
+    <constant name="InnerTrackerEndcapPMod1_zmin"   value="InnerTrackerEndcapP_zmin" />
+    <constant name="InnerTrackerEndcapPMod1_rmax"   value="InnerTrackerEndcapP_rmax" />
+    <constant name="InnerTrackerEndcapPLayer1_rmax" value="InnerTrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapPLayer1_zmin" value="InnerTrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="InnerTrackerEndcapNMod1_zmin"   value="InnerTrackerEndcapN_zmin" />
+    <constant name="InnerTrackerEndcapNMod1_rmax"   value="InnerTrackerEndcapN_rmax" />
+    <constant name="InnerTrackerEndcapNLayer1_rmax" value="InnerTrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapNLayer1_zmin" value="InnerTrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_0_ID"
+      name="InnerTrackerEndcapP"
+      type="epic_SiEndcapModuleTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <comment>
+        Module geometry comes from the plugin. This detector uses the
+        corrugation-aware placement CSV so modules sit on both sides of the frame.
+      </comment>
+      <layer id="1" name="InnerTrackerEndcapP_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcap_active_rmin"
+          rmax="InnerTrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapPLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="InnerTrackerEndcapP_lepton_center_x"
+          lepton_center_y="InnerTrackerEndcapP_lepton_center_y"
+          lepton_radius="InnerTrackerEndcapP_lepton_radius"
+          hadron_center_x="InnerTrackerEndcapP_hadron_center_x"
+          hadron_center_y="InnerTrackerEndcapP_hadron_center_y"
+          hadron_radius="InnerTrackerEndcapP_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_0_ID"
+      name="InnerTrackerEndcapN"
+      type="epic_SiEndcapModuleTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <comment><module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/></comment>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <layer id="1" name="InnerTrackerEndcapN_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcap_active_rmin"
+          rmax="InnerTrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapNLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="InnerTrackerEndcapN_lepton_center_x"
+          lepton_center_y="InnerTrackerEndcapN_lepton_center_y"
+          lepton_radius="InnerTrackerEndcapN_lepton_radius"
+          hadron_center_x="InnerTrackerEndcapN_hadron_center_x"
+          hadron_center_y="InnerTrackerEndcapN_hadron_center_y"
+          hadron_radius="InnerTrackerEndcapN_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <comment>
+    ## Main endcap disks, split into a middle and outer part
+       to comply with the ACTS translation
+  </comment>
+  <define>
+    <constant name="TrackerEndcapPMod1_zmin"   value="TrackerEndcapPDisk1_zmin" />
+    <constant name="TrackerEndcapPMod1_rmax"   value="TrackerEndcapPDisk1_rmax" />
+    <constant name="TrackerEndcapPLayer1_rmax" value="TrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer1_zmin" value="TrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapPMod2_zmin"   value="TrackerEndcapPDisk2_zmin" />
+    <constant name="TrackerEndcapPMod2_rmax"   value="TrackerEndcapPDisk2_rmax" />
+    <constant name="TrackerEndcapPLayer2_rmax" value="TrackerEndcapPMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer2_zmin" value="TrackerEndcapPMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapPMod3_zmin"   value="TrackerEndcapPDisk3_zmin" />
+    <constant name="TrackerEndcapPMod3_rmax"   value="TrackerEndcapPDisk3_rmax" />
+    <constant name="TrackerEndcapPLayer3_rmax" value="TrackerEndcapPMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer3_zmin" value="TrackerEndcapPMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapPMod4_zmin"   value="TrackerEndcapPDisk4_zmin" />
+    <constant name="TrackerEndcapPMod4_rmax"   value="TrackerEndcapPDisk4_rmax" />
+    <constant name="TrackerEndcapPLayer4_rmax" value="TrackerEndcapPMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer4_zmin" value="TrackerEndcapPMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod1_zmin"   value="TrackerEndcapNDisk1_zmin" />
+    <constant name="TrackerEndcapNMod1_rmax"   value="TrackerEndcapNDisk1_rmax" />
+    <constant name="TrackerEndcapNLayer1_rmax" value="TrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer1_zmin" value="TrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod2_zmin"   value="TrackerEndcapNDisk2_zmin" />
+    <constant name="TrackerEndcapNMod2_rmax"   value="TrackerEndcapNDisk2_rmax" />
+    <constant name="TrackerEndcapNLayer2_rmax" value="TrackerEndcapNMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer2_zmin" value="TrackerEndcapNMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod3_zmin"   value="TrackerEndcapNDisk3_zmin" />
+    <constant name="TrackerEndcapNMod3_rmax"   value="TrackerEndcapNDisk3_rmax" />
+    <constant name="TrackerEndcapNLayer3_rmax" value="TrackerEndcapNMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer3_zmin" value="TrackerEndcapNMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod4_zmin"   value="TrackerEndcapNDisk4_zmin" />
+    <constant name="TrackerEndcapNMod4_rmax"   value="TrackerEndcapNDisk4_rmax" />
+    <constant name="TrackerEndcapNLayer4_rmax" value="TrackerEndcapNMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer4_zmin" value="TrackerEndcapNMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <comment>
+      ACTS/frame-clearance radii for the module endcaps:
+        - keep the active radius near the surviving active module edge
+        - use these values for layer rmin and corrugated-frame containment checks
+        - keep beampipe_opening radii on the physical per-disk beampipe constants
+        - if ACTS later creates zero-width radial gaps, retune these from the innermost surviving module rows
+        - the inner disk active edge comes from the first surviving InnerTrackerEndcap module rows
+        - the middle disk active edge comes from the first surviving MiddleTrackerEndcap module rows
+        - the outer disks share a common active edge from the first surviving OuterTrackerEndcap module rows
+    </comment>
+    <constant name="InnerTrackerEndcap_active_rmin"  value="37.0*mm" />
+    <constant name="MiddleTrackerEndcap_active_rmin" value="54.45*mm" />
+    <constant name="OuterTrackerEndcap_active_rmin"  value="47.0*mm" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_1_ID"
+      name="MiddleTrackerEndcapP"
+      type="epic_SiEndcapModuleTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <layer id="1" name="MiddleTrackerEndcapP_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="MiddleTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk1_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk1_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk1_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk1_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk1_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk1_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_1_ID"
+      name="MiddleTrackerEndcapN"
+      type="epic_SiEndcapModuleTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <layer id="1" name="MiddleTrackerEndcapN_disk1">
+        <envelope vis="TrackerLayerVis"
+          rmin="MiddleTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer1_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk1_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk1_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk1_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk1_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk1_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk1_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapP_2_ID"
+      name="OuterTrackerEndcapP"
+      type="epic_SiEndcapModuleTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <layer id="2" name="OuterTrackerEndcapP_disk2">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapPLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer2_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk2_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk2_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk2_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk2_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk2_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk2_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="3" name="OuterTrackerEndcapP_disk3">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapPLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer3_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk3_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk3_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk3_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk3_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk3_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk3_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="4" name="OuterTrackerEndcapP_disk4">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapPLayer4_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer4_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapPDisk4_lepton_center_x"
+          lepton_center_y="TrackerEndcapPDisk4_lepton_center_y"
+          lepton_radius="TrackerEndcapPDisk4_lepton_radius"
+          hadron_center_x="TrackerEndcapPDisk4_hadron_center_x"
+          hadron_center_y="TrackerEndcapPDisk4_hadron_center_y"
+          hadron_radius="TrackerEndcapPDisk4_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_2_ID"
+      name="OuterTrackerEndcapN"
+      type="epic_SiEndcapModuleTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <layer id="2" name="OuterTrackerEndcapN_disk2">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapNLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer2_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk2_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk2_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk2_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk2_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk2_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk2_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="3" name="OuterTrackerEndcapN_disk3">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapNLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer3_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk3_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk3_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk3_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk3_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk3_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk3_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
+      </layer>
+      <layer id="4" name="OuterTrackerEndcapN_disk4">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcap_active_rmin"
+          rmax="TrackerEndcapNLayer4_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer4_zmin" />
+        <beampipe_opening
+          lepton_center_x="TrackerEndcapNDisk4_lepton_center_x"
+          lepton_center_y="TrackerEndcapNDisk4_lepton_center_y"
+          lepton_radius="TrackerEndcapNDisk4_lepton_radius"
+          hadron_center_x="TrackerEndcapNDisk4_hadron_center_x"
+          hadron_center_y="TrackerEndcapNDisk4_hadron_center_y"
+          hadron_radius="TrackerEndcapNDisk4_hadron_radius" />
+        <frame type="corrugated" name="frame" material="CarbonFiber"
+          thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
+          theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
+          y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
+          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MiddleTrackerEndcapP"/>
+      <argument value="layer_pattern: str=MiddleTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MiddleTrackerEndcapN"/>
+      <argument value="layer_pattern: str=MiddleTrackerEndcapN_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerTrackerEndcapP"/>
+      <argument value="layer_pattern: str=InnerTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerTrackerEndcapN"/>
+      <argument value="layer_pattern: str=InnerTrackerEndcapN_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterTrackerEndcapP"/>
+      <argument value="layer_pattern: str=OuterTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterTrackerEndcapN"/>
+      <argument value="layer_pattern: str=OuterTrackerEndcapN_layer\d_N"/>
+    </plugin>
+  </plugins>
+
+  <readouts>
+    <readout name="TrackerEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
+      <id>system:8,layer:4,module:12,sensor:7,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

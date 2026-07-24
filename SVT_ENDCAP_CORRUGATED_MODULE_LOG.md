@@ -1,0 +1,1628 @@
+# SVT Endcap Corrugated Module Implementation Log
+
+Append substantial project changes here. This file complements git history and is intended for debugging, reproducibility, and future handoff.
+
+Entry template:
+
+```text
+## YYYY-MM-DD HH:MM UTC - short title
+
+Files changed:
+- path
+
+Intent:
+- What this change is trying to accomplish.
+
+Implementation:
+- What changed technically.
+
+Validation:
+- Commands/scripts run and outcome.
+
+Known limitations / next step:
+- What remains unresolved.
+```
+
+## 2026-05-25 UTC - Project documentation scaffold
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Start a careful, step-by-step implementation record for the SVT endcap corrugated module geometry update.
+- Capture current understanding of the design requirements, implementation phases, validation gates, and logging convention.
+
+Implementation:
+- Added an agent-friendly project guide.
+- Added this append-only implementation log.
+
+Validation:
+- Documentation-only change. No geometry build or overlap checks run.
+
+Known limitations / next step:
+- The worktree currently contains pre-existing prototype geometry changes. Decide whether to keep them as a starting point or discard/reset them before implementing the new `EIC_LAS_6RSU_CORR` path.
+
+## 2026-05-25 UTC - Initial design decisions recorded
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record first implementation choices from user review of the open questions.
+
+Implementation:
+- Set first implementation package/support width to `32.00 mm`.
+- Decided to ignore carbon fiber bottom-edge cutouts initially.
+- Decided corrugated module handedness should be explicit in the CSV, using `left` / `right`, rather than inferred from placement.
+- Recorded that 5-RSU corrugated dimensions are unknown; assume the same end dimensions as 6-RSU later, but focus first on 6-RSU.
+- Recorded that the current prototype can be retained only if it remains separate and cleanly removable.
+
+Validation:
+- Documentation-only change. No geometry build or overlap checks run.
+
+Known limitations / next step:
+- Need to choose placeholder DD4hep materials for LEC, REC, and FPC.
+- Need to implement the `EIC_LAS_6RSU_CORR` path cleanly, keeping the current prototype separable.
+
+## 2026-05-25 UTC - Component width decision recorded
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record that the implementation should use the design widths for different module components rather than forcing all layers to one common width.
+
+Implementation:
+- Updated the project plan to use a `32.00 mm` carbon fiber/support envelope and a `19.56 mm` RSU/sensor band with `6.22 mm` margins.
+- Noted that glue/adhesive width should follow the component it bonds when clear, using simple rectangular approximations at first.
+
+Validation:
+- Documentation-only change. No geometry build or overlap checks run.
+
+Known limitations / next step:
+- During implementation, decide explicitly whether each glue/adhesive layer follows the full support envelope or the RSU/sensor band.
+
+## 2026-05-25 UTC - Clean baseline preference recorded
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the decision to begin implementation from a cleaner geometry/code baseline.
+
+Implementation:
+- Updated Phase 0 to prefer discarding or setting aside the current dirty source/XML prototype changes before implementing `EIC_LAS_6RSU_CORR`.
+- Clarified that documentation, drawing PDFs, and project notes should not be reset as part of cleanup.
+
+Validation:
+- Documentation-only change. No geometry build or overlap checks run.
+
+Known limitations / next step:
+- Before cleanup, list the exact dirty files and decide which source/XML changes to discard, which local artifacts to keep, and whether to preserve a patch/reference copy of the current prototype.
+
+## 2026-05-25 23:33 UTC - Phase 0 worktree cleanup
+
+Files changed:
+- `tmp/phase0_cleanup_2026-05-25.sh`
+- `tmp/file_actions.log`
+- `tmp/retained/2026-05-25/phase0_cleanup/prototype_geometry_changes.patch`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Start the corrugated module implementation from a cleaner geometry/code baseline while preserving the current prototype for reference.
+
+Implementation:
+- Wrote and ran `tmp/phase0_cleanup_2026-05-25.sh`.
+- Saved the dirty tracked prototype/display diff to `tmp/retained/2026-05-25/phase0_cleanup/prototype_geometry_changes.patch`.
+- Restored these tracked files to `HEAD`:
+  - `compact/display_detailed.xml`
+  - `compact/display_geoviewer.xml`
+  - `compact/tracking/silicon_disks_modules.xml`
+  - `src/SiEndcapModuleTracker_geo.cpp`
+- Moved untracked local artifacts into retention:
+  - `configurations/craterlake_svt_only.yml`
+  - `configurations/craterlake_tracking_only_disk_tiles_new.yml`
+  - `setup_local.sh`
+  - `install/`
+- Logged the moved files in `tmp/file_actions.log`.
+
+Validation:
+- `git status --short` now shows no modified tracked source/XML/display files.
+- Remaining untracked items are project docs/PDF references and the `tmp/` retention area.
+- The retained prototype patch has 199 lines.
+
+Known limitations / next step:
+- `setup_local.sh` and `install/` were moved to retention and can be restored from `tmp/retained/2026-05-25/phase0_cleanup/` if needed for validation.
+- Next implementation step should begin from restored tracked geometry files and add only the new parameterized `EIC_LAS_6RSU_CORR` path.
+
+## 2026-05-25 UTC - Debug helpers restored
+
+Files changed:
+- `setup_local.sh`
+- `configurations/craterlake_tracking_only_disk_tiles_new.yml`
+- `tmp/file_actions.log`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Restore local helper files that streamline debugging and geometry checks.
+
+Implementation:
+- Restored `setup_local.sh` from `tmp/retained/2026-05-25/phase0_cleanup/setup_local.sh`.
+- Restored `configurations/craterlake_tracking_only_disk_tiles_new.yml` from `tmp/retained/2026-05-25/phase0_cleanup/configurations/craterlake_tracking_only_disk_tiles_new.yml`.
+- Logged both restore actions in `tmp/file_actions.log`.
+
+Validation:
+- Documentation/file-restore only. No geometry build or overlap checks run.
+
+Known limitations / next step:
+- `install/` remains retained and was not restored.
+
+## 2026-05-25 UTC - Phase 1 XML parameter scaffold
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add the XML constants needed for the future `EIC_LAS_6RSU_CORR` implementation without changing current module behavior.
+
+Implementation:
+- Added RSU dimensions:
+  - `SiEndcapRSU_width`
+  - `SiEndcapRSU_length`
+  - `SiEndcapRSU_periphery_width`
+  - `SiEndcapRSU_bias_width`
+  - `SiEndcapRSU_backbone_width`
+- Added six-RSU corrugated package dimensions:
+  - `SiEndcapModule_width_corrugated = 32.0*mm`
+  - `SiEndcapModule6RSU_package_length = 152.02*mm`
+  - end extensions and sensor-strip margins.
+- Kept strip decomposition, CF cutout dimensions, and y-margin values as drawing/documentation notes until they are wired into geometry.
+- Added new corrugated-module thickness constants for sensor, adhesive, and CF.
+- Recorded placeholder material choices in the project guide:
+  - FPC/base flex: `Kapton`
+  - optional metal traces/readout strips: `Copper`
+  - LEC/REC chip-like placeholders: `Silicon`
+  - adhesive/glue: `SVT_Endcap_Glue`
+
+Validation:
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+- No DD4hep build/export was run in this phase because no code consumes the new constants yet.
+
+Known limitations / next step:
+- Constants are intentionally unused until the C++ module builder is extended in later phases.
+- The exact LEC/REC geometry remains approximate.
+
+## 2026-05-26 UTC - Phase 1 verified after main merge
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Resume after latest main-branch merge and confirm the Phase 1 parameter scaffold is still present and valid.
+
+Implementation:
+- Inspected `compact/tracking/silicon_disks_modules.xml`.
+- Confirmed the corrugated RSU/module constants are present and remain the only tracked geometry diff for Phase 1.
+
+Validation:
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+
+Known limitations / next step:
+- No C++ code consumes these constants yet. Proceed to Phase 2 when ready.
+
+## 2026-05-26 UTC - Phase 2 component offsets
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Enable future corrugated module components to be placed away from the module center while preserving current module behavior.
+
+Implementation:
+- Added `x_offset` and `y_offset` fields to `ComponentTemplate`, both defaulting to `0.0`.
+- Changed component placement in `build_module_prototype(...)` from `Position(0, 0, z_position)` to `Position(component.x_offset, component.y_offset, z_position)`.
+- Existing aggregate initializers for legacy module components do not specify offsets, so they keep the default zero offsets.
+
+Validation:
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+- Ran `git diff --check`; it passed.
+- Attempted `cmake --build build -j4`; it failed because the existing build directory references missing `/opt/local/bin/gmake`.
+- Attempted `make -C build -j4`; it failed because the existing build directory references a missing absolute CMake path under `/opt/software/...`.
+
+Known limitations / next step:
+- No successful compile check was possible with the current stale build directory/environment.
+- Next phase can add `EIC_LAS_6RSU_CORR` using these offsets; before a full build/export, regenerate or restore the local build/install environment.
+
+## 2026-05-26 UTC - Phase 3 initial 6-RSU corrugated module type
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_phase3_build.sh`
+
+Intent:
+- Add the first clean `EIC_LAS_6RSU_CORR` module type alongside the legacy modules, without changing the placement CSV.
+
+Implementation:
+- Added `build_corrugated_6rsu(...)` inside `builtin_module_templates(...)`.
+- Added `EIC_LAS_6RSU_CORR` to the built-in module map.
+- The new module currently uses:
+  - package length `SiEndcapModule6RSU_package_length = 152.02 mm`
+  - package/support width `SiEndcapModule_width_corrugated = 32.0 mm`
+  - full-envelope carbon-fiber support layer
+  - full-envelope adhesive layer
+  - sensitive silicon strip with length `6 * SiEndcapRSU_length` and width `SiEndcapRSU_width`
+  - x offset from the 11 mm left extension and 4.5 mm sensor-left margin
+- Deferred localized FPC/readout/end boxes until the builder can represent same-layer side-by-side passive pieces without adding each local box thickness to the module stack.
+
+Validation:
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+- Ran `git diff --check`; it passed.
+- Added and ran `tmp/validate_phase3_build.sh`.
+- First configure attempt exposed stale build-cache paths.
+- Updated the script to run `cmake --fresh`.
+- Fresh configure then failed because DD4hep is not available in this shell:
+  `Could not find a package configuration file provided by "DD4hep"`.
+
+Known limitations / next step:
+- No successful compile/export check yet; run inside the proper EPIC/DD4hep environment.
+- The new module is not used by the CSV yet, so detector output should remain unchanged until rows are switched or a test row/config is introduced.
+- Passive FPC/readout/end features are intentionally deferred.
+
+## 2026-05-26 UTC - Test CSV for corrugated 6-RSU visualization
+
+Files changed:
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Provide a small opt-in placement CSV for visualizing the new `EIC_LAS_6RSU_CORR` prototype without modifying the production placement CSV.
+
+Implementation:
+- Added four sparse enabled rows on `InnerTrackerEndcapN_disk1` using `EIC_LAS_6RSU_CORR`.
+- Added two disabled legacy comparison rows using `EIC_LAS_6RSU` and `EIC_LAS_5RSU`.
+- Left the production XML unchanged; it still points at `compact/tracking/SVT_endcap_modules_corrugation_all.csv`.
+
+Validation:
+- Checked the CSV columns with `awk`; all data rows have 8 fields.
+- No geometry export was run yet.
+
+Known limitations / next step:
+- To visualize, temporarily point the relevant `<module_placements file=...>` entries in `compact/tracking/silicon_disks_modules.xml` at `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv`, or make a separate test compact XML/config.
+- The test rows do not include handedness yet; handedness support is a later phase.
+
+## 2026-05-26 UTC - Repaired installed materials-map symlink
+
+Files changed:
+- `tmp/fix_materials_map_symlink_2026-05-26.sh`
+- `tmp/file_actions.log`
+- `install/share/epic/calibrations/543a6557cfe39ac6`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix `dd_web_display` failure caused by a self-referential installed calibration symlink:
+  `filesystem error: status: Too many levels of symbolic links [calibrations/materials-map.cbor]`.
+
+Implementation:
+- Confirmed `install/share/epic/calibrations/materials-map.cbor` pointed to `543a6557cfe39ac6`.
+- Confirmed `install/share/epic/calibrations/543a6557cfe39ac6` was a symlink to itself through the absolute install path.
+- Wrote and ran `tmp/fix_materials_map_symlink_2026-05-26.sh`.
+- Moved the bad self-link to `tmp/retained/2026-05-26/materials_map_symlink_fix/543a6557cfe39ac6.self_symlink`.
+- Restored the real 29 MB payload from the Phase 0 retained install tree.
+
+Validation:
+- Verified `test -f install/share/epic/calibrations/materials-map.cbor` succeeds.
+- Verified `install/share/epic/calibrations/543a6557cfe39ac6` is now a regular file.
+- Could not rerun `dd_web_display` in this shell because it is not on `PATH`.
+
+Known limitations / next step:
+- Re-run the visualization command in the configured EPIC/DD4hep environment.
+- There is another self-referential installed calibration symlink, `9508b7435023068a`, but it was not part of the reported material-map failure and was left unchanged.
+
+## 2026-05-26 UTC - Temporary XML test CSV switch noted
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Preserve the temporary XML change that points `InnerTrackerEndcapN` at the corrugated 6-RSU test CSV for easier visualization.
+
+Implementation:
+- User changed the `InnerTrackerEndcapN` `<module_placements>` entry from the production CSV to:
+  `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv`.
+- The original production CSV line is currently kept inside an XML comment.
+- This is intentionally retained for testing convenience.
+
+Validation:
+- User ran `dd_web_display`; after repairing the material-map symlink, export proceeded with only an expected warning about no valid modules for `InnerTrackerEndcapP_disk1`.
+
+Known limitations / next step:
+- Before finalizing or committing production geometry, remind the user to revert this temporary XML test switch back to `compact/tracking/SVT_endcap_modules_corrugation_all.csv`.
+
+## 2026-05-26 UTC - Phase 4 explicit handedness parsing
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add explicit left/right handedness support to the placement CSV path for corrugated modules.
+
+Implementation:
+- Added `handedness` to `ModuleRow`.
+- Added `parse_handedness(...)`, accepting only empty, `left`, or `right`.
+- Corrugated module rows, identified by module names ending in `_CORR`, now require explicit `left` or `right` handedness.
+- Non-corrugated legacy rows remain backward compatible with missing/empty handedness.
+- Module prototype cache keys now include handedness when present, preparing for future handed prototype variants.
+- Updated the corrugated 6-RSU test CSV to include a `handedness` column with left/right examples.
+
+Validation:
+- Ran `awk` field-count check on `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_test.csv`; data rows have 9 fields.
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+- Ran `git diff --check`; it passed.
+- No DD4hep export was run from this shell.
+
+Known limitations / next step:
+- Left/right handedness still does not change the local geometry.
+- The temporary XML test switch in `compact/tracking/silicon_disks_modules.xml` is intentionally retained for visualization and should be reverted before finalizing production geometry.
+- Before opening a pull request, remove the temporary test CSV and the working markdown files added for this implementation unless any are intentionally promoted to permanent documentation.
+
+## 2026-05-27 UTC - Phase 5 RSU four-region active pattern
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_phase5_rsu_four_region_2026-05-27.sh`
+
+Intent:
+- Reimplement Phase 5 on top of the Phase 4 checkpoint commit so the substantial RSU subdivision change is isolated in a fresh working-tree diff.
+- Replace the single sensitive silicon strip in `EIC_LAS_6RSU_CORR` with a vertex-barrel-style approximation where each RSU has four active regions and inactive silicon gaps.
+
+Implementation:
+- Extended `ComponentTemplate` with `x_repeat` and `rsu_four_region_pattern`.
+- Marked the corrugated 6-RSU silicon component as six repeated RSU pitches using the four-region pattern.
+- In `build_module_prototype(...)`, split each RSU pitch into two halves along local x and two halves along local y.
+- For each RSU, create four sensitive silicon rectangles.
+- Model backbone, bias, and periphery/readout regions as passive silicon boxes using `TrackerServiceVis`.
+- Follow the vertex-barrel `upper`/`lower` convention along local y: bias strips are placed at the internal boundary between the two y halves, while periphery/readout strips are placed at the outer edges.
+- Dimensions are taken from XML constants:
+  `SiEndcapRSU_length`, `SiEndcapRSU_width`, `SiEndcapRSU_backbone_width`,
+  `SiEndcapRSU_bias_width`, and `SiEndcapRSU_periphery_width`.
+
+Validation:
+- Created and ran `tmp/validate_phase5_rsu_four_region_2026-05-27.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- CSV field-count check confirmed active test rows have 9 fields with explicit handedness.
+
+Known limitations / next step:
+- This has not yet been compiled or exported in the DD4hep environment from this shell.
+- Left/right handedness swaps the sensor-band start side, but detailed asymmetric FPC/readout/end features are still not modeled.
+- The temporary XML test switch in `compact/tracking/silicon_disks_modules.xml` is intentionally retained for visualization and should be reverted before finalizing production geometry.
+
+## 2026-05-27 UTC - Fixed handed corrugated prototype selection
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix the issue where `left` and `right` handed corrugated rows had separate cache keys but still built identical module prototypes.
+
+Implementation:
+- Added `corrugated_6rsu_sensor_x_offset(...)` to calculate the sensor-band local x offset from the package length, RSU chain length, and handed end-extension/sensor-margin constants.
+- Added `with_corrugated_handedness(...)`, which copies the selected module template and updates sensitive component offsets before prototype construction.
+- `left` now uses `SiEndcapModule6RSU_left_extension + SiEndcapModule6RSU_sensor_left_margin`.
+- `right` now uses `SiEndcapModule6RSU_right_extension + SiEndcapModule6RSU_sensor_right_margin`.
+
+Validation:
+- Re-ran `tmp/validate_phase5_rsu_four_region_2026-05-27.sh`; it passed.
+- Ran `git diff --check`; it passed.
+- Ran `xmllint --noout compact/tracking/silicon_disks_modules.xml`; it passed.
+- Sanity-calculated the current sensor-band offsets:
+  `left = +4.488 mm`, `right = -4.512 mm`.
+
+Known limitations / next step:
+- This fixes the modeled sensor-band handedness, but detailed asymmetric FPC/readout/end pieces are still deferred.
+
+## 2026-05-28 UTC - SVT-specific visualization attributes
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/display.xml`
+- `compact/display_detailed.xml`
+- `compact/display_geoviewer.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make the corrugated RSU module easier to inspect by using SVT-specific visualization attributes and separating glue color from inactive RSU silicon.
+
+Implementation:
+- Changed module support components from `TrackerSupportVis` to `SVTSupportVis`.
+- Changed active silicon components from `TrackerLayerVis` to `SVTSensorVis`.
+- Changed inactive RSU backbone/bias/periphery silicon boxes from `TrackerServiceVis` to `SVTReadoutVis`.
+- Added `SVTGlueVis` and assigned glue/adhesive components to it.
+- Added the SVT visualization definitions to `display_detailed.xml` and `display_geoviewer.xml` in addition to the existing main `display.xml` definitions.
+
+Validation:
+- Ran `git diff --check`; it passed.
+- Ran `xmllint --noout` on `compact/display.xml`, `compact/display_detailed.xml`, `compact/display_geoviewer.xml`, and `compact/tracking/silicon_disks_modules.xml`; it passed.
+
+Known limitations / next step:
+- This has not yet been visually checked with `dd_web_display` in the configured DD4hep environment.
+
+## 2026-05-28 UTC - Updated remaining implementation roadmap
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Update the project documentation with the agreed remaining workflow after successful visual inspection and overlap checks.
+
+Roadmap at the time, superseded by the later Phase 6/7/8 reorder entries:
+- Migrate the real placement CSV to `EIC_LAS_6RSU_CORR` with explicit `left/right` handedness.
+- Rebuild/export, carefully inspect handedness, and rerun both overlap checks.
+- Run a more thorough `eicrecon`/ACTS validation to catch reconstruction-level issues.
+- Add simple, parameterized LEC/REC details.
+- Repeat geometry, overlap, handedness, and `eicrecon` validation after LEC/REC details are added.
+- Cleanup temporary XML switches, the test CSV, and working markdown files before PR unless any are intentionally promoted to permanent documentation.
+
+Validation:
+- Documentation-only update; no geometry or XML validation required.
+
+## 2026-06-05 19:13 UTC - RSU 12-tile detail decision
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the next RSU-detail implementation choice before changing geometry code.
+
+Implementation plan:
+- Use `1RSU_top_half.png` as the current RSU architecture reference.
+- Keep the existing six-RSU corrugated module and two-by-two RSU-half structure.
+- Refine each RSU x-half from one active rectangle into three active tile columns.
+- Add passive power-switch strips using the existing `SiEndcapRSU_powerswitch_width` constant.
+- Preserve passive backbone, biasing, and readout/periphery silicon regions.
+- Keep only active tile regions sensitive.
+
+Expected geometry change:
+- Each RSU changes from `2 x-halves * 2 y-halves = 4` sensitive regions to
+  `2 x-halves * 3 tile columns * 2 y-halves = 12` sensitive regions.
+- A 6-RSU module therefore changes from 24 sensitive regions to 72 sensitive regions.
+
+Validation to run:
+- Check XML parsing and whitespace.
+- Check C++ diff formatting.
+- Increase the `sensor` ID bitfield if needed for 72 sensitive regions per module.
+- Rebuild/export and rerun overlap checks in the configured DD4hep environment before relying on the new geometry.
+
+## 2026-06-05 19:13 UTC - Implement RSU 12-tile approximation
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_rsu_twelve_tile_2026-06-05.sh`
+
+Intent:
+- Refine the corrugated RSU sensitive-region model to better match `1RSU_top_half.png`.
+
+Implementation:
+- Renamed the RSU component flag from `rsu_four_region_pattern` to `rsu_twelve_tile_pattern`.
+- Split each local-x half-RSU into three active tile columns.
+- Added passive silicon power-switch strips after each tile column using `SiEndcapRSU_powerswitch_width`.
+- Preserved passive silicon backbone, bias, and periphery/readout strips.
+- Kept only active tile rectangles sensitive.
+- Expanded `TrackerEndcapHits` from `sensor:5` to `sensor:7` to cover 72 sensitive regions in each 6-RSU corrugated module.
+- Updated project/drawing documentation to describe the 12-tile approximation and current dimensions.
+
+Validation:
+- Created and ran `tmp/validate_rsu_twelve_tile_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- Confirmed the old `rsu_four_region_pattern` name is absent.
+- Confirmed the new powerswitch constant, `rsu_twelve_tile_pattern`, and `sensor:7` hooks are present.
+
+Known limitations / next step:
+- This has not yet been compiled, exported with `dd_web_display`, or overlap-checked in the configured DD4hep environment.
+- Visual inspection should confirm that the 12 active tile regions per RSU and passive power-switch strips are clear before moving to LEC/REC details.
+
+## 2026-06-05 UTC - Updated remaining phase order
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the revised implementation order after completing the RSU 12-tile approximation.
+
+Roadmap:
+- Phase 6: add simple passive LEC/REC detail.
+- Phase 7: make corrugation geometry flexible by allowing row-wise `h`, `d`, and `theta` values for each disk through a dedicated corrugation CSV.
+- Phase 8: add FPC and AncASIC detail.
+- Phase 9: localized adhesive pass. This supersedes the earlier Phase 9 numbering below.
+- Phase 10: fine-tune bridge-FPC dimensions and y offsets.
+- Phase 11: update the real placement CSV for corrugated-informed geometry and change the placement reference point from the bottom-left corner to the midpoint at the RSU-LEC boundary.
+- Phase 12: run `eicrecon`/ACTS compatibility and performance checks.
+- Phase 13: add a simplified AncASIC on the left bridge FPC and any remaining FPC detail.
+- Phase 14: cleanup temporary files and prepare the pull request.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
+## 2026-07-13 UTC - Add pre-PR test CSV cleanup reminder
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record a concrete Phase 14 cleanup item before merging or opening a PR.
+- Avoid accidentally committing production XML that depends on a local generated test CSV.
+
+Phase 14 pre-PR checklist addition:
+- Audit `compact/tracking/silicon_disks_modules.xml` for temporary test placement switches.
+- In particular, confirm whether any `<module_placements file=...>` entries still point to `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+- Before PR, either promote the generated CSV to an intentional tracked production/reference file or revert the XML entries to the intended tracked placement CSV.
+- Keep this check separate from ordinary geometry validation because it is a reproducibility/CI hygiene issue, not a detector-overlap issue.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
+## 2026-06-18 UTC - Phase 11a add corrugated 6-RSU template to disk-layout scripts
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Start production placement migration by teaching the disk-layout tooling about the `EIC_LAS_6RSU_CORR` module footprint.
+- Keep this first step limited to module dimensions/thickness and CLI aliases.
+
+Implementation:
+- Added an `EIC_LAS_6RSU_CORR` built-in module template to the shared layout helper.
+- Read corrugated package dimensions from XML constants:
+  - `SiEndcapModule6RSU_package_length`
+  - `SiEndcapModule_width_corrugated`
+- Matched the layout/checker thickness estimate to the current DD4hep corrugated stack:
+  - carbon fiber,
+  - adhesive,
+  - effective sensor/readout silicon layer,
+  - bridge-FPC Kapton,
+  - bridge-FPC Aluminum.
+- Added `6RSU_CORR` and `EIC_LAS_6RSU_CORR` as accepted module choices in both layout generators.
+- Updated the disk-layout README with the new corrugated module support and noted that handedness/reference-point CSV support remains a follow-up Phase 11 step.
+
+Validation:
+- `git diff --check` passed.
+- Lightweight template sanity check:
+  - `EIC_LAS_6RSU_CORR` resolves to `152.020 mm x 32.000 mm`.
+  - Estimated total thickness resolves to `0.405 mm`.
+- Generated a one-disk candidate CSV:
+  - `tmp/phase11a_6rsu_corr_candidate.csv`
+  - command used `--module 6RSU_CORR --disk InnerTrackerEndcapN_disk1`.
+- Ran the standalone intrusion checker on that candidate:
+  - total rows: 66
+  - ok rows: 66
+  - invalid rows: 0
+
+Known limitation / next step:
+- The generated CSV still uses the old schema without explicit handedness. The next Phase 11 step should add handedness output and/or the new RSU-LEC-boundary reference-point convention before using generated `_CORR` rows in DD4hep.
+
+## 2026-06-19 UTC - Phase 11b add explicit handedness output to disk-layout generators
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make generated `_CORR` placement rows directly usable by the DD4hep parser requirement that corrugated modules provide explicit `left`/`right` handedness.
+- Keep handedness generation configurable so the placement workflow can be adjusted after visual inspection.
+
+Implementation:
+- Added shared helper functions:
+  - `module_requires_handedness(...)`
+  - `placement_handedness(...)`
+- Added `--corr-handedness-mode` to both disk-layout generators.
+- Supported handedness modes:
+  - `alternate-row`: sort each disk row by x and write `left`, `right`, `left`, `right`, ...
+  - `split-x`: write `left` for module x-center `< 0`, otherwise `right`
+  - `left`: force all generated corrugated rows to `left`
+  - `right`: force all generated corrugated rows to `right`
+- Updated CSV writing so generated `_CORR` layouts include:
+  - `disk,module,x_min_mm,y_min_mm,dz_mm,facing,handedness,enabled,comment`
+- Left non-corrugated CSV output backward compatible without a handedness column.
+- Recorded the handedness mode in the corrugation-generator summary file.
+
+Validation:
+- `git diff --check` passed inside `disk_layout/scripts`.
+- Generated a one-disk handed candidate:
+  - `tmp/phase11b_6rsu_corr_handed_candidate.csv`
+  - command used `--module 6RSU_CORR --disk InnerTrackerEndcapN_disk1`.
+  - default handedness mode: `alternate-row`.
+- Candidate handedness counts:
+  - left: 39
+  - right: 27
+- Row-wise alternation check:
+  - rows checked: 25
+  - violations: 0
+- Ran the standalone intrusion checker on that candidate:
+  - total rows: 66
+  - ok rows: 66
+  - invalid rows: 0
+
+Known limitation / next step:
+- The generated CSV still uses bottom-left `x_min_mm/y_min_mm`. The next Phase 11 step should add the RSU-LEC boundary midpoint reference-point convention, or explicitly decide to keep bottom-left until after visual placement validation.
+
+## 2026-06-23 UTC - Phase 11b generated full corrugated test CSV
+
+Files changed:
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`
+- `tmp/generate_phase11b_corrugated_test_csv.sh`
+- `tmp/phase11b_6rsu_corr_generated_test.log`
+- `tmp/phase11b_6rsu_corr_generated_test_summary.txt`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Create a full all-disk test CSV using the current corrugated 6-RSU package footprint and row-wise alternating handedness before switching the placement workflow to the future `rsu_lec_boundary_midpoint` reference convention.
+
+Implementation:
+- Added a reproducible generation script at `tmp/generate_phase11b_corrugated_test_csv.sh`.
+- Generated `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+- The generated CSV still uses the current `x_min_mm` / `y_min_mm` schema for this temporary testing pass.
+- The generated CSV includes explicit row-wise alternating `handedness`.
+
+Validation:
+- Generator wrote 1892 rows.
+- Standalone intrusion checker result:
+  - total rows: 1892
+  - ok rows: 1892
+  - invalid rows: 0
+- Row-wise handedness alternation check:
+  - row groups: 410
+  - left rows: 1054
+  - right rows: 838
+  - alternation violations: 0
+
+Known limitation / next step:
+- This is a temporary test CSV. The next implementation step should switch the placement-reference convention to `rsu_lec_boundary_midpoint` and regenerate the production candidate from that schema.
+
+## 2026-06-23 UTC - Phase 11b fix corrugated test CSV z reference
+
+Files changed:
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `tmp/generate_phase11b_corrugated_test_csv.sh`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix visual overlap between generated modules and the corrugated frame.
+- Treat the corrugated frame surface as the module inner-face contact plane rather than the module center plane.
+
+Implementation:
+- Changed the corrugation generator default from `center-at-frame-surface` to `inner-face-on-frame-surface`.
+- Updated the temporary generation script to pass `--module-z-reference inner-face-on-frame-surface` explicitly.
+- Documented why `center-at-frame-surface` is only useful as a diagnostic comparison for this geometry.
+
+Validation:
+- Regenerate `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+- Confirm `dz_mm` magnitudes increase by approximately half the corrugated-module thickness.
+- Rerun standalone intrusion and row-wise handedness checks.
+
+## 2026-06-23 UTC - Phase 11b add row-wise facing alternation
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`
+- `tmp/phase11b_6rsu_corr_generated_test.log`
+- `tmp/phase11b_6rsu_corr_generated_test_summary.txt`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make adjacent modules in a row alternate both handedness and facing direction.
+- Keep the facing alternation synchronized with the handedness alternation.
+
+Implementation:
+- Added `placement_facing_map(...)` to the disk-layout helper.
+- Added `--corr-facing-mode` to both disk-layout generators.
+- The default mode is `alternate-row`.
+- For corrugated rows, modules are sorted left-to-right within each row:
+  - even index: requested `--facing` value and `left` handedness
+  - odd index: opposite facing value and `right` handedness
+- Retained `--corr-facing-mode constant` for diagnostic comparisons.
+- Regenerated `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_test.csv`.
+
+Validation:
+- Generated rows: 1892.
+- Standalone intrusion checker:
+  - ok rows: 1892
+  - invalid rows: 0
+- Row-wise alternation checks:
+  - row groups: 410
+  - handedness violations: 0
+  - facing violations: 0
+  - combined pair violations: 0
+- Facing totals:
+  - `+z`: 1054
+  - `-z`: 838
+- Handedness totals:
+  - `left`: 1054
+  - `right`: 838
+- `dz_mm` values remain `[-4.203, -3.203, 3.203, 4.203]`.
+
+Known limitations / next step:
+- Before implementing Phase 6, confirm practical first-pass dimensions and placement conventions for the LEC/REC boxes.
+
+## 2026-06-05 UTC - Phase 6 LEC/REC XML scaffold
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add XML-driven dimensions for first-pass passive LEC/REC geometry before changing the C++ module builder.
+
+Implementation:
+- Added LEC/REC lengths, widths, and thicknesses.
+- Set `SiEndcapLEC_length = 4.5 mm` and `SiEndcapREC_length = 1.5 mm`, matching the `136.02 = 4.50 + 6 * 21.67 + 1.50` strip-length decomposition.
+- Set LEC/REC widths to `SiEndcapRSU_width` for the first approximation.
+- Set LEC/REC thicknesses to `50*um` as chip-like silicon placeholders.
+- Removed the temporary FEC aliases and kept REC naming in the XML.
+- Removed zero-valued LEC/REC gap constants because they are not needed until a nonzero physical separation is specified.
+- Left FPC geometry for the next phase, as planned.
+
+Validation:
+- XML-only change; run `xmllint` and `git diff --check` before implementation continues.
+
+Known limitations / next step:
+- The LEC/REC dimensions are first-pass interpretations of the strip-length margins. The next C++ step should place simple passive boxes and visually verify whether this convention matches the drawing and handed module behavior.
+
+## 2026-06-05 UTC - Normalize LEC/REC naming
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Remove ambiguous FEC naming introduced during the Phase 6 scaffold and keep the implementation aligned with the LEC/REC terminology used in the design notes.
+
+Implementation:
+- Removed temporary `SiEndcapFEC_*` aliases.
+- Kept `SiEndcapLEC_length = 4.5 mm` and `SiEndcapREC_length = 1.5 mm`.
+- Removed unused legacy LEC/REC FPC width constants after the bridge FPC constants were introduced.
+- Removed zero-valued LEC/REC gap constants; these can be reintroduced later if a real physical gap is specified.
+- Updated the current roadmap wording from LEC/FEC to LEC/REC.
+
+Validation:
+- XML and whitespace checks should be rerun after this cleanup.
+
+## 2026-06-05 UTC - Phase 6 LEC/REC passive boxes
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Implement the first-pass LEC/REC geometry using the XML constants added for Phase 6.
+
+Implementation:
+- Added `LocalBoxTemplate` for passive boxes that are placed inside a stack component without adding to the total module thickness.
+- Added LEC and REC passive silicon boxes to the corrugated 6-RSU sensor/electronics layer.
+- Used `SVTReadoutVis` for the LEC/REC boxes.
+- Kept LEC/REC non-sensitive; no sensor IDs or surfaces are created for them.
+- Used handed placement:
+  - `left`: LEC before the RSU chain, REC after it.
+  - `right`: REC before the RSU chain, LEC after it.
+
+Validation:
+- Created and ran `tmp/validate_phase6_lec_rec_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- Confirmed the LEC/REC XML constants and C++ local-box hooks are present.
+- Confirmed no `SiEndcapFEC_*` or zero-gap constants remain in the XML/C++ implementation.
+
+Known limitations / next step:
+- This is still a simple rectangular approximation. It needs DD4hep export, visual handedness inspection, and overlap checks before moving to FPC/AncASIC detail.
+
+## 2026-06-06 UTC - Make LEC/REC visible in display
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/display.xml`
+- `compact/display_detailed.xml`
+- `compact/display_geoviewer.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Address visual inspection feedback that LEC/REC boxes were not visible in the DD4hep display.
+
+Implementation:
+- Changed the corrugated 6-RSU module volume from `TrackerModuleVis` to `SVTModuleVis`.
+- Added `SVTModuleVis` with `showDaughters="true"` in the standard, detailed, and geoviewer display XMLs.
+- Added `SVTElectronicsVis` in the same display XMLs.
+- Changed LEC/REC local boxes from `SVTReadoutVis` to `SVTElectronicsVis` so they are visually distinct from inactive RSU readout/periphery strips.
+
+Validation:
+- Updated and ran `tmp/validate_phase6_lec_rec_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout` passed for:
+  - `compact/tracking/silicon_disks_modules.xml`
+  - `compact/display.xml`
+  - `compact/display_detailed.xml`
+  - `compact/display_geoviewer.xml`
+- Confirmed `SVTModuleVis`, `SVTElectronicsVis`, and LEC/REC local-box hooks are present.
+
+Known limitations / next step:
+- If LEC/REC are still absent after rebuilding/exporting, confirm the geometry was rebuilt from this source and inspect the exported ROOT geometry for `component2_lec` and `component2_rec` volumes.
+
+## 2026-06-07 UTC - Move LEC/REC into RSU pattern placement
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `tmp/validate_phase6_lec_rec_2026-06-05.sh`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix visual/export feedback that component 2 contained backbone, powerswitch, and periphery volumes but no LEC/REC volumes.
+
+Implementation:
+- Removed the generic `LocalBoxTemplate` / `local_boxes` scaffold.
+- Added explicit `rsu_end_electronics` and `lec_after_rsu` flags to `ComponentTemplate`.
+- Placed `component2_lec` and `component2_rec` directly inside the `rsu_twelve_tile_pattern` branch using the same `place_box(...)` helper that creates the visible RSU backbone, powerswitch, bias, periphery, and sensor boxes.
+- Used `SiEndcapLEC_thickness` and `SiEndcapREC_thickness` explicitly for those boxes.
+- Preserved handedness:
+  - `left`: LEC before the RSU chain, REC after it.
+  - `right`: REC before the RSU chain, LEC after it.
+- Kept `SVTElectronicsVis` for LEC/REC.
+
+Validation:
+- Updated and ran `tmp/validate_phase6_lec_rec_2026-06-05.sh`.
+- `git diff --check` passed.
+- `xmllint --noout` passed for the tracking and display XML files.
+- Confirmed the direct `component%d_lec` / `component%d_rec` placement hooks are present.
+- Confirmed the removed `LocalBoxTemplate` / `local_boxes` scaffold is absent.
+
+Known limitations / next step:
+- Rebuild/export and confirm `component2_lec` and `component2_rec` are present in the visualization or exported geometry tree.
+
+## 2026-06-07 UTC - Phase 7a corrugation row CSV scaffold
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make corrugated support construction row-configurable so users can provide row-wise pitch, angle, and height values.
+
+Implementation:
+- Added `rowwise_placement` support to corrugated XML `<frame>` blocks.
+- Added `CorrugationRow` and a dedicated CSV loader for corrugation rows.
+- Supported exact disk keys plus `*` / `all` rows for shared tooling tables. Exact disk rows override shared rows for that disk.
+- Supported CSV columns:
+  `disk,row_y_mm,h_mm,d_mm,theta_deg,enabled,comment`.
+- Also allowed `half_pitch_mm` or full `pitch_mm` in place of `d_mm`.
+- Interpreted `row_y_mm` as the positive-y lower-flat center for one corrugation cell.
+- Mirrored nonzero rows to negative y; `row_y_mm = 0` is placed only once.
+- Kept XML `h`, `d`, and `theta` as fallback behavior if no row CSV is configured or no rows match a disk.
+- Added `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv`, an explicit-row table using the current uniform values `h=6.0 mm`, `d=17.385 mm`, and `theta=35 deg`.
+- Pointed all existing corrugated frame blocks in `silicon_disks_modules.xml` at the uniform reference CSV.
+
+Validation:
+- Created and ran `tmp/validate_phase8_corrugation_rows_2026-06-07.sh`.
+- `git diff --check` passed.
+- `xmllint --noout compact/tracking/silicon_disks_modules.xml` passed.
+- Confirmed the uniform corrugation row CSV has seven fields on each row.
+- Confirmed source hooks for `rowwise_placement`, `CorrugationRow`, `load_corrugation_rows`, mirrored row placement, and `pitch_mm` fallback are present.
+- Confirmed all corrugated frame blocks in `silicon_disks_modules.xml` reference `compact/tracking/SVT_endcap_corrugation_rows_uniform.csv`.
+
+Known limitations / next step:
+- Phase 7a is intended to reproduce the previous uniform corrugation while exercising the CSV path. A follow-up nonuniform test CSV should vary at least one row and be checked visually before using this to drive production placement generation.
+
+## 2026-06-07 UTC - Rename corrugation CSV XML hook
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `tmp/validate_phase8_corrugation_rows_2026-06-07.sh`
+
+Intent:
+- Use clearer naming for the corrugation row CSV XML attribute.
+
+Implementation:
+- Renamed the corrugated-frame XML attribute from `row_file` to `rowwise_placement`.
+- Renamed the corresponding C++ configuration field to `rowwise_placement`.
+- Updated the Phase 7 validation script to check the new name.
+
+Validation:
+- Run the Phase 7 validation script after this entry.
+
+## 2026-06-07 UTC - Normalize phase numbering
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Avoid future confusion after deciding to implement flexible corrugation before FPC/AncASIC detail.
+
+Implementation:
+- Renumbered flexible corrugation geometry as Phase 7.
+- Renumbered FPC / AncASIC detail as Phase 8.
+- Kept production placement CSV migration as Phase 9, reconstruction/ACTS validation as Phase 10, and cleanup/PR preparation as Phase 11 at that time. This numbering is superseded by the 2026-06-11 localized-adhesive Phase 9 update.
+- Updated the Phase 7a corrugation row CSV scaffold log entry.
+- Marked the older May roadmap entry as superseded instead of leaving conflicting phase numbers.
+
+Validation:
+- Documentation-only update; run `git diff --check`.
+
+## 2026-06-08 UTC - Phase 8 FPC planning notes
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the FPC design-report dimensions before implementing Phase 8 geometry.
+- Keep the main FPC explicitly deferred because its length is row-dependent.
+
+Implementation notes:
+- Phase 8 should start with simple, parameterized bridge FPC geometry.
+- The left bridge FPC can use a first-pass rectangular approximation of `27.432 mm x 10.0 mm`.
+- The right bridge FPC can use a first-pass rectangular approximation of `19.7612 mm x 4.0 mm`.
+- The bridge FPC stack can be approximated as `80 um` Kapton plus `30 um` Aluminum.
+- The main FPC should be treated as a later row-level geometry feature, not a fixed module-local box.
+
+Main FPC to-do:
+- Preserve page-2 reference values for later implementation: connector width `12.5476 mm`, body width `9.1186 mm`, sensor-to-main-FPC center distance about `17.385-17.392 mm`, RSU overlap `1 mm`, and top/bottom fill factors `0.45/0.68`.
+- Decide whether main FPC length should be derived from the production placement CSV or a dedicated row-level FPC CSV.
+- Implement and validate main FPC only after the row placement/reference-point migration is stable.
+
+Validation:
+- Documentation-only update; run `git diff --check`.
+
+## 2026-06-08 UTC - Phase 8a bridge FPC XML scaffold
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add explicit XML constants for first-pass bridge FPC geometry before touching the DD4hep placement code.
+- Keep main FPC implementation deferred because its length is row-dependent.
+
+Implementation:
+- Added shared bridge FPC Kapton and aluminum thickness constants.
+- Added left bridge FPC rectangular-approximation dimensions: `27.432 mm x 10.0 mm`.
+- Added right bridge FPC rectangular-approximation dimensions: `19.7612 mm x 4.0 mm`.
+- Bridge FPC thickness is represented by explicit `80 um` Kapton and `30 um` Aluminum layer constants.
+
+Validation:
+- Run `git diff --check`.
+- Next implementation step should wire these constants into the corrugated module builder as passive, non-sensitive local boxes.
+
+## 2026-06-08 UTC - Phase 8b bridge FPC passive boxes
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Place the first-pass bridge FPC material in the corrugated 6-RSU module prototype.
+- Keep bridge FPCs passive and separate from sensitive RSU tile volumes.
+
+Implementation:
+- Added a dedicated bridge-FPC component pattern to the module-template builder.
+- Placed bridge FPCs as a separate passive layer above the sensor layer so the FPC stack does not inflate the active sensor thickness.
+- Used report `height` as the local-y span and report `width` as the local-x span.
+- Placed the left bridge FPC on the LEC side and the right bridge FPC on the REC side.
+- Mirrored the FPC side assignment with the existing module handedness convention.
+- Built each bridge FPC as layered Kapton and Aluminum boxes.
+- Used `Kapton` and `Aluminum` materials with `SVTReadoutVis`.
+
+Assumptions:
+- The bridge FPC rectangular equivalents are material approximations, not exact outlines.
+- The main FPC remains deferred because its length depends on row-level module placement.
+
+Validation:
+- Run `git diff --check`.
+- Next validation should rebuild/export and visually confirm the bridge FPC volumes move with left/right handedness.
+
+Local validation note:
+- `git diff --check` passed in the plain login-shell environment.
+- A build/install validation script was added at `tmp/validate_phase8_bridge_fpc_2026-06-08.sh`.
+- Running the build script from the plain shell was blocked because the configured EPIC toolchain file `/opt/local/etc/cmake/find_package_resolve_symlinks.cmake` was not available.
+- Re-run the script from the usual `eic-shell`/container environment before visual inspection.
+
+## 2026-06-08 UTC - Phase 8b bridge FPC x-placement refinement
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix the visual-export warning where a bridge FPC was centered in a short `6.524 mm` end gap.
+- Keep bridge FPC boxes inside the module parent envelope while allowing them to overlap inward over the RSU footprint in their own passive z-layer.
+
+Implementation:
+- Replaced the side-gap-centering helper with an edge-aware x-placement helper.
+- If a bridge FPC fits inside the local end gap, it remains centered in that gap.
+- If it is wider than the local end gap, it is placed flush with the package edge and allowed to extend inward over the RSU footprint.
+- Removed the warning for this expected oversized-end-gap case.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export again and confirm the previous bridge-FPC width warning is gone.
+
+## 2026-06-10 UTC - Phase 8b bridge FPC handedness and clearance fix
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Fix visual-inspection feedback that the bridge FPC x offsets were not mirroring correctly.
+- Enforce the intended `0.5 mm` gap between each endcap piece and its bridge FPC, and another `0.5 mm` gap between each bridge FPC and the module edge.
+
+Root cause:
+- The bridge-FPC component used the default left-handed RSU-chain `x_offset`.
+- `with_corrugated_handedness(...)` updated the sensitive RSU component offset, but did not update the bridge-FPC component offset.
+- As a result, the LEC/REC boxes and bridge FPC boxes could be referenced to different RSU-chain centers after handedness was applied.
+- The previous edge-aware helper also did not explicitly place FPCs between the LEC/REC outer edge and the module edge with the requested clearances.
+
+Implementation:
+- Updated the bridge-FPC component `x_offset` with the same handed RSU-chain offset used by the sensitive RSU component.
+- Replaced the bridge-FPC x placement helper with one that uses:
+  - the handed RSU-chain edge,
+  - the LEC or REC length,
+  - the module edge,
+  - and `SiEndcapModuleEndClearance`.
+- Left bridge FPC is placed between the LEC outer edge and the nearest module edge.
+- Right bridge FPC is placed between the REC outer edge and the nearest module edge.
+- The implemented FPC widths are chosen to preserve both `0.5 mm` gaps.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm:
+  - left/right FPCs move with handedness,
+  - each FPC is between its corresponding endcap and module edge,
+  - the `0.5 mm` endcap-FPC and FPC-edge gaps are visible.
+
+## 2026-06-10 UTC - Phase 8b remove handedness-dependent FPC width
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Remove the small handedness-dependent bridge-FPC x span caused by recomputing the available end space from rounded RSU/endcap dimensions.
+
+Root cause:
+- The FPC placement helper used the actual RSU-chain edge plus LEC/REC length to infer the remaining end space.
+- The constants are slightly over-constrained: `6 * 21.666 + 4.5 + 1.5 = 135.996 mm`, while the drawing-level strip length is `136.02 mm`.
+- That `0.024 mm` difference made the inferred LEC-side and REC-side clear spans differ by handedness after mirroring.
+
+Implementation:
+- Bridge FPC x placement now uses the nominal side spans directly:
+  - LEC side: `SiEndcapModule6RSU_left_extension`
+  - REC side: `SiEndcapModule6RSU_right_extension`
+- This makes the placed FPC x span independent of handedness.
+- With `SiEndcapModuleEndClearance = 0.5 mm`, the LEC-side available bridge-FPC x span is `10.0 mm`.
+- The implemented left bridge FPC x span is therefore set to `10.0 mm`, so the dimensions remain exactly mirrored under handedness.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and confirm the FPC dimensions and offsets are mirrored exactly.
+
+## 2026-06-10 UTC - Remove unused legacy FPC width constants
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `SVT_ENDCAP_CORRUGATED_RSU_HANDOFF.md`
+
+Intent:
+- Remove obsolete LEC/REC FPC width names now that bridge FPC dimensions are represented by explicit left/right bridge constants.
+
+Implementation:
+- Deleted the obsolete legacy LEC/REC FPC width constants from the active XML.
+- Updated old documentation/log references so they do not preserve the dead constant names as active implementation guidance.
+
+Validation:
+- Run `git diff --check`.
+- Search for the obsolete legacy names to confirm no references remain.
+
+## 2026-06-10 UTC - Audit and remove unused corrugated XML constants
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_RSU_HANDOFF.md`
+
+Intent:
+- Remove `SiEndcap...` constants that were only scaffolding and had no active C++ or XML-attribute references.
+- Keep drawing-derived values in documentation when they are useful for future implementation, but stop presenting them as active XML variables.
+
+Removed active XML constants:
+- Generic FPC thickness, superseded by explicit bridge FPC Kapton/aluminum layer constants.
+- Corrugated inner/support cutout dimensions that are not yet modeled.
+- Drawing-level strip length, since current placement derives RSU-chain and end features from the active package/extension/margin constants.
+- Left/right CF bottom-cut lengths, since the cutouts are intentionally ignored at this stage.
+- RSU y margin, since current code directly uses the RSU width and package width.
+
+Validation:
+- Run an active-reference audit for all `SiEndcap...` constants in `compact/tracking/silicon_disks_modules.xml`.
+- Run `git diff --check`.
+
+## 2026-06-10 UTC - Update corrugated sensor and endcap thickness convention
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Align the corrugated sensor/electronics layer thickness with the latest disk material-budget estimate.
+- Avoid maintaining independent LEC/REC thickness constants that can drift from the layer they occupy.
+
+Implementation:
+- Updated `SiEndcapSensor_thickness` to `65*um` as an effective thickness from Nikki's disk material budget dated 2026-06-09.
+- Set `SiEndcapLEC_thickness` and `SiEndcapREC_thickness` to `SiEndcapSensor_thickness`.
+- This keeps LEC/REC in the same local z layer as the RSU sensor/electronics layer and makes their thickness follow future sensor-layer updates automatically.
+- Updated `SiEndcapCorrugationCF_thickness` to `0.15*mm`.
+
+Validation:
+- Run `git diff --check`.
+
+## 2026-06-11 UTC - Simplify bridge FPC material stack
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `RSU_DRAWING_SUMMARY.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Replace detailed bridge-FPC top/bottom fill-factor aluminum layers with a simple material-budget approximation.
+
+Implementation:
+- Use the same FPC material stack for all bridge FPCs:
+  - `80 um` Kapton
+  - `30 um` Aluminum
+- Removed left/right top/bottom aluminum thickness constants from XML.
+- Simplified bridge FPC placement to create one Kapton box and one Aluminum box per bridge FPC.
+
+Validation:
+- Run `git diff --check`.
+
+## 2026-06-10 UTC - Phase 8 bridge FPC y-placement follow-up
+
+To-do:
+- Revisit the left/LEC-side bridge FPC y placement.
+- The current implementation centers the rectangular left bridge FPC in local y, so the whole FPC remains contained within the module parent volume and its center aligns with the RSU band.
+- In the real design, the top edge of the left bridge FPC should align with the top edge of the RSU.
+- Because the left bridge FPC y span is larger than the RSU/module y span, that alignment will force the lower part of the left bridge FPC to extend below the current module envelope.
+- Before implementing this, decide whether the module parent volume should be enlarged in y for this passive feature, or whether the FPC should be represented outside the module-local prototype in a higher-level placement.
+
+## 2026-06-11 UTC - Phase 9 localized adhesive roadmap
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Make localized adhesive the new Phase 9 before production placement migration.
+- Avoid overestimating passive material by smearing glue over the full carbon fiber sheet.
+
+Roadmap update:
+- Phase 9: localized adhesive pass.
+- Phase 10: bridge-FPC dimension/y-offset tuning.
+- Phase 11: production placement CSV migration and reference-point update.
+- Phase 12: reconstruction / ACTS validation.
+- Phase 13: remaining FPC tuning and AncASIC detail.
+- Phase 14: cleanup and PR preparation.
+
+Implementation plan:
+- Remove the full-footprint corrugated adhesive layer.
+- Add localized adhesive under the RSU silicon/electronics band.
+- Add localized adhesive under LEC and REC.
+- Add localized adhesive under bridge FPCs.
+- Keep `SiEndcapAdhesive_thickness` as the shared XML-driven adhesive thickness for now.
+
+Validation:
+- Run geometry export and visual inspection after localized adhesive boxes are added.
+- Run overlap checks after the localized adhesive model is complete.
+
+## 2026-06-11 UTC - Phase 9a remove full-footprint corrugated adhesive
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Start the localized adhesive pass by removing the full-module corrugated adhesive sheet.
+
+Implementation:
+- Removed the full-footprint `SiEndcapAdhesive_thickness` component from the `EIC_LAS_6RSU_CORR` module stack.
+- Kept `SiEndcapAdhesive_thickness` in XML for the next step, where it should be used by localized adhesive boxes under RSU, LEC, REC, and bridge FPC features.
+- Added an XML comment making this transitional use explicit.
+
+Validation:
+- Run `git diff --check`.
+- Next validation should rebuild/export and confirm the continuous glue sheet is gone.
+
+## 2026-06-11 UTC - Phase 9b add localized RSU-band adhesive
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add back adhesive material only under the RSU silicon/electronics band instead of across the full carbon fiber support sheet.
+
+Implementation:
+- Added an `SVT_Endcap_Glue` component to the corrugated 6-RSU stack with local dimensions:
+  - x: `6 * SiEndcapRSU_length`
+  - y: `SiEndcapRSU_width`
+  - x offset: the same handed RSU-chain center used by the sensor/electronics band
+- Kept `SiEndcapAdhesive_thickness` as the glue thickness.
+- Used the existing default local component placement path, so the adhesive is a single passive box rather than a tiled sensitive pattern.
+- This restores the adhesive layer in the z stack for the RSU band without reintroducing a full-footprint glue sheet.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm the glue volume is localized under the RSU band.
+- Later Phase 9 steps should add separate localized adhesive under LEC, REC, and bridge FPCs.
+
+## 2026-06-11 UTC - Phase 9c add localized LEC/REC adhesive
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add localized adhesive under the LEC and REC passive electronics boxes.
+- Keep LEC/REC glue placement tied to the same handedness convention as the LEC/REC boxes themselves.
+
+Implementation:
+- Added a corrugated adhesive placement pattern for the glue component.
+- The pattern places:
+  - one RSU-band glue box,
+  - one LEC glue box,
+  - one REC glue box.
+- LEC/REC glue boxes use the same x/y dimensions as the corresponding LEC/REC electronics boxes.
+- LEC/REC glue x offsets use the same `left`/`right` handedness swap as the electronics layer.
+- Kept all adhesive boxes in the `SiEndcapAdhesive_thickness` z layer and material `SVT_Endcap_Glue`.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm LEC/REC glue appears under the LEC/REC boxes and mirrors with handedness.
+- Next Phase 9 step should add localized bridge-FPC adhesive.
+
+## 2026-06-11 UTC - Phase 9d add localized bridge FPC adhesive
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Add localized adhesive under the left and right bridge FPC footprints.
+- Keep bridge-FPC glue tied to the same handed x-placement as the bridge FPC material boxes.
+
+Implementation:
+- Extended the corrugated adhesive placement pattern to add:
+  - one left bridge FPC glue box,
+  - one right bridge FPC glue box.
+- Reused the bridge-FPC side-span and `SiEndcapModuleEndClearance` placement convention.
+- Bridge-FPC glue boxes use the same x/y dimensions as the corresponding bridge FPC material footprints.
+- Kept the current centered-y approximation; the known left-FPC y-alignment follow-up still applies.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm bridge-FPC glue appears under the bridge FPC boxes and mirrors with handedness.
+
+## 2026-06-11 UTC - Add Phase 10 FPC dimension tuning and AncASIC phase
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Record the FPC fine-tuning geometry phase while Phase 9 tests are running.
+- Keep FPC fine-tuning and the first AncASIC approximation separate from production CSV migration.
+
+Roadmap update:
+- Added the FPC dimension tuning and AncASIC detail phase as Phase 10 at that time.
+- The first bridge-FPC dimension/y-offset tuning step remains Phase 10.
+- The later AncASIC/detail portion is deferred to Phase 13 after placement and reconstruction checks.
+- Renumbered cleanup and PR preparation to Phase 14.
+
+FPC/AncASIC scope:
+- Fine-tune left/right bridge-FPC dimensions against the latest drawing/report interpretation.
+- Revisit the known left bridge-FPC y-placement issue and decide whether the module parent y-envelope must grow.
+- Add a simplified passive AncASIC box/material approximation on the left bridge FPC.
+- Keep the bridge-FPC material stack simple: one Kapton layer plus one effective aluminum layer.
+- Keep main FPC implementation deferred until row-dependent length handling is clearer.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
+## 2026-06-11 UTC - Phase 10a add bridge-FPC y offsets
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Apply the updated bridge-FPC y-position offsets while keeping the dimensions and placement parameters XML-driven.
+- Interpret the offsets as signed distances from the module top y edge to the corresponding FPC top edge, not as FPC center positions.
+
+Implementation:
+- Added `SiEndcapLeftBridgeFPC_y_offset = -7.5 mm`.
+- Added `SiEndcapRightBridgeFPC_y_offset = -6.22 mm`.
+- Converted the top-edge offsets into FPC center positions using `module_y/2 + offset - FPC_length/2`.
+- Applied those derived y centers to the left and right bridge-FPC Kapton/Aluminum stack placements.
+- Applied the same derived y centers to the matching bridge-FPC glue boxes so adhesive and FPC material stay aligned.
+
+Validation:
+- Run `git diff --check`.
+- Rebuild/export and visually confirm the bridge-FPC y offsets for both handedness cases.
+- Run overlap checks after visual placement is accepted.
+
+## 2026-06-18 UTC - Increment remaining phase numbers after Phase 10a
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Avoid confusion after the first bridge-FPC dimension/y-offset tuning step was implemented as Phase 10a.
+- Make production placement migration the next phase rather than reusing Phase 10.
+- Keep the remaining AncASIC/FPC fine-tuning deferred until after placement and reconstruction checks.
+
+Roadmap update:
+- Phase 10: bridge-FPC dimension/y-offset tuning.
+- Phase 11: production placement CSV migration and reference-point update.
+- Phase 12: reconstruction / ACTS validation.
+- Phase 13: remaining FPC tuning and AncASIC detail.
+- Phase 14: cleanup and PR preparation.
+
+Validation:
+- Documentation-only update. No geometry build or overlap checks run.
+
+## 2026-07-16 UTC - Phase 11 reference-point dimensional closure audit
+
+Files changed:
+- `tmp/phase11_reference_point_audit.py`
+- `tmp/phase11_reference_point_audit.md`
+- `compact/tracking/SVT_endcap_modules_phase11_reference_legacy.csv`
+- `compact/tracking/SVT_endcap_modules_phase11_reference_boundary.csv`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Validate the proposed `rsu_lec_boundary_midpoint` placement reference before
+  updating the production CSV parser and disk-layout generators.
+- Preserve the physical placement of the current corrugated-module geometry
+  exactly during the reference-convention migration.
+
+Reference convention:
+- The new reference point is the midpoint of the RSU--LEC boundary, at the
+  local y center of the RSU/LEC band.
+- It is handed: the LEC is on package -x for `left` modules and package +x for
+  `right` modules.
+- The local x offsets must be derived from the same C++ sensor-chain placement
+  expressions used by `corrugated_6rsu_sensor_x_offset(...)`, rather than from
+  a nominal mirrored package-edge formula.
+
+Dimensional closure note:
+- Current values account for `151.996 mm` of the `152.020 mm` package length:
+  - left extension + left sensor margin: `11.0 + 4.5 = 15.500 mm`,
+  - six-RSU chain: `6 * 21.666 = 129.996 mm`,
+  - right sensor margin + right extension: `1.5 + 5.0 = 6.500 mm`.
+- The resulting `0.024 mm` remainder is already present in the current
+  package/RSU parameterization, most likely from rounded mechanical inputs.
+- Consequently, the current built RSU--LEC boundary offsets are
+  `-60.510 mm` for `left` and `+60.486 mm` for `right`; their magnitudes differ
+  by `0.024 mm`.
+- This is not caused by the reference-point conversion. Phase 11 should retain
+  these derived offsets so a converted row reconstructs the existing module
+  center exactly. A later mechanical-dimension update can explicitly allocate
+  the closure remainder if exact mirror symmetry becomes a design requirement.
+
+Audit fixture:
+- Added a reproducible script that selects left/right-handed near-center and
+  outer-edge rows, writes legacy and boundary-reference CSV fixtures, and
+  verifies their reconstructed legacy lower-left residuals are zero.
+- The next Phase 11 implementation step is to add the new parser columns,
+  export both fixtures, and visually confirm coincident physical placement.
+
+## 2026-07-16 UTC - Phase 11 boundary-reference parser test pass
+
+Files changed:
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `compact/tracking/silicon_disks_modules.xml`
+- `tmp/run_phase11_reference_export.sh`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Implementation:
+- Replaced the corrugated placement CSV input columns `x_min_mm` and
+  `y_min_mm` with `rsu_lec_boundary_x_mm` and `rsu_lec_boundary_y_mm`.
+- Added `corrugated_6rsu_lec_boundary_x(...)`, which derives the handed local
+  boundary offset from `corrugated_6rsu_sensor_x_offset(...)` and the six-RSU
+  chain length.
+- The parser converts the boundary reference into the existing internal package
+  lower-left representation. Disk-boundary rejection, z checks, and DD4hep
+  module-center placement therefore continue to use the same tested geometry
+  path.
+- Corrugated rows still require explicit `left` or `right` handedness.
+- Non-corrugated rows are rejected by this CSV path because an RSU--LEC
+  boundary is not defined for them; no `x_min_mm` / `y_min_mm` compatibility
+  path is retained.
+- Temporarily pointed the six disk blocks to the small boundary-reference
+  fixture. Restore the normal generated test CSV after comparison validation.
+
+Validation status:
+- `git diff --check` passes.
+- The reproducible audit fixture continues to reconstruct the original package
+  lower-left coordinates with zero numerical residual.
+- The legacy baseline export script refreshes the installed XML/CSV content.
+- C++ rebuild and both visual exports remain pending in the EIC container: the
+  host build cache requires `/opt/local/bin/gmake`, which is not available in
+  this shell. The recorded command is
+  `PHASE11_REBUILD=1 bash tmp/run_phase11_reference_export.sh boundary` after
+  entering the standard EIC environment.
+
+## 2026-07-17 UTC - Phase 11 complete boundary-reference CSV candidate
+
+Files changed:
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `disk_layout/scripts/generate_svt_disk_corrugation_layout.py`
+- `disk_layout/scripts/generate_svt_disk_layout.py`
+- `disk_layout/scripts/README_svt_disk_layout.md`
+- `tmp/generate_phase11_complete_reference_csv.py`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv`
+- `tmp/phase11_complete_reference_validation.json`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Intent:
+- Generate a complete corrugated placement candidate using the new explicit
+  RSU--LEC boundary midpoint convention after the four-module visual
+  comparison was accepted.
+- Keep the candidate separate from the temporary four-module XML fixture until
+  full geometry and overlap checks are explicitly started.
+
+Implementation:
+- Updated the disk-layout helper to derive the handed RSU--LEC boundary x
+  offsets from the same XML constants and six-RSU chain calculation used by
+  the DD4hep plugin.
+- Updated both layout CSV writers so corrugated output uses
+  `rsu_lec_boundary_x_mm` and `rsu_lec_boundary_y_mm` instead of the legacy
+  lower-left columns.
+- Updated the standalone CSV reader/checker to reconstruct the internal
+  package rectangle from the new reference fields before checking disk and z
+  containment.
+- Converted the accepted 1,892-row temporary corrugated layout directly, so
+  row membership, handedness, facing, z offsets, and comments are unchanged.
+
+Validation:
+- The conversion script verifies its inverse coordinate transformation for
+  every row; maximum residual: `2.842e-14 mm`.
+- `check_endcap_modules_intrusion.py` reports `1,892` valid rows, `0` invalid
+  rows, and `0` disabled rows for the complete candidate.
+- `python3 -m py_compile` passes for the changed layout scripts and conversion
+  script.
+- `git diff --check` passes.
+- Next: point the disk XML blocks to the complete candidate, export the full
+  geometry, inspect handedness/facing, and rerun both overlap checks.
+
+## 2026-07-17 UTC - Phase 13 AncASIC preliminary dimensions and placement
+
+Files changed:
+- `SVT_ENDCAP_CORRUGATED_MODULE_PROJECT.md`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Confirmed first-pass AncASIC specification:
+- Place one passive AncASIC on the left (LEC-side) bridge FPC.
+- Package footprint: `3.3 mm` x `15.0 mm`; package thickness: `300 um`.
+- Bond it using a separate localized `80 um` glue box. This is distinct from
+  the existing glue between the bridge FPC and its supporting surface.
+- Set the ASIC top edge `1.0 mm` below the left bridge-FPC top edge.
+- Set the ASIC edge `5.0 mm` from the left bridge-FPC vertical edge farthest
+  from the LEC, interpreted as an edge-to-edge distance.
+
+Derived current placement:
+- For the implemented `10.0 mm` x `24.5 mm` left bridge FPC, the ASIC center
+  is `+3.75 mm` from the FPC center along y and `1.65 mm` from the FPC center
+  toward the LEC along x.
+- The handed module-local x offset is therefore `+1.65 mm` for `left` and
+  `-1.65 mm` for `right`; it must mirror with the existing left bridge FPC.
+- With the current left-FPC y placement this happens to put the ASIC center at
+  module-local `y = 0 mm`. Keep the placement FPC-relative when the known
+  left-FPC top-edge/y-envelope refinement is made.
+- Add the `80 um` glue plus `300 um` package as new outer passive layers. The
+  corrugated module total stack will grow from `405 um` to `785 um`.
+
+Implementation follow-up:
+- Add XML constants for package dimensions, glue thickness, and FPC-relative
+  clearances/offsets.
+- Add the passive ASIC and its glue in the handed bridge-FPC placement helper.
+- Rebuild/export both handedness variants and rerun overlap checks.
+
+## 2026-07-17 UTC - Phase 13 implement passive AncASIC stack
+
+Files changed:
+- `compact/tracking/silicon_disks_modules.xml`
+- `src/SiEndcapModuleTracker_geo.cpp`
+- `disk_layout/scripts/endcap_module_layout_utils.py`
+- `compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv`
+- `tmp/generate_phase11_complete_reference_csv.py`
+- `tmp/phase13_ancasic_reference_validation.json`
+- `SVT_ENDCAP_CORRUGATED_MODULE_LOG.md`
+
+Implementation:
+- Added XML-driven AncASIC constants for its `3.3 mm` x `15.0 mm` footprint,
+  `300 um` package, separate `80 um` glue, `1.0 mm` top clearance, and
+  `5.0 mm` outer-edge clearance.
+- Added a separate outer AncASIC component to the corrugated 6-RSU module:
+  first the localized ASIC glue box (`SVT_Endcap_Glue` / `SVTGlueVis`), then
+  the passive silicon package (`Silicon` / `SVTElectronicsVis`).
+- Anchored the package to the handed left bridge FPC, rather than to an absolute
+  module coordinate. Its x offset mirrors automatically: `+1.65 mm` toward
+  the LEC for `left`, `-1.65 mm` toward the LEC for `right`.
+- The current FPC-relative y placement puts the ASIC center at module-local
+  `y = 0 mm`; the `1.0 mm` top clearance remains correct if the future
+  left-FPC y-envelope refinement moves the full FPC/ASIC assembly.
+- Added the `380 um` AncASIC glue/package stack to the corrugated module
+  thickness calculation. The total module thickness is now `785 um`.
+
+CSV z-reference update:
+- The layout generator defines `dz` as the module center with its inner face on
+  the corrugated support surface. Adding material only outward requires a
+  signed center shift of half the added stack: `+/-190 um`.
+- Regenerated the complete 1,892-row boundary-reference CSV with `dz` levels
+  shifted from `+/-3.203, +/-4.203 mm` to `+/-3.393, +/-4.393 mm`.
+- This preserves the pre-AncASIC carbon-fiber, glue, sensor, and bridge-FPC
+  world positions while placing the new ASIC stack outward.
+
+Validation:
+- The conversion inverse coordinate residual remains `2.842e-14 mm` maximum.
+- The standalone containment check reports `1,892` valid rows and `0` invalid
+  rows with the new `785 um` module thickness.
+- `python3 -m py_compile` passes for the updated layout helper/conversion
+  script, and both parent/nested `git diff --check` checks pass.
+- Next: rebuild/export the DD4hep geometry, visually inspect left/right ASIC
+  mirroring and local glue placement, then rerun both overlap checks.
