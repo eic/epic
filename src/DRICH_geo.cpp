@@ -320,6 +320,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   Volume vesselVol(detName, vesselSolid, vesselMat);
   Volume gasvolVol(detName + "_gas", gasvolSolid, gasvolMat);
   vesselVol.setVisAttributes(vesselVis);
+  vesselVol.setRegion(desc, detElem.regionStr());
   gasvolVol.setVisAttributes(gasvolVis);
 
   // reference positions
