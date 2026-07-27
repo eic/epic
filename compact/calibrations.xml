@@ -79,6 +79,11 @@
       <arg value="file:calibrations/irt2/pfrich-reco.json"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/f8860f469d240c807b11a244defaaaed96b76137/irt2/pfrich-reco.json"/>
     </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/bic_edepToNpe_layer.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/60925f0113301310929f53e52783062fc40e45e3/bic_edepToNpe_layer.lut"/>
+    </plugin>
    </plugins>
 
 </lccdd>
