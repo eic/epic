@@ -64,7 +64,7 @@
     <constant name="MMPitchX"          value="1.766*mm"/>
     <constant name="MMSizeStrX"        value="0.7*mm"/>
     <constant name="MMnStripsY"        value="576"/>
-    <constant name="MMPitchY"          value="1.021"/>
+    <constant name="MMPitchY"          value="1.021*mm"/>
     <constant name="MMSizeStrY"        value="0.9*mm"/>
     <constant name="MMDeadZone"        value="1*mm"/>
     <constant name="MMCuZoneX"         value="MMActiveWidth  - 2 * MMDeadZone"/>
@@ -76,11 +76,6 @@
     <constant name="MMDriftPitchGrd" value="2.4*mm"/>
     <constant name="MMCuPCBGrd_fraction"   value="MMSizeStrGrd / MMPCBPitchGrd * 2"/>
     <constant name="MMCuDriftGrd_fraction" value="MMSizeStrGrd / MMDriftPitchGrd * 2"/>
-    <comment> Readout channels: number and pitch. They are both specified independently from the active area. The corresponding constants are needed by the MPGD plugin and the segmentation. </comment>
-    <constant name="MMnStripsPhi"    value="MMnStripsX"/>
-    <constant name="MMnStripsZ"      value="MMnStripsY"/>
-    <constant name="MMPitchPhi"      value="MMPitchX"/>
-    <constant name="MMPitchZ"        value="MMPitchY"/>
   </define>
 
   <materials>

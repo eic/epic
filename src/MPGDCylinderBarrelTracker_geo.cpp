@@ -30,7 +30,7 @@ using ROOT::Math::XYVector;
 
 /** Micromegas Barrel Tracker with fish scale layout
  *
- * - Designed to process "mpgd_barrel.xml".
+ * - Designed to process "mpgd_barrel[_2DStrip].xml".
  *
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
  *
@@ -107,6 +107,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   double mod_r0    = x_dimensions.attr<double>(_Unicode(r0));
   double mod_rmin  = x_dimensions.rmin(),  mod_rsensor = x_dimensions.attr<double>(_Unicode(rsensor));
   // phi range, when excluding frames
+  // "mod_width" is to be understood as the width at "mod_r0" (which is the top of the PCB, see XML).
   double dphi      = mod_width / mod_r0 / 2;
   double phi_start = -dphi, phi_end = dphi;
   printout(DEBUG, "MPGDCylinderBarrelTracker", "Module \"%s\": width,length %.2f,%.2f cm r0,rmin,rsensor %.2f,%.2f,%.2f cm phi +/-%.2f°",
@@ -369,7 +370,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       }
       // DetElement
       DetElement mod_elt(lay_elt, module_name, moduleIdx);
-      // Plcament
+      // Placement
       Translation3D origin2Centre(Xc,Yc,Zc);
       RotationZYX tilt(phi_tilt, 0, 0);
       RotationZYX rot(phi, 0, 0);

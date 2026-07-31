@@ -47,8 +47,9 @@
     <constant name="MMThinGap_thickness"                    value="10*um"/>
     <constant name="MMThickGap_thickness"                   value="(MMGasGap_thickness - MMThinGap_thickness * 3) / 2"/>
     <comment> ...Dimensions </comment>
-    <constant name="MMActiveWidth"                          value="340*mm"/>
-    <constant name="MMActiveLength"                         value="590*mm"/>
+    <comment> Note: the active area (which PCB minus its Dead Zone on the periphery) is not described here. It can be derived, along each dimension, from # of strips and pitch. </comment>
+    <constant name="MMPCBWidth"                             value="340*mm"/>
+    <constant name="MMPCBLength"                            value="590*mm"/>
     <constant name="MMFrameWidth"                           value="14*mm"/>
     <constant name="MMOutwardFrameWidth"                    value="80.5*mm"/>
     <comment> r0 corresponds to the outer surface of the PCB. Its value is frozen as of 2026/07, and it serves as an anchor for the other radii, which are more liable to evolve.  </comment>
@@ -67,32 +68,35 @@
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin"/>
     <constant name="InnerMPGDBarrelLayer_rmax"              value="InnerMPGDBarrel_rmax"/>
     <comment> ...Readout </comment>
-    <comment> "MMActiveWidth" is to be understood as the width at the top of the PCB (i.e. "r0"). This, as of 2026/07: it may later turn out that it rather corresponds to the neutral axis in the curved PCB. </comment>
-    <constant name="r02Sensor" value="MMGas_thickness + MMMesh_thickness + MMGasGap_thickness / 2" />
-    <constant name="MMModule_rsensor" value="MMModule_r0 + r02Sensor" />
-    <constant name="MMActiveAperture" value="MMActiveWidth/MMModule_r0"/>
+    <comment> "MMPCBWidth" is to be understood as the width at the top of the PCB (i.e. "r0"). This, as of 2026/07: it may later turn out that it rather corresponds to the neutral axis in the curved PCB. </comment>
+    <constant name="r02Sensor"         value="MMGas_thickness + MMMesh_thickness + MMGasGap_thickness / 2" />
+    <constant name="MMModule_rsensor"  value="MMModule_r0 + r02Sensor" />
+    <constant name="MMPCBAperture"     value="MMPCBWidth/MMModule_r0"/>
     <comment> Strip Cu fraction: There are three Cu strata: 1 = X, 2 = Y, 3 = conductive tracks to connectors. The latter is neglected. DeadZone all along the edges. </comment>
     <constant name="MMnStripsX"        value="192"/>
     <constant name="MMPitchX"          value="1.766*mm"/>
     <constant name="MMSizeStrX"        value="0.7*mm"/>
     <constant name="MMnStripsY"        value="576"/>
-    <constant name="MMPitchY"          value="1.021"/>
+    <constant name="MMPitchY"          value="1.021*mm"/>
     <constant name="MMSizeStrY"        value="0.9*mm"/>
     <constant name="MMDeadZone"        value="1*mm"/>
-    <constant name="MMCuZoneX"         value="MMActiveWidth  - 2 * MMDeadZone"/>
-    <constant name="MMCuZoneY"         value="MMActiveLength - 2 * MMDeadZone"/>
-    <constant name="MMCuStrip_fraction" value="(MMnStripsX * MMSizeStrX * MMCuZoneY + MMnStripsY * MMSizeStrY * MMCuZoneX) / (MMActiveWidth * MMActiveLength) * 2 / 3"/>
+    <constant name="MMCuZoneX"         value="MMPCBWidth  - 2 * MMDeadZone"/>
+    <constant name="MMCuZoneY"         value="MMPCBLength - 2 * MMDeadZone"/>
+    <constant name="MMCuStrip_fraction" value="(MMnStripsX * MMSizeStrX * MMCuZoneY + MMnStripsY * MMSizeStrY * MMCuZoneX) / (MMPCBWidth * MMPCBLength) * 2 / 3"/>
     <comment> Groundings Cu fractions: groundings are rectangular grids of copper strips. The fraction of copper is taken as size/pitch*2. </comment>
-    <constant name="MMSizeStrGrd"    value="0.2*mm"/>
-    <constant name="MMPCBPitchGrd"   value="0.8*mm"/>
-    <constant name="MMDriftPitchGrd" value="2.4*mm"/>
+    <constant name="MMSizeStrGrd"          value="0.2*mm"/>
+    <constant name="MMPCBPitchGrd"         value="0.8*mm"/>
+    <constant name="MMDriftPitchGrd"       value="2.4*mm"/>
     <constant name="MMCuPCBGrd_fraction"   value="MMSizeStrGrd / MMPCBPitchGrd * 2"/>
     <constant name="MMCuDriftGrd_fraction" value="MMSizeStrGrd / MMDriftPitchGrd * 2"/>
     <comment> Readout channels: number and pitch. They are both specified independently from the active area. The corresponding constants are needed by the MPGD plugin and the segmentation. </comment>
-    <constant name="MMnStripsPhi"    value="MMnStripsX"/>
-    <constant name="MMnStripsZ"      value="MMnStripsY"/>
-    <constant name="MMPitchPhi"      value="MMPitchX"/>
-    <constant name="MMPitchZ"        value="MMPitchY"/>
+    <constant name="MMnStripsPhi"          value="MMnStripsX"/>
+    <constant name="MMnStripsZ"            value="MMnStripsY"/>
+    <constant name="MMPitchPhi"            value="MMPitchX / MMModule_rsensor"/>
+    <constant name="MMPitchZ"              value="MMPitchY"/>
+    <comment> Spatial resolutions: needed by the MPGD plugin. Stored here until a proper DataBase of MPGD performance is in place. Values are scaled with pitch, based on the assumption that 400 um pitch yields 60 um resolution. They are expressed in um. </comment>
+    <constant name="MMumResolutionPhi"     value="260"/>
+    <constant name="MMumResolutionZ"       value="150"/>
   </define>
 
   <materials>
@@ -126,8 +130,8 @@
       <module name="InnerMPGDBarrelModule" vis="TrackerLayerVis" >
 	<comment> Note that "rsensor" must be assigned to the "radius" of the CylindricalGridPhiZ segmentation. The tag is used in the constructor to double-check the consistency between the stack of module_component's and that segmentation radius. </comment>
 	<dimensions
-            width="MMActiveWidth"
-            length="MMActiveLength"
+            width="MMPCBWidth"
+            length="MMPCBLength"
 	    r0="MMModule_r0"
 	    rmin="MMModule_rmin"
 	    rsensor="MMModule_rsensor" />
@@ -191,10 +195,10 @@
       </comment>
       <segmentation name="2DStrip" type="MultiSegmentation" key="strip">
         <segmentation name="Reference"   type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad"           grid_size_z="0.150*mm*sqrt(12)" radius="MMModule_rsensor" />
-        <segmentation name="PhiStrips"   type="CylindricalGridPhiZ" key_value="1" grid_size_phi="MMPitchPhi"       grid_size_z="MMActiveLength"    radius="MMModule_rsensor - MMThinGap_thickness" offset_phi="MMPitchPhi/2" />
-        <segmentation name="ZStrips"     type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMActiveAperture" grid_size_z="MMPitchZ"          radius="MMModule_rsensor + MMThinGap_thickness" offset_z="MMPitchZ/2" />
-        <segmentation name="BotRadiator" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"           grid_size_z="0.150*mm*sqrt(12)" radius="MMModule_rsensor - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
-        <segmentation name="TopRadiator" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"           grid_size_z="0.150*mm*sqrt(12)" radius="MMModule_rsensor + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
+        <segmentation name="PhiStrips"   type="CylindricalGridPhiZ" key_value="1" grid_size_phi="MMPitchPhi"    grid_size_z="MMPCBLength"       radius="MMModule_rsensor - MMThinGap_thickness" offset_phi="MMPitchPhi/2" />
+        <segmentation name="ZStrips"     type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMPCBAperture" grid_size_z="MMPitchZ"          radius="MMModule_rsensor + MMThinGap_thickness" offset_z="MMPitchZ/2" />
+        <segmentation name="BotRadiator" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"        grid_size_z="0.150*mm*sqrt(12)" radius="MMModule_rsensor - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
+        <segmentation name="TopRadiator" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"        grid_size_z="0.150*mm*sqrt(12)" radius="MMModule_rsensor + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
       </segmentation>
       <id>system:8,layer:4,module:12,sensor:2,strip:28:4,phi:-16,z:-16</id>
     </readout>
