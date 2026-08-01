@@ -9,8 +9,16 @@
          17 April 2026. Sam Henry
     </comment>
 
-    <constant name="SiBarrelSensor_thickness" value="40*um" />
-    <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness*2.7" /> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <constant name="SiBarrelSensorCu_thickness"         value="2.5*um" />
+    <constant name="SiBarrelSensorActiveSi_thickness"   value="14*um" />
+    <constant name="SiBarrelSensorInactiveSi_thickness" value="36*um" />
+    <constant name="SiBarrelSensor_thickness"
+      value="SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness + SiBarrelSensorInactiveSi_thickness" />
+    <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness" />
+    <comment>
+      The geometry plugin expands each CurvedSi component into the configurable
+      three-layer stack, with Cu always facing away from the stave support.
+    </comment>
     <constant name="SiBarrelSiliconGap_width" value="1*mm" />
 
     <constant name="SiBarrelStave1Service_thickness" value="0.07875*mm" />
@@ -91,9 +99,11 @@
 <constant name="SiBarrelSiliconCurveHalfAngle1" value="asin(0.5*SiBarrelStave1_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconCurveHalfAngle2" value="asin(0.5*SiBarrelStave2_width / SiBarrelSiliconCurveRadius)" />
 <constant name="SiBarrelSiliconGapHalfAngle" value="atan(0.5*SiBarrelSiliconGap_width / SiBarrelSiliconCurveRadius)" />
-<constant name="SiBarrel_ShortThickness" value="0.5*SiBarrelSensorMod_thickness" />
-<constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelStave1Service_thickness + SiBarrelStave1Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace1 + SiBarrelSiliconCurveHeight1"  />
-<constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelStave2Service_thickness + SiBarrelStave2Frame_thickness +  SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace2 + SiBarrelSiliconCurveHeight1"  />
+<constant name="SiBarrel_ShortThickness" value="SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness/2" />
+<constant name="SiBarrel1_SupportDepth" value="SiBarrelStave1Service_thickness + SiBarrelStave1Frame_thickness + SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace1 + SiBarrelSiliconCurveHeight1" />
+<constant name="SiBarrel2_SupportDepth" value="SiBarrelStave2Service_thickness + SiBarrelStave2Frame_thickness + SiBarrelBrace_thickness + 2*SiBarrelSiliconSpace2 + SiBarrelSiliconCurveHeight2" />
+<constant name="SiBarrel1_LongThickness" value="SiBarrelSensorInactiveSi_thickness + SiBarrelSensorActiveSi_thickness/2 + SiBarrelSensorMod_thickness + SiBarrel1_SupportDepth" />
+<constant name="SiBarrel2_LongThickness" value="SiBarrelSensorInactiveSi_thickness + SiBarrelSensorActiveSi_thickness/2 + SiBarrelSensorMod_thickness + SiBarrel2_SupportDepth" />
 
 
   </define>
@@ -114,7 +124,12 @@
         rmax="SiBarrelLayer1_rmax"
         length="SiBarrelLayer1_length" />
       <comment>Silicon Barrel Modules</comment>
-      <module name="Module1" vis="TrackerLayerVis">
+      <module name="Module1" vis="TrackerLayerVis"
+        sensor_stack="true"
+        sensor_cu_thickness="SiBarrelSensorCu_thickness"
+        sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness"
+        sensor_support_depth="SiBarrel1_SupportDepth">
 
          <module_component name="CurvedSi0C"
              material="Silicon"
@@ -259,7 +274,7 @@
           width="SiBarrelStave1_width"
           length="SiBarrelStave1_length"
           thickness="SiBarrelStave1Service_thickness"
-          vis="TrackerLayerVis">
+          vis="TrackerSupportVis">
           <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelStave1Service_thickness)" />
           </module_component>
 
@@ -390,7 +405,12 @@
         rmax="SiBarrelLayer2_rmax"
         length="SiBarrelLayer2_length" />
       <comment>Silicon Barrel Modules</comment>
-      <module name="Module1" vis="TrackerLayerVis">
+      <module name="Module1" vis="TrackerLayerVis"
+        sensor_stack="true"
+        sensor_cu_thickness="SiBarrelSensorCu_thickness"
+        sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness"
+        sensor_support_depth="SiBarrel2_SupportDepth">
 
          <module_component name="CurvedSi0C"
              material="Silicon"
@@ -654,7 +674,7 @@
           width="SiBarrelStave2_width"
           length="SiBarrelStave2_length"
           thickness="SiBarrelStave2Service_thickness"
-          vis="TrackerLayerVis" >
+          vis="TrackerSupportVis" >
           <position x="0" y="0" z="0.5*(SiBarrelBrace_thickness + SiBarrelStave1Service_thickness)" />
         </module_component>
 
