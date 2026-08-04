@@ -552,6 +552,109 @@ jobs:
         pattern: ${{ matrix.detector_config }}_views_*
         delete-merged: true
 
+  load-graphical-scan-configs:
+    runs-on: ubuntu-latest
+    outputs:
+      scan_matrix:   ${{ steps.read-config.outputs.scan_matrix }}
+      render_matrix: ${{ steps.read-config.outputs.render_matrix }}
+    steps:
+    - uses: actions/checkout@v6
+    - id: read-config
+      run: |
+        python3 << 'PYEOF'
+        import json, yaml, os
+        with open('.github/graphical-scan-configs.yml') as f:
+            config = yaml.safe_load(f)
+        scan_matrix   = {'scan': config['scans'],
+                         'detector_config': config['detector_configs']}
+        render_matrix = {'scan': [{'label': s['label']} for s in config['scans']],
+                         'detector_config': config['detector_configs']}
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as gho:
+            gho.write('scan_matrix='   + json.dumps(scan_matrix)   + '\n')
+            gho.write('render_matrix=' + json.dumps(render_matrix) + '\n')
+        PYEOF
+
+  graphical-scan:
+    runs-on: ubuntu-latest
+    needs:
+    - build
+    - load-graphical-scan-configs
+    strategy:
+      matrix: ${{ fromJSON(needs.load-graphical-scan-configs.outputs.scan_matrix) }}
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
+      with:
+        name: build-gcc-nightly-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
+          mkdir -p scans
+          graphicalScan \
+            ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml \
+            ${{ matrix.scan.axis }} \
+            ${{ matrix.scan.xMin }} ${{ matrix.scan.xMax }} \
+            ${{ matrix.scan.yMin }} ${{ matrix.scan.yMax }} \
+            ${{ matrix.scan.zMin }} ${{ matrix.scan.zMax }} \
+            ${{ matrix.scan.nSlices }} ${{ matrix.scan.nBins }} ${{ matrix.scan.nSamples }} \
+            FM \
+            scans/${{ matrix.detector_config }}_scans_${{ matrix.scan.label }}.root
+    - uses: actions/upload-artifact@v7
+      with:
+        name: ${{ matrix.detector_config }}_scans_${{ matrix.scan.label }}
+        path: scans/${{ matrix.detector_config }}_scans_${{ matrix.scan.label }}.root
+        if-no-files-found: error
+
+  render-graphical-scans:
+    runs-on: ubuntu-latest
+    needs:
+    - graphical-scan
+    - load-graphical-scan-configs
+    strategy:
+      matrix: ${{ fromJSON(needs.load-graphical-scan-configs.outputs.render_matrix) }}
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
+      with:
+        name: ${{ matrix.detector_config }}_scans_${{ matrix.scan.label }}
+        path: scans/
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        run: |
+          pip install --quiet pillow
+          mkdir -p images/${{ matrix.detector_config }}_scans
+          bin/render_graphical_scans \
+            scans/${{ matrix.detector_config }}_scans_${{ matrix.scan.label }}.root \
+            images/${{ matrix.detector_config }}_scans
+    - uses: actions/upload-artifact@v7
+      with:
+        name: ${{ matrix.detector_config }}_scans_rendered_${{ matrix.scan.label }}
+        path: images/
+        if-no-files-found: error
+
+  merge-graphical-scans:
+    runs-on: ubuntu-latest
+    needs:
+    - render-graphical-scans
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake]
+    steps:
+    - uses: actions/upload-artifact/merge@v7
+      with:
+        name: ${{ matrix.detector_config }}_scans
+        pattern: ${{ matrix.detector_config }}_scans_rendered_*
+        delete-merged: true
+
   npsim-gun:
     runs-on: ubuntu-latest
     needs: build
@@ -917,6 +1020,7 @@ jobs:
     - merge-constants
     - merge-parameter-table
     - merge-dawn-view
+    - merge-graphical-scans
     - get-docs-from-open-prs
     - get-docs-from-main
     if: |
