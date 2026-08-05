@@ -41,10 +41,10 @@ struct ModulePair {
 ModulePrototype buildPrototype(Detector& description, SensitiveDetector& sensitiveDetector,
                                xml_comp_t xModule, const std::string& suffix, bool isOverlap) {
   const std::string moduleName = xModule.nameStr() + suffix;
-  const xml_comp_t trd = xModule.trd();
-  const double x1 = trd.x1();
-  const double x2 = trd.x2();
-  const double halfLength = trd.z();
+  const xml_comp_t trd         = xModule.trd();
+  const double x1              = trd.x1();
+  const double x2              = trd.x2();
+  const double halfLength      = trd.z();
 
   double totalThickness = 0.0;
   for (xml_coll_t component(xModule, _U(module_component)); component; ++component) {
@@ -52,13 +52,13 @@ ModulePrototype buildPrototype(Detector& description, SensitiveDetector& sensiti
   }
 
   Solid moduleSolid;
-  double overlapHalfWidth = 0.0;
+  double overlapHalfWidth  = 0.0;
   double overlapHalfLength = 0.0;
   if (isOverlap) {
     xml_comp_t xOverlap = xModule.child(_U(overlap));
-    overlapHalfWidth = xOverlap.x();
-    overlapHalfLength = xOverlap.z();
-    moduleSolid = Box(overlapHalfWidth, totalThickness / 2.0, overlapHalfLength);
+    overlapHalfWidth    = xOverlap.x();
+    overlapHalfLength   = xOverlap.z();
+    moduleSolid         = Box(overlapHalfWidth, totalThickness / 2.0, overlapHalfLength);
   } else {
     moduleSolid = Trapezoid(x1, x2, totalThickness / 2.0, totalThickness / 2.0, halfLength);
   }
@@ -67,12 +67,12 @@ ModulePrototype buildPrototype(Detector& description, SensitiveDetector& sensiti
   prototype.volume = Volume(moduleName, moduleSolid, description.vacuum());
   prototype.volume.setVisAttributes(description.visAttributes(xModule.visStr()));
 
-  double positionY = -totalThickness / 2.0;
+  double positionY       = -totalThickness / 2.0;
   double thicknessBefore = 0.0;
-  int componentId = 0;
-  int sensorId = 1;
+  int componentId        = 0;
+  int sensorId           = 1;
   for (xml_coll_t component(xModule, _U(module_component)); component; ++component, ++componentId) {
-    xml_comp_t xComponent = component;
+    xml_comp_t xComponent  = component;
     const double thickness = xComponent.thickness();
     const std::string componentName =
         getAttrOrDefault(xComponent, _Unicode(name), _toString(componentId, "component%d"));
@@ -81,8 +81,8 @@ ModulePrototype buildPrototype(Detector& description, SensitiveDetector& sensiti
     if (isOverlap) {
       componentSolid = Box(overlapHalfWidth, thickness / 2.0, overlapHalfLength);
     } else {
-      const double componentX1 = getAttrOrDefault(xComponent, _Unicode(x1), x1);
-      const double componentX2 = getAttrOrDefault(xComponent, _Unicode(x2), x2);
+      const double componentX1         = getAttrOrDefault(xComponent, _Unicode(x1), x1);
+      const double componentX2         = getAttrOrDefault(xComponent, _Unicode(x2), x2);
       const double componentHalfLength = getAttrOrDefault(xComponent, _Unicode(height), halfLength);
       componentSolid = Trapezoid(componentX1, componentX2, thickness / 2.0, thickness / 2.0,
                                  componentHalfLength);
@@ -91,13 +91,13 @@ ModulePrototype buildPrototype(Detector& description, SensitiveDetector& sensiti
     Volume componentVolume(componentName + suffix, componentSolid,
                            description.material(xComponent.materialStr()));
     componentVolume.setVisAttributes(description.visAttributes(xComponent.visStr()));
-    PlacedVolume componentPlacement =
-        prototype.volume.placeVolume(componentVolume, Position(0.0, positionY + thickness / 2.0, 0.0));
+    PlacedVolume componentPlacement = prototype.volume.placeVolume(
+        componentVolume, Position(0.0, positionY + thickness / 2.0, 0.0));
 
     if (xComponent.isSensitive()) {
       if (sensorId > 2) {
         throw std::runtime_error(
-          "MPGDQuadrantEndcapTracker: at most two sensitive components are supported");
+            "MPGDQuadrantEndcapTracker: at most two sensitive components are supported");
       }
       componentPlacement.addPhysVolID("sensor", sensorId++);
       componentVolume.setSensitiveDetector(sensitiveDetector);
@@ -109,14 +109,11 @@ ModulePrototype buildPrototype(Detector& description, SensitiveDetector& sensiti
       const Vector3D u(0.0, 0.0, -1.0);
       const Vector3D v(-1.0, 0.0, 0.0);
       const Vector3D n(0.0, 1.0, 0.0);
-      prototype.surfaces.emplace_back(componentVolume, type, innerThickness, outerThickness, u, v, n);
+      prototype.surfaces.emplace_back(componentVolume, type, innerThickness, outerThickness, u, v,
+                                      n);
       //MP-DEBUG
-      std::cout
-       << "Created surface for "
-       << componentVolume.name()
-       << " total surfaces = "
-       << prototype.surfaces.size()
-       << std::endl;
+      std::cout << "Created surface for " << componentVolume.name()
+                << " total surfaces = " << prototype.surfaces.size() << std::endl;
       //
     }
     positionY += thickness;
@@ -134,16 +131,13 @@ void addSensitiveDetElements(DetElement& moduleElement, const ModulePrototype& p
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensorElement);
     parameters.set<std::string>("axis_definitions", "XZY");
     sensorElement.setPlacement(placement);
-    
+
     //MP - DEBUG
-    std::cout
-    << "\nAttaching ACTS surface"
-    << "\n  Sensor = " << sensorElement.name()
-    << "\n  Module ID = " << moduleId
-    << "\n  Surface index = " << index
-    << "\n  Number of surfaces = " << prototype.surfaces.size()
-    << "\n  Number of placements = " << prototype.sensitivePlacements.size()
-    << std::endl;
+    std::cout << "\nAttaching ACTS surface"
+              << "\n  Sensor = " << sensorElement.name() << "\n  Module ID = " << moduleId
+              << "\n  Surface index = " << index
+              << "\n  Number of surfaces = " << prototype.surfaces.size()
+              << "\n  Number of placements = " << prototype.sensitivePlacements.size() << std::endl;
     //--
 
     volSurfaceList(sensorElement)->push_back(prototype.surfaces.at(index));
@@ -161,17 +155,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::cout << std::endl;
   //
 
-  xml_det_t xDetector = e;
-  const int detectorId = xDetector.id();
+  xml_det_t xDetector            = e;
+  const int detectorId           = xDetector.id();
   const std::string detectorName = xDetector.nameStr();
-  const bool reflect = xDetector.reflect(false);
+  const bool reflect             = xDetector.reflect(false);
 
   DetElement detector(detectorName, detectorId);
- 
+
   //MP DEBUG
   //std::cout << "Detector name = " << detName << std::endl;
   //
-  
+
   Assembly detectorAssembly(detectorName);
   detectorAssembly.setVisAttributes(description.invisible());
   sensitiveDetector.setType("tracker");
@@ -181,30 +175,29 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(detector);
   for (xml_coll_t boundaryMaterial(xDetector, _Unicode(boundary_material)); boundaryMaterial;
        ++boundaryMaterial) {
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(xml_comp_t(boundaryMaterial), detectorParameters,
-                                                    "boundary_material");
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(xml_comp_t(boundaryMaterial),
+                                                    detectorParameters, "boundary_material");
   }
 
   std::map<std::string, ModulePair> modules;
   for (xml_coll_t module(xDetector, _U(module)); module; ++module) {
     xml_comp_t xModule = module;
     ModulePair pair;
-    pair.normal = buildPrototype(description, sensitiveDetector, xModule, "", false);
+    pair.normal  = buildPrototype(description, sensitiveDetector, xModule, "", false);
     pair.overlap = buildPrototype(description, sensitiveDetector, xModule, "_overlap", true);
     modules.emplace(xModule.nameStr(), std::move(pair));
   }
 
   for (xml_coll_t layer(xDetector, _U(layer)); layer; ++layer) {
-    xml_comp_t xLayer = layer;
-    const int layerId = xLayer.id();
-    xml_comp_t xEnvelope = xLayer.child(_U(envelope));
+    xml_comp_t xLayer               = layer;
+    const int layerId               = xLayer.id();
+    xml_comp_t xEnvelope            = xLayer.child(_U(envelope));
     const std::string baseLayerName = detectorName + "_layer" + std::to_string(layerId);
-    const double layerLength = xEnvelope.length();
-    const double layerStart = xEnvelope.zstart();
-    const double layerCenter = layerStart + layerLength / 2.0;
+    const double layerLength        = xEnvelope.length();
+    const double layerStart         = xEnvelope.zstart();
+    const double layerCenter        = layerStart + layerLength / 2.0;
 
-    Volume layerVolume(baseLayerName,
-                       Tube(xEnvelope.rmin(), xEnvelope.rmax(), layerLength / 2.0),
+    Volume layerVolume(baseLayerName, Tube(xEnvelope.rmin(), xEnvelope.rmax(), layerLength / 2.0),
                        description.material("Air"));
     layerVolume.setVisAttributes(description.visAttributes(xEnvelope.visStr()));
     const Transform3D layerTransform =
@@ -224,30 +217,30 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     int nextModuleId = 1;
     for (xml_coll_t ring(xLayer, _U(ring)); ring; ++ring) {
-      xml_comp_t xRing = ring;
+      xml_comp_t xRing             = ring;
       const ModulePair& modulePair = modules.at(xRing.moduleStr());
       const int modulesPerQuadrant = xRing.attr<int>(_Unicode(modules_per_quadrant));
-      const double radius = xRing.r();
-      const double phi0 = xRing.phi0(0.0);
-      const double localZ = xRing.zstart();
-      const double dz = xRing.dz(0.0);
+      const double radius          = xRing.r();
+      const double phi0            = xRing.phi0(0.0);
+      const double localZ          = xRing.zstart();
+      const double dz              = xRing.dz(0.0);
       const double quadrantStagger = getAttrOrDefault(xRing, _Unicode(dz_offset), 0.0);
-      const double phiStep = (M_PI / 2.0) / modulesPerQuadrant;
+      const double phiStep         = (M_PI / 2.0) / modulesPerQuadrant;
 
       for (int quadrantId = 0; quadrantId < 4; ++quadrantId) {
         const std::string quadrantName = "quadrant" + std::to_string(quadrantId);
         Assembly quadrantAssembly(baseLayerName + "_" + quadrantName);
         PlacedVolume quadrantPlacement = layerVolume.placeVolume(quadrantAssembly);
-	//quadrantPlacement.addPhysVolID("system",detector.id());
+        //quadrantPlacement.addPhysVolID("system",detector.id());
         DetElement quadrantElement(layerElement, quadrantName, quadrantId);
         quadrantElement.setPlacement(quadrantPlacement);
 
         const double zOffset = (quadrantId % 2 == 0) ? quadrantStagger : 0.0;
         for (int inQuadrant = 0; inQuadrant < modulesPerQuadrant; ++inQuadrant) {
           const double phi = phi0 + (quadrantId * modulesPerQuadrant + inQuadrant) * phiStep;
-          const double x = -radius * std::cos(phi);
-          const double y = -radius * std::sin(phi);
-          const double z = reflect ? -localZ - dz - zOffset : localZ + dz + zOffset;
+          const double x   = -radius * std::cos(phi);
+          const double y   = -radius * std::sin(phi);
+          const double z   = reflect ? -localZ - dz - zOffset : localZ + dz + zOffset;
           PlacedVolume modulePlacement = quadrantAssembly.placeVolume(
               modulePair.normal.volume,
               Transform3D(RotationZYX(0.0, -M_PI / 2.0 - phi, -M_PI / 2.0), Position(x, y, z)));
@@ -257,17 +250,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           moduleElement.setPlacement(modulePlacement);
           addSensitiveDetElements(moduleElement, modulePair.normal, nextModuleId++);
 
-	   //MP DEBUG
-	  std::cout << "\n========== MODULE ==========\n";
+          //MP DEBUG
+          std::cout << "\n========== MODULE ==========\n";
           std::cout << "module = " << nextModuleId << std::endl;
           for (const auto& id : modulePlacement.volIDs()) {
-            std::cout << "  "
-              << id.first
-              << " = "
-              << id.second
-              << std::endl;
+            std::cout << "  " << id.first << " = " << id.second << std::endl;
           }
-	  //
+          //
         }
 
         // Exactly one explicitly declared overlap belongs to each quadrant boundary.
@@ -276,7 +265,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           if (xOverlap.attr<int>(_Unicode(quadrant)) != quadrantId) {
             continue;
           }
-          const double z = reflect ? -localZ - dz - zOffset : localZ + dz + zOffset;
+          const double z                = reflect ? -localZ - dz - zOffset : localZ + dz + zOffset;
           PlacedVolume overlapPlacement = quadrantAssembly.placeVolume(
               modulePair.overlap.volume,
               Transform3D(RotationZYX(0.0, xOverlap.attr<double>(_Unicode(rotation)), -M_PI / 2.0),
@@ -287,15 +276,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           overlapElement.setPlacement(overlapPlacement);
           addSensitiveDetElements(overlapElement, modulePair.overlap, nextModuleId++);
 
-	  //MP -DEBUG
-	  std::cout << "\n========== OVERLAP ==========\n";
+          //MP -DEBUG
+          std::cout << "\n========== OVERLAP ==========\n";
           std::cout << "module = " << nextModuleId << std::endl;
           for (const auto& id : overlapPlacement.volIDs()) {
-            std::cout << "  "
-              << id.first
-              << " = "
-              << id.second
-              << std::endl;
+            std::cout << "  " << id.first << " = " << id.second << std::endl;
           }
         }
       }
@@ -308,12 +293,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   detector.setPlacement(detectorPlacement);
 
   //MP DEBUG
-  std::cout << "Returning detector: "
-    << detector.name()
-    << std::endl;
+  std::cout << "Returning detector: " << detector.name() << std::endl;
   //
   return detector;
 }
 
 DECLARE_DETELEMENT(epic_MPGDQuadrantEndcapTracker, create_detector)
-

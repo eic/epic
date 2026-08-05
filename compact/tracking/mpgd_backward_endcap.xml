@@ -43,7 +43,7 @@
 
       <module name="BackwardMPGDQuadModule1" vis="MPGDModuleVis">
         <trd x1="BackwardMPGDQuad_inner_width/2" x2="BackwardMPGDQuad_outer_width/2" z="BackwardMPGDQuad_length/2" />
-	<overlap x="BackwardMPGDQuad_overlap_half_width" z="(BackwardMPGDQuad_active_outer_radius-BackwardMPGDQuad_inner_radius)/2" />
+        <overlap x="BackwardMPGDQuad_overlap_half_width" z="(BackwardMPGDQuad_active_outer_radius-BackwardMPGDQuad_inner_radius)/2" />
         <module_component thickness="BackwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
