@@ -579,4 +579,20 @@
     <composite n="6"  ref="O"/>
     <composite n="2"  ref="N"/>
   </material>
+  <material name="Fiberglass">
+    <D type="density" value="1.85" unit="g / cm3"/>
+    <composite n="0.30" ref="Si"/>
+    <composite n="0.50" ref="O"/>
+    <composite n="0.10" ref="Ca"/>
+    <composite n="0.05" ref="Al"/>
+    <composite n="0.05" ref="B"/>
+ </material>
+ <material name="Honeycomb">
+    <D type="density" value="0.048" unit="g / cm3"/>
+    <composite n="0.54" ref="C"/>
+    <composite n="0.04" ref="H"/>
+    <composite n="0.22" ref="O"/>
+    <composite n="0.20" ref="N"/>
+ </material>
+
 </materials>
