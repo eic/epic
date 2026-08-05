@@ -61,10 +61,8 @@
     <constant name="MMModule_rsensor" value="MMModule_r0 + r02Sensor" />
     <comment> Strip Cu fraction: There are three Cu strata: 1 = X, 2 = Y, 3 = conductive tracks to connectors. The latter is neglected. DeadZone all along the edges. </comment>
     <constant name="MMnStripsX"        value="192"/>
-    <constant name="MMPitchX"          value="1.766*mm"/>
     <constant name="MMSizeStrX"        value="0.7*mm"/>
     <constant name="MMnStripsY"        value="576"/>
-    <constant name="MMPitchY"          value="1.021*mm"/>
     <constant name="MMSizeStrY"        value="0.9*mm"/>
     <constant name="MMDeadZone"        value="1*mm"/>
     <constant name="MMCuZoneX"         value="MMActiveWidth  - 2 * MMDeadZone"/>
