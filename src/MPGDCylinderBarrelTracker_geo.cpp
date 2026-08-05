@@ -100,19 +100,21 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   }
   // ***** RETRIEVE MODULE PARAMETERS
   // (Module is here the active piece, excluding frames and services.)
-  xml_comp_t x_mod   = modules;
-  string m_nam       = x_mod.nameStr();
+  xml_comp_t x_mod        = modules;
+  string m_nam            = x_mod.nameStr();
   xml_comp_t x_dimensions = x_mod.dimensions();
-  double mod_width = x_dimensions.width(), mod_length  = x_dimensions.length();
-  double mod_r0    = x_dimensions.attr<double>(_Unicode(r0));
-  double mod_rmin  = x_dimensions.rmin(),  mod_rsensor = x_dimensions.attr<double>(_Unicode(rsensor));
+  double mod_width = x_dimensions.width(), mod_length = x_dimensions.length();
+  double mod_r0   = x_dimensions.attr<double>(_Unicode(r0));
+  double mod_rmin = x_dimensions.rmin(), mod_rsensor = x_dimensions.attr<double>(_Unicode(rsensor));
   // phi range, when excluding frames
   // "mod_width" is to be understood as the width at "mod_r0" (which is the top of the PCB, see XML).
   double dphi      = mod_width / mod_r0 / 2;
   double phi_start = -dphi, phi_end = dphi;
-  printout(DEBUG, "MPGDCylinderBarrelTracker", "Module \"%s\": width,length %.2f,%.2f cm r0,rmin,rsensor %.2f,%.2f,%.2f cm phi +/-%.2f°",
-           m_nam.c_str(), mod_width / cm, mod_length / cm,
-	   mod_r0 / cm, mod_rmin / cm, mod_rsensor / cm, dphi / M_PI * 180);
+  printout(
+      DEBUG, "MPGDCylinderBarrelTracker",
+      "Module \"%s\": width,length %.2f,%.2f cm r0,rmin,rsensor %.2f,%.2f,%.2f cm phi +/-%.2f°",
+      m_nam.c_str(), mod_width / cm, mod_length / cm, mod_r0 / cm, mod_rmin / cm, mod_rsensor / cm,
+      dphi / M_PI * 180);
   // ********** LAYER
   // ***** ONE AND ONLY ONE <layer>
   xml_coll_t li(x_det, _U(layer));
@@ -134,16 +136,16 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   double barrel_z0     = getAttrOrDefault(x_barrel, _U(z0), 0.);
   // ***** LAYOUTS
   xml_comp_t rphi_layout = x_layer.child(_U(rphi_layout));
-  double x_offset     = rphi_layout.x_offset();
-  double y_offset     = rphi_layout.y_offset();
-  double phi_tilt     = rphi_layout.phi_tilt();
-  double delta        = rphi_layout.delta();
-  int    nphi         = rphi_layout.nphi();
-  double phi0         = rphi_layout.phi0(); // Overall shift in phi
-  xml_comp_t z_layout = x_layer.child(_U(z_layout));
-  double z0           = z_layout.z0();
-  double z1           = z_layout.z1();
-  double z2           = z_layout.z2();
+  double x_offset        = rphi_layout.x_offset();
+  double y_offset        = rphi_layout.y_offset();
+  double phi_tilt        = rphi_layout.phi_tilt();
+  double delta           = rphi_layout.delta();
+  int nphi               = rphi_layout.nphi();
+  double phi0            = rphi_layout.phi0(); // Overall shift in phi
+  xml_comp_t z_layout    = x_layer.child(_U(z_layout));
+  double z0              = z_layout.z0();
+  double z1              = z_layout.z1();
+  double z2              = z_layout.z2();
   // ***** FRAMES
   // There must be two:
   // - Outward frame (wider, because supporting connectors)
@@ -181,8 +183,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   for (iFr = 0; iFr < 2; iFr++) {
     Frame& frame = frames[iFr];
     printout(DEBUG, "MPGDCylinderBarrelTracker",
-	     "Frame #%d \"%s\": width %.2f cm material \"%s\" vis \"%s\"", iFr,
-	     frame.name.c_str(), frame.width, frame.material.c_str(), frame.vis.c_str());
+             "Frame #%d \"%s\": width %.2f cm material \"%s\" vis \"%s\"", iFr, frame.name.c_str(),
+             frame.width, frame.material.c_str(), frame.vis.c_str());
   }
 
   // ***** TOTAL THICKNESS from components (later used to build frames)
@@ -191,8 +193,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
     const xml_comp_t x_comp = ci;
     total_thickness += x_comp.thickness();
-    printout(DEBUG, "MPGDCylinderBarrelTracker", "\"%s\": \t thickness %.4f %.4f cm material \"%s\"",
-             x_comp.nameStr().c_str(), x_comp.thickness() / cm, total_thickness / cm, x_comp.materialStr().c_str());
+    printout(DEBUG, "MPGDCylinderBarrelTracker",
+             "\"%s\": \t thickness %.4f %.4f cm material \"%s\"", x_comp.nameStr().c_str(),
+             x_comp.thickness() / cm, total_thickness / cm, x_comp.materialStr().c_str());
   }
   printout(DEBUG, "MPGDCylinderBarrelTracker", " => total_thickness %.4f cm", total_thickness / cm);
 
@@ -204,7 +207,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   double zthickness, mod_rmax = mod_rmin + total_thickness;
   Frame &out_frame = frames[0], &frame = frames[1];
   double total_length = // Total length including frames
-    mod_length + out_frame.width + frame.width;
+      mod_length + out_frame.width + frame.width;
   // Outward frame
   zthickness = out_frame.width;
   Tube frame_tube_O(mod_rmin, mod_rmax, zthickness / 2, phi_start, phi_end);
@@ -217,7 +220,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   m_vol.placeVolume(frame_vol_I, Position(0, 0, (total_length - zthickness) / 2));
   // Start/stop frames
   double frame_dphi =
-    zthickness / mod_r0; //converting the thickness of the frame to angular radians.
+      zthickness / mod_r0; //converting the thickness of the frame to angular radians.
   Tube frame_tube_3(mod_rmin, mod_rmax, total_length / 2, phi_start - frame_dphi, phi_start);
   const string start_frame_nam("StartFrame");
   Volume frame_vol_3(start_frame_nam, frame_tube_3, description.material(frame.material));
@@ -254,17 +257,17 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     if (x_comp.isSensitive()) {
       // ***** SENSITIVE VOLUME
       if (nSensitives >= 5) {
-	sensitiveVolumeSet = -1;
-	break;
+        sensitiveVolumeSet = -1;
+        break;
       }
       pv.addPhysVolID("sensor", 0);
       // StripID. Single Sensitive Volume?
       if (c_nam == "DriftGap") {
-	if (nSensitives != 0) {
-	  sensitiveVolumeSet = -1;
-	  break;
-	}
-	sensitiveVolumeSet = 1;
+        if (nSensitives != 0) {
+          sensitiveVolumeSet = -1;
+          break;
+        }
+        sensitiveVolumeSet = 1;
       }
       int strip_id = x_comp.key();
       pv.addPhysVolID("strip", strip_id);
@@ -277,18 +280,18 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       Vector3D n(0., 0., 1.);
 
       if (strip_id == 0) {
-	// Consistency(+/-1um) check:
-	// "rsensor" is supposed to have been assigned to the radius specified
-	// in the segmentation. Let's double-check the consistency between the
-	// stack of module components and that radius.
-	double rXCheck = comp_rmin + comp_thickness / 2;
-	if (fabs(mod_rsensor - rXCheck) > .0001 / cm) {
-	  printout(ERROR, "MPGDCylinderBarrelTracker",
-		   "Sensitive Component \"%s\": rsensor(%.4f cm) != "
-		   "radius @ sensitive surface(%.4f cm)",
-		   c_nam.c_str(), mod_rsensor / cm, rXCheck / cm);
-	  throw runtime_error("Logics error in building modules.");
-	}
+        // Consistency(+/-1um) check:
+        // "rsensor" is supposed to have been assigned to the radius specified
+        // in the segmentation. Let's double-check the consistency between the
+        // stack of module components and that radius.
+        double rXCheck = comp_rmin + comp_thickness / 2;
+        if (fabs(mod_rsensor - rXCheck) > .0001 / cm) {
+          printout(ERROR, "MPGDCylinderBarrelTracker",
+                   "Sensitive Component \"%s\": rsensor(%.4f cm) != "
+                   "radius @ sensitive surface(%.4f cm)",
+                   c_nam.c_str(), mod_rsensor / cm, rXCheck / cm);
+          throw runtime_error("Logics error in building modules.");
+        }
       }
 
       // Compute the inner (i.e. thickness until mid-sensitive-volume) and
@@ -297,20 +300,19 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       // depending on whether the support is above or below the sensor.
       double inner_thickness, outer_thickness;
       if (sensitiveVolumeSet == 1) {
-	inner_thickness = thickness_so_far + comp_thickness / 2;
-	outer_thickness = total_thickness - inner_thickness;
+        inner_thickness = thickness_so_far + comp_thickness / 2;
+        outer_thickness = total_thickness - inner_thickness;
       } else if (nSensitives == 0) {
-	inner_thickness = thickness_so_far + comp_thickness / 2;
-	outer_thickness = comp_thickness / 2;
+        inner_thickness = thickness_so_far + comp_thickness / 2;
+        outer_thickness = comp_thickness / 2;
       } else if (nSensitives == 4) {
-	inner_thickness = comp_thickness / 2;
-	outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
+        inner_thickness = comp_thickness / 2;
+        outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
       } else {
-	inner_thickness = outer_thickness = comp_thickness / 2;
+        inner_thickness = outer_thickness = comp_thickness / 2;
       }
-      printout(DEBUG, "MPGDCylinderBarrelTracker",
-	       "Sensitive surface @ R = %.4f (%.4f,%.4f) cm",
-	       mod_rsensor, inner_thickness / cm, outer_thickness / cm);
+      printout(DEBUG, "MPGDCylinderBarrelTracker", "Sensitive surface @ R = %.4f (%.4f,%.4f) cm",
+               mod_rsensor, inner_thickness / cm, outer_thickness / cm);
       SurfaceType type(SurfaceType::Sensitive);
       VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
       volplane_surfaces.push_back(surf);
@@ -321,7 +323,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   } //end of module component loop
   if (sensitiveVolumeSet < 0 || sensitiveVolumeSet != nSensitives) {
     printout(ERROR, "MPGDCylinderBarrelTracker",
-	     "Invalid set of Sensitive Volumes: it's either one (named \"DriftGap\") or 5");
+             "Invalid set of Sensitive Volumes: it's either one (named \"DriftGap\") or 5");
     throw runtime_error("Logics error in building modules.");
   }
 
@@ -348,42 +350,44 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     // Z abscissa?
     bool isBackward = iz < 2, isExternal = iz == 0 || iz == 3;
     double zCorr = (out_frame.width - frame.width) / 2;
-    double Zc = isExternal ? z2 : z1;
+    double Zc    = isExternal ? z2 : z1;
     Zc += zCorr; // Transform from sensitive area to overall module
-    if (isBackward) Zc *= -1; // Apply symmetry w.r.t. overall offset
+    if (isBackward)
+      Zc *= -1; // Apply symmetry w.r.t. overall offset
     Zc += z0;
     // ***** LOOP OVER THE STAVES IN phi.
     for (int iphi = 0; iphi < nphi; iphi++) {
       // Module index and name
-      int moduleIdx = nphi * iz + iphi;
+      int moduleIdx      = nphi * iz + iphi;
       string module_name = _toString(moduleIdx, "module%02d");
       // phi angle
       // Starting value? Sectors sit aside, as opposed to astride, the axes.
       // With still some "phi0" margin, to make for possible imperfections.
       double phi_incr = 2 * M_PI / nphi;
-      double phi = phi0 +  phi_incr / 2 + iphi * phi_incr; 
+      double phi      = phi0 + phi_incr / 2 + iphi * phi_incr;
       // Center of cylinder
       double Xc = x_offset, Yc = y_offset;
       if (isExternal) { // Add "delta" along tilt
-	//double t = phi_tilt / 180 * M_PI;
-	Xc += delta * cos(phi_tilt); Yc += delta * sin(phi_tilt);
+        //double t = phi_tilt / 180 * M_PI;
+        Xc += delta * cos(phi_tilt);
+        Yc += delta * sin(phi_tilt);
       }
       // DetElement
       DetElement mod_elt(lay_elt, module_name, moduleIdx);
       // Placement
-      Translation3D origin2Centre(Xc,Yc,Zc);
+      Translation3D origin2Centre(Xc, Yc, Zc);
       RotationZYX tilt(phi_tilt, 0, 0);
       RotationZYX rot(phi, 0, 0);
       Transform3D tr;
       if (isBackward)
-	tr = rot * origin2Centre * tilt;
+        tr = rot * origin2Centre * tilt;
       else {
-	// Reflection, so that outward-frame faces outwards.
-	// Note: we need a reflection, as opposed to a rotation, so that fish
-	// scales keep being oriented the same. This in turn, so that the set
-	// of all four sections can be moved out in one go for maintenance.
-	Translation3D restoreZ(0,0,2*Zc);
-        tr = restoreZ * Rotation3D(1,0,0,0,1,0,0,0,-1) * rot * origin2Centre * tilt;
+        // Reflection, so that outward-frame faces outwards.
+        // Note: we need a reflection, as opposed to a rotation, so that fish
+        // scales keep being oriented the same. This in turn, so that the set
+        // of all four sections can be moved out in one go for maintenance.
+        Translation3D restoreZ(0, 0, 2 * Zc);
+        tr = restoreZ * Rotation3D(1, 0, 0, 0, 1, 0, 0, 0, -1) * rot * origin2Centre * tilt;
       }
       Volume& module_vol = m_vol;
       pv                 = lay_vol.placeVolume(module_vol, tr);
@@ -404,9 +408,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       }
       printout(DEBUG, "MPGDCylinderBarrelTracker",
                "System %d Layer %d Module \"%s\",id=%-2d: x,y,r,z: %7.4f,%7.4f,%6.4f,%8.4f cm",
-               det_id, lay_id, module_name.c_str(), moduleIdx, pv.position().x() / cm, pv.position().y() / cm,
-               sqrt(Xc * Xc + Yc * Yc) / cm, pv.position().z() / cm);
-
+               det_id, lay_id, module_name.c_str(), moduleIdx, pv.position().x() / cm,
+               pv.position().y() / cm, sqrt(Xc * Xc + Yc * Yc) / cm, pv.position().z() / cm);
     }
   }
 

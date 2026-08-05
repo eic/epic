@@ -129,13 +129,13 @@
       <type_flags type="DetType_TRACKER + DetType_BARREL"/>
 
       <module name="InnerMPGDBarrelModule" vis="TrackerLayerVis" >
-	<comment> Note that "rsensor" must be assigned to the "radius" of the CylindricalGridPhiZ segmentation. The tag is used in the constructor to double-check the consistency between the stack of module_component's and that segmentation radius. </comment>
-	<dimensions
+        <comment> Note that "rsensor" must be assigned to the "radius" of the CylindricalGridPhiZ segmentation. The tag is used in the constructor to double-check the consistency between the stack of module_component's and that segmentation radius. </comment>
+        <dimensions
             width="MMPCBWidth"
             length="MMPCBLength"
-	    r0="MMModule_r0"
-	    rmin="MMModule_rmin"
-	    rsensor="MMModule_rsensor" />
+            r0="MMModule_r0"
+            rmin="MMModule_rmin"
+            rsensor="MMModule_rsensor" />
         <frame name="MMFrame"        material="CarbonFiber" width="MMFrameWidth"        vis="TrackerSupportVis" />
         <frame name="MMOutwardFrame" material="CarbonFiber" width="MMOutwardFrameWidth" vis="TrackerServiceVis" />
         <comment> Components: going outwards, from PCB to drift electrode. The stack-up is taken from Geico_v7. It is simplified as: FR4|Grounding|Kapton|Anode|Kapton|Resistive, where Anode comprises all 4 Cu strata and Kapton includes adhesive and coverlay. The drift stack-up is also, slightly, simplified: Cathode|FR4|Grounding|Kapton. </comment>
@@ -167,12 +167,12 @@
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count*24" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count*24" bins1="100" />
         <rphi_layout
-	    x_offset="MMInternalSection_x" y_offset="MMInternalSection_y"
-	    phi_tilt="MMModule_tilt" phi0="0.0"
-	    delta="MMExternalSection_delta"
-	    nphi="MPGDBarrelStave_count"/>
+            x_offset="MMInternalSection_x" y_offset="MMInternalSection_y"
+            phi_tilt="MMModule_tilt" phi0="0.0"
+            delta="MMExternalSection_delta"
+            nphi="MPGDBarrelStave_count"/>
         <z_layout
-	    z0="0.0" z1="MMInternalSection_z" z2="MMExternalSection_z"/>
+            z0="0.0" z1="MMInternalSection_z" z2="MMExternalSection_z"/>
       </layer>
     </detector>
   </detectors>
