@@ -28,6 +28,7 @@
         name="B0ECal"
         type="B0_ECAL"
         readout="B0ECalHits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="B0ECal_xcenter" y="0" z="B0ECal_zcenter"/>
       <rotation x="0" y="180*deg+B0ECal_rotation" z="0"/>
       <placements>

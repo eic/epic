@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v44.4.0"
+ACTS_VERSION="v45.3.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -53,8 +53,15 @@ EOF
     fi
   fi
 done
-curl --location https://github.com/acts-project/acts/pull/4931.diff | patch -p1
-curl --location https://github.com/acts-project/acts/pull/5046.diff | patch -p1
+function patch_acts() {
+  local url="$1"
+  local file="$(basename "$1")"
+  if [ ! -e "$file" ]; then
+    wget "$url"
+    patch -p1 --forward --input="$file" || git apply --whitespace=nowarn "$file"
+  fi
+}
+patch_acts https://github.com/acts-project/acts/pull/5359.diff # landed in 46.3.0
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
@@ -196,7 +203,6 @@ mkdir -p Surfaces/1D_plot
 
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_regenerated'.root","'${trackFile}'",-1,"Surfaces/regenerated/ratio_plot","Surfaces/regenerated/prop_plot","Surfaces/regenerated/map_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_current'.root","'${trackFile}'",-1,"Surfaces/current/ratio_plot","Surfaces/current/prop_plot","Surfaces/current/map_plot")'
-# These scripts still need to be patched to work with missing sur_type
-#root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
-#root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
 echo "::endgroup::"

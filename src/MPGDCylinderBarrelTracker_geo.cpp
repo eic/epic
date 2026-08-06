@@ -42,7 +42,7 @@ using ROOT::Math::XYVector;
  *  but a single XML <module> and a single <layer>.
  *
  * - Two distinct versions of ".xml" are covered:
- *  I) Single Sensitive Volume (which name is then "GasGap"): "eicrecon" is to
+ *  I) Single Sensitive Volume (which name is then "DriftGap"): "eicrecon" is to
  *   be executed while setting bit 0x1 of option "MPGD:SiFactoryPattern".
  * II) Multiple Sensitive Volume: Bit 0x1 of above-mentioned option not set.
  *
@@ -132,14 +132,14 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   xml_comp_t z_layout = x_layer.child(_U(z_layout));
   double z_gap        = z_layout.gap();
   // ***** INVALID LAYOUT PROPERTIES
-  // # of staves (along phi) and sectors (along z) are now derived from stave
-  // width and sector length. Used to be specified directly. In order to remind
+  // # of staves (along phi) and sections (along z) are now derived from stave
+  // width and section length. Used to be specified directly. In order to remind
   // the user this is no longer the case, let's forbid the use of the
   // corresponding (and a few more) tags.
   const int nInvalids                     = 4;
-  const xml::Tag_t unvalidTags[nInvalids] = {_U(phi_tilt), _U(nphi), _U(rc), _U(dr)};
+  const xml::Tag_t invalidTags[nInvalids] = {_U(phi_tilt), _U(nphi), _U(rc), _U(dr)};
   for (int uv = 0; uv < nInvalids; uv++) {
-    if (x_barrel.hasChild(unvalidTags[uv])) {
+    if (x_barrel.hasChild(invalidTags[uv])) {
       const string tag = _U(nphi);
       printout(ERROR, "MPGDCylinderBarrelTracker",
                "Layer \"%s\": Invalid property \"%s\" in \"rphi_layout\"", m_nam.c_str(),
@@ -156,7 +156,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // - There needs to be 2, as of 2024/03: Inner and outer.
   // StaveModel = radius of curvature (=> "nphi", given "rmin")
   //            + offset
-  // sector2Models[2][2]: Which model for [inner,outer][r1,r2]
+  // section2Models[2][2]: Which model for [inner,outer][r1,r2]
   typedef struct {
     string name;
     double rmin;
@@ -168,9 +168,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double offset;
     int io;
   } StaveModel;
-  const int nSectors = 4;
-  StaveModel staveModels[nSectors];
-  int sector2Models[2][2];
+  const int nSections = 4;
+  StaveModel staveModels[nSections];
+  int section2Models[2][2];
   xml_coll_t mi(x_mod, _U(model));
   if (mi.size() != 2) {
     printout(ERROR, "MPGDCylinderBarrelTracker", "Number of models = %d. Must be = 2",
@@ -202,8 +202,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       io = 0;              // ...it's the inner one => io = 0.
     else
       io = 1;
-    staveModel.io        = io;
-    sector2Models[io][0] = nStaveModels - 1;
+    staveModel.io         = io;
+    section2Models[io][0] = nStaveModels - 1;
     if (fabs(rmin2 - rmin1) > 1.e6) {
       StaveModel& staveMode2 = staveModels[nStaveModels++];
       staveMode2.rmin        = rmin2;
@@ -215,7 +215,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       staveMode2.name        = x_model.nameStr() + string("_2");
     } else
       staveModel.name = x_model.nameStr();
-    sector2Models[io][1] = nStaveModels - 1;
+    section2Models[io][1] = nStaveModels - 1;
   }
   printout(DEBUG, "MPGDCylinderBarrelTracker", "%d Stave Models:", nStaveModels);
   for (int iSM = 0; iSM < nStaveModels; iSM++) {
@@ -291,11 +291,11 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
 
   // Now that we know total thickness, let's "printout" the characteristics
   // of the models (extrema, phi superposition).
-  printout(DEBUG, "MPGDCylinderBarrelTracker", "2 Sector Models:");
+  printout(DEBUG, "MPGDCylinderBarrelTracker", "2 Section Models:");
   double outerPhiSuperpos = 0; // Later used to define phi range of service to inner
   for (int io = 0; io < 2; io++) {
-    StaveModel& sM0 = staveModels[sector2Models[io][0]];
-    StaveModel& sM1 = staveModels[sector2Models[io][1]];
+    StaveModel& sM0 = staveModels[section2Models[io][0]];
+    StaveModel& sM1 = staveModels[section2Models[io][1]];
     XYVector vOffset(sM0.offset / 2, 0);
     double phiEdge0 = stave_width / 2 / sM0.rmin;
     XYVector vEdge0(sM0.rmin * cos(phiEdge0), sM0.rmin * sin(phiEdge0));
@@ -312,7 +312,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double dPhi = acos(vEdge0.Dot(vEdge1) / Mag0 / Mag1);
     RMx += total_thickness;
     if (io == 1) {
-      RMn -= service_thickness; // Outer sector: account for services to inner sector
+      RMn -= service_thickness; // Outer section: account for services to inner section
       outerPhiSuperpos = dPhi;
     }
     printout(
@@ -336,7 +336,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double phi_start = -dphi, phi_end = dphi;
 
     // ***** ASSEMBLY VOLUME: ONE PER STAVE MODEL
-    Assembly m_vol(staveModel.name);
+    Assembly m_vol(m_nam);
     volumes.push_back(m_vol);
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
@@ -405,8 +405,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double comp_rmin        = stave_rmin;
     double thickness_so_far = 0;
     // Pattern of Multiple Sensitive Volumes
-    // - The "GasGap" may be subdivided into SUBVOLUMES (this order to have one
-    //  sensitive component per strip coordinate (and accessorily, some extras).
+    // - The "DriftGap" may be subdivided into SUBVOLUMES (this in order to
+    //  have one sensitive component per strip coordinate (and accessorily,
+    //  some extras).
     int nSensitives = 0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci) {
       xml_comp_t x_comp     = mci;
@@ -426,7 +427,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         }
         pv.addPhysVolID("sensor", sensor_number);
         // StripID. Single Sensitive Volume?
-        if (c_nam == "GasGap") {
+        if (c_nam == "DriftGap") {
           if (nSensitives != 0) {
             sensitiveVolumeSet = -1;
             break;
@@ -488,7 +489,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     } //end of module component loop
     if (sensitiveVolumeSet < 0 || sensitiveVolumeSet != nSensitives) {
       printout(ERROR, "MPGDCylinderBarrelTracker",
-               "Invalid set of Sensitive Volumes: it's either one (named \"GasGap\") or 5");
+               "Invalid set of Sensitive Volumes: it's either one (named \"DriftGap\") or 5");
       throw runtime_error("Logics error in building modules.");
     }
   } //end of stave model loop
@@ -515,13 +516,13 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ***** SECTOR POSITIONS ALONG Z
   // These are the 4 central values in Z where the four sets of modules, called
   // sectors, will be placed.
-  double modz_pos[nSectors] = {-barrel_length / 2 + (total_length) / 2, -(total_length + z_gap) / 2,
-                               +(total_length + z_gap) / 2,
-                               +barrel_length / 2 - (total_length) / 2};
-  int nModules              = 0;
-  for (int iz = 0; iz < nSectors; iz++) {
+  double modz_pos[nSections] = {-barrel_length / 2 + (total_length) / 2,
+                                -(total_length + z_gap) / 2, +(total_length + z_gap) / 2,
+                                +barrel_length / 2 - (total_length) / 2};
+  int nModules               = 0;
+  for (int iz = 0; iz < nSections; iz++) {
     int io                = (iz == 1 || iz == 2) ? 0 : 1;
-    int iSMs[2]           = {sector2Models[io][0], sector2Models[io][1]};
+    int iSMs[2]           = {section2Models[io][0], section2Models[io][1]};
     int iSM0              = iSMs[0];
     const StaveModel& sm0 = staveModels[iSM0];
     int nphi              = sm0.nphi;
@@ -562,7 +563,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
         // ***** SENSITIVE COMPONENTS
         PlacedVolume& sens_pv = sensitives[iSensitive][iV];
-        int de_id             = nphi * nSectors * iSensitive + nModules;
+        int de_id             = nphi * nSections * iSensitive + nModules;
         DetElement comp_de(mod_elt,
                            std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
                            de_id);

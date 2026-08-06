@@ -29,6 +29,7 @@
         type="ZDC_ImagingCal"
         vis="ZDC_WSi_Vis"
         readout="ZDC_WSi_Hits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="ZDC_WSi_x_pos"         y="ZDC_WSi_y_pos"         z="ZDC_WSi_z_pos"/>
       <rotation x="ZDC_WSi_rotateX_angle" y="ZDC_WSi_rotateY_angle" z="ZDC_WSi_rotateZ_angle"/>
       <dimensions x="ZDC_WSi_x" y="ZDC_WSi_y" z="ZDC_WSi_z"/>
