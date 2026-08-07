@@ -32,12 +32,12 @@
    <constant name="SiBarrel2_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
 
     <constant name="SiBarrelStave1_length" value="51.3*cm - SiBarrel1_Length_Trim"/>
-    <constant name="SiBarrelStave2_length" value="80.3*cm - SiBarrel2_Length_Trim" /> 
+    <constant name="SiBarrelStave2_length" value="80.3*cm - SiBarrel2_Length_Trim" />
 
     <constant name="SiBarrelSingleModule1_length" value="12.9996*cm"/>
     <constant name="SiBarrelSingleModule2_length" value="10.833*cm" />
 
-    <constant name="SiBarrel1_PassiveSi_Length" value="4.5*mm"/>    
+    <constant name="SiBarrel1_PassiveSi_Length" value="4.5*mm"/>
     <constant name="SiBarrel2_PassiveSi_Length" value="4.5*mm"/>
 
    <constant name="SiBarrel1_Module0_Position" value="-187.126*mm" />
@@ -90,7 +90,7 @@
     <constant name="SiBarrelBrace_width" value="10*mm" />
     <constant name="SiBarrelBrace_thickness_material" value="1*mm" />
     <constant name="SiBarrelBrace_thickness_space" value="2*mm" />
-    
+
     <constant name="SiBarrelBrace_StaveWidthFraction" value="0.9" />
     <constant name="SiBarrelBrace_Position_X" value="-1*mm" />
 
