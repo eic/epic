@@ -62,11 +62,16 @@
 <!-- end of hardcoded constants -->
 </define>
 
+<regions>
+  <region name="PFRICHRegion"/>
+</regions>
+
 <detectors>
 <detector
   id="BackwardRICH_ID"
   name="PFRICH"
   type="epic_PFRICH"
+  region="PFRICHRegion"
 
   readout="PFRICHHits"
 

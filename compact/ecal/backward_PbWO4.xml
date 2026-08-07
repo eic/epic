@@ -148,7 +148,7 @@
             moduley="EcalEndcapN_crystalmodule_total_width"
             modulez="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
             moduleshift="EcalEndcapN_crystalmodule_VM2000_thickness"
-            gmaterial="Vacuum"
+            gmaterial="Air"
             vis="BlueVis"/>
           <crystal
             sizex="EcalEndcapN_crystalmodule_crystal_width"
