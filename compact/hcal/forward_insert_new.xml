@@ -1,11 +1,12 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Ryan Milton -->
+<!-- Copyright (C) 2026 Aiden Wu -->
 
 <lccdd>
 
   <documentation>
     Title: Forward HCal Insert Calorimeter
-    Author: @rymilton
+    Author: @rymilton, @aidenwu23
     Status: development
     Version: 1.0
   </documentation>
@@ -22,24 +23,6 @@
     <constant name="HcalEndcapPInsertESRFoilThickness"           value="0.015*cm"/>
 
     <constant name="LFHCAL_FrontWallThickness"                   value="1.50*cm"/>
-    <documentation>
-      #### Cell Sizes
-    </documentation>
-    <constant name="HcalEndcapPInsertCellSizeHG" value="2.34*cm"/>
-    <constant name="HcalEndcapPInsertCellSizeLGLeft" value="2.84*cm"/>
-    <constant name="HcalEndcapPInsertCellSizeLGRight" value="3.1*cm"/>
-    <documentation>
-      #### Transverse offsets of cells
-    </documentation>
-    <constant name="HcalEndcapPInsertCellToPCBEdge" value="0.04*cm"/>
-    <constant name="HcalEndcapPInsertOffsetXHGRight" value="-HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeHG*0.25"/>
-    <constant name="HcalEndcapPInsertOffsetYHGRight" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
-    <constant name="HcalEndcapPInsertOffsetXHGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellToPCBEdge+HcalEndcapPInsertCellSizeHG*0.75"/>
-    <constant name="HcalEndcapPInsertOffsetYHGLeft" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
-    <constant name="HcalEndcapPInsertOffsetXLGRight" value="-HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeLGRight*0.5"/>
-    <constant name="HcalEndcapPInsertOffsetYLGRight" value="HcalEndcapPInsertCellSizeLGRight*0*sqrt(3)/2"/>
-    <constant name="HcalEndcapPInsertOffsetXLGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellToPCBEdge+HcalEndcapPInsertCellSizeLGLeft*0.5"/>
-    <constant name="HcalEndcapPInsertOffsetYLGLeft" value="HcalEndcapPInsertCellSizeLGLeft*0*sqrt(3)/2"/>
 
     <documentation>
       - Insert N Layers and computed Thickness
@@ -80,8 +63,17 @@
     <constant name="HcalEndcapPInsert_right_v_pcb_slot_height" value="11.0*cm"/>
     <constant name="HcalEndcapPInsert_left_v_pcb_slot_height" value="14.5*cm"/>
     <constant name="HcalEndcapPInsert_v_pcb_slot_offset_y" value="1.0*cm"/>
-    <constant name="HcalEndcapPInsert_pcb_face_clearance" value="0.05*cm"/>
+    <constant name="HcalEndcapPInsert_pcb_thickness" value="0.16*cm"/>
     <constant name="HcalEndcapPInsert_pcb_edge_clearance" value="0.4*cm"/>
+    <constant name="HcalEndcapPInsert_tile_size" value="4.7*cm"/>
+    <constant name="HcalEndcapPInsert_tile_gap" value="0.02*cm"/>
+    <constant name="HcalEndcapPInsert_casing_length" value="132.0*cm"/>
+    <constant name="HcalEndcapPInsert_casing_thickness" value="0.34163*cm"/>
+    <constant name="HcalEndcapPInsert_casing_left_radius" value="16.781*cm"/>
+    <constant name="HcalEndcapPInsert_pcb_cover_thickness" value="0.19844*cm"/>
+    <constant name="HcalEndcapPInsert_right_back_cutout_margin" value="4.0*cm"/>
+    <constant name="HcalEndcapPInsert_left_back_cutout_margin" value="3.5*cm"/>
+    <constant name="HcalEndcapPInsert_back_cutout_vertical_margin" value="3.5*cm"/>
   </define>
 
   <detectors>
@@ -100,7 +92,7 @@
     <detector
       id="HcalEndcapPInsert_ID"
       name="HcalEndcapPInsert"
-      type="epic_InsertCalorimeterNew"
+      type="epic_InsertCalorimeter_new"
       vis="HcalEndcapInsertVis"
       readout="HcalEndcapPInsertHits"
       calorimeterType="HAD_ENDCAP"
@@ -113,112 +105,98 @@
         y="HcalEndcapPInsert_height"
         z="HcalEndcapPInsert_length"
       />
-      <backplate thickness="HcalEndcapPInsertBackplateThickness"/>
       <comment> Steel/Sc layers </comment>
       <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness="HcalEndcapPInsertSingleLayerThickness" vis="InvisibleWithDaughters">
-        <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="LFHCAL8MModVis"/>
+        <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="AnlRed"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness"  sensitive="true" limits="cal_limits" vis="AnlLightGray"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
-        <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
+        <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness" vis="AnlDarkGreen"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
       <layer repeat="1" thickness="HcalEndcapPInsertBackplateThickness">
-        <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" vis="LFHCAL8MModVis"/>
+        <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" vis="AnlRed"/>
       </layer>
       <documentation>
-        left_radius: Circular hole radius on the left side
-        center_x/y: Hole position in global coordinates
-        right_radius: Circular section radius on the right side
-        rect_width/height: Rectangular section dimensions on the right side
-        h_pcb_slot_width/height: Horizontal PCB slot dimensions
-        v_pcb_slot_width: Vertical PCB slot width
-        right_v_pcb_slot_height: Right-side vertical PCB slot height
-        left_v_pcb_slot_height: Left-side vertical PCB slot height
-        v_pcb_slot_offset_y: Vertical PCB slot offset from the outer top and bottom edges
-        pcb_length: Longitudinal PCB length
-        pcb_face_clearance: Clearance from each broad PCB face to its slot
-        pcb_edge_clearance: Clearance from each narrow PCB edge to its slot
+        beampipe_cutout: Beam-pipe circle and right-side rectangular cutout
+        pcb_slots: Horizontal and vertical PCB slot dimensions
+        pcb_boards: Physical PCB dimensions and slot clearance
+        tiles: Physical scintillator tile size and gap
+        casing: Steel casing length and wall thickness
+        pcb_covers: Stainless PCB cover thickness and material
+        backplate_cutouts: Rear casing cutout margins
+
+        The tile grid has twelve rows centered vertically at y=0. The top row is at
+        y=5.5*(tile_size+tile_gap), and row IDs increase from top to bottom.
+
+        Tile counts per row from top to bottom:
+          left side:  4, 4, 4, 3, 3, 2, 2, 3, 3, 4, 4, 4
+          right side: 8, 8, 4, 3, 2, 2, 2, 2, 3, 4, 8, 8
+
+        Tiles are placed from each outer edge toward the center. Both sides' x IDs start at
+        zero and increase inward.
+        The right-side clearance between the innermost tile and central PCB slot is four
+        times its outer-edge margin.
+
+        Two left-side tiles cross the circular cutout. Their placement indices are
+        (row, column)=(4, 2) and (7, 2), corresponding to cell IDs (x, y)=(2, 4) and
+        (2, 7). Matching air pockets extend the layer container around these tiles.
       </documentation>
-      <beampipe_hole
+      <beampipe_cutout
         left_radius="HcalEndcapPInsert_left_radius"
         center_x="HcalEndcapPInsert_center_x"
         center_y="HcalEndcapPInsert_center_y"
         right_radius="HcalEndcapPInsert_right_radius"
         rect_width="HcalEndcapPInsert_rect_width"
         rect_height="HcalEndcapPInsert_rect_height"
-        h_pcb_slot_width="HcalEndcapPInsert_h_pcb_slot_width"
-        h_pcb_slot_height="HcalEndcapPInsert_h_pcb_slot_height"
-        v_pcb_slot_width="HcalEndcapPInsert_v_pcb_slot_width"
-        right_v_pcb_slot_height="HcalEndcapPInsert_right_v_pcb_slot_height"
-        left_v_pcb_slot_height="HcalEndcapPInsert_left_v_pcb_slot_height"
-        v_pcb_slot_offset_y="HcalEndcapPInsert_v_pcb_slot_offset_y"
-        pcb_length="HcalEndcapPInsert_pcb_length"
-        pcb_face_clearance="HcalEndcapPInsert_pcb_face_clearance"
-        pcb_edge_clearance="HcalEndcapPInsert_pcb_edge_clearance"
+      />
+      <pcb_slots
+        horizontal_width="HcalEndcapPInsert_h_pcb_slot_width"
+        horizontal_height="HcalEndcapPInsert_h_pcb_slot_height"
+        vertical_width="HcalEndcapPInsert_v_pcb_slot_width"
+        right_vertical_height="HcalEndcapPInsert_right_v_pcb_slot_height"
+        left_vertical_height="HcalEndcapPInsert_left_v_pcb_slot_height"
+        vertical_offset_y="HcalEndcapPInsert_v_pcb_slot_offset_y"
+      />
+      <pcb_boards
+        length="HcalEndcapPInsert_pcb_length"
+        thickness="HcalEndcapPInsert_pcb_thickness"
+        edge_clearance="HcalEndcapPInsert_pcb_edge_clearance"
+      />
+      <tiles
+        size="HcalEndcapPInsert_tile_size"
+        gap="HcalEndcapPInsert_tile_gap"
+      />
+      <casing
+        length="HcalEndcapPInsert_casing_length"
+        thickness="HcalEndcapPInsert_casing_thickness"
+        left_radius="HcalEndcapPInsert_casing_left_radius"
+        material="Steel235"
+        vis="AnlOrange"
+      />
+      <pcb_covers
+        thickness="HcalEndcapPInsert_pcb_cover_thickness"
+        material="StainlessSteelSAE304"
+        vis="AnlOrange"
+      />
+      <backplate_cutouts
+        right_margin="HcalEndcapPInsert_right_back_cutout_margin"
+        left_margin="HcalEndcapPInsert_left_back_cutout_margin"
+        vertical_margin="HcalEndcapPInsert_back_cutout_vertical_margin"
       />
     </detector>
   </detectors>
 
   <readouts>
     <documentation>
-      Readout is segmented into hexagons with sides of 2.16 cm, 2.84 cm, and 3.10 cm in the high-granularity upstream section (layers 1-16, for both left and right sides),
-      the left downstream section (layers 17-60), and the right downstream section (layers 17-60), respectively.
-      The hexagons positions in the first 16 layers cycle through four sets of layer configurations ("H4 staggering")
-      i.e. hexagons in layers 1-4 (5-8, ...) are all offset transversely from each other
-      with the centers of the cells of one layer being at the midpoints of the edges of the cells in
-      the other layers.
-
-      Staggering defined in https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/include/DDSegmentation/HexGrid.h#L112-L114
-      and https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/src/segmentations/HexGrid.cpp#L102-L120
+      Each physical scintillator tile is one readout cell.
+      The side, layer, slice, x (column number), and y (row number) placements define its cell ID.
     </documentation>
     <readout name="HcalEndcapPInsertHits">
-      <segmentation type="MultiSegmentation" key="layer">
-        <segmentation name="insert_hg" type="MultiSegmentation" key="side" key_min="1" key_max="16">
-          <segmentation
-            name="insert_hg_left"
-            type="HexGrid"
-            side_length="HcalEndcapPInsertCellSizeHG"
-            stagger="2"
-            key_value="1"
-            offset_x="HcalEndcapPInsertOffsetXHGLeft"
-            offset_y="HcalEndcapPInsertOffsetYHGLeft"
-          />
-           <segmentation
-            name="insert_hg_right"
-            type="HexGrid"
-            side_length="HcalEndcapPInsertCellSizeHG"
-            stagger="2"
-            key_value="0"
-            offset_x="HcalEndcapPInsertOffsetXHGRight"
-            offset_y="HcalEndcapPInsertOffsetYHGRight"
-          />
-        </segmentation>
-        <segmentation name="insert_lg" type="MultiSegmentation" key="side" key_min="17" key_max="60">
-          <segmentation
-            name="insert_lg_left"
-            type="HexGrid"
-            side_length="HcalEndcapPInsertCellSizeLGLeft"
-            stagger="0"
-            key_value="1"
-            offset_x="HcalEndcapPInsertOffsetXLGLeft"
-            offset_y="HcalEndcapPInsertOffsetYLGLeft"
-          />
-          <segmentation
-            name="insert_lg_right"
-            type="HexGrid"
-            side_length="HcalEndcapPInsertCellSizeLGRight"
-            stagger="0"
-            key_value="0"
-            offset_x="HcalEndcapPInsertOffsetXLGRight"
-            offset_y="HcalEndcapPInsertOffsetYLGRight"
-          />
-        </segmentation>
-      </segmentation>
-
+      <segmentation type="NoSegmentation"/>
       <id>system:8,side:1,layer:8,slice:7,x:32:-16,y:-16</id>
     </readout>
 
