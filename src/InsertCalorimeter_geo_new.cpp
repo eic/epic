@@ -81,7 +81,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Gap between insert sides.
   const double left_right_gap =
-      dd4hep::getAttrOrDefault<double>(detElem, _Unicode(left_right_gap), 0.38 * cm);
+      dd4hep::getAttrOrDefault<double>(detElem, _Unicode(left_right_gap), 0.40 * cm);
   const double right_split_x = -left_right_gap / 2. - pos.x();
   const double left_split_x  = left_right_gap / 2. - pos.x();
 
@@ -474,7 +474,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double left_v_pcb_cover_inner_y = std::sqrt(
       casing_left_radius * casing_left_radius -
       left_split_from_center * left_split_from_center);
-  const double left_v_pcb_cover_outer_y = height / 2.;
+  const double left_v_pcb_cover_outer_y = height / 2. + casing_thickness;
   const double left_v_pcb_cover_height  = left_v_pcb_cover_outer_y - left_v_pcb_cover_inner_y;
   const double left_v_pcb_cover_y = (left_v_pcb_cover_inner_y + left_v_pcb_cover_outer_y) / 2.;
   Box left_v_pcb_cover(cover_thickness / 2., left_v_pcb_cover_height / 2., pcb_length / 2.);
