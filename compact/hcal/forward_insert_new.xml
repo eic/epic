@@ -83,7 +83,7 @@
 
       Insert is 60 layers of Steel/Sc + 1 backplate of steel
       Each of the layers (sans backplate) includes air gaps (front and back of each layer),
-      ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
+      ESR foil (front and back of scintillator), a PCB, and an aluminum scintillator cover
 
       A cylindrical hole is cut out from each layer to account for the beampipe
       Hole radius is beampipe radius + 3.85 cm of clearance
@@ -121,29 +121,18 @@
         <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" vis="AnlRed"/>
       </layer>
       <documentation>
-        beampipe_cutout: Beam-pipe circle and right-side rectangular cutout
-        pcb_slots: Horizontal and vertical PCB slot dimensions
-        pcb_boards: Physical PCB dimensions and slot clearance
-        tiles: Physical scintillator tile size and gap
-        casing: Steel casing length and wall thickness
-        pcb_covers: Stainless PCB cover thickness and material
-        backplate_cutouts: Rear casing cutout margins
+        The insert has two sides: right (-x, side 0) and left (+x, side 1).
 
-        The tile grid has twelve rows centered vertically at y=0. The top row is at
-        y=5.5*(tile_size+tile_gap), and row IDs increase from top to bottom.
+        Each sensitive slice contains physical 4.7 cm square scintillator tiles
+        separated by 0.2 mm gaps. Number of tiles in each row, ordered from top to bottom:
 
-        Tile counts per row from top to bottom:
-          left side:  4, 4, 4, 3, 3, 2, 2, 3, 3, 4, 4, 4
-          right side: 8, 8, 4, 3, 2, 2, 2, 2, 3, 4, 8, 8
+          left:  4, 4, 4, 3, 3, 2, 2, 3, 3, 4, 4, 4
+          right: 8, 8, 4, 3, 2, 2, 2, 2, 3, 4, 8, 8
 
-        Tiles are placed from each outer edge toward the center. Both sides' x IDs start at
-        zero and increase inward.
-        The right-side clearance between the innermost tile and central PCB slot is four
-        times its outer-edge margin.
+        Columns increase from each outer edge toward the center; rows increase downward.
 
-        Two left-side tiles cross the circular cutout. Their placement indices are
-        (row, column)=(4, 2) and (7, 2), corresponding to cell IDs (x, y)=(2, 4) and
-        (2, 7). Matching air pockets extend the layer container around these tiles.
+        Left-side tiles (column,row)=(2,4) and (2,7) cross the circular boundary.
+        Matching air pockets contain these tiles.
       </documentation>
       <beampipe_cutout
         left_radius="HcalEndcapPInsert_left_radius"

@@ -9,27 +9,11 @@
  Author: Ryan Milton (UCR)
  Insert Redesign: Aiden Wu (ORNL (NGSI))
 ==========================================================================
-Cell ID bit layout:
-  [7:0]   system   [8]     side     [16:9]  layer
-  [23:17] slice    [31:24] unused   [47:32] x
-  [63:48] y
-column_id is decoded from x; row_id is decoded from y.
-Columns increase from each outer edge toward the center; rows increase top to bottom.
-Insert-local tile-center coordinate mapping:
-  Due to the Insert's orientation along z, the front face's left side lies on +x
-  and its right side lies on -x.
-  right_x0 and left_x0 are the first outer tile-center x positions.
-  top_y0 is the first row's tile-center y position.
-  Both sides start at column x=0 and move inward.
-
-  Using that logic:
-    right_x0 = -width/2 + right_tile_outer_margin + tile_size/2
-    left_x0 = width/2 - tile_gap - tile_size/2
-    top_y0 = 5.5*tile_pitch
-
-    x_center (right side) = right_x0 + column_id*tile_pitch
-    x_center (left side) = left_x0 - column_id*tile_pitch
-    y_center = top_y0 - row_id*tile_pitch
+Tile indexing uses side 0 for right (-x) and side 1 for left (+x).
+Columns increase from each outer edge inward; rows increase from top to bottom.
+Insert-local tile centers in cm:
+  left:  (x, y) = (27.26 - 4.72*column, 25.96 - 4.72*row) cm
+  right: (x, y) = (-27.04 + 4.72*column, 25.96 - 4.72*row) cm
 ==========================================================================
 */
 
@@ -58,7 +42,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_dim_t pos = detElem.position();
   Material air  = desc.material("Air");
 
-  // Insert component configuration.
+  // Read component configuration.
   const xml::Component& beam_xml         = detElem.child(_Unicode(beampipe_cutout));
   const xml::Component& slots_xml        = detElem.child(_Unicode(pcb_slots));
   const xml::Component& pcb_xml          = detElem.child(_Unicode(pcb_boards));
@@ -67,7 +51,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const xml::Component& cover_xml        = detElem.child(_Unicode(pcb_covers));
   const xml::Component& back_cutouts_xml = detElem.child(_Unicode(backplate_cutouts));
 
-  // Circle center in insert coordinates.
+  // Read beam-opening geometry.
   const double center_x =
       dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(center_x), -10.0 * cm) - pos.x();
   const double center_y =
@@ -145,6 +129,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double back_cutout_height =
       height / 2. - center_y - rect_height / 2. - 2. * back_cutout_vertical_margin;
 
+  // Derive PCB placement and clearances.
   // Shorten each PCB along its slot by the edge clearance at both ends.
   const double h_pcb_width        = h_pcb_slot_width - 2. * pcb_edge_clearance;
   const double right_v_pcb_height = right_v_pcb_slot_height - 2. * pcb_edge_clearance;
@@ -153,6 +138,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // Align the PCB front with the casing's inner face.
   const double pcb_z = -(length - pcb_length) / 2. + casing_thickness;
 
+  // Define the physical tile layout.
   // Tile size, gap, and pitch.
   const double tile_size  = dd4hep::getAttrOrDefault<double>(tiles_xml, _Unicode(size), 4.7 * cm);
   const double tile_gap   = dd4hep::getAttrOrDefault<double>(tiles_xml, _Unicode(gap), 0.02 * cm);
@@ -167,7 +153,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double right_x0 = -width / 2. + right_tile_outer_margin + tile_size / 2.;
   const double top_y0   = 5.5 * tile_pitch;
 
-  // Tiles per row, top to bottom.
+  // Number of tiles in each row, ordered from top to bottom.
   const std::array<int, 12> left_tiles_per_row  = {4, 4, 4, 3, 3, 2, 2, 3, 3, 4, 4, 4};
   const std::array<int, 12> right_tiles_per_row = {8, 8, 4, 3, 2, 2, 2, 2, 3, 4, 8, 8};
 
@@ -221,20 +207,20 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   assembly.setVisAttributes(desc.visAttributes("InvisibleWithDaughters"));
   PlacedVolume pv;
 
-  // Loop through the front-face right (-x) and left (+x) sides.
+  // Build the right and left halves.
   for (int side = 0; side < 2; side++) { // 0 = right (-x), 1 = left (+x)
     std::string side_name = side == 1 ? "L" : "R";
 
     double z_distance_traversed = 0.;
     int layer_num               = 1;
 
-    // Loop through layer sections.
+    // Build every longitudinal layer section.
     for (xml_coll_t c(detElem, _U(layer)); c; c++) {
       xml_comp_t x_layer     = c;
       int repeat             = x_layer.repeat();
       double layer_thickness = x_layer.thickness();
 
-      // Loop through each layer in this section.
+      // Build the layers in this section.
       for (int i = 0; i < repeat; i++) {
         std::string layer_name = detName + _toString(layer_num, "_layer%d") + "_" + side_name;
         Box layer(width / 2., height / 2., layer_thickness / 2.);
@@ -261,7 +247,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         int slice_num  = 1;
         double slice_z = -layer_thickness / 2.;
 
-        // Loop through layer slices.
+        // Build each material slice.
         for (xml_coll_t l(x_layer, _U(slice)); l; l++) {
           xml_comp_t x_slice     = l;
           double slice_thickness = x_slice.thickness();
@@ -269,7 +255,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           Material slice_mat     = desc.material(x_slice.materialStr());
           slice_z += slice_thickness / 2.;
 
-          // Build a sensitive slice from physical tiles.
+          // Build the sensitive tiles.
           if (x_slice.isSensitive()) {
             Assembly tile_assembly(slice_name + "_tiles");
             Box tile(tile_size / 2., tile_size / 2., slice_thickness / 2.);
@@ -280,15 +266,15 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             tile_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
                                    x_slice.visStr());
 
-            // Loop through all rows of tiles.
+            // Place every tile row.
             for (std::size_t row = 0; row < left_tiles_per_row.size(); row++) {
 
               int tiles_in_row = side == 0 ? right_tiles_per_row[row] : left_tiles_per_row[row];
 
-              // Per row, loop through each column.
+              // Place every tile in this row.
               for (int column = 0; column < tiles_in_row; column++) {
 
-                // Place tile volume depending on side.
+                // Place the tile on the selected side.
                 Position tile_position =
                     side == 0 ? right_tile_position(row, column) : left_tile_position(row, column);
                 PlacedVolume tile_pv = tile_assembly.placeVolume(tile_vol, tile_position);
@@ -403,7 +389,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double left_split_from_center = left_split_x - center_x;
   Material cover_material             = desc.material(cover_xml.materialStr());
 
-  // (maybe) FIXME: Restore the left-side conical cover after figuring out what to do with the tiles that stick out.
+  // FIXME: The left conical PCB cover is omitted because it intersects tiles
+  // (column,row)=(2,4) and (2,7); its material contribution should be negligible.
   /*
   const double cover_phi = std::acos(left_split_from_center / casing_left_radius);
   ConeSegment conical_cover(pcb_length / 2., casing_left_radius - cover_thickness,
@@ -472,8 +459,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Then place the covers for the left vertical PCBs.
   const double left_v_pcb_cover_inner_y = std::sqrt(
-      casing_left_radius * casing_left_radius -
-      left_split_from_center * left_split_from_center);
+      casing_left_radius * casing_left_radius - left_split_from_center * left_split_from_center);
   const double left_v_pcb_cover_outer_y = height / 2. + casing_thickness;
   const double left_v_pcb_cover_height  = left_v_pcb_cover_outer_y - left_v_pcb_cover_inner_y;
   const double left_v_pcb_cover_y = (left_v_pcb_cover_inner_y + left_v_pcb_cover_outer_y) / 2.;
