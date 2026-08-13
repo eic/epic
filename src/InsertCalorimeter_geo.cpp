@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Ryan Milton
-// Copyright (C) 2026 Aiden Wu
+// Copyright (C) 2022 - 2026 Ryan Milton, Aiden Wu
 // Updated geometry dimensions provided by Eliott Fountain.
 /*
 ==========================================================================
@@ -52,46 +51,33 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const xml::Component& back_cutouts_xml = detElem.child(_Unicode(backplate_cutouts));
 
   // Read beam-opening geometry.
-  const double center_x =
-      dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(center_x), -10.0 * cm) - pos.x();
-  const double center_y =
-      dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(center_y), 0. * cm) - pos.y();
+  const double center_x = beam_xml.attr<double>(_Unicode(center_x)) - pos.x();
+  const double center_y = beam_xml.attr<double>(_Unicode(center_y)) - pos.y();
 
   // Circle radii.
-  const double left_radius =
-      dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(left_radius), 16.781 * cm);
-  const double right_radius =
-      dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(right_radius), 16.786 * cm);
+  const double left_radius  = beam_xml.attr<double>(_Unicode(left_radius));
+  const double right_radius = beam_xml.attr<double>(_Unicode(right_radius));
 
   // Gap between insert sides.
-  const double left_right_gap =
-      dd4hep::getAttrOrDefault<double>(detElem, _Unicode(left_right_gap), 0.40 * cm);
-  const double right_split_x = -left_right_gap / 2. - pos.x();
-  const double left_split_x  = left_right_gap / 2. - pos.x();
+  const double left_right_gap = detElem.attr<double>(_Unicode(left_right_gap));
+  const double right_split_x  = -left_right_gap / 2. - pos.x();
+  const double left_split_x   = left_right_gap / 2. - pos.x();
 
   // Right-side rectangular cutout.
-  const double rect_width =
-      dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(rect_width), 18.84 * cm);
-  const double rect_height =
-      dd4hep::getAttrOrDefault<double>(beam_xml, _Unicode(rect_height), 33.41 * cm);
-  const double rect_x = right_split_x - center_x - rect_width / 2.;
+  const double rect_width  = beam_xml.attr<double>(_Unicode(rect_width));
+  const double rect_height = beam_xml.attr<double>(_Unicode(rect_height));
+  const double rect_x      = right_split_x - center_x - rect_width / 2.;
 
   // Horizontal PCB slots.
-  const double h_pcb_slot_width =
-      dd4hep::getAttrOrDefault<double>(slots_xml, _Unicode(horizontal_width), 15.0 * cm);
-  const double h_pcb_slot_height =
-      dd4hep::getAttrOrDefault<double>(slots_xml, _Unicode(horizontal_height), 0.5 * cm);
-  const double h_pcb_slot_y = (rect_height + h_pcb_slot_height) / 2.;
+  const double h_pcb_slot_width  = slots_xml.attr<double>(_Unicode(horizontal_width));
+  const double h_pcb_slot_height = slots_xml.attr<double>(_Unicode(horizontal_height));
+  const double h_pcb_slot_y      = (rect_height + h_pcb_slot_height) / 2.;
 
   // Vertical PCB slots.
-  const double v_pcb_slot_width =
-      dd4hep::getAttrOrDefault<double>(slots_xml, _Unicode(vertical_width), 0.5 * cm);
-  const double right_v_pcb_slot_height =
-      dd4hep::getAttrOrDefault<double>(slots_xml, _Unicode(right_vertical_height), 11.0 * cm);
-  const double left_v_pcb_slot_height =
-      dd4hep::getAttrOrDefault<double>(slots_xml, _Unicode(left_vertical_height), 14.5 * cm);
-  const double v_pcb_slot_offset_y =
-      dd4hep::getAttrOrDefault<double>(slots_xml, _Unicode(vertical_offset_y), 1.0 * cm);
+  const double v_pcb_slot_width        = slots_xml.attr<double>(_Unicode(vertical_width));
+  const double right_v_pcb_slot_height = slots_xml.attr<double>(_Unicode(right_vertical_height));
+  const double left_v_pcb_slot_height  = slots_xml.attr<double>(_Unicode(left_vertical_height));
+  const double v_pcb_slot_offset_y     = slots_xml.attr<double>(_Unicode(vertical_offset_y));
   const double right_v_pcb_slot_y =
       height / 2. - v_pcb_slot_offset_y - right_v_pcb_slot_height / 2.;
   const double left_v_pcb_slot_y = height / 2. - v_pcb_slot_offset_y - left_v_pcb_slot_height / 2.;
@@ -101,27 +87,19 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double left_v_pcb_slot_x  = left_split_x + v_pcb_slot_width / 2. - center_x;
 
   // PCB length, thickness, and slot clearance.
-  const double pcb_length = dd4hep::getAttrOrDefault<double>(pcb_xml, _Unicode(length), 125.0 * cm);
-  const double pcb_thickness =
-      dd4hep::getAttrOrDefault<double>(pcb_xml, _Unicode(thickness), 0.16 * cm);
-  const double pcb_edge_clearance =
-      dd4hep::getAttrOrDefault<double>(pcb_xml, _Unicode(edge_clearance), 0.4 * cm);
+  const double pcb_length         = pcb_xml.attr<double>(_Unicode(length));
+  const double pcb_thickness      = pcb_xml.attr<double>(_Unicode(thickness));
+  const double pcb_edge_clearance = pcb_xml.attr<double>(_Unicode(edge_clearance));
 
   // Steel casing dimensions.
-  const double casing_length =
-      dd4hep::getAttrOrDefault<double>(casing_xml, _Unicode(length), 132.0 * cm);
-  const double casing_thickness =
-      dd4hep::getAttrOrDefault<double>(casing_xml, _Unicode(thickness), 0.34163 * cm);
-  const double casing_left_radius =
-      dd4hep::getAttrOrDefault<double>(casing_xml, _Unicode(left_radius), 16.781 * cm);
-  const double cover_thickness =
-      dd4hep::getAttrOrDefault<double>(cover_xml, _Unicode(thickness), 0.19844 * cm);
-  const double right_back_cutout_margin =
-      dd4hep::getAttrOrDefault<double>(back_cutouts_xml, _Unicode(right_margin), 4.0 * cm);
-  const double left_back_cutout_margin =
-      dd4hep::getAttrOrDefault<double>(back_cutouts_xml, _Unicode(left_margin), 3.5 * cm);
+  const double casing_length            = casing_xml.attr<double>(_Unicode(length));
+  const double casing_thickness         = casing_xml.attr<double>(_Unicode(thickness));
+  const double casing_left_radius       = casing_xml.attr<double>(_Unicode(left_radius));
+  const double cover_thickness          = cover_xml.attr<double>(_Unicode(thickness));
+  const double right_back_cutout_margin = back_cutouts_xml.attr<double>(_Unicode(right_margin));
+  const double left_back_cutout_margin  = back_cutouts_xml.attr<double>(_Unicode(left_margin));
   const double back_cutout_vertical_margin =
-      dd4hep::getAttrOrDefault<double>(back_cutouts_xml, _Unicode(vertical_margin), 3.5 * cm);
+      back_cutouts_xml.attr<double>(_Unicode(vertical_margin));
   const double right_back_cutout_width =
       width / 2. - left_right_gap / 2. - pos.x() - 2. * right_back_cutout_margin;
   const double left_back_cutout_width =
@@ -140,8 +118,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Define the physical tile layout.
   // Tile size, gap, and pitch.
-  const double tile_size  = dd4hep::getAttrOrDefault<double>(tiles_xml, _Unicode(size), 4.7 * cm);
-  const double tile_gap   = dd4hep::getAttrOrDefault<double>(tiles_xml, _Unicode(gap), 0.02 * cm);
+  const double tile_size  = tiles_xml.attr<double>(_Unicode(size));
+  const double tile_gap   = tiles_xml.attr<double>(_Unicode(gap));
   const double tile_pitch = tile_size + tile_gap;
 
   // Make the gap from the right tile grid to the central PCB slot four times its outer-edge gap.
