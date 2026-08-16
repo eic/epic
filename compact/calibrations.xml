@@ -40,7 +40,7 @@
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/c6e3d56b5dfa2e9fa5998d38d7da20e837d89157/onnx/EcalEndcapN_pi_rejection.onnx"/>
     </plugin>
     <plugin name="epic_FileLoader">
-      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/onnx/EcalBarrel_pi_rejection.onnx"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/fbdd8da1eb0dfe878ca078b1d8c4c19d406ec86e/onnx/EcalBarrel_pi_rejection.onnx"/>
     </plugin>
