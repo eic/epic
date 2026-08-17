@@ -9,6 +9,7 @@
 #include <DD4hep/Printout.h>
 
 #include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <cstdlib>
 #include <filesystem>
