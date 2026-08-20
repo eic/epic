@@ -388,17 +388,37 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position));
 
   //---- Place modules -----------------------------------------------
+  // Create a cylindrical layer volume (TGeoTubeSeg) wrapping all modules.
+  // Acts requires a Tube-shaped layer envelope for cylindrical layers.
+  // All 12 modules are placed inside this layer, which is then placed in det_volume.
   const int module_repeat = xml_module.repeat();
   const double dphi       = 2. * M_PI / module_repeat;
+
+  double layer_zsize = envbox_zsize + 0.5 * mirror_thickness; // half-length covering all bars
+  double layer_rmin  = det_rmin;
+  double layer_rmax  = det_rmax;
+  string layer_name  = det_name + "_layer0";
+  Tube layer_tube(layer_rmin, layer_rmax, layer_zsize);
+  Volume layer_vol(layer_name, layer_tube, desc.material("Air"));
+  layer_vol.setVisAttributes(desc.invisible());
+
+  // Place the cylindrical layer in the detector assembly and create its DetElement
+  // (must be done before module loop so module DetElements can be children of layer_det)
+  PlacedVolume layer_pv = det_volume.placeVolume(layer_vol);
+  layer_pv.addPhysVolID("layer", 0);
+  DetElement layer_det(det, layer_name, 0);
+  layer_det.setPlacement(layer_pv);
+  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_det);
+
   for (int i = 0; i < module_repeat; i++) {
     double phi = dphi * i;
     double x   = det_ravg * cos(phi);
     double y   = det_ravg * sin(phi);
     Transform3D tr(RotationZ(phi), Position(x, y, 0));
-    PlacedVolume module_pv = det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
+    PlacedVolume module_pv = layer_vol.placeVolume(dirc_module, tr).addPhysVolID("module", i);
 
-    // Create DetElement for this module and attach single measurement surface
-    DetElement module_det(det, Form("module%d", i), i);
+    // Create DetElement for this module (child of layer_det) and attach surface
+    DetElement module_det(layer_det, Form("module%d", i), i);
     module_det.setPlacement(module_pv);
     // Ensure VariantParameters extension exists for this module
     DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(module_det);
