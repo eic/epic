@@ -16,6 +16,7 @@
 
 using namespace std;
 using namespace dd4hep;
+using namespace dd4hep::rec;
 
 static dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX,
                              double pLTX);
