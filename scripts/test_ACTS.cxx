@@ -20,6 +20,9 @@ using ActsPlugins::convertDD4hepDetector;
 using Acts::convertDD4hepDetector;
 #endif
 
+#include <exception>
+#include <iostream>
+
 /** Example loading ACTs.
  *
  *
@@ -32,8 +35,20 @@ void test_ACTS(const char* compact = "epic.xml") {
   auto detector = dd4hep::Detector::make_unique("");
   detector->fromCompact(compact);
 
-  auto logger                 = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
-  auto acts_tracking_geometry = convertDD4hepDetector(detector->world(), *logger);
+  auto logger = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
+
+  std::shared_ptr<const Acts::TrackingGeometry> acts_tracking_geometry;
+  try {
+    acts_tracking_geometry = convertDD4hepDetector(detector->world(), *logger);
+  } catch (const std::exception& e) {
+    std::cerr << "Error in convertDD4hepDetector: " << e.what() << std::endl;
+    exit(1);
+  }
+
+  if (!acts_tracking_geometry) {
+    std::cerr << "Error: convertDD4hepDetector returned nullptr" << std::endl;
+    exit(1);
+  }
 
   // Visit all surfaces
   acts_tracking_geometry->visitSurfaces([](const Acts::Surface* surface) {});
