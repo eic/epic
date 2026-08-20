@@ -400,6 +400,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
     // Create DetElement for this module and attach single measurement surface
     DetElement module_det(det, Form("module%d", i), i);
     module_det.setPlacement(module_pv);
+    // Ensure VariantParameters extension exists for this module
+    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(module_det);
     // Attach Acts measurement surface (one continuous plane per module, not per bar)
     volSurfaceList(module_det)->push_back(module_surf);
   }
