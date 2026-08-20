@@ -189,6 +189,19 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Box Envelope_box("Envelope_box", envbox_xsize, envbox_ysize, envbox_zsize);
   Volume Envelope_box_vol("Envelope_box_vol", Envelope_box, desc.material("AirOptical"));
   dirc_module.placeVolume(Envelope_box_vol, Position(0, 0, 0.5 * mirror_thickness));
+
+  //---- Define Acts measurement surface for entire bar assembly (one plane per module)
+  // This provides a continuous projection surface without gaps between bars
+  // Surface normal points radially outward (local x), u along bar length (z), v along bar width (y)
+  Vector3D u(0., 0., 1.);                // along bar length (z-axis)
+  Vector3D v(0., 1., 0.);                // along bar width (y-axis)
+  Vector3D n(1., 0., 0.);                // radially outward (x-axis)
+  double inner_thickness = envbox_xsize; // full depth of envelope
+  double outer_thickness = envbox_xsize;
+  SurfaceType type(
+      SurfaceType::Helper); // Helper surface for projection, not sensitive for tracking
+  VolPlane module_surf(Envelope_box_vol, type, inner_thickness, outer_thickness, u, v, n);
+
   printout(DEBUG, "DIRC_geo", "envbox_xsize    = %12.4f ", envbox_xsize);
   printout(DEBUG, "DIRC_geo", "envbox_ysize    = %12.4f ", envbox_ysize);
   printout(DEBUG, "DIRC_geo", "envbox_zsize    = %12.4f ", envbox_zsize);
@@ -373,7 +386,13 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
     double x   = det_ravg * cos(phi);
     double y   = det_ravg * sin(phi);
     Transform3D tr(RotationZ(phi), Position(x, y, 0));
-    det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
+    PlacedVolume module_pv = det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
+
+    // Create DetElement for this module and attach single measurement surface
+    DetElement module_det(det, Form("module%d", i), i);
+    module_det.setPlacement(module_pv);
+    // Attach Acts measurement surface (one continuous plane per module, not per bar)
+    volSurfaceList(module_det)->push_back(module_surf);
   }
 
   //---- Construct Assembly dirc_support
