@@ -205,7 +205,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="cb_DIRC"/>
-      <argument value="layer_pattern: str=envelope"/>
+      <argument value="layer_pattern: str=module\d"/>
     </plugin>
   </plugins>
 
