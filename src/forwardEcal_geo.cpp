@@ -12,6 +12,7 @@
 #include "DD4hep/Printout.h"
 #include <XML/Helper.h>
 #include <XML/Layering.h>
+#include <XML/Utilities.h>
 #include "forwardEcalMap.h"
 
 using namespace dd4hep;
@@ -31,10 +32,10 @@ double yBlock(int ns, int row) {
 }
 
 static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens) {
-  blocksize    = desc.constant<double>("EcalEndcapP_blockSize");
-  blockgap     = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
-  double nsgap = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
-                 desc.constant<double>("EcalEndcapP_xOffsetSouth");
+  blocksize               = desc.constant<double>("EcalEndcapP_blockSize");
+  blockgap                = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
+  double nsgap            = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
+                            desc.constant<double>("EcalEndcapP_xOffsetSouth");
   double rmin             = 0.0; // Dummy variable. Set to 0 since cutting out insert
   double rmax             = desc.constant<double>("EcalEndcapP_rmax");
   double rmaxWithGap      = desc.constant<double>("EcalEndcapP_rmaxWithGap");
@@ -242,8 +243,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           double xrow =
               (xBlock(ns, r, 0) + xBlock(ns, r, nColBlock - 1)) / 2.0 - pm[ns] * nsgap / 2.0;
           double yrow = yBlock(ns, r);
-          pv          = half_vol.placeVolume(row_vol,
-                                             Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
+          pv = half_vol.placeVolume(row_vol,
+                                    Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
           pv.addPhysVolID("blockrow", r);
 
           //column of blocks
@@ -291,6 +292,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Volume motherVol = desc.pickMotherVolume(det);
   auto tr          = Transform3D(Position(0.0, 0.0, zmin + length / 2.0));
   pv               = motherVol.placeVolume(envelopeVol, tr);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
+
   pv.addPhysVolID("system", detID);
   det.setPlacement(pv);
 

@@ -1,8 +1,8 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Nicolas Schmidt -->
-
+<!-- Four-quadrant forward MPGD endcap.  Requires the constants patch shipped beside this file. -->
 <lccdd>
   <define>
+<<<<<<< HEAD
     <comment>
       --------------------------
       Forward MPGD Parameters
@@ -315,6 +315,114 @@
           dz_offset="ForwardMPGDMod_dzoffset"
           phi0="2*pi/ForwardMPGDEndcapMod_count/2.0"
           module="ForwardModule2" />
+=======
+    <constant name="ForwardMPGDQuad_nlayers" value="2" />
+    <constant name="ForwardMPGDQuad_modules_per_quadrant" value="12" />
+    <constant name="ForwardMPGDQuad_angle" value="360*degree/(4*ForwardMPGDQuad_modules_per_quadrant)" />
+    <!-- Main defines ForwardMPGD_zmin.  These retain the supplied 1261/1379 mm layout. -->
+    <constant name="ForwardMPGDQuad_z1" value="ForwardMPGD_z1" />
+    <constant name="ForwardMPGDQuad_z2" value="ForwardMPGD_z2" />
+    <constant name="ForwardMPGDQuad_stagger" value="16*mm" />
+    <constant name="ForwardMPGDQuad_inner_radius" value="90*mm" />
+    <constant name="ForwardMPGDQuad_outer_radius" value="500*mm" />
+    <constant name="ForwardMPGDQuad_active_outer_radius" value="468*mm" />
+    <constant name="ForwardMPGDQuad_overlap_half_width" value="12.5*mm" />
+    <constant name="ForwardMPGDQuad_overlap_radius" value="(ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_outer_radius)/2" />
+
+    <constant name="ForwardMPGDQuad_cathode_cu" value="5*um" />
+    <constant name="ForwardMPGDQuad_cathode_kapton" value="50*um" />
+    <constant name="ForwardMPGDQuad_skin" value="100*um" />
+    <constant name="ForwardMPGDQuad_gem_kapton" value="50*um" />
+    <constant name="ForwardMPGDQuad_gem_cu" value="5*um" />
+    <constant name="ForwardMPGDQuad_honeycomb" value="3*mm" />
+    <constant name="ForwardMPGDQuad_drift_gas" value="6*mm" />
+    <constant name="ForwardMPGDQuad_transfer_gas" value="3*mm" />
+    <constant name="ForwardMPGDQuad_pcb" value="135*um" />
+    <constant name="ForwardMPGDQuad_anode_kapton" value="50*um" />
+    <constant name="ForwardMPGDQuad_anode_cu" value="5*um" />
+
+    <constant name="ForwardMPGDQuad_thickness"
+      value="2*ForwardMPGDQuad_cathode_cu + 2*ForwardMPGDQuad_cathode_kapton + 2*ForwardMPGDQuad_skin + ForwardMPGDQuad_gem_kapton + 3*ForwardMPGDQuad_gem_cu + 2*ForwardMPGDQuad_honeycomb + ForwardMPGDQuad_drift_gas + ForwardMPGDQuad_transfer_gas + ForwardMPGDQuad_pcb + ForwardMPGDQuad_anode_kapton + ForwardMPGDQuad_anode_cu" />
+    <constant name="ForwardMPGDQuad_layer_length" value="ForwardMPGDQuad_thickness + 2*ForwardMPGDQuad_stagger" />
+
+    <!-- Trapezoid dimensions use the local Y axis as the detector thickness. -->
+    <constant name="ForwardMPGDQuad_inner_width" value="2*ForwardMPGDQuad_inner_radius*tan(ForwardMPGDQuad_angle/2)" />
+    <constant name="ForwardMPGDQuad_outer_width" value="2*ForwardMPGDQuad_outer_radius*sin(ForwardMPGDQuad_angle/2)" />
+    <constant name="ForwardMPGDQuad_length" value="ForwardMPGDQuad_outer_radius*cos(ForwardMPGDQuad_angle/2)-ForwardMPGDQuad_inner_radius" />
+  </define>
+
+  <detectors>
+    <detector id="TrackerEndcapP_5_ID" name="ForwardMPGD" type="epic_MPGDQuadrantEndcapTracker"
+              actsType="endcap" readout="ForwardMPGDEndcapHits" vis="MPGDVis" reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP" />
+
+      <!-- Layer 1 stack: cathode faces +z, drift gas is component 9/sensor 1. -->
+      <module name="ForwardMPGDQuadModule1" vis="MPGDModuleVis">
+        <trd x1="ForwardMPGDQuad_inner_width/2" x2="ForwardMPGDQuad_outer_width/2" z="ForwardMPGDQuad_length/2" />
+        <overlap x="ForwardMPGDQuad_overlap_half_width" z="(ForwardMPGDQuad_active_outer_radius-ForwardMPGDQuad_inner_radius)/2" />
+        <module_component thickness="ForwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component name="drift_gas" thickness="ForwardMPGDQuad_drift_gas" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_transfer_gas" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_pcb" material="Fr4" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_anode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_anode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+      </module>
+
+      <!-- Layer 2 is read out from the opposite face, retaining the existing ePIC convention. -->
+      <module name="ForwardMPGDQuadModule2" vis="MPGDModuleVis">
+        <trd x1="ForwardMPGDQuad_inner_width/2" x2="ForwardMPGDQuad_outer_width/2" z="ForwardMPGDQuad_length/2" />
+        <overlap x="ForwardMPGDQuad_overlap_half_width" z="(ForwardMPGDQuad_active_outer_radius-ForwardMPGDQuad_inner_radius)/2" />
+        <module_component thickness="ForwardMPGDQuad_anode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_anode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_pcb" material="Fr4" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_transfer_gas" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component name="drift_gas" thickness="ForwardMPGDQuad_drift_gas" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_gem_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+      </module>
+
+      <layer id="1">
+        <envelope vis="MPGDLayerVis" rmin="ForwardMPGDQuad_inner_radius" rmax="ForwardMPGDQuad_outer_radius + ForwardMPGDQuad_overlap_half_width" length="ForwardMPGDQuad_layer_length" zstart="ForwardMPGDQuad_z1" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <layer_material surface="outer" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <ring r="ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_length/2" zstart="0" dz="0" dz_offset="ForwardMPGDQuad_stagger" phi0="ForwardMPGDQuad_angle/2" modules_per_quadrant="ForwardMPGDQuad_modules_per_quadrant" module="ForwardMPGDQuadModule1">
+          <overlap quadrant="0" x="-ForwardMPGDQuad_overlap_radius" y="ForwardMPGDQuad_overlap_half_width" rotation="-90*degree" />
+          <overlap quadrant="1" x="-ForwardMPGDQuad_overlap_half_width" y="-ForwardMPGDQuad_overlap_radius" rotation="180*degree" />
+          <overlap quadrant="2" x="ForwardMPGDQuad_overlap_radius" y="-ForwardMPGDQuad_overlap_half_width" rotation="90*degree" />
+          <overlap quadrant="3" x="ForwardMPGDQuad_overlap_half_width" y="ForwardMPGDQuad_overlap_radius" rotation="0*degree" />
+        </ring>
+      </layer>
+
+      <layer id="2">
+        <envelope vis="MPGDLayerVis" rmin="ForwardMPGDQuad_inner_radius" rmax="ForwardMPGDQuad_outer_radius + ForwardMPGDQuad_overlap_half_width" length="ForwardMPGDQuad_layer_length" zstart="ForwardMPGDQuad_z2" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <layer_material surface="outer" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <ring r="ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_length/2" zstart="0" dz="0" dz_offset="ForwardMPGDQuad_stagger" phi0="ForwardMPGDQuad_angle/2" modules_per_quadrant="ForwardMPGDQuad_modules_per_quadrant" module="ForwardMPGDQuadModule2">
+          <overlap quadrant="0" x="-ForwardMPGDQuad_overlap_radius" y="ForwardMPGDQuad_overlap_half_width" rotation="-90*degree" />
+          <overlap quadrant="1" x="-ForwardMPGDQuad_overlap_half_width" y="-ForwardMPGDQuad_overlap_radius" rotation="180*degree" />
+          <overlap quadrant="2" x="ForwardMPGDQuad_overlap_radius" y="-ForwardMPGDQuad_overlap_half_width" rotation="90*degree" />
+          <overlap quadrant="3" x="ForwardMPGDQuad_overlap_half_width" y="ForwardMPGDQuad_overlap_radius" rotation="0*degree" />
+        </ring>
+>>>>>>> origin/mpgd_endcap_workbranch
       </layer>
     </detector>
   </detectors>
@@ -322,7 +430,11 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardMPGD" />
+<<<<<<< HEAD
       <argument value="layer_pattern: str=ForwardMPGD_layer\d_N" />
+=======
+      <argument value="layer_pattern: str=ForwardMPGD_layer\d_P" />
+>>>>>>> origin/mpgd_endcap_workbranch
     </plugin>
   </plugins>
 
@@ -333,5 +445,9 @@
       <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
     </readout>
   </readouts>
+<<<<<<< HEAD
 
 </lccdd>
+=======
+</lccdd>
+>>>>>>> origin/mpgd_endcap_workbranch

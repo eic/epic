@@ -579,12 +579,16 @@
     <composite n="6"  ref="O"/>
     <composite n="2"  ref="N"/>
   </material>
+<<<<<<< HEAD
 
   <comment>
    Material for MPGD endcap
 	</comment>
 		
  <material name="Fiberglass">
+=======
+  <material name="Fiberglass">
+>>>>>>> origin/mpgd_endcap_workbranch
     <D type="density" value="1.85" unit="g / cm3"/>
     <composite n="0.30" ref="Si"/>
     <composite n="0.50" ref="O"/>
@@ -592,7 +596,10 @@
     <composite n="0.05" ref="Al"/>
     <composite n="0.05" ref="B"/>
  </material>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/mpgd_endcap_workbranch
  <material name="Honeycomb">
     <D type="density" value="0.048" unit="g / cm3"/>
     <composite n="0.54" ref="C"/>

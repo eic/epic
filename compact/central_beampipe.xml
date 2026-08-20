@@ -15,7 +15,7 @@
         ID="IPBeampipeID"
         wall_thickness="0.757*mm"
         wall_material="Beryllium"
-        coating_thickness="5*um"
+        coating_thickness="10*um"
         coating_material="Gold"
         crossing_angle="CrossingAngle"
         upstream_straight_length="IPBeampipeUpstreamStraightLength"

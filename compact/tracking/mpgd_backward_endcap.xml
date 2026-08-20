@@ -1,8 +1,8 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Nicolas Schmidt -->
-
+<!-- Backward MPGD using epic_MPGDQuadrantEndcapTracker. -->
 <lccdd>
   <define>
+<<<<<<< HEAD
     <comment>
       --------------------------
       Backward MPGD Parameters
@@ -315,6 +315,111 @@
           dz_offset="BackwardMPGDMod_dzoffset"
           phi0="2*pi/BackwardMPGDEndcapMod_count/2.0"
           module="BackwardModule2" />
+=======
+    <constant name="BackwardMPGDQuad_modules_nlayers" value="2" />
+    <constant name="BackwardMPGDQuad_modules_per_quadrant" value="12" />
+    <constant name="BackwardMPGDQuad_angle" value="360*degree/(4*BackwardMPGDQuad_modules_per_quadrant)" />
+    <constant name="BackwardMPGDQuad_z1" value="BackwardMPGD_z1" />
+    <constant name="BackwardMPGDQuad_z2" value="BackwardMPGD_z2" />
+    <constant name="BackwardMPGDQuad_stagger" value="16*mm" />
+    <constant name="BackwardMPGDQuad_inner_radius" value="50*mm" />
+    <constant name="BackwardMPGDQuad_outer_radius" value="500*mm" />
+    <constant name="BackwardMPGDQuad_active_outer_radius" value="468*mm"/>
+    <constant name="BackwardMPGDQuad_overlap_half_width" value="12.5*mm" />
+    <constant name="BackwardMPGDQuad_overlap_radius" value="(BackwardMPGDQuad_inner_radius + BackwardMPGDQuad_outer_radius)/2" />
+
+    <constant name="BackwardMPGDQuad_cathode_cu" value="5*um" />
+    <constant name="BackwardMPGDQuad_cathode_kapton" value="50*um" />
+    <constant name="BackwardMPGDQuad_skin" value="100*um" />
+    <constant name="BackwardMPGDQuad_gem_kapton" value="50*um" />
+    <constant name="BackwardMPGDQuad_gem_cu" value="5*um" />
+    <constant name="BackwardMPGDQuad_honeycomb" value="3*mm" />
+    <constant name="BackwardMPGDQuad_drift_gas" value="6*mm" />
+    <constant name="BackwardMPGDQuad_transfer_gas" value="3*mm" />
+    <constant name="BackwardMPGDQuad_pcb" value="135*um" />
+    <constant name="BackwardMPGDQuad_anode_kapton" value="50*um" />
+    <constant name="BackwardMPGDQuad_anode_cu" value="5*um" />
+
+    <constant name="BackwardMPGDQuad_thickness"
+      value="2*BackwardMPGDQuad_cathode_cu + 2*BackwardMPGDQuad_cathode_kapton + 2*BackwardMPGDQuad_skin + BackwardMPGDQuad_gem_kapton + 3*BackwardMPGDQuad_gem_cu + 2*BackwardMPGDQuad_honeycomb + BackwardMPGDQuad_drift_gas + BackwardMPGDQuad_transfer_gas + BackwardMPGDQuad_pcb + BackwardMPGDQuad_anode_kapton + BackwardMPGDQuad_anode_cu" />
+    <constant name="BackwardMPGDQuad_layer_length" value="BackwardMPGDQuad_thickness + 2*BackwardMPGDQuad_stagger" />
+
+    <!-- Trapezoid dimensions use the local Y axis as the detector thickness. -->
+    <constant name="BackwardMPGDQuad_inner_width" value="2*BackwardMPGDQuad_inner_radius*tan(BackwardMPGDQuad_angle/2)" />
+    <constant name="BackwardMPGDQuad_outer_width" value="2*BackwardMPGDQuad_outer_radius*sin(BackwardMPGDQuad_angle/2)" />
+    <constant name="BackwardMPGDQuad_length" value="BackwardMPGDQuad_outer_radius*cos(BackwardMPGDQuad_angle/2)-BackwardMPGDQuad_inner_radius" />
+  </define>
+
+  <detectors>
+    <detector id="TrackerEndcapN_4_ID" name="BackwardMPGD" type="epic_MPGDQuadrantEndcapTracker"
+              actsType="endcap" readout="BackwardMPGDEndcapHits" vis="MPGDVis" reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP" />
+
+      <module name="BackwardMPGDQuadModule1" vis="MPGDModuleVis">
+        <trd x1="BackwardMPGDQuad_inner_width/2" x2="BackwardMPGDQuad_outer_width/2" z="BackwardMPGDQuad_length/2" />
+        <overlap x="BackwardMPGDQuad_overlap_half_width" z="(BackwardMPGDQuad_active_outer_radius-BackwardMPGDQuad_inner_radius)/2" />
+        <module_component thickness="BackwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component name="drift_gas" thickness="BackwardMPGDQuad_drift_gas" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_transfer_gas" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_pcb" material="Fr4" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_anode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_anode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+      </module>
+
+      <module name="BackwardMPGDQuadModule2" vis="MPGDModuleVis">
+        <trd x1="BackwardMPGDQuad_inner_width/2" x2="BackwardMPGDQuad_outer_width/2" z="BackwardMPGDQuad_length/2" />
+        <overlap x="BackwardMPGDQuad_overlap_half_width" z="(BackwardMPGDQuad_active_outer_radius-BackwardMPGDQuad_inner_radius)/2" />
+        <module_component thickness="BackwardMPGDQuad_anode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_anode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_pcb" material="Fr4" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_transfer_gas" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component name="drift_gas" thickness="BackwardMPGDQuad_drift_gas" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_gem_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
+      </module>
+
+      <layer id="1">
+        <envelope vis="MPGDLayerVis" rmin="BackwardMPGDQuad_inner_radius" rmax="BackwardMPGDQuad_outer_radius + BackwardMPGDQuad_overlap_half_width" length="BackwardMPGDQuad_layer_length" zstart="BackwardMPGDQuad_z1" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="4*BackwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <layer_material surface="outer" binning="binPhi,binR" bins0="4*BackwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <ring r="BackwardMPGDQuad_inner_radius + BackwardMPGDQuad_length/2" zstart="0" dz="0" dz_offset="BackwardMPGDQuad_stagger" phi0="BackwardMPGDQuad_angle/2" modules_per_quadrant="BackwardMPGDQuad_modules_per_quadrant" module="BackwardMPGDQuadModule1">
+          <overlap quadrant="0" x="-BackwardMPGDQuad_overlap_radius" y="BackwardMPGDQuad_overlap_half_width" rotation="-90*degree" />
+          <overlap quadrant="1" x="-BackwardMPGDQuad_overlap_half_width" y="-BackwardMPGDQuad_overlap_radius" rotation="180*degree" />
+          <overlap quadrant="2" x="BackwardMPGDQuad_overlap_radius" y="-BackwardMPGDQuad_overlap_half_width" rotation="90*degree" />
+          <overlap quadrant="3" x="BackwardMPGDQuad_overlap_half_width" y="BackwardMPGDQuad_overlap_radius" rotation="0*degree" />
+        </ring>
+      </layer>
+
+      <layer id="2">
+        <envelope vis="MPGDLayerVis" rmin="BackwardMPGDQuad_inner_radius" rmax="BackwardMPGDQuad_outer_radius + BackwardMPGDQuad_overlap_half_width" length="BackwardMPGDQuad_layer_length" zstart="BackwardMPGDQuad_z2" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="4*BackwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <layer_material surface="outer" binning="binPhi,binR" bins0="4*BackwardMPGDQuad_modules_per_quadrant" bins1="50" />
+        <ring r="BackwardMPGDQuad_inner_radius + BackwardMPGDQuad_length/2" zstart="0" dz="0" dz_offset="BackwardMPGDQuad_stagger" phi0="BackwardMPGDQuad_angle/2" modules_per_quadrant="BackwardMPGDQuad_modules_per_quadrant" module="BackwardMPGDQuadModule2">
+          <overlap quadrant="0" x="-BackwardMPGDQuad_overlap_radius" y="BackwardMPGDQuad_overlap_half_width" rotation="-90*degree" />
+          <overlap quadrant="1" x="-BackwardMPGDQuad_overlap_half_width" y="-BackwardMPGDQuad_overlap_radius" rotation="180*degree" />
+          <overlap quadrant="2" x="BackwardMPGDQuad_overlap_radius" y="-BackwardMPGDQuad_overlap_half_width" rotation="90*degree" />
+          <overlap quadrant="3" x="BackwardMPGDQuad_overlap_half_width" y="BackwardMPGDQuad_overlap_radius" rotation="0*degree" />
+        </ring>
+>>>>>>> origin/mpgd_endcap_workbranch
       </layer>
     </detector>
   </detectors>
@@ -333,5 +438,9 @@
       <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
     </readout>
   </readouts>
+<<<<<<< HEAD
 
 </lccdd>
+=======
+</lccdd>
+>>>>>>> origin/mpgd_endcap_workbranch

@@ -10,6 +10,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include <XML/Helper.h>
 #include <XML/Layering.h>
+#include <XML/Utilities.h>
 #include <tuple>
 #include <vector>
 
@@ -82,7 +83,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     */
     double hole_radius_slope = (hole_radii_parameters.second - hole_radii_parameters.first) /
                                (length - backplate_thickness);
-    double hole_radius_at_z = hole_radius_slope * z_pos + hole_radii_parameters.first;
+    double hole_radius_at_z  = hole_radius_slope * z_pos + hole_radii_parameters.first;
 
     double hole_xpos_slope =
         (hole_x_parameters.second - hole_x_parameters.first) / (length - backplate_thickness);
@@ -205,6 +206,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   }
   DetElement det(detName, detID);
   Volume motherVol = desc.pickMotherVolume(det);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
 
   // Placing insert in world volume
   auto tr          = Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.));
