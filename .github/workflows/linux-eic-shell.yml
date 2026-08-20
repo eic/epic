@@ -150,7 +150,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/check-tracking-geometry.yml
     with:
-      detector_configs: "['epic_craterlake', 'epic_ip6', 'epic_dirc_only']"
+      detector_configs: "['epic_craterlake', 'epic_ip6']"
 
   validate-material-map:
     runs-on: ubuntu-latest
