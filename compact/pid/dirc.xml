@@ -97,15 +97,8 @@
   </display>
 
   <detectors>
-    <detector id="DIRCSubAssembly_ID"
-      name="DIRCTrackerSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="cb_DIRC"/>
-    </detector>
-
     <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube" region="DIRCRegion">
-      <type_flags type="DetType_TRACKER + DetType_CHERENKOV + DetType_BARREL"/>
+      <type_flags type="DetType_CHERENKOV + DetType_BARREL"/>
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
 
