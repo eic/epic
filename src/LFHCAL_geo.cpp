@@ -1247,6 +1247,21 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
 
   Volume motherVol = desc.pickMotherVolume(det);
   phv              = env_vol.placeVolume(assembly);
+
+  // Add a copper plate in front of the stack for the TB.
+  if (detElem.hasChild(_Unicode(copperplate))) {
+    xml_comp_t copper_xml = detElem.child(_Unicode(copperplate));
+    xml_dim_t copper_dim  = copper_xml.dimensions();
+    xml_dim_t copper_pos  = copper_xml.position();
+    Box copper_box(copper_dim.x() / 2., copper_dim.y() / 2., copper_dim.z() / 2.);
+    Volume copper_vol(detName + "_CopperPlate", copper_box,
+                      desc.material(copper_xml.materialStr()));
+    copper_vol.setVisAttributes(desc.visAttributes(copper_xml.visStr()));
+    env_vol.placeVolume(copper_vol,
+                        Position(copper_pos.x(), copper_pos.y(),
+                                 -length / 2. + eightM_params.mod_MPThick - copper_dim.z() / 2.));
+  }
+  
   phv              = motherVol.placeVolume(env_vol,
                                            Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
   phv.addPhysVolID("system", detID);
