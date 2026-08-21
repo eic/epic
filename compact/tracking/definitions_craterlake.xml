@@ -73,7 +73,7 @@
     <comment> Assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
 
-    <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
+    <constant name="InnerTrackerEndcapP_zmin"        value="25.5*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
     <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
@@ -215,7 +215,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/b59d999b8df6ecf4349dbc1bf4f836295d182e05/material-map.cbor"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/700fa7f92568311408137b2002b513346b66277d/material-map.cbor"/>
     </plugin>
   </plugins>
 
