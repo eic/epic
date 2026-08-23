@@ -1261,9 +1261,9 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                         Position(copper_pos.x(), copper_pos.y(),
                                  -length / 2. + eightM_params.mod_MPThick - copper_dim.z() / 2.));
   }
-  
-  phv              = motherVol.placeVolume(env_vol,
-                                           Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
+
+  phv = motherVol.placeVolume(env_vol,
+                              Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);
 
