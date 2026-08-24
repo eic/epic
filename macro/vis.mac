@@ -15,8 +15,8 @@
 /vis/viewer/set/viewpointThetaPhi -120 -30
 /vis/viewer/addCutawayPlane 0 0 0 m 1 0 0
 /vis/viewer/addCutawayPlane 0 0 0 m 0 -1 0
-/vis/viewer/zoom 4
-/vis/viewer/panTo 130 50 cm
+#/vis/viewer/zoom 4
+#/vis/viewer/panTo 130 50 cm
 
 #/vis/filtering/trajectories/create/particleFilter
 #/vis/filtering/trajectories/particleFilter-0/add gamma
