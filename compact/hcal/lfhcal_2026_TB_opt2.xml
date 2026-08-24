@@ -55,6 +55,11 @@
         y="EightM_OuterHeight*4+1*cm"/>
       <envelope material="Steel235"/>
 
+      <copperplate material="Copper" vis="AnlOrange">
+        <dimensions x="30*cm" y="25.112*cm" z="5*mm"/>
+        <position x="0*cm" y="7.644*cm"/>
+      </copperplate>
+
       <eightmodule name="8MModule" vis="InvisibleWithDaughters" repeat="0" >
         <dimensions
         width="EightM_OuterWidth"
@@ -125,11 +130,11 @@
         <position x="-EightM_OuterWidth/2." y="-(EightM_OuterHeight/2.+EightM_OuterHeight)" z="0*mm" orientation="2" IDx="0" IDy="0"/>
         <position x="-EightM_OuterWidth/2." y="-EightM_OuterHeight/2." z="0*mm" orientation="2" IDx="0" IDy="1"/>
         <position x="-EightM_OuterWidth/2." y="EightM_OuterHeight/2." z="0*mm" orientation="2" IDx="0" IDy="2"/>
-        <position x="-EightM_OuterWidth/2." y="EightM_OuterHeight/2.+EightM_OuterHeight" z="0*mm" orientation="2" IDx="0" IDy="3"/>
+        <!-- <position x="-EightM_OuterWidth/2." y="EightM_OuterHeight/2.+EightM_OuterHeight" z="0*mm" orientation="2" IDx="0" IDy="3"/> -->
         <position x="EightM_OuterWidth/2." y="-(EightM_OuterHeight/2.+EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="0"/>
         <position x="EightM_OuterWidth/2." y="-EightM_OuterHeight/2." z="0*mm" orientation="0" IDx="1" IDy="1"/>
         <position x="EightM_OuterWidth/2." y="EightM_OuterHeight/2." z="0*mm" orientation="0" IDx="1" IDy="2"/>
-        <position x="EightM_OuterWidth/2." y="EightM_OuterHeight/2.+EightM_OuterHeight" z="0*mm" orientation="0" IDx="1" IDy="3"/>
+        <!-- <position x="EightM_OuterWidth/2." y="EightM_OuterHeight/2.+EightM_OuterHeight" z="0*mm" orientation="0" IDx="1" IDy="3"/> -->
       </eightmodulepositions>
 
 
