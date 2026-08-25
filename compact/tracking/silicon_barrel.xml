@@ -13,18 +13,18 @@
     <constant name="SiBarrelSensorMod_thickness" value="50*um" />
     <constant name="SiBarrelSiliconGap_width" value="1*mm" />
 
-    <constant name="SiBarrelStave1Service_thickness" value="0.13*mm" />
-    <constant name="SiBarrelStave2Service_thickness" value="0.11*mm" />
-    <constant name="SiBarrelStave1Frame_thickness" value="0.20*mm" />
-    <constant name="SiBarrelStave2Frame_thickness" value="0.19*mm" />
+    <constant name="SiBarrelStave1Service_thickness" value="0.09*mm" />
+    <constant name="SiBarrelStave2Service_thickness" value="0.09*mm" />
+    <constant name="SiBarrelStave1Frame_thickness" value="0.15*mm" />
+    <constant name="SiBarrelStave2Frame_thickness" value="0.15*mm" />
     <constant name="SiBarrelStave1_width" value="3.848*cm" />
     <constant name="SiBarrelStave2_width" value="3.848*cm" />
 
    <constant name="SiBarrel1_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
    <constant name="SiBarrel2_Length_Trim" value="0*mm" /> <!-- trim this amount off end modules to avoid overlaps with support structure-->
 
-    <constant name="SiBarrelStave1_length" value="50.3*cm - SiBarrel1_Length_Trim"/>
-    <constant name="SiBarrelStave2_length" value="79.3*cm - SiBarrel2_Length_Trim" />
+    <constant name="SiBarrelStave1_length" value="51.3*cm - SiBarrel1_Length_Trim"/>
+    <constant name="SiBarrelStave2_length" value="80.3*cm - SiBarrel2_Length_Trim" />
 
     <constant name="SiBarrelSingleModule1_length" value="12.9996*cm"/>
     <constant name="SiBarrelSingleModule2_length" value="10.833*cm" />
@@ -33,7 +33,7 @@
    <constant name="SiBarrel1_Module1_Position" value="-62.7931*mm" />
    <constant name="SiBarrel1_Module2_Position" value="62.5436*mm" />
    <constant name="SiBarrel1_Module3_Position" value="186.8764*mm" />
-
+ 
    <constant name="SiBarrel2_Module0_Position" value="-342.83*mm" />
    <constant name="SiBarrel2_Module1_Position" value="-245.026*mm" />
    <constant name="SiBarrel2_Module2_Position" value="-147.216*mm" />
@@ -43,15 +43,12 @@
    <constant name="SiBarrel2_Module6_Position" value="245.0257*mm" />
    <constant name="SiBarrel2_Module7_Position" value="342.8342*mm" />
 
-    <!-- <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
-    <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" /> -->
-    <constant name="SiBarrelLayer1_length" value="59.4*cm" />
-    <constant name="SiBarrelLayer2_length" value="95.4" />  
+    <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
+    <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" /> 
     
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
-   <!-- <constant name="SiBarrelLayer_thickness" value="1.6*cm" /> -->
-    <constant name ="SiBarrelLayer_thickness" value="3.0*cm"/>
+    <constant name ="SiBarrelLayer_thickness" value="2.0*cm"/>
     <constant name="SiBarrelStave1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
     <constant name="SiBarrelStave2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
 
@@ -85,9 +82,9 @@
     <constant name="SiBarrel2_Brace4_Position_Y" value="SiBarrelStave2_length/2-SiBarrelBrace_width/2" /> <!-- to align last brace edge with module edge, the center should be 79.3/2-1/2=39.15cm-->
 
 <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
-<constant name="SiBarrelSiliconCurveRadius" value="90.075*mm" />
-<constant name="SiBarrelSiliconSpace1" value= "1.26*mm"/>
-<constant name="SiBarrelSiliconSpace2" value="1.26*mm"/>
+   <constant name="SiBarrelSiliconCurveRadius" value="90.075*mm" />
+   <constant name="SiBarrelSiliconSpace1" value="1.15*mm"/>
+   <constant name="SiBarrelSiliconSpace2" value="1.15*mm"/>
 
 <constant name="SiBarrelSiliconCurveHeight1" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave1_width/2)^2)" />
 <constant name="SiBarrelSiliconCurveHeight2" value="SiBarrelSiliconCurveRadius - sqrt(SiBarrelSiliconCurveRadius^2 - (SiBarrelStave2_width/2)^2)" />
@@ -299,126 +296,126 @@
                           material="Kapton"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
     
         <module_component name="FPC_Mockup_L3_L3_Full_ASCII.gdml" 
                           matching_name="FPC"
                           material="Kapton"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_L004_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_L004_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L004_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_L005_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_L005_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L005_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_L006_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_L006_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L006_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_L3_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_L3_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L3_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_L3_End001_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_L3_End001_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L3_End001_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_L3_End_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_L3_End_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L3_End_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" />
     
         <module_component name="MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" />
     
         <module_component name="MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" />
     
         <module_component name="Carbon_Composite_Stave_Skin_L3_updated_Bottom_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/Carbon_Composite_Stave_Skin_L3_updated_Bottom_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/Carbon_Composite_Stave_Skin_L3_updated_Bottom_ASCII.gdml" />
     
         <module_component name="Carbon_Composite_Stave_Skin_L3_updated_Top_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/Carbon_Composite_Stave_Skin_L3_updated_Top_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/Carbon_Composite_Stave_Skin_L3_updated_Top_ASCII.gdml" />
     
         <module_component name="Carbon_Compsite_Central_Spar_L004_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/Carbon_Compsite_Central_Spar_L004_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/Carbon_Compsite_Central_Spar_L004_ASCII.gdml" />
     
         <module_component name="Carbon_Compsite_Central_Spar_L3_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/Carbon_Compsite_Central_Spar_L3_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/Carbon_Compsite_Central_Spar_L3_ASCII.gdml" />
     
      <!--  <module_component name="Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron072_ASCII.gdml" 
                           matching_name="Ultem"
                           material="Ultem"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron072_ASCII.gdml" />
+                          file="CAD/Feb-2026/L3cut/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron072_ASCII.gdml" />
     
         <module_component name="Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron073_ASCII.gdml" 
                           matching_name="Ultem"
                           material="Ultem"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L3/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron073_ASCII.gdml" />  -->
+                          file="CAD/Feb-2026/L3cut/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron073_ASCII.gdml" />  -->
     
     <!--end bundle-->    
       </module>
@@ -811,196 +808,196 @@
                           material="Kapton"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/FPC_Mockup_L3_Bottom002_ASCII.gdml" />
     
         <module_component name="FPC_Mockup_L3_Bottom003_ASCII.gdml" 
                           matching_name="FPC"
                           material="Kapton"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/FPC_Mockup_L3_Bottom003_ASCII.gdml" />
     
         <module_component name="FPC_Mockup_L3_Top002_ASCII.gdml" 
                           matching_name="FPC"
                           material="Kapton"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/FPC_Mockup_L3_Top002_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/FPC_Mockup_L3_Top002_ASCII.gdml" />
     
         <module_component name="FPC_Mockup_L3_Top003_ASCII.gdml" 
                           matching_name="FPC"
                           material="Kapton"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/FPC_Mockup_L3_Top003_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/FPC_Mockup_L3_Top003_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_End_Varient002_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_End_Varient003_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" />
     
         <module_component name="K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" />
     
         <module_component name="MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
     
         <module_component name="MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" 
                           matching_name="K9"
                           material="K9"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
     
         <module_component name="Carbon_Composite_Stave_Skin_Bottom_-_Overlap001_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/Carbon_Composite_Stave_Skin_Bottom_-_Overlap001_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/Carbon_Composite_Stave_Skin_Bottom_-_Overlap001_ASCII.gdml" />
     
         <module_component name="Carbon_Composite_Stave_Skin_Top_-_Overlap001_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/Carbon_Composite_Stave_Skin_Top_-_Overlap001_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/Carbon_Composite_Stave_Skin_Top_-_Overlap001_ASCII.gdml" />
     
         <module_component name="Carbon_Compsite_Central_Spar_L006_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/Carbon_Compsite_Central_Spar_L006_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/Carbon_Compsite_Central_Spar_L006_ASCII.gdml" />
     
         <module_component name="Carbon_Compsite_Central_Spar_L007_ASCII.gdml" 
                           matching_name="Carbon"
                           material="CarbonFiber"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/Carbon_Compsite_Central_Spar_L007_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/Carbon_Compsite_Central_Spar_L007_ASCII.gdml" />
     
       <!--  <module_component name="Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron002_ASCII.gdml" 
                           matching_name="Ultem"
                           material="Ultem"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron002_ASCII.gdml" />
+                          file="CAD/Feb-2026/L4cut/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron002_ASCII.gdml" />
     
         <module_component name="Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron003_ASCII.gdml" 
                           matching_name="Ultem"
                           material="Ultem"
                           sensitive="false"
                           vis="TrackerLayerVis"
-                          file="CAD/Feb-2026/L4/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron003_ASCII.gdml" /> -->
+                          file="CAD/Feb-2026/L4cut/Ultem_End_Mount_Square_Captive_Mod_for_C_channel_Longeron003_ASCII.gdml" /> -->
      
       </module>
       <comment> Layers composed of many arrayed modules </comment>
