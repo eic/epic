@@ -5,13 +5,12 @@
     <constant name="ForwardMPGDQuad_nlayers" value="2" />
     <constant name="ForwardMPGDQuad_modules_per_quadrant" value="12" />
     <constant name="ForwardMPGDQuad_angle" value="360*degree/(4*ForwardMPGDQuad_modules_per_quadrant)" />
-    <!-- Main defines ForwardMPGD_zmin.  These retain the supplied 1261/1379 mm layout. -->
     <constant name="ForwardMPGDQuad_z1" value="ForwardMPGD_z1" />
     <constant name="ForwardMPGDQuad_z2" value="ForwardMPGD_z2" />
     <constant name="ForwardMPGDQuad_stagger" value="16*mm" />
-    <constant name="ForwardMPGDQuad_inner_radius" value="90*mm" />
-    <constant name="ForwardMPGDQuad_outer_radius" value="500*mm" />
-    <constant name="ForwardMPGDQuad_active_outer_radius" value="468*mm" />
+    <constant name="ForwardMPGDQuad_inner_radius" value="ForwardMPGDMod_rmin" />
+    <constant name="ForwardMPGDQuad_outer_radius" value="ForwardMPGDMod_rmax" />
+    <constant name="ForwardMPGDQuad_active_outer_radius" value="420*mm" />
     <constant name="ForwardMPGDQuad_overlap_half_width" value="12.5*mm" />
     <constant name="ForwardMPGDQuad_overlap_radius" value="(ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_outer_radius)/2" />
 

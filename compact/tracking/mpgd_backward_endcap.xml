@@ -8,9 +8,9 @@
     <constant name="BackwardMPGDQuad_z1" value="BackwardMPGD_z1" />
     <constant name="BackwardMPGDQuad_z2" value="BackwardMPGD_z2" />
     <constant name="BackwardMPGDQuad_stagger" value="16*mm" />
-    <constant name="BackwardMPGDQuad_inner_radius" value="50*mm" />
-    <constant name="BackwardMPGDQuad_outer_radius" value="500*mm" />
-    <constant name="BackwardMPGDQuad_active_outer_radius" value="468*mm"/>
+    <constant name="BackwardMPGDQuad_inner_radius" value="BackwardMPGDMod_rmin" />
+    <constant name="BackwardMPGDQuad_outer_radius" value="BackwardMPGDMod_rmax" />
+    <constant name="BackwardMPGDQuad_active_outer_radius" value="420*mm"/>
     <constant name="BackwardMPGDQuad_overlap_half_width" value="12.5*mm" />
     <constant name="BackwardMPGDQuad_overlap_radius" value="(BackwardMPGDQuad_inner_radius + BackwardMPGDQuad_outer_radius)/2" />
 
@@ -43,7 +43,7 @@
 
       <module name="BackwardMPGDQuadModule1" vis="MPGDModuleVis">
         <trd x1="BackwardMPGDQuad_inner_width/2" x2="BackwardMPGDQuad_outer_width/2" z="BackwardMPGDQuad_length/2" />
-        <overlap x="BackwardMPGDQuad_overlap_half_width" z="(BackwardMPGDQuad_active_outer_radius-BackwardMPGDQuad_inner_radius)/2" />
+	<overlap x="BackwardMPGDQuad_overlap_half_width" z="(BackwardMPGDQuad_active_outer_radius-BackwardMPGDQuad_inner_radius)/2" />
         <module_component thickness="BackwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
