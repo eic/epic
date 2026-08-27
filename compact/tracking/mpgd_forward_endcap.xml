@@ -2,7 +2,6 @@
 <!-- Four-quadrant forward MPGD endcap.  Requires the constants patch shipped beside this file. -->
 <lccdd>
   <define>
-<<<<<<< HEAD
     <comment>
       --------------------------
       Forward MPGD Parameters
@@ -13,20 +12,24 @@
     <constant name="ForwardMPGD_AllowedSpace" value="2.5*cm" />
 
     <comment> Parameters for the endcap MPGDs </comment>
-    <constant name="ForwardMPGDEndcapMod_count" value="48" />
+    <constant name="ForwardMPGDEndcapSectorMod_count" value="12" />
+    <constant name="ForwardMPGDEndcapMod_count" value="4*ForwardMPGDEndcapSectorMod_count" />
     <constant name="ForwardMPGDEndcapMod_dz" value="0" />
     <constant name="ForwardMPGDEndcap_overlap" value="0" />
     <constant name="ForwardMPGDMod_dzoffset" value="1.6*cm" />
     <constant name="ForwardMPGD_overlap" value="2.5*cm" />
 
     <comment> Layer definitions around the sensor for the endcap MPGDs </comment>
-    <constant name="ForwardMPGD_IR1" value="90.0*mm" />
-    <constant name="ForwardMPGD_IR2" value="105.0*mm" />
-    <constant name="ForwardMPGD_IR3" value="108.0*mm" />
-    <constant name="ForwardMPGD_OR1" value="500.0*mm" />
-    <constant name="ForwardMPGD_OR2" value="453.0*mm" />
-    <constant name="ForwardMPGD_OR3" value="450.0*mm" />
-    <constant name="ForwardMPGD_OR4" value="468.0*mm" />
+    <constant name="ForwardMPGD_IR1N" value="70.0*mm" />
+    <constant name="ForwardMPGD_IR2N" value="85.0*mm" />
+    <constant name="ForwardMPGD_IR3N" value="88.0*mm" />
+    <constant name="ForwardMPGD_IR1S" value="95.0*mm" />
+    <constant name="ForwardMPGD_IR2S" value="110.0*mm" />
+    <constant name="ForwardMPGD_IR3S" value="110.0*mm" />
+    <constant name="ForwardMPGD_OR1" value="460.0*mm" />
+    <constant name="ForwardMPGD_OR2" value="405.0*mm" />
+    <constant name="ForwardMPGD_OR3" value="400.0*mm" />
+    <constant name="ForwardMPGD_OR4" value="420.0*mm" />
 
     <constant name="ForwardMPGD_AnodeFCCopper_thickness" value="5.0*um" />
     <constant name="ForwardMPGD_AnodeFCBulk_thickness" value="50*um" />
@@ -95,47 +98,10 @@
       value="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDEndcapMod_dz + ForwardMPGDLayerPad" />
 
 
-    <constant name="ForwardMPGD_rmin" value="ForwardMPGD_IR1 - ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGD_rmin" value="ForwardMPGD_IR1N - ForwardMPGDLayerPad" />
     <constant name="ForwardMPGD_rmax" value="ForwardMPGD_OR4 + ForwardMPGDLayerPad" />
     <constant name="ForwardMPGD_zmin" value="ForwardMPGD_z1 - ForwardMPGD_z1" />
     <constant name="ForwardMPGD_zmax" value="ForwardMPGD_z2 + ForwardMPGD_z1" />
-
-    <comment> Bases of trapezoids </comment>
-    <constant name="ForwardMPGD_x1"
-      value="2 * ForwardMPGD_IR1 * tan(ForwardMPGDEndcapMod_angle/2)" />
-    <constant name="ForwardMPGD_x2"
-      value="2 * ForwardMPGD_IR2 * sin(ForwardMPGDEndcapMod_angle/2)" />
-    <constant name="ForwardMPGD_x3"
-      value="2 * ForwardMPGD_IR3 * sin(ForwardMPGDEndcapMod_angle/2)" />
-
-    <constant name="ForwardMPGD_X1"
-      value="2 * ForwardMPGD_OR1 * sin(ForwardMPGDEndcapMod_angle/2)" />
-    <constant name="ForwardMPGD_X2"
-      value="2 * ForwardMPGD_OR2 * sin(ForwardMPGDEndcapMod_angle/2)" />
-    <constant name="ForwardMPGD_X3"
-      value="2 * ForwardMPGD_OR3 * sin(ForwardMPGDEndcapMod_angle/2)" />
-    <constant name="ForwardMPGD_X4"
-      value="2 * ForwardMPGD_OR4 * sin(ForwardMPGDEndcapMod_angle/2)" />
-
-    <comment> Lenght of trapezoids </comment>
-    <constant name="ForwardMPGD_Y1"
-      value="ForwardMPGD_OR1 * cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_IR1" />
-    <constant name="ForwardMPGD_Y2"
-      value="ForwardMPGD_OR2 * cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_IR2" />
-    <constant name="ForwardMPGD_Y3"
-      value="ForwardMPGD_OR3 * cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_IR3" />
-    <constant name="ForwardMPGD_Y4"
-      value="ForwardMPGD_OR4 * cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_IR1" />
-
-    <constant name="ForwardMPGD_a1"
-      value="ForwardMPGD_IR2 *cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_IR1" />
-    <constant name="ForwardMPGD_b1"
-      value="ForwardMPGD_OR1 *cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_OR2" />
-
-    <constant name="ForwardMPGD_a2"
-      value="ForwardMPGD_OR3 *cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_IR3" />
-    <constant name="ForwardMPGD_b2"
-      value="ForwardMPGD_OR4 *cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGD_OR2" />
   </define>
 
   <detectors>
@@ -149,22 +115,17 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP" />
       <module name="ForwardModule1" vis="MPGDModuleVis">
-        <trd x1="ForwardMPGD_x1/2.0" x2="ForwardMPGD_X1/2.0" z="ForwardMPGD_Y1/2" />
-        <box x="ForwardMPGD_overlap/2.0" z="ForwardMPGD_OR4/2.0 - ForwardMPGD_IR1/2.0"
-          Z="ForwardMPGD_OR1/2.0 - ForwardMPGD_IR1/2.0" />
+         <trd IR1N="ForwardMPGD_IR1N" IR2N="ForwardMPGD_IR2N" IR3N="ForwardMPGD_IR3N" 
+            IR1S="ForwardMPGD_IR1S" IR2S="ForwardMPGD_IR2S" IR3S="ForwardMPGD_IR3S" 
+            OR1="ForwardMPGD_OR1" OR2="ForwardMPGD_OR2" OR3="ForwardMPGD_OR3" OR4="ForwardMPGD_OR4"
+            theta = "ForwardMPGDEndcapMod_angle/2"/>
+        <box x="ForwardMPGD_overlap/2.0"/>
 
-        <module_component thickness="ForwardMPGD_CathodeFCCopper_thickness"
-          x2="ForwardMPGD_X4/2.0" height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false"
-          vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeFCBulk_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeStructSkin_thickness"
-          x2="ForwardMPGD_X4/2.0" height="ForwardMPGD_Y4/2.0" material="Fiberglass"
-          sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeBulk_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_GEMBulk_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeFCCopper_thickness" IR="1" OR="4"  material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeFCBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeStructSkin_thickness" IR="1" OR="4" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_GEMBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
 
         <!-- <module_component thickness = "ForwardMPGD_CathodeStructFrame_thickness" material =
         "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
@@ -172,82 +133,59 @@
         sensitive = "false" vis = "MPGDVis"/> -->
         <!-- <module_component thickness = "ForwardMPGD_TransferFrame_thickness" material = "PEEK"
         sensitive = "false" vis = "MPGDVis"/> -->
-        <module_component thickness="ForwardMPGD_CathodeAA_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_GEMBottomAA_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_GEMtopAA_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_GEMBottomAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_GEMtopAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
         <!-- <module_component thickness = "ForwardMPGD_RWellAA_thickness" material = "?????"
         sensitive = "false" vis = "MPGDVis"/> -->
-        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness"
-          x2="ForwardMPGD_X4/2.0" height="ForwardMPGD_Y4/2.0" material="Honeycomb"
-          sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness" IR="2" OR="2" material="Honeycomb" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_DriftGas_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_TransferGas_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_DriftGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_TransferGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness" material="Honeycomb"
-          sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness" material="Honeycomb" IR="2" OR="2" sensitive="false" vis="MPGDVis" />
 
         <!-- <module_component thickness = "ForwardMPGD_AnodeStructFrame_thickness" material =
         "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
-        <module_component thickness="ForwardMPGD_PCB_thickness" height="ForwardMPGD_Y1/2.0"
-          material="Fr4" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_AnodeStructSkin_thickness"
-          height="ForwardMPGD_Y1/2.0" material="Fiberglass" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_AnodeFCBulk_thickness"
-          height="ForwardMPGD_Y1/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_AnodeFCCopper_thickness"
-          height="ForwardMPGD_Y1/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_AnodeFCBulk_thickness" IR="1" OR="1" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_AnodeFCCopper_thickness" IR="1" OR="1" material="Copper" sensitive="false" vis="MPGDVis" />
       </module>
         <!-- <module_component thickness = "ForwardMPGD_AnodeStructFrame_thickness" material =
         "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
 
 
       <module name="ForwardModule2" vis="MPGDModuleVis">
-        <trd x1="ForwardMPGD_x1/2.0" x2="ForwardMPGD_X1/2.0" z="ForwardMPGD_Y1/2" />
-        <box x="ForwardMPGD_overlap/2.0" z="ForwardMPGD_OR4/2.0 - ForwardMPGD_IR1/2.0"
-          Z="ForwardMPGD_OR1/2.0 - ForwardMPGD_IR1/2.0" />
+        <trd IR1N="ForwardMPGD_IR1N" IR2N="ForwardMPGD_IR2N" IR3N="ForwardMPGD_IR3N" 
+            IR1S="ForwardMPGD_IR1S" IR2S="ForwardMPGD_IR2S" IR3S="ForwardMPGD_IR3S" 
+            OR1="ForwardMPGD_OR1" OR2="ForwardMPGD_OR2" OR3="ForwardMPGD_OR3" OR4="ForwardMPGD_OR4"
+            theta = "ForwardMPGDEndcapMod_angle/2"/>
+        <box x="ForwardMPGD_overlap/2.0"/>
 
+        <module_component thickness="ForwardMPGD_AnodeFCCopper_thickness" IR="1" OR="1" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_AnodeFCBulk_thickness" IR="1" OR="1" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_AnodeFCCopper_thickness"
-          height="ForwardMPGD_Y1/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_AnodeFCBulk_thickness"
-          height="ForwardMPGD_Y1/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_AnodeStructSkin_thickness"
-          height="ForwardMPGD_Y1/2.0" material="Fiberglass" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_PCB_thickness" height="ForwardMPGD_Y1/2.0"
-          material="Fr4" sensitive="false" vis="MPGDVis" />
+        <!-- <module_component thickness = "ForwardMPGD_AnodeStructFrame_thickness" material =
+        "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
 
+        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness" material="Honeycomb" IR="2" OR="2" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness" material="Honeycomb"
-          sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_TransferGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_DriftGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
 
-
-        <module_component thickness="ForwardMPGD_TransferGas_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_DriftGas_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
-
-
-        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness"
-          x2="ForwardMPGD_X4/2.0" height="ForwardMPGD_Y4/2.0" material="Honeycomb"
-          sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness" IR="2" OR="2" material="Honeycomb" sensitive="false" vis="MPGDVis" />
         <!-- <module_component thickness = "ForwardMPGD_RWellAA_thickness" material = "?????"
         sensitive = "false" vis = "MPGDVis"/> -->
 
-        <module_component thickness="ForwardMPGD_GEMtopAA_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_GEMBottomAA_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_GEMtopAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_GEMBottomAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_CathodeAA_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
         <!-- <module_component thickness = "ForwardMPGD_TransferFrame_thickness" material = "PEEK"
         sensitive = "false" vis = "MPGDVis"/> -->
@@ -256,19 +194,11 @@
         <!-- <module_component thickness = "ForwardMPGD_CathodeStructFrame_thickness" material =
         "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
 
-        <module_component thickness="ForwardMPGD_GEMBulk_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeBulk_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeStructSkin_thickness"
-          x2="ForwardMPGD_X4/2.0" height="ForwardMPGD_Y4/2.0" material="Fiberglass"
-          sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeFCBulk_thickness" x2="ForwardMPGD_X4/2.0"
-          height="ForwardMPGD_Y4/2.0" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_CathodeFCCopper_thickness"
-          x2="ForwardMPGD_X4/2.0" height="ForwardMPGD_Y4/2.0" material="Copper" sensitive="false"
-          vis="MPGDVis" />
-
+        <module_component thickness="ForwardMPGD_GEMBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeStructSkin_thickness" IR="1" OR="4" material="Fiberglass" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeFCBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="ForwardMPGD_CathodeFCCopper_thickness" IR="1" OR="4"  material="Copper" sensitive="false" vis="MPGDVis" />
 
 
       </module>
@@ -277,7 +207,6 @@
 
       <layer id="1">
         <envelope vis="MPGDLayerVis"
-          rmin="ForwardMPGD_IR1"
           rmax="sqrt(ForwardMPGD_overlap*ForwardMPGD_overlap+ForwardMPGD_OR1*ForwardMPGD_OR1)"
           length="2 * ForwardMPGDEndcapLayer_thickness + 2 * ForwardMPGDMod_dzoffset"
           zstart="ForwardMPGD_z1" />
@@ -286,8 +215,6 @@
         <layer_material surface="outer" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count"
           bins1="50" />
         <ring
-          r="ForwardMPGD_IR1 + ForwardMPGD_Y1/2.0"
-          R="ForwardMPGD_IR1/2.0 + ForwardMPGD_OR1/2.0"
           zstart="0"
           nmodules="ForwardMPGDEndcapMod_count"
           dz="ForwardMPGDEndcapMod_dz"
@@ -298,7 +225,6 @@
 
       <layer id="2">
         <envelope vis="MPGDLayerVis"
-          rmin="ForwardMPGD_IR1"
           rmax="sqrt(ForwardMPGD_overlap*ForwardMPGD_overlap+ForwardMPGD_OR1*ForwardMPGD_OR1)"
           length="2 * ForwardMPGDEndcapLayer_thickness + 2 * ForwardMPGDMod_dzoffset"
           zstart="ForwardMPGD_z2" />
@@ -307,122 +233,12 @@
         <layer_material surface="outer" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count"
           bins1="50" />
         <ring
-          r="ForwardMPGD_IR1 + ForwardMPGD_Y1/2.0"
-          R="ForwardMPGD_IR1/2.0 + ForwardMPGD_OR1/2.0"
           zstart="0"
           nmodules="ForwardMPGDEndcapMod_count"
           dz="ForwardMPGDEndcapMod_dz"
           dz_offset="ForwardMPGDMod_dzoffset"
           phi0="2*pi/ForwardMPGDEndcapMod_count/2.0"
           module="ForwardModule2" />
-=======
-    <constant name="ForwardMPGDQuad_nlayers" value="2" />
-    <constant name="ForwardMPGDQuad_modules_per_quadrant" value="12" />
-    <constant name="ForwardMPGDQuad_angle" value="360*degree/(4*ForwardMPGDQuad_modules_per_quadrant)" />
-    <!-- Main defines ForwardMPGD_zmin.  These retain the supplied 1261/1379 mm layout. -->
-    <constant name="ForwardMPGDQuad_z1" value="ForwardMPGD_z1" />
-    <constant name="ForwardMPGDQuad_z2" value="ForwardMPGD_z2" />
-    <constant name="ForwardMPGDQuad_stagger" value="16*mm" />
-    <constant name="ForwardMPGDQuad_inner_radius" value="90*mm" />
-    <constant name="ForwardMPGDQuad_outer_radius" value="500*mm" />
-    <constant name="ForwardMPGDQuad_active_outer_radius" value="468*mm" />
-    <constant name="ForwardMPGDQuad_overlap_half_width" value="12.5*mm" />
-    <constant name="ForwardMPGDQuad_overlap_radius" value="(ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_outer_radius)/2" />
-
-    <constant name="ForwardMPGDQuad_cathode_cu" value="5*um" />
-    <constant name="ForwardMPGDQuad_cathode_kapton" value="50*um" />
-    <constant name="ForwardMPGDQuad_skin" value="100*um" />
-    <constant name="ForwardMPGDQuad_gem_kapton" value="50*um" />
-    <constant name="ForwardMPGDQuad_gem_cu" value="5*um" />
-    <constant name="ForwardMPGDQuad_honeycomb" value="3*mm" />
-    <constant name="ForwardMPGDQuad_drift_gas" value="6*mm" />
-    <constant name="ForwardMPGDQuad_transfer_gas" value="3*mm" />
-    <constant name="ForwardMPGDQuad_pcb" value="135*um" />
-    <constant name="ForwardMPGDQuad_anode_kapton" value="50*um" />
-    <constant name="ForwardMPGDQuad_anode_cu" value="5*um" />
-
-    <constant name="ForwardMPGDQuad_thickness"
-      value="2*ForwardMPGDQuad_cathode_cu + 2*ForwardMPGDQuad_cathode_kapton + 2*ForwardMPGDQuad_skin + ForwardMPGDQuad_gem_kapton + 3*ForwardMPGDQuad_gem_cu + 2*ForwardMPGDQuad_honeycomb + ForwardMPGDQuad_drift_gas + ForwardMPGDQuad_transfer_gas + ForwardMPGDQuad_pcb + ForwardMPGDQuad_anode_kapton + ForwardMPGDQuad_anode_cu" />
-    <constant name="ForwardMPGDQuad_layer_length" value="ForwardMPGDQuad_thickness + 2*ForwardMPGDQuad_stagger" />
-
-    <!-- Trapezoid dimensions use the local Y axis as the detector thickness. -->
-    <constant name="ForwardMPGDQuad_inner_width" value="2*ForwardMPGDQuad_inner_radius*tan(ForwardMPGDQuad_angle/2)" />
-    <constant name="ForwardMPGDQuad_outer_width" value="2*ForwardMPGDQuad_outer_radius*sin(ForwardMPGDQuad_angle/2)" />
-    <constant name="ForwardMPGDQuad_length" value="ForwardMPGDQuad_outer_radius*cos(ForwardMPGDQuad_angle/2)-ForwardMPGDQuad_inner_radius" />
-  </define>
-
-  <detectors>
-    <detector id="TrackerEndcapP_5_ID" name="ForwardMPGD" type="epic_MPGDQuadrantEndcapTracker"
-              actsType="endcap" readout="ForwardMPGDEndcapHits" vis="MPGDVis" reflect="false">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP" />
-
-      <!-- Layer 1 stack: cathode faces +z, drift gas is component 9/sensor 1. -->
-      <module name="ForwardMPGDQuadModule1" vis="MPGDModuleVis">
-        <trd x1="ForwardMPGDQuad_inner_width/2" x2="ForwardMPGDQuad_outer_width/2" z="ForwardMPGDQuad_length/2" />
-        <overlap x="ForwardMPGDQuad_overlap_half_width" z="(ForwardMPGDQuad_active_outer_radius-ForwardMPGDQuad_inner_radius)/2" />
-        <module_component thickness="ForwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
-        <module_component name="drift_gas" thickness="ForwardMPGDQuad_drift_gas" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_transfer_gas" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_pcb" material="Fr4" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_anode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_anode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-      </module>
-
-      <!-- Layer 2 is read out from the opposite face, retaining the existing ePIC convention. -->
-      <module name="ForwardMPGDQuadModule2" vis="MPGDModuleVis">
-        <trd x1="ForwardMPGDQuad_inner_width/2" x2="ForwardMPGDQuad_outer_width/2" z="ForwardMPGDQuad_length/2" />
-        <overlap x="ForwardMPGDQuad_overlap_half_width" z="(ForwardMPGDQuad_active_outer_radius-ForwardMPGDQuad_inner_radius)/2" />
-        <module_component thickness="ForwardMPGDQuad_anode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_anode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_pcb" material="Fr4" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_transfer_gas" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
-        <module_component name="drift_gas" thickness="ForwardMPGDQuad_drift_gas" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_honeycomb" material="Honeycomb" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_gem_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_skin" material="Fiberglass" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_cathode_kapton" material="Kapton" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGDQuad_cathode_cu" material="Copper" sensitive="false" vis="MPGDVis" />
-      </module>
-
-      <layer id="1">
-        <envelope vis="MPGDLayerVis" rmin="ForwardMPGDQuad_inner_radius" rmax="ForwardMPGDQuad_outer_radius + ForwardMPGDQuad_overlap_half_width" length="ForwardMPGDQuad_layer_length" zstart="ForwardMPGDQuad_z1" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
-        <layer_material surface="outer" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
-        <ring r="ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_length/2" zstart="0" dz="0" dz_offset="ForwardMPGDQuad_stagger" phi0="ForwardMPGDQuad_angle/2" modules_per_quadrant="ForwardMPGDQuad_modules_per_quadrant" module="ForwardMPGDQuadModule1">
-          <overlap quadrant="0" x="-ForwardMPGDQuad_overlap_radius" y="ForwardMPGDQuad_overlap_half_width" rotation="-90*degree" />
-          <overlap quadrant="1" x="-ForwardMPGDQuad_overlap_half_width" y="-ForwardMPGDQuad_overlap_radius" rotation="180*degree" />
-          <overlap quadrant="2" x="ForwardMPGDQuad_overlap_radius" y="-ForwardMPGDQuad_overlap_half_width" rotation="90*degree" />
-          <overlap quadrant="3" x="ForwardMPGDQuad_overlap_half_width" y="ForwardMPGDQuad_overlap_radius" rotation="0*degree" />
-        </ring>
-      </layer>
-
-      <layer id="2">
-        <envelope vis="MPGDLayerVis" rmin="ForwardMPGDQuad_inner_radius" rmax="ForwardMPGDQuad_outer_radius + ForwardMPGDQuad_overlap_half_width" length="ForwardMPGDQuad_layer_length" zstart="ForwardMPGDQuad_z2" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
-        <layer_material surface="outer" binning="binPhi,binR" bins0="4*ForwardMPGDQuad_modules_per_quadrant" bins1="50" />
-        <ring r="ForwardMPGDQuad_inner_radius + ForwardMPGDQuad_length/2" zstart="0" dz="0" dz_offset="ForwardMPGDQuad_stagger" phi0="ForwardMPGDQuad_angle/2" modules_per_quadrant="ForwardMPGDQuad_modules_per_quadrant" module="ForwardMPGDQuadModule2">
-          <overlap quadrant="0" x="-ForwardMPGDQuad_overlap_radius" y="ForwardMPGDQuad_overlap_half_width" rotation="-90*degree" />
-          <overlap quadrant="1" x="-ForwardMPGDQuad_overlap_half_width" y="-ForwardMPGDQuad_overlap_radius" rotation="180*degree" />
-          <overlap quadrant="2" x="ForwardMPGDQuad_overlap_radius" y="-ForwardMPGDQuad_overlap_half_width" rotation="90*degree" />
-          <overlap quadrant="3" x="ForwardMPGDQuad_overlap_half_width" y="ForwardMPGDQuad_overlap_radius" rotation="0*degree" />
-        </ring>
->>>>>>> origin/mpgd_endcap_workbranch
       </layer>
     </detector>
   </detectors>
@@ -430,11 +246,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardMPGD" />
-<<<<<<< HEAD
       <argument value="layer_pattern: str=ForwardMPGD_layer\d_N" />
-=======
-      <argument value="layer_pattern: str=ForwardMPGD_layer\d_P" />
->>>>>>> origin/mpgd_endcap_workbranch
     </plugin>
   </plugins>
 
@@ -445,9 +257,5 @@
       <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
     </readout>
   </readouts>
-<<<<<<< HEAD
 
 </lccdd>
-=======
-</lccdd>
->>>>>>> origin/mpgd_endcap_workbranch

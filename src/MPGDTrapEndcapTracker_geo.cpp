@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2022 Marco Spreafico
 
 /** \addtogroup Trackers Trackers
- * \brief Type: **BarrelTrackerWithFrame**.
- * \author W. Armstrong
+ * \brief Type: **MPGDEndcap**.
+ * \author M. Spreafico
  *
  * \ingroup trackers
  *
@@ -25,11 +25,6 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
-/** Endcap Trapezoidal Tracker.
- *
- * @author Whitney Armstrong
- *
- */
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens) {
   typedef vector<PlacedVolume> Placements;
   xml_det_t x_det = e;
@@ -43,16 +38,21 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Material air     = description.material("Air");
   Volume motherVol = description.pickMotherVolume(sdet);
   int m_id = 0, c_id = 0, n_sensor = 0;
-  map<string, Volume> modules;
-  map<string, Volume> modules_overlap; //M.S.
-  map<string, Placements> sensitives;
-  map<string, Placements> sensitives_overlap; //M.S.
-  map<string, std::vector<VolPlane>> volplane_surfaces;
+  map<string, Volume> modules_N, modules_S;
+  map<string, Volume> modules_overlap_N, modules_overlap_S; //M.S.
+  map<string, Placements> sensitives_N, sensitives_S;
+  map<string, Placements> sensitives_overlap_N, sensitives_overlap_S; //M.S.
+  map<string, std::vector<VolPlane>> volplane_surfaces_N, volplane_surfaces_S;
   map<string, std::array<double, 2>> module_thicknesses;
-  PlacedVolume pv; 
-  PlacedVolume pv_overlap; //M.S. pv_overlap to automatize some parts
+  PlacedVolume pv_N, pv_S, pv; 
+  PlacedVolume pv_overlap_N, pv_overlap_S; //M.S. pv_overlap to automatize some parts
 
-  double xb = 0, zbox = 0, Zbox = 0; // M.S. variable to store width of overlap
+  //Parameters to store 
+  double xb = 0;; // overlap size 
+  std::array<double, 3> IRN = {0.0, 0.0, 0.0};
+  std::array<double, 3> IRS = {0.0, 0.0, 0.0};
+  std::array<double, 4> OR = {0.0, 0.0, 0.0, 0.0};
+  double theta_trd = 0.0; 
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
@@ -68,7 +68,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   assembly.setVisAttributes(description.invisible());
   sens.setType("tracker");
 
-  for (xml_coll_t su(x_det, _U(support)); su; ++su) {
+  //Removed because no support 
+  /*for (xml_coll_t su(x_det, _U(support)); su; ++su) {
     xml_comp_t x_support     = su;
     double support_thickness = getAttrOrDefault(x_support, _U(thickness), 2.0 * mm);
     double support_length    = getAttrOrDefault(x_support, _U(length), 2.0 * mm);
@@ -105,41 +106,78 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     support_vol.setVisAttributes(description.visAttributes(support_vis));
     pv = assembly.placeVolume(support_vol, tr);
     // pv = assembly.placeVolume(support_vol, Position(0, 0, support_zstart + support_length / 2));
-  }
+  }*/
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod = mi;
     string m_nam     = x_mod.nameStr();
-    string m_nam_overlap = m_nam + "_overlap"; //M.S.
-    xml_comp_t trd   = x_mod.trd();
-    xml_comp_t box = x_mod.child(_U(box)); //M.S.
 
     double posY;
-    double x1              = trd.x1();
-    double x2              = trd.x2();
-    double z               = trd.z();
+
+    // get and store parameters 
+    xml_comp_t trd   = x_mod.trd(); 
+    xml_comp_t box = x_mod.child(_U(box)); 
+
+    IRN = {
+        getAttrOrDefault<double>(trd, _Unicode(IR1N), 0.0),
+        getAttrOrDefault<double>(trd, _Unicode(IR2N), 0.0),
+        getAttrOrDefault<double>(trd, _Unicode(IR3N), 0.0)};
+    IRS = {
+        getAttrOrDefault<double>(trd, _Unicode(IR1S), 0.0),
+        getAttrOrDefault<double>(trd, _Unicode(IR2S), 0.0),
+        getAttrOrDefault<double>(trd, _Unicode(IR3S), 0.0)};
+    OR = {
+        getAttrOrDefault<double>(trd, _Unicode(OR1), 0.0),
+        getAttrOrDefault<double>(trd, _Unicode(OR2), 0.0), 
+        getAttrOrDefault<double>(trd, _Unicode(OR3), 0.0),
+        getAttrOrDefault<double>(trd, _Unicode(OR4), 0.0)};
+
+    theta_trd = getAttrOrDefault<double>(trd, _Unicode(theta), 0.0);
+
+    xb = box.x();
+    // end of getting and storing parameters 
+    
     double total_thickness = 0.;
     xml_coll_t ci(x_mod, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci)
       total_thickness += xml_comp_t(ci).thickness();
 
     double thickness_so_far = 0.0;
-    double y1               = total_thickness / 2;
-    double y2               = total_thickness / 2; 
-    Trapezoid m_solid(x1, x2, y1, y2, z);
-    Volume m_volume(m_nam, m_solid, vacuum);
-    m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
-    //M.S. define the two boxes for overlap
-    xb = box.x();
-    zbox = box.z(); 
-    Zbox = getAttrOrDefault(box, _Unicode(Z), zbox);
-    Box m_box_overlap(xb, y1, Zbox);
+    double y = total_thickness / 2;
 
-    Volume m_volume_overlap(m_nam_overlap, m_box_overlap, vacuum); //M.S.
-    m_volume_overlap.setVisAttributes(description.visAttributes(x_mod.visStr())); //M.S.
-    //end of M.S. 
+    double xN = IRN[0] * sin(theta_trd);
+    double XN = OR[0] * sin(theta_trd);
+    double zN = (OR[0] - IRN[0]) * cos(theta_trd) / 2.0;
 
+    double xS = IRS[0] * sin(theta_trd);
+    double XS = OR[0] * sin(theta_trd);
+    double zS = (OR[0] - IRS[0]) * cos(theta_trd) / 2.0;
+
+    // Define volumes for north and south trapezoids
+    Trapezoid m_solid_N(xN, XN, y, y, zN);
+    Trapezoid m_solid_S(xS, XS, y, y, zS);
+
+    Volume m_volume_N(m_nam + "_N", m_solid_N, vacuum);
+    Volume m_volume_S(m_nam + "_S", m_solid_S, vacuum);
+
+    m_volume_N.setVisAttributes(description.visAttributes(x_mod.visStr()));
+    m_volume_S.setVisAttributes(description.visAttributes(x_mod.visStr()));
+
+    double zbox_N = (OR[0] - IRN[0])/2;
+    double zbox_S = (OR[0] - IRS[0])/2;
+    // Define volume for overlap box
+    Box m_box_overlap_N(xb, y, zbox_N);
+    Box m_box_overlap_S(xb, y, zbox_S);
+
+    Volume m_volume_overlap_N(m_nam + "_overlap_N", m_box_overlap_N, vacuum);
+    Volume m_volume_overlap_S(m_nam + "_overlap_S", m_box_overlap_S, vacuum);
+
+    m_volume_overlap_N.setVisAttributes(description.visAttributes(x_mod.visStr()));
+    m_volume_overlap_S.setVisAttributes(description.visAttributes(x_mod.visStr()));
+    
+    //Commented frame part because frames are not present
+    /*
     Solid frame_s;
     if (x_mod.hasChild(_U(frame))) {
       // build frame from trd (assumed to be smaller)
@@ -163,50 +201,92 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // figure out how to best place
       pv = m_volume.placeVolume(f_vol, Position(f_pos.x(), f_pos.y(), f_pos.z()));
     }
+    */
 
-    for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
+    for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y; ci; ++ci, ++c_id) {
       xml_comp_t c     = ci;
       double c_thick   = c.thickness();
-      auto comp_x1     = getAttrOrDefault(c, _Unicode(x1), x1);
-      auto comp_x2     = getAttrOrDefault(c, _Unicode(x2), x2);
-      auto comp_xb     = getAttrOrDefault(c, _Unicode(xb), xb); // M.S.
-      auto comp_height = getAttrOrDefault(c, _Unicode(height), z);
-      //auto comp_zb     = getAttrOrDefault(c, _Unicode(z), Zbox); // M.S.
-      auto comp_zb = Zbox; 
-      if(comp_height < z) comp_zb = zbox; 
+      auto comp_IRN = IRN[getAttrOrDefault(c, _Unicode(IR), 1)-1];
+      auto comp_IRS = IRS[getAttrOrDefault(c, _Unicode(IR), 1)-1];
+      auto comp_OR = OR[getAttrOrDefault(c, _Unicode(OR), 1)-1];
 
-      std::cout << Zbox << " " << zbox << " " << comp_zb << std::endl; // M.S. printout to check the correct assignment of comp_zb
+      double comp_x1_N = comp_IRN * sin(theta_trd);
+      double comp_x2_N = comp_OR * sin(theta_trd);
+      double comp_z_N = (comp_OR - comp_IRN) * cos(theta_trd)/2;
+
+      double comp_x1_S = comp_IRS * sin(theta_trd);
+      double comp_x2_S = comp_OR * sin(theta_trd);
+      double comp_z_S = (comp_OR - comp_IRS) * cos(theta_trd)/2;
+
+      double comp_zb_N = (comp_OR - comp_IRN)/2.0; 
+      double comp_zb_S = (comp_OR - comp_IRS)/2.0;
 
       Material c_mat = description.material(c.materialStr());
+
       string c_name  = _toString(c_id, "component%d");
       string c_name_overlap = c_name + "_overlap"; //M.S.
 
-      Trapezoid comp_s1(comp_x1, comp_x2, c_thick / 2e0, c_thick / 2e0, comp_height);
-      Box comp_s_overlap(comp_xb, c_thick / 2e0, comp_zb); //M.S.
-      Solid comp_shape = comp_s1;
-      if (frame_s.isValid()) {
-        comp_shape = SubtractionSolid(comp_s1, frame_s);
-      }
-      Volume c_vol(c_name, comp_shape, c_mat);
-      Volume c_vol_overlap(c_name_overlap, comp_s_overlap, c_mat); //M.S.
+      //Define volumes for north and south sectors 
+      Trapezoid comp_s_N(comp_x1_N, comp_x2_N, c_thick / 2e0, c_thick / 2e0, comp_z_N);
+      Trapezoid comp_s_S(comp_x1_S, comp_x2_S, c_thick / 2e0, c_thick / 2e0, comp_z_S);
 
-      c_vol.setVisAttributes(description.visAttributes(c.visStr()));
-      c_vol_overlap.setVisAttributes(description.visAttributes(c.visStr())); //M.S.
-      pv = m_volume.placeVolume(c_vol, Position(0, posY + c_thick / 2, comp_height-z));
-      pv_overlap = m_volume_overlap.placeVolume(c_vol_overlap, Position(0, posY + c_thick / 2, comp_zb-Zbox)); //M.S.
-      cout << zbox << " " << Zbox << " " << comp_zb << " " << comp_zb-zbox << endl; 
+      Box comp_o_N(xb, c_thick / 2e0, comp_zb_N); 
+      Box comp_o_S(xb, c_thick / 2e0, comp_zb_S); 
+
+      Solid comp_shape_N = comp_s_N;
+      Solid comp_shape_S = comp_s_S;
+      Solid comp_overlap_N = comp_o_N;
+      Solid comp_overlap_S = comp_o_S;
+      
+      /*f (frame_s.isValid()) {
+        comp_shape_N = SubtractionSolid(comp_s_N, frame_s);
+        comp_shape_S = SubtractionSolid(comp_s_S, frame_s);
+      }*/
+
+      Volume c_vol_N(_toString(c_id, "%d_N"), comp_shape_N, c_mat);
+      Volume c_vol_S(_toString(c_id, "%d_S"), comp_shape_S, c_mat);
+
+      Volume c_vol_overlap_N(_toString(c_id, "%d_overlap_N"), comp_overlap_N, c_mat); //M.S.
+      Volume c_vol_overlap_S(_toString(c_id, "%d_overlap_S"), comp_overlap_S, c_mat); //M.S.
+
+      c_vol_N.setVisAttributes(description.visAttributes(c.visStr()));
+      c_vol_S.setVisAttributes(description.visAttributes(c.visStr()));
+
+      c_vol_overlap_N.setVisAttributes(description.visAttributes(c.visStr())); //M.S.
+      c_vol_overlap_S.setVisAttributes(description.visAttributes(c.visStr())); //M.S.
+
+      double comp_pos_Z_N = (comp_IRN - IRN[0]) * cos(theta_trd) + comp_z_N; 
+      double comp_pos_Z_S = (comp_IRS - IRS[0]) * cos(theta_trd) + comp_z_S; 
+
+      pv_N = m_volume_N.placeVolume(c_vol_N, Position(0, posY + c_thick / 2, comp_pos_Z_N-zN));
+      pv_S = m_volume_S.placeVolume(c_vol_S, Position(0, posY + c_thick / 2, comp_pos_Z_S-zS));
+
+      double comp_pos_Zb_N = (comp_IRN - IRN[0]) + comp_zb_N;
+      double comp_pos_Zb_S = (comp_IRS - IRS[0]) + comp_zb_S;
+      
+      pv_overlap_N = m_volume_overlap_N.placeVolume(c_vol_overlap_N, Position(0, posY + c_thick / 2, comp_pos_Zb_N-zbox_N)); //M.S.
+      pv_overlap_S = m_volume_overlap_S.placeVolume(c_vol_overlap_S, Position(0, posY + c_thick / 2, comp_pos_Zb_S-zbox_S)); //M.S.
+
       if (c.isSensitive()) {
-        module_thicknesses[m_nam] = {thickness_so_far + c_thick / 2.0,
-                                     total_thickness - thickness_so_far - c_thick / 2.0};
-        // std::cout << " adding sensitive volume" << c_name << "\n";
-        sdet.check(n_sensor > 2,
-                   "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
-        pv.addPhysVolID("sensor", n_sensor);
-        pv_overlap.addPhysVolID("sensor", n_sensor); //M.S.
-        c_vol.setSensitiveDetector(sens);
-        c_vol_overlap.setSensitiveDetector(sens); //M.S.
-        sensitives[m_nam].push_back(pv);
-        sensitives_overlap[m_nam].push_back(pv_overlap); //M.S.
+        module_thicknesses[m_nam] = {thickness_so_far + c_thick / 2.0, total_thickness - thickness_so_far - c_thick / 2.0};
+                                     
+        sdet.check(n_sensor > 2, "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
+
+        pv_N.addPhysVolID("sensor", n_sensor);
+        pv_S.addPhysVolID("sensor", n_sensor);
+        pv_overlap_N.addPhysVolID("sensor", n_sensor); //M.S.
+        pv_overlap_S.addPhysVolID("sensor", n_sensor); //M.S.
+
+        c_vol_N.setSensitiveDetector(sens);
+        c_vol_S.setSensitiveDetector(sens);
+        c_vol_overlap_N.setSensitiveDetector(sens); //M.S.
+        c_vol_overlap_S.setSensitiveDetector(sens); //M.S.
+
+        sensitives_N[m_nam].push_back(pv_N);
+        sensitives_S[m_nam].push_back(pv_S);
+        sensitives_overlap_N[m_nam].push_back(pv_overlap_N); //M.S.
+        sensitives_overlap_S[m_nam].push_back(pv_overlap_S); //M.S.
+
         ++n_sensor;
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
         Vector3D u(0., 0., -1.);
@@ -224,17 +304,23 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // if( isStripDetector )
         //  type.setProperty( SurfaceType::Measurement1D , true ) ;
 
-        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-        VolPlane surf_overlap(c_vol_overlap, type, inner_thickness, outer_thickness, u, v, n); //M.S.
-        volplane_surfaces[m_nam].push_back(surf);
-        volplane_surfaces[m_nam].push_back(surf_overlap); //M.S.
+        VolPlane surf_N(c_vol_N, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+        VolPlane surf_S(c_vol_S, type, inner_thickness, outer_thickness, u, v, n); //M.S.
+        VolPlane surf_overlap_N(c_vol_overlap_N, type, inner_thickness, outer_thickness, u, v, n); //M.S.
+        VolPlane surf_overlap_S(c_vol_overlap_S, type, inner_thickness, outer_thickness, u, v, n); //M.S.
+        volplane_surfaces_N[m_nam].push_back(surf_N);
+        volplane_surfaces_S[m_nam].push_back(surf_S);
+        volplane_surfaces_N[m_nam].push_back(surf_overlap_N); //M.S.
+        volplane_surfaces_S[m_nam].push_back(surf_overlap_S); //M.S.
         //--------------------------------------------
       }
       posY += c_thick;
       thickness_so_far += c_thick;
     }
-    modules[m_nam] = m_volume;
-    modules_overlap[m_nam] = m_volume_overlap; //M.S.
+    modules_N[m_nam] = m_volume_N; //M.S.
+    modules_S[m_nam] = m_volume_S; //M.S.
+    modules_overlap_N[m_nam] = m_volume_overlap_N; //M.S.
+    modules_overlap_S[m_nam] = m_volume_overlap_S; //M.S.
   }
 
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
@@ -246,33 +332,38 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     string layer_name = det_name + std::string("_layer") + std::to_string(l_id);
 
     std::string layer_vis = l_env.attr<std::string>(_Unicode(vis));
-    double layer_rmin     = l_env.attr<double>(_Unicode(rmin));
-    double layer_rmax     = l_env.attr<double>(_Unicode(rmax));
+    double layer_rmin_N = IRN[0] * cos(theta_trd); 
+    double layer_rmin_S = IRS[0] * cos(theta_trd);
+    double layer_rmax = sqrt(4*xb*xb+OR[0]*OR[0]);
+
     double layer_length   = l_env.attr<double>(_Unicode(length));
-    //std::cout << layer_length << std::endl;
     double layer_zstart   = l_env.attr<double>(_Unicode(zstart));
     double layer_center_z = layer_zstart + layer_length / 2.0;
+
     // printout(INFO,"ROOTGDMLParse","+++ Read geometry from GDML file file:%s",input.c_str());
     // std::cout << "SiTracker Endcap layer " << l_id << " zstart = " << layer_zstart/dd4hep::mm << "mm ( " <<
     // layer_length/dd4hep::mm << " mm thick )\n";
 
     // Assembly    layer_assembly(layer_name);
     // assembly.placeVolume(layer_assembly);
-    Tube layer_tub(layer_rmin, layer_rmax, layer_length / 2);
+    Tube layer_tub(std::min(layer_rmin_N, layer_rmin_S), layer_rmax, layer_length / 2);
     Volume layer_vol(layer_name, layer_tub, air); // Create the layer envelope volume.
     layer_vol.setVisAttributes(description.visAttributes(layer_vis));
+
+    
 
     PlacedVolume layer_pv;
     if (reflect) {
       layer_pv = assembly.placeVolume(
           layer_vol, Transform3D(RotationZYX(0.0, -M_PI, 0.0), Position(0, 0, -layer_center_z)));
       layer_pv.addPhysVolID("layer", l_id);
-      layer_name += "_N";
+      layer_name += "_B";
     } else {
       layer_pv = assembly.placeVolume(layer_vol, Position(0, 0, layer_center_z));
       layer_pv.addPhysVolID("layer", l_id);
-      layer_name += "_P";
+      layer_name += "_F";
     }
+
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
 
@@ -287,8 +378,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
       xml_comp_t x_ring    = ri;
-      double r             = x_ring.r();
-      double R            = x_ring.R(); //M.S. 
+      double r             = (IRS[0]+OR[0])*cos(theta_trd)/2;
+      double R             = (IRS[0]+OR[0])/2; 
       double phi0          = x_ring.phi0(0);
       double zstart        = x_ring.zstart();
       double dz            = x_ring.dz(0);
@@ -296,25 +387,46 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       int nmodules         = x_ring.nmodules();
       int nmodules_per_quadrant = (int)(nmodules / 4);
       string m_nam         = x_ring.moduleStr();
-      Volume m_vol         = modules[m_nam];
-      Volume m_vol_overlap = modules_overlap[m_nam]; //M.S.
+      Volume m_vol         = modules_S[m_nam];
+      Volume m_vol_overlap = modules_overlap_S[m_nam]; //M.S.
       double iphi          = 2 * M_PI / nmodules;
       double phi           = phi0;
-      Placements& sensVols = sensitives[m_nam];
-      Placements& sensVols_overlap = sensitives_overlap[m_nam];
+      Placements& sensVols = sensitives_S[m_nam];
+      Placements& sensVols_overlap = sensitives_overlap_S[m_nam];
 
       for (int k = 0; k < nmodules; ++k) {
+        mod_num = k; 
         string m_base = _toString(l_id, "layer%d") + _toString(mod_num, "_module%d");
-        double x      = -r * std::cos(phi);
-        double y      = -r * std::sin(phi);
+ 
+        bool isN = false; // default = S
+        if(k >= nmodules_per_quadrant && k < 3*nmodules_per_quadrant) {isN = true;}
 
         // M.S. stagger quadrants 
         double dz_final = dz;
         if(k < nmodules_per_quadrant  || (k >= 2*nmodules_per_quadrant && k < 3*nmodules_per_quadrant)) dz_final = dz + dz_offset;
 
+        if(isN) {
+          m_vol = modules_N[m_nam];
+          m_vol_overlap = modules_overlap_N[m_nam];
+          sensVols = sensitives_N[m_nam];
+          sensVols_overlap = sensitives_overlap_N[m_nam];
+          r             = (IRN[0]+ OR[0]) * cos(theta_trd) /2;
+          R             = (IRN[0]+OR[0] * cos(theta_trd))/2; 
+        }else{
+          m_vol = modules_S[m_nam];
+          m_vol_overlap = modules_overlap_S[m_nam];
+          sensVols = sensitives_S[m_nam];
+          sensVols_overlap = sensitives_overlap_S[m_nam];
+          r             = (IRS[0]+OR[0]) * cos(theta_trd) /2;
+          R             = (IRS[0]+OR[0] * cos(theta_trd))/2; 
+        }
+
+        double x      = -r * std::cos(phi);
+        double y      = -r * std::sin(phi);
+
         if (!reflect) {
           DetElement module(layer_element, m_base + "_pos", det_id);
-          pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
+          pv = layer_vol.placeVolume(m_vol, mod_num, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
                                                         Position(x, y, zstart + dz_final)));
           pv.addPhysVolID("module", mod_num);
           module.setPlacement(pv);
@@ -325,10 +437,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+            if(isN) {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_N[m_nam][ic]);
+            } else {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_S[m_nam][ ic]);
+            }
           }
         } else {
-          pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
+          pv = layer_vol.placeVolume(m_vol, mod_num, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
                                                         Position(x, y, -zstart - dz_final)));
           pv.addPhysVolID("module", mod_num);
           DetElement r_module(layer_element, m_base + "_neg", det_id);
@@ -340,12 +456,21 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+            if(isN) {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_N[m_nam][ic]);
+            } else {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_S[m_nam][ ic]);
+            }
           }
         }
         dz = -dz;
         phi += iphi;
-        ++mod_num;
+
+        if (isN) {
+          R = (IRN[0] + OR[0]) / 2.0;
+        } else {
+          R = (IRS[0] + OR[0]) / 2.0;
+        }
 
         //M.S. add two overlaps volumes for each quadrant 
         if(k%nmodules_per_quadrant == 0 || k%(nmodules_per_quadrant) == nmodules_per_quadrant-1){
@@ -363,9 +488,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         if(!reflect){
           DetElement module(layer_element, m_base + "_overlap_pos", det_id);
-          pv = layer_vol.placeVolume(m_vol_overlap, Transform3D(RotationZYX(0, roto, -M_PI / 2),
+          pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),
                                                         Position(xo, yo, zstart + dz_final)));
-          pv.addPhysVolID("module", mod_num);
+          pv.addPhysVolID("module_overlap", mod_num);
           module.setPlacement(pv);
           for (size_t ic = 0; ic < sensVols_overlap.size(); ++ic) {
             PlacedVolume sens_pv = sensVols_overlap[ic];
@@ -374,13 +499,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+            if(k >= nmodules_per_quadrant && k < 3*nmodules_per_quadrant) {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_N[m_nam][ic]);
+            } else {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_S[m_nam][ ic]);
+            }
           } 
         }else{
           DetElement r_module(layer_element, m_base + "_overlap_neg", det_id);
-          pv = layer_vol.placeVolume(m_vol_overlap, Transform3D(RotationZYX(0, roto, -M_PI / 2),
+          pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),
                                                         Position(xo, yo, -zstart - dz_final)));
-          pv.addPhysVolID("module", mod_num);
+          pv.addPhysVolID("module_overlap", mod_num);
           r_module.setPlacement(pv);
           for (size_t ic = 0; ic < sensVols_overlap.size(); ++ic) {
             PlacedVolume sens_pv = sensVols_overlap[ic];
@@ -389,13 +518,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+            if(k >= nmodules_per_quadrant && k < 3*nmodules_per_quadrant) {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_N[m_nam][ic]);
+            } else {
+            volSurfaceList(comp_elt)->push_back(volplane_surfaces_S[m_nam][ ic]);
+            }
         }
-
-
-        ++mod_num;
       }
     }
+      
+  
       }
     }
   }
