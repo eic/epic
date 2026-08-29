@@ -26,6 +26,8 @@
 #include "TGDMLParse.h"
 #include "FileLoaderHelper.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
@@ -104,14 +106,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::string csec_gdml_cache =
       getAttrOrDefault<std::string>(x_det_csec_gdmlfile, _Unicode(cache), " ");
 
-  xml_comp_t x_det_er_gdmlfile = x_det.child("er_gdmlfile");
-  std::string er_gdml_file = getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(file), " ");
-  ;
-  std::string er_gdml_material =
-      getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(material), " ");
-  std::string er_gdml_url = getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(url), " ");
-  std::string er_gdml_cache =
-      getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(cache), " ");
+  xml_comp_t x_end_ring        = x_det.child("end_ring");
+  std::string er_material_name = getAttrOrDefault<std::string>(x_end_ring, _Unicode(material), " ");
+  xml_comp_t x_er_dims         = x_end_ring.child(_Unicode(dimensions));
+  double er_rinner             = x_er_dims.attr<double>(_Unicode(rinner)) * mm;
+  double er_router             = x_er_dims.attr<double>(_Unicode(router)) * mm;
+  double er_zhalf              = x_er_dims.attr<double>(_Unicode(zhalf)) * mm;
+  double er_zcenter            = x_er_dims.attr<double>(_Unicode(zcenter)) * mm;
+  int er_nholes                = x_er_dims.attr<int>(_Unicode(nholes));
+  double er_rhole              = x_er_dims.attr<double>(_Unicode(rhole)) * mm;
+  double er_rhole_ctr          = x_er_dims.attr<double>(_Unicode(rhole_ctr)) * mm;
 
   // Loop over the defines section and pick up the tile offsets, ref location and angles
 
@@ -180,7 +184,22 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Read in the barrel structure GDML file
   // three structures - normal sector, chimney sector, and end rings
-  Assembly BarrelHCAL("BarrelHCAL");
+
+  // Helper: normalize phi (radians) to [0, 2π) and return the phi sector index [0..31]
+  auto phi_to_sector = [](double phi_rad) -> int {
+    constexpr int N = 32;
+    phi_rad         = std::fmod(phi_rad, 2 * M_PI);
+    if (phi_rad < 0)
+      phi_rad += 2 * M_PI;
+    return static_cast<int>(phi_rad / (2.0 * M_PI / N)) % N;
+  };
+
+  // 32 per-sector sub-assemblies replace the single flat BarrelHCAL assembly
+  std::vector<Assembly> hcal_sec;
+  hcal_sec.reserve(32);
+  for (int k = 0; k < 32; k++)
+    hcal_sec.emplace_back(_toString(k, "BarrelHCAL_sector%02d"));
+
   TGDMLParse parser;
 
   // sector
@@ -227,57 +246,61 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Material csector_material = description.material(csec_gdml_material.c_str());
   barrel_csector_vol.setMaterial(csector_material);
 
-  // end ring
-  EnsureFileFromURLExists(er_gdml_url, er_gdml_file, er_gdml_cache);
-  if (!fs::exists(fs::path(er_gdml_file))) {
-    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + er_gdml_file + " does not exist");
-    printout(ERROR, "BarrelHCalCalorimeter_geo",
-             "use a FileLoader plugin before the field element");
-    std::_Exit(EXIT_FAILURE);
-  }
+  // end ring — steel annulus (Tube) with 32 air-filled bolt-hole daughters
+  //
+  // Using daughter placements instead of a Boolean-subtraction chain lets
+  // Geant4's SmartVoxelHeader voxelise the 32 holes, giving O(log 32)
+  // boundary-crossing tests rather than traversing a depth-32 CSG tree.
+  // A track inside a daughter volume is in the daughter's material (air),
+  // which is geometrically equivalent to a hole in the steel.
+  Volume barrel_er_vol;
+  {
+    Tube er_base(er_rinner, er_router, er_zhalf);
+    Material er_material = description.material(er_material_name.c_str());
+    barrel_er_vol        = Volume("BarrelHCalEndRing", er_base, er_material);
+    barrel_er_vol.setVisAttributes(description, x_det.visStr());
 
-  Volume barrel_er_vol = parser.GDMLReadFile(er_gdml_file.c_str());
-  if (!barrel_er_vol.isValid()) {
-    printout(WARNING, "BarrelHCalCalorimeter", "%s", er_gdml_file.c_str());
-    printout(WARNING, "BarrelHCalCalorimeter", "barrel_er_vol invalid, GDML parser failed!");
-    std::_Exit(EXIT_FAILURE);
+    // Bolt-hole daughters: same half-length as the ring (flush faces — no
+    // overlap needed because the hole solid is a proper daughter, not a
+    // Boolean operand).
+    Tube er_hole(0., er_rhole, er_zhalf);
+    Volume hole_vol("BarrelHCalEndRingHole", er_hole, description.air());
+    hole_vol.setVisAttributes(description, "InvisibleNoDaughters");
+    for (int i = 0; i < er_nholes; ++i) {
+      double phi = i * 2. * M_PI / er_nholes;
+      barrel_er_vol.placeVolume(
+          hole_vol, i, Position(er_rhole_ctr * std::cos(phi), er_rhole_ctr * std::sin(phi), 0.));
+    }
   }
-  barrel_er_vol.import();
-  barrel_er_vol.setVisAttributes(description, x_det.visStr());
-  TessellatedSolid barrel_er_solid = barrel_er_vol.solid();
-  barrel_er_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
-  Material er_material = description.material(er_gdml_material.c_str());
-  barrel_er_vol.setMaterial(er_material);
 
   // Place steel in envelope
 
   double sec_rot_angle = 360.0 / 32.0;
 
   for (int k = 0; k < 29; k++) {
-    BarrelHCAL.placeVolume(
+    int sec = phi_to_sector(-k * sec_rot_angle * dd4hep::deg);
+    hcal_sec[sec].placeVolume(
         barrel_sector_vol, k,
         Transform3D(RotationZ(-k * sec_rot_angle * dd4hep::deg) * RotationY(180.0 * dd4hep::deg),
                     Translation3D(0, 0, 0)));
   }
 
-  BarrelHCAL.placeVolume(
+  hcal_sec[phi_to_sector(sec_rot_angle * dd4hep::deg)].placeVolume(
       barrel_csector_vol, 0,
       Transform3D(RotationZ(sec_rot_angle * dd4hep::deg) * RotationY(180.0 * dd4hep::deg),
                   Translation3D(0, 0, 0)));
 
-  BarrelHCAL.placeVolume(barrel_csector_vol, 1,
-                         Transform3D(RotationY(180.0 * dd4hep::deg), Translation3D(0, 0, 0)));
+  hcal_sec[phi_to_sector(0.0)].placeVolume(
+      barrel_csector_vol, 1, Transform3D(RotationY(180.0 * dd4hep::deg), Translation3D(0, 0, 0)));
 
-  BarrelHCAL.placeVolume(
+  hcal_sec[phi_to_sector(-sec_rot_angle * dd4hep::deg)].placeVolume(
       barrel_csector_vol, 2,
       Transform3D(RotationZ(-sec_rot_angle * dd4hep::deg) * RotationY(180.0 * dd4hep::deg),
                   Translation3D(0, 0, 0)));
 
-  BarrelHCAL.placeVolume(barrel_er_vol, 0,
-                         Transform3D(RotationY(180.0 * dd4hep::deg), Translation3D(0, 0, 0)));
-
-  BarrelHCAL.placeVolume(barrel_er_vol, 1,
-                         Transform3D(RotationY(0.0 * dd4hep::deg), Translation3D(0, 0, 0)));
+  // End rings placed directly in envelope (not in sector sub-assemblies)
+  envelope.placeVolume(barrel_er_vol, 0, Position(0, 0, -er_zcenter));
+  envelope.placeVolume(barrel_er_vol, 1, Position(0, 0, +er_zcenter));
 
   // Loop over the tile solids, create them and add them to the detector volume
 
@@ -293,52 +316,44 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // standard tiles
 
-      gdmlname   = _toString(j, "tile%d_gdmlfile");
+      gdmlname   = _toString(j, "tile%d");
       solid_name = _toString(j, "OuterHCalTile%02d");
 
     } else {
 
       // chimney tiles
 
-      gdmlname   = _toString(j - 4, "ctile%d_gdmlfile");
+      gdmlname   = _toString(j - 4, "ctile%d");
       solid_name = _toString(j - 4, "OuterHCalChimneyTile%02d");
     }
 
-    // tile shape gdml file info
-    xml_comp_t x_det_tgdmlfile = x_det.child(gdmlname);
+    // tile shape: read material and Xtru shape from compact XML
+    xml_comp_t x_tile              = x_det.child(gdmlname);
+    std::string tile_material_name = getAttrOrDefault<std::string>(x_tile, _Unicode(material), " ");
 
-    std::string tgdml_file = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(file), " ");
-    ;
-    std::string tgdml_material =
-        getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(material), " ");
-    std::string tgdml_url   = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(url), " ");
-    std::string tgdml_cache = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(cache), " ");
-
-    EnsureFileFromURLExists(tgdml_url, tgdml_file, tgdml_cache);
-    if (!fs::exists(fs::path(tgdml_file))) {
-      printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + tgdml_file + " does not exist");
-      printout(ERROR, "BarrelHCalCalorimeter_geo",
-               "use a FileLoader plugin before the field element");
-      std::_Exit(EXIT_FAILURE);
+    // Parse <shape type="Xtru"> child: <twoDimVertex> and <section> elements
+    xml_comp_t x_shape = x_tile.child(_Unicode(shape));
+    std::vector<double> vx, vy, vz, vxoff, vyoff, vscale;
+    for (xml_coll_t v(x_shape, _Unicode(twoDimVertex)); v; ++v) {
+      xml_comp_t vertex = v;
+      vx.push_back(vertex.attr<double>(_Unicode(x)) * mm);
+      vy.push_back(vertex.attr<double>(_Unicode(y)) * mm);
+    }
+    for (xml_coll_t sec_iter(x_shape, _Unicode(section)); sec_iter; ++sec_iter) {
+      xml_comp_t xtru_sec = sec_iter;
+      vz.push_back(xtru_sec.attr<double>(_Unicode(zPosition)) * mm);
+      vxoff.push_back(getAttrOrDefault<double>(xtru_sec, _Unicode(xOffset), 0.) * mm);
+      vyoff.push_back(getAttrOrDefault<double>(xtru_sec, _Unicode(yOffset), 0.) * mm);
+      vscale.push_back(getAttrOrDefault<double>(xtru_sec, _Unicode(scalingFactor), 1.));
     }
 
-    Volume solidVolume = parser.GDMLReadFile(tgdml_file.c_str());
-    if (!solidVolume.isValid()) {
-      printout(WARNING, "BarrelHCalCalorimeter_geo", "%s", tgdml_file.c_str());
-      printout(WARNING, "BarrelHCalCalorimeter_geo", "solidVolume invalid, GDML parser failed!");
-      std::_Exit(EXIT_FAILURE);
-    }
-    solidVolume.import();
+    ExtrudedPolygon tile_solid(vx, vy, vz, vxoff, vyoff, vscale);
+    Material tile_material = description.material(tile_material_name.c_str());
+    Volume solidVolume(solid_name, tile_solid, tile_material);
     solidVolume.setVisAttributes(description, x_det.visStr());
-    TessellatedSolid volume_solid = solidVolume.solid();
-    volume_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
-    Material tile_material = description.material(tgdml_material.c_str());
-    solidVolume.setMaterial(tile_material);
-
     solidVolume.setSensitiveDetector(sens);
 
-    // For tiles we build an assembly to get the full array of tiles
-    // Offsets and rotation are to properly orient the tiles in the assembly.
+    // Tile numbers are indexed from centre (eta=0) outward; reindex starting from one end.
 
     if (solid_name.size() > 0) {
 
@@ -348,8 +363,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         std::string stnum = solid_name.substr(solid_name.size() - 2, solid_name.size());
         int tnum          = atoi(stnum.c_str()) - 1;
-
-        // Tile numbers are indexed by the center (eta=0) out, we want them starting zero at one end.
 
         if (type == "OuterHCalTile") {
 
@@ -382,11 +395,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     for (int i_phi = 0; i_phi < 320; i_phi++) { // phi index
 
+      // Determine which phi sector this tile column belongs to
+      double tile_phi = i_phi * increment_angle + increment_offset;
+      int sec         = phi_to_sector(tile_phi);
+
       if (i_eta > 3) {
 
         // ordinary sector tiles
 
-        PlacedVolume phv1 = BarrelHCAL.placeVolume(
+        PlacedVolume phv1 = hcal_sec[sec].placeVolume(
             Tile[i_eta], i_phi + i_eta * 320,
             RotationZ(i_phi * increment_angle + increment_offset) *
                 Transform3D(
@@ -404,7 +421,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         sd1.setPlacement(phv1);
         sdet.add(sd1);
 
-        PlacedVolume phv0 = BarrelHCAL.placeVolume(
+        PlacedVolume phv0 = hcal_sec[sec].placeVolume(
             Tile[i_eta], i_phi + (12 + tnum) * 320,
             RotationZ(i_phi * increment_angle + increment_offset) *
                 Transform3D(
@@ -429,7 +446,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           // ordinary sector tiles
 
-          PlacedVolume phv1 = BarrelHCAL.placeVolume(
+          PlacedVolume phv1 = hcal_sec[sec].placeVolume(
               Tile[i_eta], i_phi + i_eta * 320,
               RotationZ(i_phi * increment_angle + increment_offset) *
                   Transform3D(
@@ -445,7 +462,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           sd1.setPlacement(phv1);
           sdet.add(sd1);
 
-          PlacedVolume phv0 = BarrelHCAL.placeVolume(
+          PlacedVolume phv0 = hcal_sec[sec].placeVolume(
               Tile[i_eta], i_phi + (12 + tnum) * 320,
               RotationZ(i_phi * increment_angle + increment_offset) *
                   Transform3D(
@@ -468,7 +485,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           // chimney sector tile
 
-          PlacedVolume phv1 = BarrelHCAL.placeVolume(
+          PlacedVolume phv1 = hcal_sec[sec].placeVolume(
               ChimneyTile[i_eta], i_phi + (12 + tnum) * 320,
               RotationZ(i_phi * increment_angle + increment_offset) *
                   Transform3D(
@@ -487,7 +504,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           sd1.setPlacement(phv1);
           sdet.add(sd1);
 
-          PlacedVolume phv0 = BarrelHCAL.placeVolume(
+          PlacedVolume phv0 = hcal_sec[sec].placeVolume(
               Tile[i_eta], i_phi + i_eta * 320,
               RotationZ(i_phi * increment_angle + increment_offset) *
                   Transform3D(
@@ -507,9 +524,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
   }
 
-  // Place the detector into the envelope
-
-  envelope.placeVolume(BarrelHCAL, 0, Transform3D(RotationZ(0.0), Translation3D(0, 0, 0)));
+  // Place 32 phi-sector sub-assemblies into the envelope
+  for (int k = 0; k < 32; k++)
+    envelope.placeVolume(hcal_sec[k], k);
 
   std::string env_vis =
       getAttrOrDefault<std::string>(x_det, _Unicode(env_vis), "HcalBarrelEnvelopeVis");
