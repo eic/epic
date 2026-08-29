@@ -25,23 +25,236 @@
         <type_flags type="DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC"/>
         <sec_gdmlfile file="gdml/barrel_hcal_steel_sector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_sector_nocombs.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="Steel1020"/>
         <csec_gdmlfile file="gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="Steel1020"/>
-        <er_gdmlfile file="gdml/barrel_hcal_steel_endring.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_endring.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="Steel1020"/>
-        <tile1_gdmlfile file="gdml/Tile01_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile01_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile2_gdmlfile file="gdml/Tile02_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile02_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile3_gdmlfile file="gdml/Tile03_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile03_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile4_gdmlfile file="gdml/Tile04_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile04_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile5_gdmlfile file="gdml/Tile05_Reduced.gdml" url="https://github.com/eic/epic-data/raw/557595947d6423b8925a917c09461654e9df2d45/barrel_HCAL_gdml/tiles/Tile05_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile6_gdmlfile file="gdml/Tile06_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile06_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile7_gdmlfile file="gdml/Tile07_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile07_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile8_gdmlfile file="gdml/Tile08_Reduced.gdml" url="https://github.com/eic/epic-data/raw/582c777d1f17886da4619b1a2b047c507db43672/barrel_HCAL_gdml/tiles/Tile08_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile9_gdmlfile file="gdml/Tile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/66733a76b758ce9d85d270e59fdd560f84bc70ec/barrel_HCAL_gdml/tiles/Tile09_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile10_gdmlfile file="gdml/Tile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/66733a76b758ce9d85d270e59fdd560f84bc70ec/barrel_HCAL_gdml/tiles/Tile10_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile11_gdmlfile file="gdml/Tile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/66733a76b758ce9d85d270e59fdd560f84bc70ec/barrel_HCAL_gdml/tiles/Tile11_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <tile12_gdmlfile file="gdml/Tile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/66733a76b758ce9d85d270e59fdd560f84bc70ec/barrel_HCAL_gdml/tiles/Tile12_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <ctile9_gdmlfile file="gdml/CTile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile09_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <ctile10_gdmlfile file="gdml/CTile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile10_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <ctile11_gdmlfile file="gdml/CTile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile11_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
-        <ctile12_gdmlfile file="gdml/CTile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile12_Reduced.gdml" cache="$DETECTOR_CACHE:/opt/detector" material="PlasticScint"/>
+        <end_ring material="Steel1020">
+          <dimensions rinner="1980.15" router="2619.85" zhalf="19.304" zcenter="3178.406"
+                      nholes="32" rhole="152.4" rhole_ctr="2293.86069"/>
+        </end_ring>
+        <tile1 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="1.9212" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition="8.9212" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-102.207000" y="-426.850000"/>
+            <twoDimVertex x="-102.207000" y=" 381.494482"/>
+            <twoDimVertex x=" -35.668670" y=" 381.494482"/>
+            <twoDimVertex x=" -35.668670" y=" 372.824500"/>
+            <twoDimVertex x="  35.801331" y=" 372.824500"/>
+            <twoDimVertex x="  35.801331" y=" 381.494482"/>
+            <twoDimVertex x=" 136.273087" y=" 381.494482"/>
+            <twoDimVertex x="  63.817399" y="-426.850000"/>
+          </shape>
+        </tile1>
+        <tile2 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-143.321588" y="-426.422000"/>
+            <twoDimVertex x=" -70.865900" y=" 381.922482"/>
+            <twoDimVertex x="  -7.278375" y=" 381.922482"/>
+            <twoDimVertex x="  -7.278375" y=" 372.872495"/>
+            <twoDimVertex x="  64.191626" y=" 372.872495"/>
+            <twoDimVertex x="  64.191626" y=" 381.922482"/>
+            <twoDimVertex x=" 173.766669" y=" 381.922482"/>
+            <twoDimVertex x="  28.060339" y="-426.422000"/>
+          </shape>
+        </tile2>
+        <tile3 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-180.683547" y="-427.080000"/>
+            <twoDimVertex x=" -34.977218" y=" 381.264482"/>
+            <twoDimVertex x="  22.907151" y=" 381.264482"/>
+            <twoDimVertex x="  22.907151" y=" 372.214495"/>
+            <twoDimVertex x="  94.377183" y=" 372.214495"/>
+            <twoDimVertex x="  94.377183" y=" 381.264482"/>
+            <twoDimVertex x=" 207.250291" y=" 381.264482"/>
+            <twoDimVertex x=" -12.735671" y="-427.080000"/>
+          </shape>
+        </tile3>
+        <tile4 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="  -3.905333" y=" 381.526482"/>
+            <twoDimVertex x="-223.891325" y="-426.818000"/>
+            <twoDimVertex x=" -48.887693" y="-426.818000"/>
+            <twoDimVertex x=" 247.276369" y=" 381.526482"/>
+            <twoDimVertex x=" 124.100161" y=" 381.526482"/>
+            <twoDimVertex x=" 124.100161" y=" 372.476495"/>
+            <twoDimVertex x="  52.630129" y=" 372.476495"/>
+            <twoDimVertex x="  52.630129" y=" 381.526482"/>
+          </shape>
+        </tile4>
+        <tile5 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="  28.549372" y=" 381.478482"/>
+            <twoDimVertex x="-267.614691" y="-426.866000"/>
+            <twoDimVertex x=" -86.592779" y="-426.866000"/>
+            <twoDimVertex x=" 288.371088" y=" 381.478482"/>
+            <twoDimVertex x=" 219.066645" y=" 381.478482"/>
+            <twoDimVertex x=" 219.066645" y=" 372.428495"/>
+            <twoDimVertex x=" 147.596552" y=" 372.428495"/>
+            <twoDimVertex x=" 147.596552" y=" 381.478482"/>
+          </shape>
+        </tile5>
+        <tile6 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-313.621423" y="-426.919000"/>
+            <twoDimVertex x="  61.342383" y=" 381.425482"/>
+            <twoDimVertex x=" 115.199561" y=" 381.425482"/>
+            <twoDimVertex x=" 115.199561" y=" 372.375495"/>
+            <twoDimVertex x=" 186.669531" y=" 372.375495"/>
+            <twoDimVertex x=" 186.669531" y=" 381.425482"/>
+            <twoDimVertex x=" 330.776465" y=" 381.425482"/>
+            <twoDimVertex x="-125.911157" y="-426.919000"/>
+          </shape>
+        </tile6>
+        <tile7 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-362.442598" y="-426.976000"/>
+            <twoDimVertex x="  94.245024" y=" 381.368482"/>
+            <twoDimVertex x=" 149.082549" y=" 381.368482"/>
+            <twoDimVertex x=" 149.082549" y=" 372.318495"/>
+            <twoDimVertex x=" 220.552520" y=" 372.318495"/>
+            <twoDimVertex x=" 220.552520" y=" 381.368482"/>
+            <twoDimVertex x=" 376.774077" y=" 381.368482"/>
+            <twoDimVertex x="-165.592134" y="-426.976000"/>
+          </shape>
+        </tile7>
+        <tile8 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-414.647910" y="-426.824000"/>
+            <twoDimVertex x=" 127.718301" y=" 381.520482"/>
+            <twoDimVertex x=" 184.142861" y=" 381.520482"/>
+            <twoDimVertex x=" 184.142861" y=" 372.470495"/>
+            <twoDimVertex x=" 255.612832" y=" 372.470495"/>
+            <twoDimVertex x=" 255.612832" y=" 381.520482"/>
+            <twoDimVertex x=" 426.309854" y=" 381.520482"/>
+            <twoDimVertex x="-205.897178" y="-426.824000"/>
+          </shape>
+        </tile8>
+        <tile9 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-118.545385" y=" 326.307482"/>
+            <twoDimVertex x=" 416.710475" y="-358.074498"/>
+            <twoDimVertex x=" 181.886622" y="-358.074498"/>
+            <twoDimVertex x="-435.632543" y=" 326.307482"/>
+            <twoDimVertex x="-243.662816" y=" 326.307482"/>
+            <twoDimVertex x="-243.662816" y=" 317.257495"/>
+            <twoDimVertex x="-172.192846" y=" 317.257495"/>
+            <twoDimVertex x="-172.192846" y=" 326.307482"/>
+          </shape>
+        </tile9>
+        <tile10 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-149.569467" y=" 326.436482"/>
+            <twoDimVertex x=" 467.949698" y="-357.945498"/>
+            <twoDimVertex x=" 218.585807" y="-357.945498"/>
+            <twoDimVertex x="-485.130502" y=" 326.436482"/>
+            <twoDimVertex x="-272.052865" y=" 326.436482"/>
+            <twoDimVertex x="-272.052865" y=" 317.386495"/>
+            <twoDimVertex x="-200.582895" y=" 317.386495"/>
+            <twoDimVertex x="-200.582895" y=" 326.436482"/>
+          </shape>
+        </tile10>
+        <tile11 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x=" 480.269480" y="-346.196498"/>
+            <twoDimVertex x="-223.446828" y=" 338.185482"/>
+            <twoDimVertex x="-246.227834" y=" 338.185482"/>
+            <twoDimVertex x="-246.227834" y=" 329.135495"/>
+            <twoDimVertex x="-317.697805" y=" 329.135495"/>
+            <twoDimVertex x="-317.697805" y=" 338.185482"/>
+            <twoDimVertex x="-488.055959" y=" 338.185482"/>
+            <twoDimVertex x=" 239.031199" y="-346.196498"/>
+          </shape>
+        </tile11>
+        <tile12 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x=" 492.771215" y="-308.834498"/>
+            <twoDimVertex x="-234.315943" y=" 375.547482"/>
+            <twoDimVertex x="-256.116480" y=" 375.547482"/>
+            <twoDimVertex x="-256.116480" y=" 366.497495"/>
+            <twoDimVertex x="-327.586451" y=" 366.497495"/>
+            <twoDimVertex x="-327.586451" y=" 375.547482"/>
+            <twoDimVertex x="-333.086451" y=" 375.547482"/>
+            <twoDimVertex x="-333.086451" y="  86.981442"/>
+            <twoDimVertex x=" 183.030736" y="-308.834498"/>
+          </shape>
+        </tile12>
+        <ctile9 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-280.572737" y="-167.969510"/>
+            <twoDimVertex x=" -21.947615" y=" 162.710482"/>
+            <twoDimVertex x="  31.699846" y=" 162.710482"/>
+            <twoDimVertex x="  31.699846" y=" 153.660495"/>
+            <twoDimVertex x=" 103.169816" y=" 153.660495"/>
+            <twoDimVertex x=" 103.169816" y=" 162.710482"/>
+            <twoDimVertex x=" 295.139543" y=" 162.710482"/>
+            <twoDimVertex x="  -3.233504" y="-167.969510"/>
+          </shape>
+        </ctile9>
+        <ctile10 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x=" -11.216533" y=" 162.699482"/>
+            <twoDimVertex x="-309.607646" y="-168.000499"/>
+            <twoDimVertex x=" -15.697979" y="-168.000499"/>
+            <twoDimVertex x=" 324.344502" y=" 162.699482"/>
+            <twoDimVertex x=" 111.266865" y=" 162.699482"/>
+            <twoDimVertex x=" 111.266865" y=" 153.649495"/>
+            <twoDimVertex x="  39.796895" y=" 153.649495"/>
+            <twoDimVertex x="  39.796895" y=" 162.699482"/>
+          </shape>
+        </ctile10>
+        <ctile11 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-300.003652" y="-165.319499"/>
+            <twoDimVertex x="  40.038828" y=" 165.380482"/>
+            <twoDimVertex x="  62.819834" y=" 165.380482"/>
+            <twoDimVertex x="  62.819834" y=" 156.330495"/>
+            <twoDimVertex x=" 134.289805" y=" 156.330495"/>
+            <twoDimVertex x=" 134.289805" y=" 165.380482"/>
+            <twoDimVertex x=" 304.647959" y=" 165.380482"/>
+            <twoDimVertex x=" -46.687490" y="-165.319499"/>
+          </shape>
+        </ctile11>
+        <ctile12 material="PlasticScint">
+          <shape type="Xtru">
+            <section zOrder="0" zPosition="-3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <section zOrder="1" zPosition=" 3.5" xOffset="0" yOffset="0" scalingFactor="1"/>
+            <twoDimVertex x="-291.496266" y="-130.125510"/>
+            <twoDimVertex x="  59.817943" y=" 200.554482"/>
+            <twoDimVertex x="  81.618480" y=" 200.554482"/>
+            <twoDimVertex x="  81.618480" y=" 191.504495"/>
+            <twoDimVertex x=" 153.088451" y=" 191.504495"/>
+            <twoDimVertex x=" 153.088451" y=" 200.554482"/>
+            <twoDimVertex x=" 158.588451" y=" 200.554482"/>
+            <twoDimVertex x=" 158.588451" y=" -88.011558"/>
+            <twoDimVertex x=" 103.674877" y="-130.125510"/>
+          </shape>
+        </ctile12>
 
   <define>
 
