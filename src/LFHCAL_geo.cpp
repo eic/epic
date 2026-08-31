@@ -1261,7 +1261,84 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                         Position(copper_pos.x(), copper_pos.y(),
                                  -length / 2. + eightM_params.mod_MPThick - copper_dim.z() / 2.));
   }
-  
+
+  // Build the upstream trigger-scintillator assembly when configured.
+  if (detElem.hasChild(_Unicode(triggerscintillators))) {
+    xml_comp_t triggers_xml = detElem.child(_Unicode(triggerscintillators));
+    double shell_thickness  = triggers_xml.attr<double>(_Unicode(shellThickness));
+    double center_x         = triggers_xml.attr<double>(_Unicode(centerX));
+    double center_y         = triggers_xml.attr<double>(_Unicode(centerY));
+    std::string scintillator_material =
+        triggers_xml.attr<std::string>(_Unicode(scintillatorMaterial));
+    std::string shell_material = triggers_xml.attr<std::string>(_Unicode(shellMaterial));
+    std::string scintillator_vis =
+        triggers_xml.attr<std::string>(_Unicode(scintillatorVis));
+    std::string shell_vis = triggers_xml.attr<std::string>(_Unicode(shellVis));
+
+    struct TriggerScintillator {
+      std::string name;
+      int id;
+      double x;
+      double y;
+      double thickness;
+      double gap_after;
+    };
+    std::vector<TriggerScintillator> triggers;
+    
+    // Read scintillator dimensions and downstream gaps ordered along +z.
+    for (xml_coll_t trigger_i(triggers_xml, _Unicode(scintillator)); trigger_i; ++trigger_i) {
+      xml_comp_t trigger_xml = trigger_i;
+      xml_dim_t trigger_dim  = trigger_xml.dimensions();
+      triggers.push_back({trigger_xml.nameStr(), trigger_xml.attr<int>(_Unicode(id)),
+                          trigger_dim.x(), trigger_dim.y(), trigger_dim.z(),
+                          trigger_xml.attr<double>(_Unicode(gapAfter))});
+    }
+
+    // Locate the assembly upstream of the configured gap to the LFHCal front face.
+    double upstream_face = 0.;
+    for (const auto& trigger : triggers) {
+      upstream_face -= trigger.thickness + 2. * shell_thickness + trigger.gap_after;
+    }
+
+    Assembly trigger_assembly(detName + "_TriggerScintillators");
+    // Enclose each sensitive block in its shell and place the blocks along +z.
+    for (const auto& trigger : triggers) {
+      double outer_x  = trigger.x + 2. * shell_thickness;
+      double outer_y  = trigger.y + 2. * shell_thickness;
+      double outer_z  = trigger.thickness + 2. * shell_thickness;
+      double center_z = upstream_face + outer_z / 2.;
+
+      Box shell_box(outer_x / 2., outer_y / 2., outer_z / 2.);
+      Volume shell_vol(detName + "_" + trigger.name + "Shell", shell_box,
+                       desc.material(shell_material));
+      shell_vol.setVisAttributes(desc.visAttributes(shell_vis));
+
+      Box scintillator_box(trigger.x / 2., trigger.y / 2., trigger.thickness / 2.);
+      Volume scintillator_vol(detName + "_" + trigger.name, scintillator_box,
+                              desc.material(scintillator_material));
+      scintillator_vol.setVisAttributes(desc.visAttributes(scintillator_vis));
+      scintillator_vol.setSensitiveDetector(sens);
+      PlacedVolume scintillator_pv = shell_vol.placeVolume(scintillator_vol);
+      scintillator_pv.addPhysVolID("moduleIDx", 15)
+          .addPhysVolID("moduleIDy", 15)
+          .addPhysVolID("moduletype", 1)
+          .addPhysVolID("passive", 0)
+          .addPhysVolID("towerx", trigger.id)
+          .addPhysVolID("towery", 0)
+          .addPhysVolID("rlayerz", 0)
+          .addPhysVolID("layerz", 0);
+
+      trigger_assembly.placeVolume(shell_vol, Position(center_x, center_y, center_z));
+      upstream_face += outer_z + trigger.gap_after;
+    }
+    // Place the completed trigger assembly relative to the LFHCal origin.
+    // NOTE: current assembly is placed slightly offset from the center of the stack so ddsim particle gun
+    // does not shoot into a gap between modules
+    PlacedVolume trigger_pv =
+        motherVol.placeVolume(trigger_assembly, Position(pos.x(), pos.y(), pos.z()));
+    trigger_pv.addPhysVolID("system", detID);
+  }
+
   phv              = motherVol.placeVolume(env_vol,
                                            Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
   phv.addPhysVolID("system", detID);
