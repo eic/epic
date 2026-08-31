@@ -73,7 +73,7 @@
           Scintillators are placed slightly off-center so a ddsim particle gun can avoid shooting between the modules.
           PolyvinylAcetate is used as a substitute for PLA.
         </documentation>
-        
+
         <scintillator name="Plate1" id="0" gapAfter="3*mm">
           <dimensions x="200*mm" y="100*mm" z="10*mm"/>
         </scintillator>

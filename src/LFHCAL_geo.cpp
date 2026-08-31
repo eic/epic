@@ -1270,10 +1270,9 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
     double center_y         = triggers_xml.attr<double>(_Unicode(centerY));
     std::string scintillator_material =
         triggers_xml.attr<std::string>(_Unicode(scintillatorMaterial));
-    std::string shell_material = triggers_xml.attr<std::string>(_Unicode(shellMaterial));
-    std::string scintillator_vis =
-        triggers_xml.attr<std::string>(_Unicode(scintillatorVis));
-    std::string shell_vis = triggers_xml.attr<std::string>(_Unicode(shellVis));
+    std::string shell_material   = triggers_xml.attr<std::string>(_Unicode(shellMaterial));
+    std::string scintillator_vis = triggers_xml.attr<std::string>(_Unicode(scintillatorVis));
+    std::string shell_vis        = triggers_xml.attr<std::string>(_Unicode(shellVis));
 
     struct TriggerScintillator {
       std::string name;
@@ -1284,7 +1283,7 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
       double gap_after;
     };
     std::vector<TriggerScintillator> triggers;
-    
+
     // Read scintillator dimensions and downstream gaps ordered along +z.
     for (xml_coll_t trigger_i(triggers_xml, _Unicode(scintillator)); trigger_i; ++trigger_i) {
       xml_comp_t trigger_xml = trigger_i;
