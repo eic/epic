@@ -1339,8 +1339,8 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
     trigger_pv.addPhysVolID("system", detID);
   }
 
-  phv              = motherVol.placeVolume(env_vol,
-                                           Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
+  phv = motherVol.placeVolume(env_vol,
+                              Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);
 
