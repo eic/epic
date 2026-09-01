@@ -163,14 +163,14 @@ echo "::endgroup::"
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
 if [[ "$verbose" -eq 1 ]]; then
 
-echo "::group::----MAPPING Debugging-----"
-echo "Volumes by name:"
-jq -r '.Volumes.entries[] | "vol=\(.volume): \(.value.NAME)"' geometry-map.json
-echo "Volume surfaces:"
-jq -r '.Surfaces.entries[] | select(.boundary != null) | "vol=\(.volume)|bnd=\(.boundary): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
-echo "Layer surfaces:"
-jq -r '.Surfaces.entries[] | select(.volume < 40 and .layer != null) | "vol=\(.volume)|lay=\(.layer): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
-echo "::endgroup::"
+  echo "::group::----MAPPING Debugging-----"
+  echo "Volumes by name:"
+  jq -r '.Volumes.entries[] | "vol=\(.volume): \(.value.NAME)"' geometry-map.json
+  echo "Volume surfaces:"
+  jq -r '.Surfaces.entries[] | select(.boundary != null) | "vol=\(.volume)|bnd=\(.boundary): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
+  echo "Layer surfaces:"
+  jq -r '.Surfaces.entries[] | select(.volume < 40 and .layer != null) | "vol=\(.volume)|lay=\(.layer): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
+  echo "::endgroup::"
 
   sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
   sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
