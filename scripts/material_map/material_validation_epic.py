@@ -28,8 +28,8 @@ if "__main__" == __name__:
     p.add_argument(
         "--matFile",
         type=str,
-        default="material-map.json",
-        help="input material map file with extension, can be either xx.json or xx.cbor",
+        default="",
+        help="input material map file with extension, can be either xx.json or xx.cbor (optional)",
     )
     p.add_argument(
         "--outputName",
