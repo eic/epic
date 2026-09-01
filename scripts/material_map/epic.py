@@ -20,7 +20,7 @@ def getDetector(
     logger = acts.getDefaultLogger("epic.getDetector", logLevel)
 
     matDeco = None
-    if len(jsonFile)>0:
+    if len(jsonFile) > 0 and Path(jsonFile).exists():
         file = Path(jsonFile)
         logger.info("Adding material from %s", file.absolute())
         matDeco = acts.IMaterialDecorator.fromFile(

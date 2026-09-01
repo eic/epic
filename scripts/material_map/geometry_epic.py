@@ -38,5 +38,5 @@ if "__main__" == __name__:
         outputDir=Path.cwd(),
         outputObj=False,
         outputCsv=False,
-        outputJson=True,
+        outputSurfacesJson=True,
     )
