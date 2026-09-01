@@ -51,6 +51,11 @@ diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/Materi
      eta_1p->Draw("Same");
 EOF
     fi
+    if [ "${file}" = "Examples/Scripts/MaterialMapping/materialPlotHelper.cpp" ] ; then
+      # Patch materialPlotHelper.cpp for Acts v46.8.1 geometry JSON format
+      # (geo_id changed from uint64_t to object with component fields)
+      patch -p1 < materialPlotHelper.cpp.patch
+    fi
   fi
 done
 # Patch function is possibly unused but retained for future use
@@ -176,6 +181,7 @@ if [[ "$verbose" -eq 1 ]]; then
   sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
   sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
 fi
+
 echo "::group::----MAPPING------------"
 python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
 echo "::endgroup::"
