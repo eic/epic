@@ -182,7 +182,7 @@ echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
 # output propagation-material.root
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_regenerated --matFile $(matFile} -n ${nevents}  -t ${nparticles}
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_regenerated --matFile ${matFile} -n ${nevents}  -t ${nparticles}
 python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_current --matFile "calibrations/materials-map.cbor" -n ${nevents} -t ${nparticles}
 echo "::endgroup::"
 
