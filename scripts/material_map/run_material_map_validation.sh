@@ -94,10 +94,13 @@ function print_the_help {
   exit
 }
 
-while [[ $# -gt 1 ]]
+while [[ $# -gt 0 ]]
 do
   key="$1"
   case $key in
+    -h|--help)
+      print_the_help
+      ;;
     --nevents)
       nevents=$2
       shift # past value
