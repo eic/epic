@@ -39,13 +39,19 @@ if "__main__" == __name__:
         default="material-map.json",
         help="output filename for the generated material map, can be json and cbor formats",
     )
+    p.add_argument(
+        "--inputRootFile",
+        type=str,
+        default="geant4_material_tracks.root",
+        help="input ROOT file with material tracks (typically from material_recording_epic.py)",
+    )
     args = p.parse_args()
 
     mapName = args.matFile.split('.')[0]
     if '.json' in args.matFile:
-        mapFormat = JsonFormat.Json
+        mapFormats = ["json", "root"]
     elif '.cbor' in args.matFile:
-        mapFormat = JsonFormat.Cbor
+        mapFormats = ["json", "root"]
     else:
         print('ERROR(material_mapping_epic.py): please provide a material map file in .json or .cbor format')
         exit()
@@ -55,13 +61,13 @@ if "__main__" == __name__:
     trackingGeometry = detector.trackingGeometry()
     decorators = detector.contextDecorators()
 
+    materialSurfaces = trackingGeometry.extractMaterialSurfaces()
+
+    outputFileBase = os.path.join(os.getcwd(), mapName)
+
     runMaterialMapping(
-        trackingGeometry,
-        decorators,
-        outputDir=Path.cwd(),
-        inputDir=Path.cwd(),
-        readCachedSurfaceInformation=False,
-        mapVolume=False,
-        mapName=mapName,
-        mapFormat=mapFormat,
+        surfaces=materialSurfaces,
+        inputFile=Path(args.inputRootFile),
+        outputFileBase=outputFileBase,
+        outputMapFormats=mapFormats,
     ).run()
