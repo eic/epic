@@ -58,10 +58,10 @@ def main():
 
     runMaterialRecording(
         detector=detector,
-        tracksPerEvent=args.tracks,
-        outputDir=os.getcwd(),
-        etaRange=(args.eta_min, args.eta_max),
         s=acts.examples.Sequencer(events=args.events, numThreads=1),
+        tracksPerEvent=args.tracks,
+        etaRange=(args.eta_min, args.eta_max),
+        outputFileBase=os.path.join(os.getcwd(), args.outputName.replace(".root", "")),
     ).run()
 
 
