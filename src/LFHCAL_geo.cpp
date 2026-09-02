@@ -1305,9 +1305,9 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
     Assembly trigger_assembly(detName + "_TriggerScintillators");
     // Enclose each sensitive block in its shell and place the blocks away from the front face.
     for (const auto& trigger : triggers) {
-      double outer_x  = trigger.x + 2. * shell_thickness;
-      double outer_y  = trigger.y + 2. * shell_thickness;
-      double outer_z  = trigger.thickness + 2. * shell_thickness;
+      double outer_x           = trigger.x + 2. * shell_thickness;
+      double outer_y           = trigger.y + 2. * shell_thickness;
+      double outer_z           = trigger.thickness + 2. * shell_thickness;
       double relative_center_z = relative_face + outer_z / 2.;
       double center_z          = front_face_z + placement_z_sign * relative_center_z;
 
