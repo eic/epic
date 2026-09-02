@@ -27,6 +27,8 @@ def getDetector(
             file,
             level=customLogLevel(maxLevel=acts.logging.WARNING),
         )
+    else:
+        logger.warning("Material map %s not loaded.", jsonFile)
 
     dd4hepConfig = acts.examples.dd4hep.DD4hepDetector.Config(
         xmlFileNames=[xmlFile],
