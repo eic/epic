@@ -51,11 +51,6 @@ diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/Materi
      eta_1p->Draw("Same");
 EOF
     fi
-    if [ "${file}" = "Examples/Scripts/MaterialMapping/materialPlotHelper.cpp" ] ; then
-      # Patch materialPlotHelper.cpp for Acts v46.8.1 geometry JSON format
-      # (geo_id changed from uint64_t to object with component fields)
-      patch -p1 < materialPlotHelper.cpp.patch
-    fi
   fi
 done
 # Patch function is possibly unused but retained for future use
@@ -67,6 +62,8 @@ function patch_acts() {
     patch -p1 --forward --input="$file" || git apply --whitespace=nowarn "$file"
   fi
 }
+patch_acts https://github.com/acts-project/acts/pull/6010.diff  # geo_id encoding
+patch_acts https://github.com/acts-project/acts/pull/6012.diff  # cbor support
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
@@ -132,7 +129,7 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 recordingFile=geant4_material_tracks.root
 geoFile=geometry-map.json
-matFile=material-map.json
+matFile=material-map.cbor
 trackFile=material-map_mapped.root
 propFile=propagation_material
 
