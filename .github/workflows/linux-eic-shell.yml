@@ -178,8 +178,9 @@ jobs:
       with:
         name: material_map
         path: |
+          scripts/material_map/*.cbor
           scripts/material_map/*.json
-          scripts/material_map/material-map.*
+          scripts/material_map/*.root
           scripts/material_map/plots/
           scripts/material_map/Surfaces/
           scripts/material_map/Validation/
