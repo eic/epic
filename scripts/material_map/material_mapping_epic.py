@@ -51,7 +51,7 @@ if "__main__" == __name__:
     if '.json' in args.matFile:
         mapFormats = ["json", "root"]
     elif '.cbor' in args.matFile:
-        mapFormats = ["json", "root"]
+        mapFormats = ["cbor", "root"]
     else:
         print('ERROR(material_mapping_epic.py): please provide a material map file in .json or .cbor format')
         exit()
