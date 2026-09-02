@@ -1335,8 +1335,6 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
       relative_face += outer_z + trigger.gap_after;
     }
     // Place the completed trigger assembly relative to the LFHCal origin.
-    // NOTE: current assembly is placed slightly offset from the center of the stack so ddsim particle gun
-    // does not shoot into a gap between modules
     PlacedVolume trigger_pv =
         motherVol.placeVolume(trigger_assembly, Position(pos.x(), pos.y(), pos.z()));
     trigger_pv.addPhysVolID("system", detID);
