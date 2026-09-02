@@ -55,6 +55,34 @@
         y="EightM_OuterHeight*2+1*cm"/>
       <envelope material="Steel235"/>
 
+      <triggerscintillators
+        scintillatorMaterial="Polystyrene"
+        shellMaterial="PolyvinylAcetate"
+        shellThickness="3*mm"
+        centerX="2.85*cm"
+        centerY="1*cm"
+        scintillatorVis="AnlGreen"
+        shellVis="AnlGray">
+        <documentation>
+          gapAfter is the surface-to-surface distance to the following volume; Finger2 uses the LFHCal front face.
+          Scintillators are placed slightly off-center from the stack.
+          PolyvinylAcetate is used as a substitute for PLA.
+        </documentation>
+
+        <scintillator name="Plate1" id="0" gapAfter="3*mm">
+          <dimensions x="200*mm" y="100*mm" z="10*mm"/>
+        </scintillator>
+        <scintillator name="Plate2" id="1" gapAfter="10*cm">
+          <dimensions x="200*mm" y="100*mm" z="10*mm"/>
+        </scintillator>
+        <scintillator name="Finger1" id="2" gapAfter="3*mm">
+          <dimensions x="120*mm" y="15*mm" z="10*mm"/>
+        </scintillator>
+        <scintillator name="Finger2" id="3" gapAfter="30*cm">
+          <dimensions x="15*mm" y="120*mm" z="10*mm"/>
+        </scintillator>
+      </triggerscintillators>
+
       <eightmodule name="8MModule" vis="InvisibleWithDaughters" repeat="0" >
         <dimensions
         width="EightM_OuterWidth"
@@ -152,6 +180,7 @@
           1 bit [0-1] tower Y
           6 bit [0-63] readout layer z
           6 bit [0-63] layer z in readout layer
+        Trigger scintillators use moduleID X/Y = 15 and tower X = 0-3 ordered along +z.
       </documentation>
       <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:6,layerz:6</id>
     </readout>

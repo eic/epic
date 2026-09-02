@@ -1262,7 +1262,7 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                                  -length / 2. + eightM_params.mod_MPThick - copper_dim.z() / 2.));
   }
 
-  // Build the upstream trigger-scintillator assembly when configured.
+  // Build the trigger-scintillator assembly when configured.
   if (detElem.hasChild(_Unicode(triggerscintillators))) {
     xml_comp_t triggers_xml = detElem.child(_Unicode(triggerscintillators));
     double shell_thickness  = triggers_xml.attr<double>(_Unicode(shellThickness));
@@ -1284,7 +1284,7 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
     };
     std::vector<TriggerScintillator> triggers;
 
-    // Read scintillator dimensions and downstream gaps ordered along +z.
+    // Read scintillator dimensions and downstream gaps in their listed order.
     for (xml_coll_t trigger_i(triggers_xml, _Unicode(scintillator)); trigger_i; ++trigger_i) {
       xml_comp_t trigger_xml = trigger_i;
       xml_dim_t trigger_dim  = trigger_xml.dimensions();
@@ -1293,19 +1293,23 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                           trigger_xml.attr<double>(_Unicode(gapAfter))});
     }
 
-    // Locate the assembly upstream of the configured gap to the LFHCal front face.
-    double upstream_face = 0.;
+    // Locate the assembly beside the module's front face.
+    double relative_face = 0.;
     for (const auto& trigger : triggers) {
-      upstream_face -= trigger.thickness + 2. * shell_thickness + trigger.gap_after;
+      relative_face -= trigger.thickness + 2. * shell_thickness + trigger.gap_after;
     }
+    bool flipped            = !pos8M.empty() && pos8M.front().orientation == 1;
+    double front_face_z     = flipped ? length : 0.;
+    double placement_z_sign = flipped ? -1. : 1.;
 
     Assembly trigger_assembly(detName + "_TriggerScintillators");
-    // Enclose each sensitive block in its shell and place the blocks along +z.
+    // Enclose each sensitive block in its shell and place the blocks away from the front face.
     for (const auto& trigger : triggers) {
       double outer_x  = trigger.x + 2. * shell_thickness;
       double outer_y  = trigger.y + 2. * shell_thickness;
       double outer_z  = trigger.thickness + 2. * shell_thickness;
-      double center_z = upstream_face + outer_z / 2.;
+      double relative_center_z = relative_face + outer_z / 2.;
+      double center_z          = front_face_z + placement_z_sign * relative_center_z;
 
       Box shell_box(outer_x / 2., outer_y / 2., outer_z / 2.);
       Volume shell_vol(detName + "_" + trigger.name + "Shell", shell_box,
@@ -1328,7 +1332,7 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
           .addPhysVolID("layerz", 0);
 
       trigger_assembly.placeVolume(shell_vol, Position(center_x, center_y, center_z));
-      upstream_face += outer_z + trigger.gap_after;
+      relative_face += outer_z + trigger.gap_after;
     }
     // Place the completed trigger assembly relative to the LFHCal origin.
     // NOTE: current assembly is placed slightly offset from the center of the stack so ddsim particle gun
