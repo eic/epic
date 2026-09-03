@@ -84,13 +84,18 @@ export ACTS_SEQUENCER_DISABLE_FPEMON=1
 nevents=1000
 nparticles=5000
 verbose=0
+prefix=""
+suffix=""
 
 function print_the_help {
-  echo "USAGE:    [--nevents <int>] [--nparticles <int>]"
+  echo "USAGE:    [--nevents <int>] [--nparticles <int>] [--prefix <str>] [--suffix <str>]"
   echo "OPTIONAL ARGUMENTS:"
   echo "          --nevents       Number of events (default: $nevents)"
   echo "          --nparticles    Number of particles per event (default: $nparticles)"
-  echo "          -h,--help     Print this message"
+  echo "          --prefix        Prefix for generated filenames (default: empty)"
+  echo "          --suffix        Suffix for generated filenames (default: empty)"
+  echo "          -v,--verbose    Enable verbose output"
+  echo "          -h,--help       Print this message"
   echo ""
   echo "  Run material map validation."
   exit
@@ -113,6 +118,16 @@ do
       shift # past value
       shift
       ;;
+    --prefix)
+      prefix=$2
+      shift # past value
+      shift
+      ;;
+    --suffix)
+      suffix=$2
+      shift # past value
+      shift
+      ;;
     -v|--verbose)
       verbose=1
       shift
@@ -127,12 +142,12 @@ do
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-recordingFile=geant4_material_tracks.root
-geoFile=geometry-map.json
-matFileBase=material-map
+recordingFile="${prefix}geant4_material_tracks${suffix}.root"
+geoFile="${prefix}geometry-map${suffix}.json"
+matFileBase="${prefix}material-map${suffix}"
 matFileFormats="cbor root"  # Generate both CBOR and ROOT output formats
-trackFile=material-map_mapped.root
-propFile=propagation_material
+trackFile="${prefix}material-map${suffix}_mapped.root"
+propFile="${prefix}propagation_material${suffix}"
 
 echo "::group::----GEANTINO SCAN------"
 # output geant4_material_tracks.root
