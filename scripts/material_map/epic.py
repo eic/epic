@@ -13,22 +13,23 @@ import acts.examples.dd4hep
 
 def getDetector(
     xmlFile,
-    jsonFile="",
+    matFile="",
     logLevel=acts.logging.WARNING,
 ):
     customLogLevel = acts.examples.defaultLogging(logLevel=logLevel)
     logger = acts.getDefaultLogger("epic.getDetector", logLevel)
 
     matDeco = None
-    if len(jsonFile) > 0 and Path(jsonFile).exists():
-        file = Path(jsonFile)
-        logger.info("Adding material from %s", file.absolute())
-        matDeco = acts.IMaterialDecorator.fromFile(
-            file,
-            level=customLogLevel(maxLevel=acts.logging.WARNING),
-        )
-    else:
-        logger.warning("Material map %s not loaded.", jsonFile)
+    if len(matFile) > 0:
+        file = Path(matFile)
+        if file.exists():
+            logger.info("Adding material from %s", file.absolute())
+            matDeco = acts.IMaterialDecorator.fromFile(
+                file,
+                level=customLogLevel(maxLevel=acts.logging.WARNING),
+            )
+        else:
+            logger.warning("Material map %s not found.", matFile)
 
     dd4hepConfig = acts.examples.dd4hep.DD4hepDetector.Config(
         xmlFileNames=[xmlFile],

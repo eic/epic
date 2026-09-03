@@ -34,10 +34,17 @@ if "__main__" == __name__:
         help="input json file to define volumes and layers used in material mapping",
     )
     p.add_argument(
-        "--matFile",
+        "--matFileBase",
         type=str,
-        default="material-map.json",
-        help="output filename for the generated material map, can be json and cbor formats",
+        default="material-map",
+        help="base name for the generated material map (without extension)",
+    )
+    p.add_argument(
+        "--matFileFormat",
+        type=str,
+        nargs="+",
+        default=["json", "root"],
+        help="output format(s) for the material map (json, cbor, root). Default: json, root",
     )
     p.add_argument(
         "--inputRootFile",
@@ -47,23 +54,22 @@ if "__main__" == __name__:
     )
     args = p.parse_args()
 
-    mapName = args.matFile.split('.')[0]
-    if '.json' in args.matFile:
-        mapFormats = ["json", "root"]
-    elif '.cbor' in args.matFile:
-        mapFormats = ["cbor", "root"]
-    else:
-        print('ERROR(material_mapping_epic.py): please provide a material map file in .json or .cbor format')
-        exit()
+    # Parse material map formats
+    mapFormats = args.matFileFormat
+    # Validate formats
+    valid_formats = {"json", "cbor", "root"}
+    for fmt in mapFormats:
+        if fmt not in valid_formats:
+            print(f'ERROR(material_mapping_epic.py): invalid format "{fmt}". Must be one of: {", ".join(valid_formats)}')
+            exit(1)
 
-    detector = epic.getDetector(
-        args.xmlFile, args.geoFile)
+    detector = epic.getDetector(args.xmlFile)
     trackingGeometry = detector.trackingGeometry()
     decorators = detector.contextDecorators()
 
     materialSurfaces = trackingGeometry.extractMaterialSurfaces()
 
-    outputFileBase = os.path.join(os.getcwd(), mapName)
+    outputFileBase = os.path.join(os.getcwd(), args.matFileBase)
 
     runMaterialMapping(
         surfaces=materialSurfaces,
