@@ -129,8 +129,8 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 recordingFile=geant4_material_tracks.root
 geoFile=geometry-map.json
-matFile=material-map.cbor
-matMapFile="${matFile%.*}_map.${matFile##*.}"  # material-map.cbor → material-map_map.cbor
+matFileBase=material-map
+matFileFormats="cbor root"  # Generate both CBOR and ROOT output formats
 trackFile=material-map_mapped.root
 propFile=propagation_material
 
@@ -181,13 +181,16 @@ if [[ "$verbose" -eq 1 ]]; then
 fi
 
 echo "::group::----MAPPING------------"
-python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
+matFormatArgs=$(echo ${matFileFormats} | sed 's/\([^ ]*\)/--matFileFormat \1/g')
+python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFileBase ${matFileBase} ${matFormatArgs}
 echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
 # output propagation-material.root
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_regenerated --matFile ${matMapFile} -n ${nevents}  -t ${nparticles}
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_current --matFile "calibrations/materials-map.cbor" -n ${nevents} -t ${nparticles}
+# Use the generated material map (Acts appends _map to the base name during generation,
+# so we need to use matFileBase_map for validation)
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_regenerated --matFileBase ${matFileBase}_map -n ${nevents}  -t ${nparticles}
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_current --matFileBase calibrations/materials-map -n ${nevents} -t ${nparticles}
 echo "::endgroup::"
 
 echo "::group::-------Comparison plots---------"

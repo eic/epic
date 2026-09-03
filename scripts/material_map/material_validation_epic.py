@@ -26,10 +26,10 @@ if "__main__" == __name__:
         help="input xml file containing ePIC geometry",
     )
     p.add_argument(
-        "--matFile",
+        "--matFileBase",
         type=str,
         default="",
-        help="input material map file with extension, can be either xx.json or xx.cbor (optional)",
+        help="base name for the input material map file (without extension). Script will search for .json, .cbor, or .root formats (optional)",
     )
     p.add_argument(
         "--outputName",
@@ -52,7 +52,18 @@ if "__main__" == __name__:
 
     args = p.parse_args()
 
-    detector = epic.getDetector(args.xmlFile, args.matFile)
+    # Resolve material file if base name provided
+    matFile = ""
+    if len(args.matFileBase) > 0:
+        # Search for material map file with any valid extension
+        valid_extensions = [".json", ".cbor", ".root"]
+        for ext in valid_extensions:
+            candidate = Path(args.matFileBase + ext)
+            if candidate.exists():
+                matFile = str(candidate)
+                break
+
+    detector = epic.getDetector(args.xmlFile, matFile)
     trackingGeometry = detector.trackingGeometry()
     decorators = detector.contextDecorators()
 
