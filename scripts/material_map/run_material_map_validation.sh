@@ -156,18 +156,20 @@ python material_recording_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -n 
 echo "::endgroup::"
 
 echo "::group::-----MAPPING Configuration-----"
-# map geometry to geometry-map.json
-python geometry_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml
+# map geometry to ${geoFile}
+python geometry_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -o "${geoFile%.json}"
 
-# take geometry-map.json and read out config-map.json
-python Examples/Scripts/MaterialMapping/writeMapConfig.py ${geoFile} config-map.json
+# take ${geoFile} and read out ${prefix}config-map${suffix}.json
+configFile="${prefix}config-map${suffix}.json"
+configFileRegen="${prefix}config-map${suffix}_regenerated.json"
+python Examples/Scripts/MaterialMapping/writeMapConfig.py ${geoFile} ${configFile}
 
 # turn on approaches and beampipe surfaces for material mapping
-# you can always manually adjust the mapmaterial flag and binnings in config-map.json
-python materialmap_config.py -i config-map.json -o config-map_regenerated.json
+# you can always manually adjust the mapmaterial flag and binnings in ${configFile}
+python materialmap_config.py -i ${configFile} -o ${configFileRegen}
 
-# turn config-map.json into modified geometry-map.json
-python Examples/Scripts/MaterialMapping/configureMap.py ${geoFile} config-map_regenerated.json
+# turn ${geoFile} into modified ${geoFile} with material binnings
+python Examples/Scripts/MaterialMapping/configureMap.py ${geoFile} ${configFileRegen}
 
 # generate figures to display tracking layers and volumes as seen by ACTS
 rm -rf plots
