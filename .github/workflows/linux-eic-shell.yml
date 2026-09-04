@@ -836,6 +836,7 @@ jobs:
     needs:
       - list-open-prs
       - merge-npsim-capybara
+      - validate-material-map
     strategy:
       matrix: ${{ fromJSON(needs.list-open-prs.outputs.json) }}
       fail-fast: false
@@ -858,6 +859,35 @@ jobs:
         with:
           name: capybara-report
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
+      - name: Download material_map artifact (other PRs)
+        id: download_material_map
+        uses: dawidd6/action-download-artifact@v21
+        if: github.event.pull_request.number != matrix.pr
+        with:
+          commit: ${{ matrix.head_sha }}
+          path: publishing_docs/pr/${{ matrix.pr }}/material-map/
+          name: material_map
+          workflow: ".github/workflows/linux-eic-shell.yml"
+          workflow_conclusion: "completed"
+          if_no_artifact_found: ignore
+      - name: Download material_map artifact (this PR)
+        uses: actions/download-artifact@v8
+        if: github.event.pull_request.number == matrix.pr
+        with:
+          name: material_map
+          path: publishing_docs/pr/${{ matrix.pr }}/material-map/
+      - name: Generate material-map validation index
+        if: github.event.pull_request.number == matrix.pr || steps.download_material_map.outputs.found_artifact == 'true'
+        run: |
+          VALDIR="publishing_docs/pr/${{ matrix.pr }}/material-map/Validation"
+          if [ -d "$VALDIR" ]; then
+            echo '<html><body><h1>Material map validation plots</h1><ul>' > "$VALDIR/index.html"
+            find "$VALDIR" -name '*.pdf' | sort | while read f; do
+              rel="${f#$VALDIR/}"
+              echo "<li><a href=\"$rel\">$rel</a></li>"
+            done >> "$VALDIR/index.html"
+            echo '</ul></body></html>' >> "$VALDIR/index.html"
+          fi
       - uses: actions/upload-artifact@v7
         with:
           name: github-pages-staging-pr-${{ matrix.pr }}
@@ -868,6 +898,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - merge-npsim-capybara
+      - validate-material-map
     steps:
       # Note:
       # - If we run this on a non-main branch, we download from main with action-download-artifact.
@@ -889,12 +920,46 @@ jobs:
         with:
           name: capybara-report
           path: publishing_docs/capybara/
+      - name: Download material_map artifact (in PR)
+        id: download_material_map
+        uses: dawidd6/action-download-artifact@v21
+        if: github.ref_name != 'main'
+        with:
+          branch: main
+          path: publishing_docs/material-map/
+          name: material_map
+          workflow: ".github/workflows/linux-eic-shell.yml"
+          workflow_conclusion: "completed"
+          if_no_artifact_found: ignore
+      - name: Download material_map artifact (on main)
+        uses: actions/download-artifact@v8
+        if: github.ref_name == 'main'
+        with:
+          name: material_map
+          path: publishing_docs/material-map/
       - name: Populate capybara summary (on main)
         if: github.ref_name == 'main' || steps.download_capybara.outputs.found_artifact == 'true'
         run: |
          echo "### Capybara summary for main" >> publishing_docs/capybara/index.md
          find publishing_docs/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
            "- [%f](https://eic.github.io/epic/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
+      - name: Generate material-map validation index
+        if: github.ref_name == 'main' || steps.download_material_map.outputs.found_artifact == 'true'
+        run: |
+          VALDIR="publishing_docs/material-map/Validation"
+          if [ -d "$VALDIR" ]; then
+            echo '<html><body><h1>Material map validation plots</h1><ul>' > "$VALDIR/index.html"
+            find "$VALDIR" -name '*.pdf' | sort | while read f; do
+              rel="${f#$VALDIR/}"
+              echo "<li><a href=\"$rel\">$rel</a></li>"
+            done >> "$VALDIR/index.html"
+            echo '</ul></body></html>' >> "$VALDIR/index.html"
+          fi
+      - name: Populate material-map summary (on main)
+        if: github.ref_name == 'main' || steps.download_material_map.outputs.found_artifact == 'true'
+        run: |
+          echo "### Material map validation for main" >> publishing_docs/material-map/index.md
+          echo "- [Validation plots](https://eic.github.io/epic/material-map/Validation/index.html)" >> publishing_docs/material-map/index.md
       - name: Create capybara step summary (this PR)
         if: github.ref_name == 'main'
         run: |
@@ -957,6 +1022,10 @@ jobs:
         [ -d _site/pr/${{ github.event.pull_request.number }}/capybara/ ] && \
           find _site/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
             "- [%f](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md || true
+        if [ -d _site/pr/${{ github.event.pull_request.number }}/material-map/Validation/ ]; then
+          echo "### Material map validation" >> capybara_${{ github.event.pull_request.number }}.md
+          echo "- [Validation plots](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/material-map/Validation/index.html)" >> capybara_${{ github.event.pull_request.number }}.md
+        fi
         echo "<sup><sub>Last updated $(TZ=America/New_York date -Iminutes) ${{github.event.pull_request.head.sha}}</sub></sup>" >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create capybara step summary
       if: ${{ github.event_name == 'pull_request' }}
