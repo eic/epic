@@ -836,6 +836,7 @@ jobs:
     needs:
       - list-open-prs
       - merge-npsim-capybara
+      - validate-material-map
     strategy:
       matrix: ${{ fromJSON(needs.list-open-prs.outputs.json) }}
       fail-fast: false
@@ -858,22 +859,6 @@ jobs:
         with:
           name: capybara-report
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
-      - uses: actions/upload-artifact@v7
-        with:
-          name: github-pages-staging-pr-${{ matrix.pr }}
-          path: publishing_docs/
-          if-no-files-found: ignore
-
-  get-material-map-from-open-prs:
-    runs-on: ubuntu-latest
-    needs:
-      - list-open-prs
-      - validate-material-map
-    strategy:
-      matrix: ${{ fromJSON(needs.list-open-prs.outputs.json) }}
-      fail-fast: false
-      max-parallel: 4
-    steps:
       - name: Download material_map artifact (other PRs)
         id: download_material_map
         uses: dawidd6/action-download-artifact@v21
@@ -905,7 +890,7 @@ jobs:
           fi
       - uses: actions/upload-artifact@v7
         with:
-          name: github-pages-staging-material-map-pr-${{ matrix.pr }}
+          name: github-pages-staging-pr-${{ matrix.pr }}
           path: publishing_docs/
           if-no-files-found: ignore
 
@@ -913,6 +898,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - merge-npsim-capybara
+      - validate-material-map
     steps:
       # Note:
       # - If we run this on a non-main branch, we download from main with action-download-artifact.
@@ -934,33 +920,6 @@ jobs:
         with:
           name: capybara-report
           path: publishing_docs/capybara/
-      - name: Populate capybara summary (on main)
-        if: github.ref_name == 'main' || steps.download_capybara.outputs.found_artifact == 'true'
-        run: |
-         echo "### Capybara summary for main" >> publishing_docs/capybara/index.md
-         find publishing_docs/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-           "- [%f](https://eic.github.io/epic/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
-      - name: Create capybara step summary (this PR)
-        if: github.ref_name == 'main'
-        run: |
-          cat publishing_docs/capybara/index.md >> $GITHUB_STEP_SUMMARY
-      - name: Ensure publishing_docs is non-empty
-        run: mkdir -p publishing_docs && touch publishing_docs/.keep
-      - uses: actions/upload-artifact@v7
-        with:
-          name: github-pages-staging-main
-          path: publishing_docs/
-          if-no-files-found: error
-          include-hidden-files: true
-
-  get-material-map-from-main:
-    runs-on: ubuntu-latest
-    needs:
-      - validate-material-map
-    steps:
-      # Note:
-      # - If we run this on a non-main branch, we download from main with action-download-artifact.
-      # - If we run this on the main branch, we have to download from this pipeline with download-artifact.
       - name: Download material_map artifact (in PR)
         id: download_material_map
         uses: dawidd6/action-download-artifact@v21
@@ -978,6 +937,12 @@ jobs:
         with:
           name: material_map
           path: publishing_docs/material-map/
+      - name: Populate capybara summary (on main)
+        if: github.ref_name == 'main' || steps.download_capybara.outputs.found_artifact == 'true'
+        run: |
+         echo "### Capybara summary for main" >> publishing_docs/capybara/index.md
+         find publishing_docs/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
+           "- [%f](https://eic.github.io/epic/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
       - name: Generate material-map validation index
         if: github.ref_name == 'main' || steps.download_material_map.outputs.found_artifact == 'true'
         run: |
@@ -995,11 +960,15 @@ jobs:
         run: |
           echo "### Material map validation for main" >> publishing_docs/material-map/index.md
           echo "- [Validation plots](https://eic.github.io/epic/material-map/scripts/material_map/Validation/index.html)" >> publishing_docs/material-map/index.md
+      - name: Create capybara step summary (this PR)
+        if: github.ref_name == 'main'
+        run: |
+          cat publishing_docs/capybara/index.md >> $GITHUB_STEP_SUMMARY
       - name: Ensure publishing_docs is non-empty
         run: mkdir -p publishing_docs && touch publishing_docs/.keep
       - uses: actions/upload-artifact@v7
         with:
-          name: github-pages-staging-material-map-main
+          name: github-pages-staging-main
           path: publishing_docs/
           if-no-files-found: error
           include-hidden-files: true
@@ -1014,8 +983,6 @@ jobs:
     - merge-dawn-view
     - get-docs-from-open-prs
     - get-docs-from-main
-    - get-material-map-from-open-prs
-    - get-material-map-from-main
     if: |
       always() &&
       !cancelled() &&
