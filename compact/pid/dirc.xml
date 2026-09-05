@@ -21,16 +21,13 @@
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
     The width of each DIRC module is derived from DIRCPrism_width
 
-    Triple Readout System:
-      - DIRCHits readout includes MCP surface and quartz bar entry/mid/exit planes
-      - Use "surface" field (2 bits) to distinguish:
+    Triple Readout System (Simplified):
+      - DIRCHits readout includes MCP surface and quartz bars as sensitive detectors
+      - Use "surface" field (1 bit) to distinguish:
         * surface=0: MCP photon detection surface (negative z face of prism)
-        * surface=1: Charged particle ENTRY plane (inner radial face of bars)
-        * surface=2: Charged particle MID plane (radial center of bars)
-        * surface=3: Charged particle EXIT plane (outer radial face of bars)
-      - Entry/mid/exit planes are thin (0.01mm) quartz volumes that record track
-        kinematics without introducing optical boundaries
-      - Filtering by surface field enables trajectory-pattern correlation
+        * surface=1: Quartz bar charged particles (many hits per track with step limit)
+      - Bar step limit (0.5mm) provides continuous position sampling along track
+      - To enable per-step hits, run npsim with CollectSingleDeposits=True
 
   </comment>
 
@@ -88,8 +85,8 @@
   </materials>
 
   <limits>
-    <limitset name="dirc_plane_limits">
-      <limit name="step_length_max" particles="*" value="0.005" unit="mm"/>
+    <limitset name="dirc_bar_limits">
+      <limit name="step_length_max" particles="*" value="0.5" unit="mm"/>
     </limitset>
   </limits>
 
@@ -195,30 +192,25 @@
 
   <readouts>
     <comment>
-      DIRCHits: Combined readout for MCP surface and quartz bar entry/mid/exit planes
-      - surface=0: MCP photon detection (3mm grid for coarser segmentation)
-      - surface=1: Entry plane charged particles (0.5mm grid for fine tracking)
-      - surface=2: Mid plane charged particles (0.5mm grid for fine tracking)
-      - surface=3: Exit plane charged particles (0.5mm grid for fine tracking)
-      MultiSegmentation enables different grid sizes per surface type.
-      ID structure: system:8,module:4,surface:2,section:2,bar:4,x:16,y:16 (52 bits)
+      DIRCHits: Combined readout for MCP surface and quartz bars with per-step hits
+      - surface=0: MCP optical photon detection (3mm grid for coarser segmentation)
+      - surface=1: Bar charged particle hits (one hit per Geant4 step, fine tracking)
+
+      To enable per-step hits, run npsim with:
+      --action.tracker "Geant4TrackerWeightedAction:CollectSingleDeposits=True"
+
+      ID structure: system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16 (51 bits)
     </comment>
     <readout name="DIRCHits">
       <segmentation type="MultiSegmentation" key="surface">
         <segmentation name="mcp" type="CartesianGridXY" key_value="0"
           grid_size_x="3.0*mm" grid_size_y="3.0*mm"
           offset_x="0.0*mm" offset_y="0.0*mm" />
-        <segmentation name="entry" type="CartesianGridXY" key_value="1"
-          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
-          offset_x="0.0*mm" offset_y="0.0*mm" />
-        <segmentation name="mid" type="CartesianGridXY" key_value="2"
-          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
-          offset_x="0.0*mm" offset_y="0.0*mm" />
-        <segmentation name="exit" type="CartesianGridXY" key_value="3"
+        <segmentation name="bar" type="CartesianGridXY" key_value="1"
           grid_size_x="0.5*mm" grid_size_y="0.5*mm"
           offset_x="0.0*mm" offset_y="0.0*mm" />
       </segmentation>
-      <id>system:8,module:4,surface:2,section:2,bar:4,x:-16,y:-16</id>
+      <id>system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16</id>
     </readout>
   </readouts>
 
