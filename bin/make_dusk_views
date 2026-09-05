@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""make_dusk_views — run dusk/duskcut generate_svg scripts for a detector view.
+
+Analogous to make_dawn_views but uses STEP files and produces SVG output.
+
+Usage:
+  make_dusk_views -i detector.stp -d scripts/view1 -t view01 [-o images/]
+"""
+
+import os
+import subprocess
+import argparse
+
+parser = argparse.ArgumentParser(description="Generate SVG views using dusk/duskcut")
+
+parser.add_argument('-i', '--input', type=str, dest='input', required=True,
+                    help='Input STEP file (.stp)')
+parser.add_argument('-o', '--output-dir', type=str, dest='out_dir',
+                    default='images',
+                    help='Output directory for SVG files (default: images)')
+parser.add_argument('-d', '--dusk-dir', type=str, dest='dusk_dir',
+                    default='scripts/view1',
+                    help='Directory containing the generate_svg script')
+parser.add_argument('-t', '--tag', type=str, dest='file_tag',
+                    default='view',
+                    help='Output file tag passed to generate_svg')
+
+args = parser.parse_args()
+
+os.makedirs(args.out_dir, exist_ok=True)
+
+# Use absolute paths so chdir does not break them
+args.input   = os.path.abspath(args.input)
+args.out_dir = os.path.abspath(args.out_dir)
+
+owd = os.getcwd()
+os.chdir(args.dusk_dir)
+subprocess.run(['pwd'])
+subprocess.run(['./generate_svg', '-t', args.file_tag, '-i', args.input])
+subprocess.run(['ls', '-lrth'])
+
+os.system('cp *.svg {}'.format(args.out_dir))
+os.chdir(owd)
