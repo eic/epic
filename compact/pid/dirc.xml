@@ -21,7 +21,7 @@
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
     The width of each DIRC module is derived from DIRCPrism_width
 
-    Triple Readout System (Simplified):
+    Dual Readout System (Simplified):
       - DIRCHits readout includes MCP surface and quartz bars as sensitive detectors
       - Use "surface" field (1 bit) to distinguish:
         * surface=0: MCP photon detection surface (negative z face of prism)
@@ -131,6 +131,7 @@
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="QuartzOptical"
+          limits="dirc_bar_limits"
           vis="DIRCBar"
         />
 

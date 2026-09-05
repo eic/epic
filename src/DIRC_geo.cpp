@@ -123,7 +123,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Volume bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
   bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
   bar_vol.setSensitiveDetector(sens);
-  bar_vol.setLimitSet(desc.limitSet("dirc_bar_limits"));
+  bar_vol.setLimitSet(desc, xml_bar.limitsStr());
   printout(DEBUG, "DIRC_geo", "bar_vol set as sensitive detector with step limit");
 
   //---- define glue_vol
