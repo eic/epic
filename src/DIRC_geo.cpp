@@ -74,7 +74,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   printout(DEBUG, "DIRC_geo", "dirc_pos_z      = %12.4f", dirc_pos_z);
   printout(DEBUG, "DIRC_geo", "dirc_pos_z exp  = %12.4f", FAKE_dirc_pos_z_exp);
 
-  //---- Detector type
+  //---- Detector type: TrackerCombine to merge all steps per track per volume into one hit
   sens.setType("tracker");
 
   //---- Entire DIRC assembly
@@ -106,6 +106,37 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
               bar_length / 2); // the box volume for a bar, not a "bar box"
   Volume bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
   bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
+
+  //---- Create thin entry, mid, and exit planes inside bar for track detection
+  //     These are mathematical surfaces (QuartzOptical material) to record track
+  //     kinematics without creating optical boundaries
+  double plane_thickness = 0.01 * mm; // Very thin planes
+
+  // Entry plane (at inner radial face)
+  Box entry_plane_box("entry_plane_box", plane_thickness / 2, bar_width / 2, bar_length / 2);
+  Volume entry_plane_vol("entry_plane_vol", entry_plane_box, desc.material("QuartzOptical"));
+  entry_plane_vol.setSensitiveDetector(sens);
+  entry_plane_vol.setVisAttributes(desc.invisible());
+  entry_plane_vol.setLimitSet(desc.limitSet("dirc_plane_limits"));
+  printout(DEBUG, "DIRC_geo",
+           "entry_plane_vol created as thin sensitive plane at inner radial face");
+
+  // Mid plane (at radial center)
+  Box mid_plane_box("mid_plane_box", plane_thickness / 2, bar_width / 2, bar_length / 2);
+  Volume mid_plane_vol("mid_plane_vol", mid_plane_box, desc.material("QuartzOptical"));
+  mid_plane_vol.setSensitiveDetector(sens);
+  mid_plane_vol.setVisAttributes(desc.invisible());
+  mid_plane_vol.setLimitSet(desc.limitSet("dirc_plane_limits"));
+  printout(DEBUG, "DIRC_geo", "mid_plane_vol created as thin sensitive plane at radial center");
+
+  // Exit plane (at outer radial face)
+  Box exit_plane_box("exit_plane_box", plane_thickness / 2, bar_width / 2, bar_length / 2);
+  Volume exit_plane_vol("exit_plane_vol", exit_plane_box, desc.material("QuartzOptical"));
+  exit_plane_vol.setSensitiveDetector(sens);
+  exit_plane_vol.setVisAttributes(desc.invisible());
+  exit_plane_vol.setLimitSet(desc.limitSet("dirc_plane_limits"));
+  printout(DEBUG, "DIRC_geo",
+           "exit_plane_vol created as thin sensitive plane at outer radial face");
 
   //---- define glue_vol
   xml_comp_t xml_glue   = xml_module.child(_Unicode(glue));
@@ -185,6 +216,21 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
       Envelope_box_vol.placeVolume(bar_vol, Position(0, y, z))
           .addPhysVolID("section", z_index)
           .addPhysVolID("bar", y_index);
+
+      //---- Place entry, mid, and exit planes as daughters of bar_vol
+      //     Entry plane at inner radial face
+      double x_entry = -bar_height / 2 + plane_thickness / 2;
+      bar_vol.placeVolume(entry_plane_vol, Position(x_entry, 0, 0))
+          .addPhysVolID("surface", 1); // surface=1 for entry plane
+
+      //---- Mid plane at radial center
+      bar_vol.placeVolume(mid_plane_vol, Position(0, 0, 0))
+          .addPhysVolID("surface", 2); // surface=2 for mid plane
+
+      //---- Exit plane at outer radial face
+      double x_exit = bar_height / 2 - plane_thickness / 2;
+      bar_vol.placeVolume(exit_plane_vol, Position(x_exit, 0, 0))
+          .addPhysVolID("surface", 3); // surface=3 for exit plane
       //
       if (y_index == 4 && z_index == 0) {
         barZmax = z + bar_length / 2.;
@@ -333,7 +379,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Position mcp_position(prism_position_x, mcp_position_z, 0);
   RotationX mcp_rotation(-M_PI / 2.);
   //
-  Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position));
+  Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position))
+      .addPhysVolID("surface", 0); // surface=0 for MCP photon detection
 
   //---- Place modules -----------------------------------------------
   const int module_repeat = xml_module.repeat();
