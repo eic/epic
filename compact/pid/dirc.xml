@@ -197,13 +197,10 @@
       - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3mm grid)
       - surface=1: Bar charged particle hits (requires tracker action, no optical filter, 0.5mm grid)
 
-      Production use (optical photons in MCP only):
-        npsim uses Geant4OpticalTrackerAction + opticalphotons filter by default for DIRC.
-        Bar hits require a separate npsim setup that bypasses the optical-only filter.
-
-      Local testing (bar charged particle hits):
-        Use scripts/run_dirc_bars_test.py which configures tracker action for the whole
-        DIRC detector, recording both MCP and bar hits. Use surface ID to distinguish.
+      npsim configuration (VolumeDispatchAction in eic/npsim):
+        mcp_vol: Geant4OpticalTrackerAction + opticalphoton filter
+        bar_vol: Geant4TrackerWeightedAction + EnergyDepositMinimumCut filter (eDep>0 only)
+        Both sub-actions share the DIRCHits collection; use surface ID to distinguish.
 
       ID structure: system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16 (51 bits)
     </comment>
