@@ -75,6 +75,22 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   printout(DEBUG, "DIRC_geo", "dirc_pos_z exp  = %12.4f", FAKE_dirc_pos_z_exp);
 
   //---- Detector type: tracker
+  //
+  //  Note on npsim.py and optical photon filter:
+  //  npsim.py applies 'opticalphotons' particle filter + Geant4OpticalTrackerAction to any
+  //  detector whose name contains 'dirc' (case-insensitive substring match). This filter
+  //  applies to ALL sensitive volumes in cb_DIRC, including bar_vol. As a result, standard
+  //  npsim only records optical photon hits in both MCP and bars.
+  //
+  //  To collect CHARGED PARTICLE hits in bars, use scripts/run_dirc_bars_test.py which
+  //  removes the optical filter for DIRC (using Geant4TrackerWeightedAction instead).
+  //  With surface=0 (MCP) and surface=1 (bars) in DIRCHits cellID, both hit types
+  //  can be separated in post-processing.
+  //
+  //  A production solution requires a npsim.py PR to configure separate filter/action
+  //  policies per volume (e.g., mcp_vol → optical, bar_vol → tracker). DD4hep's
+  //  architecture does not currently support per-volume filter config from a single
+  //  detector element without custom C++ DDG4 plugins.
   sens.setType("tracker");
 
   //---- Entire DIRC assembly
