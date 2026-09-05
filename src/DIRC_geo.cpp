@@ -74,7 +74,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   printout(DEBUG, "DIRC_geo", "dirc_pos_z      = %12.4f", dirc_pos_z);
   printout(DEBUG, "DIRC_geo", "dirc_pos_z exp  = %12.4f", FAKE_dirc_pos_z_exp);
 
-  //---- Detector type: TrackerCombine to merge all steps per track per volume into one hit
+  //---- Detector type: tracker
   sens.setType("tracker");
 
   //---- Entire DIRC assembly
@@ -186,7 +186,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
       Envelope_box_vol.placeVolume(glue_vol,
                                    Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
       Envelope_box_vol.placeVolume(bar_vol, Position(0, y, z))
-          .addPhysVolID("surface", 1) // surface=1 for bar charged particles
+          .addPhysVolID("surface", 1)
           .addPhysVolID("section", z_index)
           .addPhysVolID("bar", y_index);
 
