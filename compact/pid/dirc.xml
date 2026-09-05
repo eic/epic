@@ -21,6 +21,17 @@
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
     The width of each DIRC module is derived from DIRCPrism_width
 
+    Triple Readout System:
+      - DIRCHits readout includes MCP surface and quartz bar entry/mid/exit planes
+      - Use "surface" field (2 bits) to distinguish:
+        * surface=0: MCP photon detection surface (negative z face of prism)
+        * surface=1: Charged particle ENTRY plane (inner radial face of bars)
+        * surface=2: Charged particle MID plane (radial center of bars)
+        * surface=3: Charged particle EXIT plane (outer radial face of bars)
+      - Entry/mid/exit planes are thin (0.01mm) quartz volumes that record track
+        kinematics without introducing optical boundaries
+      - Filtering by surface field enables trajectory-pattern correlation
+
   </comment>
 
   <define>
@@ -77,6 +88,9 @@
   </materials>
 
   <limits>
+    <limitset name="dirc_plane_limits">
+      <limit name="step_length_max" particles="*" value="0.005" unit="mm"/>
+    </limitset>
   </limits>
 
   <regions>
@@ -97,7 +111,7 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube" region="DIRCRegion">
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCHits" vis="DIRCTube" region="DIRCRegion">
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
@@ -180,9 +194,31 @@
   </detectors>
 
   <readouts>
-    <readout name="DIRCBarHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*mm" grid_size_y="3.0*mm" />
-      <id>system:8,module:8,section:8,bar:8,x:32:-16,y:-16</id>
+    <comment>
+      DIRCHits: Combined readout for MCP surface and quartz bar entry/mid/exit planes
+      - surface=0: MCP photon detection (3mm grid for coarser segmentation)
+      - surface=1: Entry plane charged particles (0.5mm grid for fine tracking)
+      - surface=2: Mid plane charged particles (0.5mm grid for fine tracking)
+      - surface=3: Exit plane charged particles (0.5mm grid for fine tracking)
+      MultiSegmentation enables different grid sizes per surface type.
+      ID structure: system:8,module:4,surface:2,section:2,bar:4,x:16,y:16 (52 bits)
+    </comment>
+    <readout name="DIRCHits">
+      <segmentation type="MultiSegmentation" key="surface">
+        <segmentation name="mcp" type="CartesianGridXY" key_value="0"
+          grid_size_x="3.0*mm" grid_size_y="3.0*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+        <segmentation name="entry" type="CartesianGridXY" key_value="1"
+          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+        <segmentation name="mid" type="CartesianGridXY" key_value="2"
+          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+        <segmentation name="exit" type="CartesianGridXY" key_value="3"
+          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+      </segmentation>
+      <id>system:8,module:4,surface:2,section:2,bar:4,x:-16,y:-16</id>
     </readout>
   </readouts>
 
