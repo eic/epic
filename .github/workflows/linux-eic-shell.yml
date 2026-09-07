@@ -208,6 +208,14 @@ jobs:
       # NOTE: This list of detector configurations must be kept in sync with the configurations linked in README.md.
       detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
 
+  convert-to-dot:
+    needs:
+      - build
+    uses: ./.github/workflows/convert-to-dot.yml
+    with:
+      # NOTE: This list of detector configurations must be kept in sync with the configurations linked in README.md.
+      detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
+
   dump-constants:
     runs-on: ubuntu-latest
     needs: build
@@ -978,6 +986,7 @@ jobs:
     needs:
     - convert-to-gdml
     - convert-to-tgeo
+    - convert-to-dot
     - merge-constants
     - merge-parameter-table
     - merge-dawn-view
@@ -1002,6 +1011,15 @@ jobs:
       run: |
         for dir in artifacts/github-pages-staging-*/; do
           [ -d "$dir" ] && cp -r "$dir"/. _site/ || true
+        done
+    - name: Copy detector geometry dot and svg files
+      run: |
+        mkdir -p _site/detector-geometry
+        for artifact_dir in artifacts/dot-*/; do
+          if [ -d "$artifact_dir" ]; then
+            cp "$artifact_dir"*.dot _site/detector-geometry/ 2>/dev/null || true
+            cp "$artifact_dir"*.svg _site/detector-geometry/ 2>/dev/null || true
+          fi
         done
     - name: Make PR summary page
       run: |
