@@ -861,7 +861,7 @@ jobs:
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
       - name: Download material_map artifact (other PRs)
         id: download_material_map
-        uses: dawidd6/action-download-artifact@v21
+        uses: dawidd6/action-download-artifact@v24
         if: github.event.pull_request.number != matrix.pr
         with:
           commit: ${{ matrix.head_sha }}
@@ -922,7 +922,7 @@ jobs:
           path: publishing_docs/capybara/
       - name: Download material_map artifact (in PR)
         id: download_material_map
-        uses: dawidd6/action-download-artifact@v21
+        uses: dawidd6/action-download-artifact@v24
         if: github.ref_name != 'main'
         with:
           branch: main
