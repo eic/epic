@@ -27,7 +27,7 @@ jobs:
           for config in ${configs[@]} ; do
             echo "::group::${config}" ;
             # Generate dot file from detector configuration
-            npdet_to_dot $DETECTOR_PATH/${config}.xml -o ${config}.dot 2>&1 | sed '/TGeoMatrix::dtor/d'
+            npdet_to_dot list -d 2 -o ${config} "$DETECTOR_PATH/${config}.xml" 2>&1 | sed '/TGeoMatrix::dtor/d'
             # Convert dot to SVG using dot command
             dot -Tsvg ${config}.dot -o ${config}.svg
             line_count=$(wc -l < ${config}.dot)
