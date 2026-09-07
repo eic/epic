@@ -21,6 +21,14 @@
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
     The width of each DIRC module is derived from DIRCPrism_width
 
+    Dual Readout System (Simplified):
+      - DIRCHits readout includes MCP surface and quartz bars as sensitive detectors
+      - Use "surface" field (1 bit) to distinguish:
+        * surface=0: MCP photon detection surface (negative z face of prism)
+        * surface=1: Quartz bar charged particles (many hits per track with step limit)
+      - Bar step limit (0.5mm) provides continuous position sampling along track
+      - To enable per-step hits, run npsim with CollectSingleDeposits=True
+
   </comment>
 
   <define>
@@ -77,6 +85,9 @@
   </materials>
 
   <limits>
+    <limitset name="dirc_bar_limits">
+      <limit name="step_length_max" particles="*" value="0.5" unit="mm"/>
+    </limitset>
   </limits>
 
   <regions>
@@ -97,7 +108,7 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube" region="DIRCRegion">
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCHits" vis="DIRCTube" region="DIRCRegion">
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
@@ -120,6 +131,7 @@
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="QuartzOptical"
+          limits="dirc_bar_limits"
           vis="DIRCBar"
         />
 
@@ -180,9 +192,28 @@
   </detectors>
 
   <readouts>
-    <readout name="DIRCBarHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*mm" grid_size_y="3.0*mm" />
-      <id>system:8,module:8,section:8,bar:8,x:32:-16,y:-16</id>
+    <comment>
+      DIRCHits: Combined readout for MCP surface and quartz bars.
+      - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3mm grid)
+      - surface=1: Bar charged particle hits (requires tracker action, no optical filter, 0.5mm grid)
+
+      npsim configuration (VolumeDispatchAction in eic/npsim):
+        mcp_vol: Geant4OpticalTrackerAction + opticalphoton filter
+        bar_vol: Geant4TrackerWeightedAction + EnergyDepositMinimumCut filter (eDep>0 only)
+        Both sub-actions share the DIRCHits collection; use surface ID to distinguish.
+
+      ID structure: system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16 (51 bits)
+    </comment>
+    <readout name="DIRCHits">
+      <segmentation type="MultiSegmentation" key="surface">
+        <segmentation name="mcp" type="CartesianGridXY" key_value="0"
+          grid_size_x="3.0*mm" grid_size_y="3.0*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+        <segmentation name="bar" type="CartesianGridXY" key_value="1"
+          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+      </segmentation>
+      <id>system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16</id>
     </readout>
   </readouts>
 
