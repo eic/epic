@@ -1012,15 +1012,6 @@ jobs:
         for dir in artifacts/github-pages-staging-*/; do
           [ -d "$dir" ] && cp -r "$dir"/. _site/ || true
         done
-    - name: Copy detector geometry dot and svg files
-      run: |
-        mkdir -p _site/detector-geometry
-        for artifact_dir in artifacts/dot-*/; do
-          if [ -d "$artifact_dir" ]; then
-            cp "$artifact_dir"*.dot _site/detector-geometry/ 2>/dev/null || true
-            cp "$artifact_dir"*.svg _site/detector-geometry/ 2>/dev/null || true
-          fi
-        done
     - name: Make PR summary page
       run: |
         mkdir -p _site/pr

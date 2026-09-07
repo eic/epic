@@ -32,7 +32,7 @@ jobs:
           dot -Tsvg ${{matrix.detector_config}}.dot -o ${{matrix.detector_config}}.svg
     - uses: actions/upload-artifact@v7
       with:
-        name: dot-${{matrix.detector_config}}
+        name: github-pages-staging-detector-geometry
         path: |
           ${{matrix.detector_config}}.dot
           ${{matrix.detector_config}}.svg
