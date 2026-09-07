@@ -30,6 +30,12 @@ jobs:
           npdet_to_dot $DETECTOR_PATH/${{matrix.detector_config}}.xml -o ${{matrix.detector_config}}.dot 2>&1 | sed '/TGeoMatrix::dtor/d'
           # Convert dot to SVG using dot command
           dot -Tsvg ${{matrix.detector_config}}.dot -o ${{matrix.detector_config}}.svg
+    - name: Check dot file size
+      run: |
+        line_count=$(wc -l < ${{matrix.detector_config}}.dot)
+        if [ $line_count -gt 1000 ]; then
+          echo "::warning::Dot file for ${{matrix.detector_config}} has $line_count lines (> 1000)"
+        fi
     - uses: actions/upload-artifact@v7
       with:
         name: github-pages-staging-detector-geometry
