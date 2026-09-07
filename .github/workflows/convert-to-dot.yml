@@ -36,15 +36,10 @@ jobs:
         if [ $line_count -gt 1000 ]; then
           echo "::warning::Dot file for ${{matrix.detector_config}} has $line_count lines (> 1000)"
         fi
-    - name: Stage files for GitHub Pages artifacts path
-      run: |
-        mkdir -p artifacts
-        cp ${{matrix.detector_config}}.dot artifacts/
-        cp ${{matrix.detector_config}}.svg artifacts/
     - uses: actions/upload-artifact@v7
       with:
-        name: github-pages-staging-artifacts-${{matrix.detector_config}}
+        name: github-pages-staging-detector-geometry
         path: |
-          artifacts/${{matrix.detector_config}}.dot
-          artifacts/${{matrix.detector_config}}.svg
+          ${{matrix.detector_config}}.dot
+          ${{matrix.detector_config}}.svg
         if-no-files-found: error
