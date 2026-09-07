@@ -56,16 +56,14 @@ jobs:
           - CC: gcc
             CXX: g++
             release: nightly
-            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
-            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
+            CXXFLAGS: -Werror -Wall -Wextra
             artifact_tag: ''
             cmake_sanitize_flags: ''
           # Sanitized build (ASAN+UBSAN): only npsim and eicrecon jobs consume this artifact
           - CC: gcc
             CXX: g++
             release: nightly
-            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
-            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
+            CXXFLAGS: -Werror -Wall -Wextra
             artifact_tag: '-asan'
             cmake_sanitize_flags: '-DUSE_ASAN=ON -DUSE_UBSAN=ON'
           - CC: clang
@@ -78,8 +76,7 @@ jobs:
           - CC: gcc
             CXX: g++
             release: 25.07.0-stable
-            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
-            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
+            CXXFLAGS: -Werror -Wall -Wextra
             artifact_tag: ''
             cmake_sanitize_flags: ''
     env:
