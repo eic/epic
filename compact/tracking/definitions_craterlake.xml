@@ -217,6 +217,190 @@
       <arg value="file:calibrations/materials-map.cbor"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/b59d999b8df6ecf4349dbc1bf4f836295d182e05/material-map.cbor"/>
     </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/FPC_Mockup_L3_L3_Full_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/Carbon_Composite_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/Carbon_Composite_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/FPC_Mockup_L3_L3_Full001_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_L004_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L004_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_L005_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L005_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_L006_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L006_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_L3_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L3_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_L3_End001_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L3_End001_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_L3_End_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_L3_End_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml"/>
+    </plugin>
+        <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L3"/>
+       <arg value="file:CAD/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml"/>
+    </plugin>
+    
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/Carbon_Composite_L4_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/Carbon_Composite_L4_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/FPC_Mockup_L3_Bottom002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/FPC_Mockup_L3_Bottom003_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/FPC_Mockup_L3_Top002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/FPC_Mockup_L3_Top002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/FPC_Mockup_L3_Top003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/FPC_Mockup_L3_Top003_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:CAD/L4"/>
+       <arg value="file:CAD/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+    </plugin>
+
+    
+    
   </plugins>
 
 </lccdd>

@@ -83,7 +83,7 @@
     <constant name="SiBarrelLayer2_rmin" value="SiBarrelStave2_rc -  SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
-    </define>
+    </define>    
       <detectors>
         <documentation level="5">
           ### Actual detectors
@@ -329,7 +329,10 @@
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
         <position x="0" y="SiBarrel1_Passive3_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
+   </module_component>
+   
+        <module_component name="Carbon_Composite.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/Carbon_Composite_ASCII.gdml" />
+        
        <module_component name="FPC_Mockup_L3_L3_Full001_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
         <module_component name="FPC_Mockup_L3_L3_Full_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
         <module_component name="K9_Split_CrossBrace_L004_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L004_ASCII.gdml" />
@@ -342,7 +345,7 @@
         <module_component name="K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" />
         <module_component name="MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" />
         <module_component name="MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" />
-        <module_component name="Carbon_Composite.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/Carbon_Composite_ASCII.gdml" />
+        
 
       </module>
       <comment> Layers composed of many arrayed modules </comment>
