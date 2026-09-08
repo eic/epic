@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2026 Whitney Armstrong, Tuna Tasali, Sam Henry, Shujie Li
 
 /** \addtogroup Trackers Trackers
  * \brief Type: **BarrelTrackerWithFrame**.
@@ -19,6 +19,22 @@
 #include <array>
 #include "DD4hepDetectorHelper.h"
 #include "TGDMLParseBiggerFiles.h"
+
+
+/*
+This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels, and import 
+passive components from GDML files.
+
+A curved component (identified by the word "Curved" in the name) is a segment of a cylinder. This is constructed by a series of flat segments
+The number of segments is set in the xml file, together with the radius, anglular range, length, thickness, and the inner and outer thicknesses
+used to set the sensitive surface. This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface 
+where the axis is displaced from the beam line. Therefore the curved surface is modelled as a series of flat segments.
+Unlike in BarrelTrackerWithFrame, the position of components (related to the centre of the stave) must now be given in the xml files.
+
+Passive components are modelled as a tessellated solid, imported from a .gdml file, with the filename given in the xml file.
+
+8 September 2026. Sam Henry
+*/
 
 using namespace std;
 using namespace dd4hep;
@@ -130,7 +146,6 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
                string((string("Module with named ") + m_nam + string(" already exists."))).c_str());
       throw runtime_error("Logics error in building modules.");
     }
-
     
     const bool sensor_stack = getAttrOrDefault<bool>(x_mod, _Unicode(sensor_stack), false);
     const double copper_thickness =
@@ -154,15 +169,11 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
     volumes[m_nam] = m_vol;
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
-
-    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-      
+    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {      
       xml_comp_t x_comp  = mci;
       xml_comp_t x_pos   = x_comp.position(false);
       xml_comp_t x_rot   = x_comp.rotation(false);
       const string c_nam = _toString(ncomponents, "component%d");
-
- 
       
       if (x_comp.nameStr().find("Curved") != std::string::npos) {
         const bool build_sensor_stack =
@@ -294,7 +305,6 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       c_sol->CheckClosure(true, true); //fix any flipped orientation in facets, the second 'true' is for verbose
       c_vol.setSolid(c_sol);
       
-      
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());
@@ -317,17 +327,10 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
         }
         c_vol.setVisAttributes(description, x_comp.visStr());
         
-      
       }
-      
     }
   }
   delete parser;
-
-
-
-
-
 
   // now build the layers
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
