@@ -385,6 +385,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double dz            = x_ring.dz(0);
       double dz_offset     = getAttrOrDefault(x_ring, _Unicode(dz_offset), 0.0); //M.S.
       int nmodules         = x_ring.nmodules();
+      int nextOverlapModuleId = nmodules; //MP 
       int nmodules_per_quadrant = (int)(nmodules / 4);
       string m_nam         = x_ring.moduleStr();
       Volume m_vol         = modules_S[m_nam];
@@ -474,6 +475,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         //M.S. add two overlaps volumes for each quadrant 
         if(k%nmodules_per_quadrant == 0 || k%(nmodules_per_quadrant) == nmodules_per_quadrant-1){
+	const int overlapModuleId = nextOverlapModuleId++;//MP
         //if(-1 == 1){
         double xo = 0, yo = 0, roto = 0; 
 
@@ -488,9 +490,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         if(!reflect){
           DetElement module(layer_element, m_base + "_overlap_pos", det_id);
-          pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),
-                                                        Position(xo, yo, zstart + dz_final)));
-          pv.addPhysVolID("module_overlap", mod_num);
+          //pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),//MP
+          //                                              Position(xo, yo, zstart + dz_final)));//MP
+          //pv.addPhysVolID("module_overlap", mod_num);
+	  pv = layer_vol.placeVolume(m_vol_overlap, overlapModuleId, Transform3D(RotationZYX(0, roto, -M_PI / 2),
+                      				          Position(xo, yo, zstart + dz_final)));//MP
+	  pv.addPhysVolID("module", overlapModuleId);//MP
           module.setPlacement(pv);
           for (size_t ic = 0; ic < sensVols_overlap.size(); ++ic) {
             PlacedVolume sens_pv = sensVols_overlap[ic];
@@ -507,9 +512,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           } 
         }else{
           DetElement r_module(layer_element, m_base + "_overlap_neg", det_id);
-          pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),
-                                                        Position(xo, yo, -zstart - dz_final)));
-          pv.addPhysVolID("module_overlap", mod_num);
+          //pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),//MP
+          //                                              Position(xo, yo, -zstart - dz_final)));//MP
+          //pv.addPhysVolID("module_overlap", mod_num);//MP
+           pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),
+				                          Position(xo, yo, -zstart - dz_final))); //MP
+	   pv.addPhysVolID("module", overlapModuleId);//MP
           r_module.setPlacement(pv);
           for (size_t ic = 0; ic < sensVols_overlap.size(); ++ic) {
             PlacedVolume sens_pv = sensVols_overlap[ic];
