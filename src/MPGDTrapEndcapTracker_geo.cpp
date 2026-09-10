@@ -509,7 +509,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           } 
         }else{
           DetElement r_module(layer_element, m_base + "_overlap_neg", det_id);
-           pv = layer_vol.placeVolume(m_vol_overlap, mod_num, Transform3D(RotationZYX(0, roto, -M_PI / 2),
+           pv = layer_vol.placeVolume(m_vol_overlap, overlapModuleId, Transform3D(RotationZYX(0, roto, -M_PI / 2),
 				                          Position(xo, yo, -zstart - dz_final))); 
 	   pv.addPhysVolID("module", overlapModuleId);
           r_module.setPlacement(pv);
