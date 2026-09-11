@@ -2,4 +2,7 @@ Examples/
 Surfaces/
 Validation/
 calibrations/
+plots/
+*.diff
+*.cbor
 *.json

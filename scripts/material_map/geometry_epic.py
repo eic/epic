@@ -26,17 +26,39 @@ if "__main__" == __name__:
         ),
         help="Input xml file containing ePIC geometry",
     )
+    p.add_argument(
+        "-o",
+        "--outputName",
+        type=str,
+        default="geometry-map",
+        help="output name for the geometry JSON file (without .json extension)",
+    )
     args = p.parse_args()
 
     detector = epic.getDetector(args.xmlFile)
     trackingGeometry = detector.trackingGeometry()
     decorators = detector.contextDecorators()
 
-    runGeometry(
-        trackingGeometry,
-        decorators,
-        outputDir=Path.cwd(),
-        outputObj=False,
-        outputCsv=False,
-        outputJson=True,
-    )
+    import tempfile
+    import shutil
+
+    # Generate geometry to a temporary directory, then rename the output file
+    tmpdir = Path(tempfile.mkdtemp())
+    try:
+        runGeometry(
+            trackingGeometry,
+            decorators,
+            outputDir=tmpdir,
+            outputObj=False,
+            outputCsv=False,
+            outputSurfacesJson=True,
+        )
+        # Move the generated geometry-map.json to the desired output name
+        src_file = tmpdir / "geometry-map.json"
+        dst_file = Path.cwd() / f"{args.outputName}.json"
+        if src_file.exists():
+            shutil.move(str(src_file), str(dst_file))
+        else:
+            raise FileNotFoundError(f"Expected geometry file not found at {src_file}")
+    finally:
+        shutil.rmtree(tmpdir)
