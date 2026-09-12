@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 - 2026 Wouter Deconinck, Dmitry Romanov, Bill Llope
 
+#include "DD4hepDetectorHelper.h"
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 //////////////////////////////////
 // Central Barrel DIRC
@@ -14,6 +16,7 @@
 
 using namespace std;
 using namespace dd4hep;
+using namespace dd4hep::rec;
 
 static dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX,
                              double pLTX);
@@ -77,6 +80,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //---- Detector type
   sens.setType("tracker");
 
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(xml_det, det);
+
   //---- Entire DIRC assembly
   Assembly det_volume("DIRC");
   det_volume.setAttributes(desc, xml_det.regionStr(), xml_det.limitsStr(), xml_det.visStr());
@@ -84,8 +90,41 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   det.setPlacement(
       desc.pickMotherVolume(det).placeVolume(det_volume, det_tr).addPhysVolID("system", det_id));
 
+  // ACTS support
+  auto& envelope_params =
+      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(det);
+  if (xml_det.hasChild(_Unicode(envelope))) {
+    xml_comp_t x_envelope = xml_det.child(_Unicode(envelope));
+    envelope_params.set<double>("envelope_r_min", getAttrOrDefault(x_envelope, _U(rmin), 0.));
+    envelope_params.set<double>("envelope_r_max", getAttrOrDefault(x_envelope, _U(rmax), 0.));
+    // Handle zstart+length format (convert to zmin/zmax)
+    if (x_envelope.hasAttr(_U(zstart)) && x_envelope.hasAttr(_U(length))) {
+      double zstart = x_envelope.attr<double>(_U(zstart));
+      double length = x_envelope.attr<double>(_U(length));
+      envelope_params.set<double>("envelope_z_min", zstart);
+      envelope_params.set<double>("envelope_z_max", zstart + length);
+    } else {
+      envelope_params.set<double>("envelope_z_min", getAttrOrDefault(x_envelope, _U(zmin), 0.));
+      envelope_params.set<double>("envelope_z_max", getAttrOrDefault(x_envelope, _U(zmax), 0.));
+    }
+  }
+  // Add the volume boundary material if configured
+  for (xml_coll_t boundary_material(xml_det, _Unicode(boundary_material)); boundary_material;
+       ++boundary_material) {
+    xml_comp_t x_boundary_material = boundary_material;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, envelope_params,
+                                                    "boundary_material");
+  }
+  // Add the volume layer material if configured
+  for (xml_coll_t layer_material(xml_det, _Unicode(layer_material)); layer_material;
+       ++layer_material) {
+    xml_comp_t x_layer_material = layer_material;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, envelope_params,
+                                                    "layer_material");
+  }
+
   //---- Assembly dirc_module holds all the hpDIRC
-  //
+  // Construct module
   xml_comp_t xml_module = xml_det.child(_U(module));
   Assembly dirc_module("DIRCModule");
   dirc_module.setVisAttributes(desc.visAttributes(xml_module.visStr()));
@@ -159,6 +198,19 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Box Envelope_box("Envelope_box", envbox_xsize, envbox_ysize, envbox_zsize);
   Volume Envelope_box_vol("Envelope_box_vol", Envelope_box, desc.material("AirOptical"));
   dirc_module.placeVolume(Envelope_box_vol, Position(0, 0, 0.5 * mirror_thickness));
+
+  //---- Define Acts measurement surface for entire bar assembly (one plane per module)
+  // This provides a continuous projection surface without gaps between bars
+  // Surface normal points radially outward (local x), u along bar length (z), v along bar width (y)
+  Vector3D u(0., 0., 1.);                // along bar length (z-axis)
+  Vector3D v(0., 1., 0.);                // along bar width (y-axis)
+  Vector3D n(1., 0., 0.);                // radially outward (x-axis)
+  double inner_thickness = envbox_xsize; // full depth of envelope
+  double outer_thickness = envbox_xsize;
+  SurfaceType type(
+      SurfaceType::Helper); // Helper surface for projection, not sensitive for tracking
+  VolPlane module_surf(Envelope_box_vol, type, inner_thickness, outer_thickness, u, v, n);
+
   printout(DEBUG, "DIRC_geo", "envbox_xsize    = %12.4f ", envbox_xsize);
   printout(DEBUG, "DIRC_geo", "envbox_ysize    = %12.4f ", envbox_ysize);
   printout(DEBUG, "DIRC_geo", "envbox_zsize    = %12.4f ", envbox_zsize);
@@ -336,14 +388,42 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position));
 
   //---- Place modules -----------------------------------------------
+  // Create a cylindrical layer volume (TGeoTubeSeg) wrapping all modules.
+  // Acts requires a Tube-shaped layer envelope for cylindrical layers.
+  // All 12 modules are placed inside this layer, which is then placed in det_volume.
   const int module_repeat = xml_module.repeat();
   const double dphi       = 2. * M_PI / module_repeat;
+
+  double layer_zsize = envbox_zsize + 0.5 * mirror_thickness; // half-length covering all bars
+  double layer_rmin  = det_rmin;
+  double layer_rmax  = det_rmax;
+  string layer_name  = det_name + "_layer0";
+  Tube layer_tube(layer_rmin, layer_rmax, layer_zsize);
+  Volume layer_vol(layer_name, layer_tube, desc.material("Air"));
+  layer_vol.setVisAttributes(desc.invisible());
+
+  // Place the cylindrical layer in the detector assembly and create its DetElement
+  // (must be done before module loop so module DetElements can be children of layer_det)
+  PlacedVolume layer_pv = det_volume.placeVolume(layer_vol);
+  layer_pv.addPhysVolID("layer", 0);
+  DetElement layer_det(det, layer_name, 0);
+  layer_det.setPlacement(layer_pv);
+  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_det);
+
   for (int i = 0; i < module_repeat; i++) {
     double phi = dphi * i;
     double x   = det_ravg * cos(phi);
     double y   = det_ravg * sin(phi);
     Transform3D tr(RotationZ(phi), Position(x, y, 0));
-    det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
+    PlacedVolume module_pv = layer_vol.placeVolume(dirc_module, tr).addPhysVolID("module", i);
+
+    // Create DetElement for this module (child of layer_det) and attach surface
+    DetElement module_det(layer_det, Form("module%d", i), i);
+    module_det.setPlacement(module_pv);
+    // Ensure VariantParameters extension exists for this module
+    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(module_det);
+    // Attach Acts measurement surface (one continuous plane per module, not per bar)
+    volSurfaceList(module_det)->push_back(module_surf);
   }
 
   //---- Construct Assembly dirc_support
