@@ -695,7 +695,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardTOF"/>
-      <argument value="layer_pattern: str=ForwardTOF_layer\d"/>
+      <argument value="layer_pattern: str=ForwardTOF_layer[12]"/>
     </plugin>
   </plugins>
 
