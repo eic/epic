@@ -20,6 +20,8 @@
     <constant name="ForwardMPGD_overlap" value="2.5*cm" />
 
     <comment> Layer definitions around the sensor for the endcap MPGDs </comment>
+     <comment> Parameters for latest design </comment>
+     <comment>
     <constant name="ForwardMPGD_IR1N" value="70.0*mm" />
     <constant name="ForwardMPGD_IR2N" value="85.0*mm" />
     <constant name="ForwardMPGD_IR3N" value="88.0*mm" />
@@ -30,6 +32,17 @@
     <constant name="ForwardMPGD_OR2" value="405.0*mm" />
     <constant name="ForwardMPGD_OR3" value="400.0*mm" />
     <constant name="ForwardMPGD_OR4" value="420.0*mm" />
+     </comment>
+    <constant name="ForwardMPGD_IR1N" value="90.0*mm" />
+    <constant name="ForwardMPGD_IR2N" value="105.0*mm" />
+    <constant name="ForwardMPGD_IR3N" value="108.0*mm" />
+    <constant name="ForwardMPGD_IR1S" value="90.0*mm" />
+    <constant name="ForwardMPGD_IR2S" value="105.0*mm" />
+    <constant name="ForwardMPGD_IR3S" value="108.0*mm" />
+    <constant name="ForwardMPGD_OR1" value="500.0*mm" />
+    <constant name="ForwardMPGD_OR2" value="453.0*mm" />
+    <constant name="ForwardMPGD_OR3" value="450.0*mm" />
+    <constant name="ForwardMPGD_OR4" value="468.0*mm" />
 
     <constant name="ForwardMPGD_AnodeFCCopper_thickness" value="5.0*um" />
     <constant name="ForwardMPGD_AnodeFCBulk_thickness" value="50*um" />

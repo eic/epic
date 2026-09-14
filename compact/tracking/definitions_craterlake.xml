@@ -108,7 +108,13 @@
 
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
    
+    <comment> newer postions </comment>
+    <comment> 
     <constant name="ForwardMPGD_z1"             value="1285.0*mm-24*mm"/>
+    <constant name="BackwardMPGD_z1"             value="1075.0*mm-12*mm"/>
+    </comment>
+
+    <constant name="ForwardMPGD_z1"             value="1500.0*mm-24*mm"/>
     <constant name="ForwardMPGDMod_offset"        value="118.0*mm"/>
     <constant name="ForwardMPGD_z2"             value="ForwardMPGD_z1 + ForwardMPGDMod_offset"/>
 

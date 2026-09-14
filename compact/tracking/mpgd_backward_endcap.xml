@@ -17,6 +17,8 @@
     <constant name="BackwardMPGD_overlap" value="2.5*cm" />
 
     <comment> Layer definitions around the sensor for the endcap MPGDs </comment>
+    <comment> Parameters for latest design </comment>
+    <comment>
     <constant name="BackwardMPGD_IR1N" value="55.0*mm" />
     <constant name="BackwardMPGD_IR2N" value="70.0*mm" />
     <constant name="BackwardMPGD_IR3N" value="73.0*mm" />
@@ -27,6 +29,19 @@
     <constant name="BackwardMPGD_OR2" value="405.0*mm" />
     <constant name="BackwardMPGD_OR3" value="400.0*mm" />
     <constant name="BackwardMPGD_OR4" value="420.0*mm" />
+    </comment>
+
+    <constant name="BackwardMPGD_IR1N" value="50.0*mm" />
+    <constant name="BackwardMPGD_IR2N" value="65.0*mm" />
+    <constant name="BackwardMPGD_IR3N" value="68.0*mm" />
+    <constant name="BackwardMPGD_IR1S" value="50.0*mm" />
+    <constant name="BackwardMPGD_IR2S" value="65.0*mm" />
+    <constant name="BackwardMPGD_IR3S" value="68.0*mm" />
+    <constant name="BackwardMPGD_OR1" value="500.0*mm" />
+    <constant name="BackwardMPGD_OR2" value="453.0*mm" />
+    <constant name="BackwardMPGD_OR3" value="450.0*mm" />
+    <constant name="BackwardMPGD_OR4" value="468.0*mm" />
+    
 
 
     <constant name="BackwardMPGD_AnodeFCCopper_thickness" value="5.0*um" />
