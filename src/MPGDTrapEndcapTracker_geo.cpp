@@ -206,10 +206,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y; ci; ++ci, ++c_id) {
       xml_comp_t c     = ci;
       double c_thick   = c.thickness();
+      // layer size
       auto comp_IRN = IRN[getAttrOrDefault(c, _Unicode(IR), 1)-1];
       auto comp_IRS = IRS[getAttrOrDefault(c, _Unicode(IR), 1)-1];
       auto comp_OR = OR[getAttrOrDefault(c, _Unicode(OR), 1)-1];
 
+      // frame size (0 if no frame)
+      bool has_frame = (getAttrOrDefault(c, _Unicode(IRf), 0) != 0); 
+
+      auto frame_IRN = IRN[getAttrOrDefault(c, _Unicode(IRf), 1)-1];
+      auto frame_IRS = IRS[getAttrOrDefault(c, _Unicode(IRf), 1)-1];
+      auto frame_OR = OR[getAttrOrDefault(c, _Unicode(ORf), 1)-1];
+
+      // layer trd sides
       double comp_x1_N = comp_IRN * sin(theta_trd);
       double comp_x2_N = comp_OR * sin(theta_trd);
       double comp_z_N = (comp_OR - comp_IRN) * cos(theta_trd)/2;
@@ -221,39 +230,86 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double comp_zb_N = (comp_OR - comp_IRN)/2.0; 
       double comp_zb_S = (comp_OR - comp_IRS)/2.0;
 
-      Material c_mat = description.material(c.materialStr());
+      // frame trd sides 
+      double frame_x1_N = frame_IRN * sin(theta_trd);
+      double frame_x2_N = frame_OR * sin(theta_trd);
+      double frame_z_N_in = (comp_IRN - frame_IRN) * cos(theta_trd)/2;
+      double frame_z_N_out = (frame_OR - comp_OR) * cos(theta_trd)/2;
 
+      double frame_x1_S = frame_IRS * sin(theta_trd);
+      double frame_x2_S = frame_OR * sin(theta_trd);
+      double frame_z_S_in = (comp_IRS - frame_IRS) * cos(theta_trd)/2;
+      double frame_z_S_out = (frame_OR - comp_OR) * cos(theta_trd)/2;
+
+      double frame_zb_N_in = (comp_IRN - frame_IRN)/2.0;
+      double frame_zb_N_out = (frame_OR - comp_OR)/2.0;
+      double frame_zb_S_in = (comp_IRS - frame_IRS)/2.0;
+      double frame_zb_S_out = (frame_OR - comp_OR)/2.0;
+
+      // materials
+      Material c_mat = description.material(c.materialStr());
+      Material f_mat = description.material(getAttrOrDefault(c, _Unicode(materialf), c.materialStr())); 
+
+      // names
       string c_name  = _toString(c_id, "component%d");
       string c_name_overlap = c_name + "_overlap"; //M.S.
 
-      //Define volumes for north and south sectors 
+      string fname_in = _toString(c_id, "component%d_frame_in"); 
+      string fname_out = _toString(c_id, "component%d_frame_out");
+
+      string f_name_overlap_in = fname_in + "_overlap"; //M.S.
+      string f_name_overlap_out = fname_out + "_overlap"; //M.S.
+
+      //Define trapezoid
       Trapezoid comp_s_N(comp_x1_N, comp_x2_N, c_thick / 2e0, c_thick / 2e0, comp_z_N);
       Trapezoid comp_s_S(comp_x1_S, comp_x2_S, c_thick / 2e0, c_thick / 2e0, comp_z_S);
 
+      Trapezoid frame_s_N_in(frame_x1_N, comp_x1_N, c_thick / 2e0, c_thick / 2e0, frame_z_N_in);
+      Trapezoid frame_s_N_out(comp_x2_N, frame_x2_N, c_thick / 2e0, c_thick / 2e0, frame_z_N_out);
+      Trapezoid frame_s_S_in(frame_x1_S, comp_x1_S, c_thick / 2e0, c_thick / 2e0, frame_z_S_in);
+      Trapezoid frame_s_S_out(comp_x2_S, frame_x2_S, c_thick / 2e0, c_thick / 2e0, frame_z_S_out);
+
+      //Define boxes 
       Box comp_o_N(xb, c_thick / 2e0, comp_zb_N); 
       Box comp_o_S(xb, c_thick / 2e0, comp_zb_S); 
 
-      Solid comp_shape_N = comp_s_N;
-      Solid comp_shape_S = comp_s_S;
-      Solid comp_overlap_N = comp_o_N;
-      Solid comp_overlap_S = comp_o_S;
-      
-      /*f (frame_s.isValid()) {
-        comp_shape_N = SubtractionSolid(comp_s_N, frame_s);
-        comp_shape_S = SubtractionSolid(comp_s_S, frame_s);
-      }*/
+      Box frame_o_N_in = Box(xb, c_thick / 2e0, frame_zb_N_in);
+      Box frame_o_N_out = Box(xb, c_thick / 2e0, frame_zb_N_out);
+      Box frame_o_S_in = Box(xb, c_thick / 2e0, frame_zb_S_in);
+      Box frame_o_S_out = Box(xb, c_thick / 2e0, frame_zb_S_out);
 
-      Volume c_vol_N(_toString(c_id, "%d_N"), comp_shape_N, c_mat);
-      Volume c_vol_S(_toString(c_id, "%d_S"), comp_shape_S, c_mat);
+      //Define volumes
+      Volume c_vol_N(_toString(c_id, "%d_N"), comp_s_N, c_mat);
+      Volume c_vol_S(_toString(c_id, "%d_S"), comp_s_S, c_mat);
 
-      Volume c_vol_overlap_N(_toString(c_id, "%d_overlap_N"), comp_overlap_N, c_mat); //M.S.
-      Volume c_vol_overlap_S(_toString(c_id, "%d_overlap_S"), comp_overlap_S, c_mat); //M.S.
+      Volume f_vol_N_in(_toString(c_id, "%d_frame_N_in"), frame_s_N_in, f_mat);
+      Volume f_vol_N_out(_toString(c_id, "%d_frame_N_out"), frame_s_N_out, f_mat);
+      Volume f_vol_S_in(_toString(c_id, "%d_frame_S_in"), frame_s_S_in, f_mat);
+      Volume f_vol_S_out(_toString(c_id, "%d_frame_S_out"), frame_s_S_out, f_mat);
+
+      Volume c_vol_overlap_N(_toString(c_id, "%d_overlap_N"), comp_o_N, c_mat); //M.S.
+      Volume c_vol_overlap_S(_toString(c_id, "%d_overlap_S"), comp_o_S, c_mat); //M.S.
+
+      Volume f_vol_overlap_N_in(_toString(c_id, "%d_frame_overlap_N_in"), frame_o_N_in, f_mat); 
+      Volume f_vol_overlap_N_out(_toString(c_id, "%d_frame_overlap_N_out"), frame_o_N_out, f_mat); 
+      Volume f_vol_overlap_S_in(_toString(c_id, "%d_frame_overlap_S_in"), frame_o_S_in, f_mat ); 
+      Volume f_vol_overlap_S_out(_toString(c_id, "%d_frame_overlap_S_out"), frame_o_S_out, f_mat); 
 
       c_vol_N.setVisAttributes(description.visAttributes(c.visStr()));
       c_vol_S.setVisAttributes(description.visAttributes(c.visStr()));
 
+      f_vol_N_in.setVisAttributes(description.visAttributes(c.visStr()));
+      f_vol_N_out.setVisAttributes(description.visAttributes(c.visStr()));
+      f_vol_S_in.setVisAttributes(description.visAttributes(c.visStr()));
+      f_vol_S_out.setVisAttributes(description.visAttributes(c.visStr()));
+
       c_vol_overlap_N.setVisAttributes(description.visAttributes(c.visStr())); //M.S.
       c_vol_overlap_S.setVisAttributes(description.visAttributes(c.visStr())); //M.S.
+
+      f_vol_overlap_N_in.setVisAttributes(description.visAttributes(c.visStr()));
+      f_vol_overlap_N_out.setVisAttributes(description.visAttributes(c.visStr()));
+      f_vol_overlap_S_in.setVisAttributes(description.visAttributes(c.visStr()));
+      f_vol_overlap_S_out.setVisAttributes(description.visAttributes(c.visStr()));
 
       double comp_pos_Z_N = (comp_IRN - IRN[0]) * cos(theta_trd) + comp_z_N; 
       double comp_pos_Z_S = (comp_IRS - IRS[0]) * cos(theta_trd) + comp_z_S; 
@@ -266,6 +322,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       
       pv_overlap_N = m_volume_overlap_N.placeVolume(c_vol_overlap_N, Position(0, posY + c_thick / 2, comp_pos_Zb_N-zbox_N)); //M.S.
       pv_overlap_S = m_volume_overlap_S.placeVolume(c_vol_overlap_S, Position(0, posY + c_thick / 2, comp_pos_Zb_S-zbox_S)); //M.S.
+
 
       if (c.isSensitive()) {
         module_thicknesses[m_nam] = {thickness_so_far + c_thick / 2.0, total_thickness - thickness_so_far - c_thick / 2.0};
@@ -314,6 +371,31 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         volplane_surfaces_S[m_nam].push_back(surf_overlap_S); //M.S.
         //--------------------------------------------
       }
+
+
+      // Add frames if present
+      if(has_frame){
+      double frame_pos_Z_N_in = comp_pos_Z_N - comp_z_N - frame_z_N_in;
+      double frame_pos_Z_N_out = comp_pos_Z_N + comp_z_N + frame_z_N_out;
+      double frame_pos_Z_S_in = comp_pos_Z_S - comp_z_S - frame_z_S_in;
+      double frame_pos_Z_S_out = comp_pos_Z_S + comp_z_S + frame_z_S_out;
+
+        pv_N = m_volume_N.placeVolume(f_vol_N_in, Position(0, posY + c_thick / 2, frame_pos_Z_N_in-zN));
+        pv_N = m_volume_N.placeVolume(f_vol_N_out, Position(0, posY + c_thick / 2, frame_pos_Z_N_out-zN));
+        pv_S = m_volume_S.placeVolume(f_vol_S_in, Position(0, posY + c_thick / 2, frame_pos_Z_S_in-zS));
+        pv_S = m_volume_S.placeVolume(f_vol_S_out, Position(0, posY + c_thick / 2, frame_pos_Z_S_out-zS));
+
+        double frame_pos_Zb_N_in = comp_pos_Zb_N  - comp_zb_N - frame_zb_N_in;
+        double frame_pos_Zb_N_out = comp_pos_Zb_N + comp_zb_N + frame_zb_N_out;
+        double frame_pos_Zb_S_in = comp_pos_Zb_S  - comp_zb_S - frame_zb_S_in;
+        double frame_pos_Zb_S_out = comp_pos_Zb_S + comp_zb_S + frame_zb_S_out;
+
+        pv_overlap_N = m_volume_overlap_N.placeVolume(f_vol_overlap_N_in, Position(0, posY + c_thick / 2, frame_pos_Zb_N_in-zbox_N)); //M.S.
+        pv_overlap_N = m_volume_overlap_N.placeVolume(f_vol_overlap_N_out, Position(0, posY + c_thick / 2, frame_pos_Zb_N_out-zbox_N)); //M.S.
+        pv_overlap_S = m_volume_overlap_S.placeVolume(f_vol_overlap_S_in, Position(0, posY + c_thick / 2, frame_pos_Zb_S_in-zbox_S)); //M.S.
+        pv_overlap_S = m_volume_overlap_S.placeVolume(f_vol_overlap_S_out, Position(0, posY + c_thick / 2, frame_pos_Zb_S_out-zbox_S)); //M.S.
+      }
+
       posY += c_thick;
       thickness_so_far += c_thick;
     }

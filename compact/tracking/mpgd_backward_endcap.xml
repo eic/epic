@@ -134,36 +134,36 @@
         <module_component thickness="BackwardMPGD_CathodeBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_GEMBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
 
-        <!-- <module_component thickness = "BackwardMPGD_CathodeStructFrame_thickness" material =
-        "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
-        <!-- <module_component thickness = "BackwardMPGD_DriftFrame_thickness" material = "PEEK"
-        sensitive = "false" vis = "MPGDVis"/> -->
-        <!-- <module_component thickness = "BackwardMPGD_TransferFrame_thickness" material = "PEEK"
-        sensitive = "false" vis = "MPGDVis"/> -->
-        <module_component thickness="BackwardMPGD_CathodeAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
+      <module_component thickness="BackwardMPGD_CathodeAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
         <module_component thickness="BackwardMPGD_GEMBottomAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_GEMtopAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
-        <!-- <module_component thickness = "BackwardMPGD_RWellAA_thickness" material = "?????"
-        sensitive = "false" vis = "MPGDVis"/> -->
-        <module_component thickness="BackwardMPGD_CathodeStructCore_thickness" IR="2" OR="2" material="Honeycomb" sensitive="false" vis="MPGDVis" />
+         <module_component thickness="BackwardMPGD_CathodeStructCore_thickness" 
+        IR="2" OR="2" material="Honeycomb" 
+        IRf="1" ORf="4" materialf="Fiberglass"
+        sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="BackwardMPGD_DriftGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
-        <module_component thickness="BackwardMPGD_TransferGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGD_DriftGas_thickness" 
+        IR="2" OR="2" material="Ar90IsoButane" 
+        IRf="1" ORf="4" materialf="PEEK"
+        sensitive="true" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGD_TransferGas_thickness" 
+        IR="2" OR="2" material="Ar90IsoButane" 
+        IRf="1" ORf="4" materialf="PEEK"
+        sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness" material="Honeycomb" IR="2" OR="2" sensitive="false" vis="MPGDVis" />
-
-        <!-- <module_component thickness = "BackwardMPGD_AnodeStructFrame_thickness" material =
-        "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
+        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness" 
+              IR="2" OR="2" material="Honeycomb" 
+              IRf="1" ORf="1" materialf="Fiberglass"
+              sensitive="false" vis="MPGDVis"/>
+              
         <module_component thickness="BackwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_AnodeFCBulk_thickness" IR="1" OR="1" material="Kapton" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_AnodeFCCopper_thickness" IR="1" OR="1" material="Copper" sensitive="false" vis="MPGDVis" />
       </module>
-        <!-- <module_component thickness = "BackwardMPGD_AnodeStructFrame_thickness" material =
-        "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
-
+     
 
       <module name="BackwardModule2" vis="MPGDModuleVis">
          <trd IR1N="BackwardMPGD_IR1N" IR2N="BackwardMPGD_IR2N" IR3N="BackwardMPGD_IR3N" 
@@ -177,29 +177,30 @@
         <module_component thickness="BackwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
 
-        <!-- <module_component thickness = "BackwardMPGD_AnodeStructFrame_thickness" material =
-        "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
+        
+        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness" 
+              IR="2" OR="2" material="Honeycomb" 
+              IRf="1" ORf="1" materialf="Fiberglass"
+              sensitive="false" vis="MPGDVis"/>
 
-        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness" material="Honeycomb" IR="2" OR="2" sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGD_TransferGas_thickness" 
+        IR="2" OR="2" material="Ar90IsoButane" 
+        IRf="1" ORf="4" materialf="PEEK"
+        sensitive="false" vis="MPGDVis" />
+        <module_component thickness="BackwardMPGD_DriftGas_thickness" 
+        IR="2" OR="2" material="Ar90IsoButane" 
+        IRf="1" ORf="4" materialf="PEEK"
+        sensitive="true" vis="MPGDVis" />
 
-        <module_component thickness="BackwardMPGD_TransferGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="false" vis="MPGDVis" />
-        <module_component thickness="BackwardMPGD_DriftGas_thickness" IR="2" OR="2" material="Ar90IsoButane" sensitive="true" vis="MPGDVis" />
-
-        <module_component thickness="BackwardMPGD_CathodeStructCore_thickness" IR="2" OR="2" material="Honeycomb" sensitive="false" vis="MPGDVis" />
-        <!-- <module_component thickness = "BackwardMPGD_RWellAA_thickness" material = "?????"
-        sensitive = "false" vis = "MPGDVis"/> -->
+        <module_component thickness="BackwardMPGD_CathodeStructCore_thickness" 
+        IR="2" OR="2" material="Honeycomb" 
+        IRf="1" ORf="4" materialf="Fiberglass"
+        sensitive="false" vis="MPGDVis" />
 
         <module_component thickness="BackwardMPGD_GEMtopAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_GEMBottomAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
         <module_component thickness="BackwardMPGD_CathodeAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
-
-        <!-- <module_component thickness = "BackwardMPGD_TransferFrame_thickness" material = "PEEK"
-        sensitive = "false" vis = "MPGDVis"/> -->
-        <!-- <module_component thickness = "BackwardMPGD_DriftFrame_thickness" material = "PEEK"
-        sensitive = "false" vis = "MPGDVis"/> -->
-        <!-- <module_component thickness = "BackwardMPGD_CathodeStructFrame_thickness" material =
-        "Fiberglass" sensitive = "false" vis = "MPGDVis"/> -->
 
         <module_component thickness="BackwardMPGD_GEMBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_CathodeBulk_thickness" IR="1" OR="4" material="Kapton" sensitive="false" vis="MPGDVis" />
