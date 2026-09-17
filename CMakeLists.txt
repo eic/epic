@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 # CMP0074: find_package() uses <PackageName>_ROOT variables
 cmake_policy(SET CMP0074 NEW)
 
+include(cmake/git_version.cmake)
+set_git_version(EPIC_VERSION)
+
 PROJECT(epic
+  VERSION ${EPIC_VERSION}
   LANGUAGES CXX
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
-
-# Set version based on git
-include(cmake/git_version.cmake)
-set_git_version(CMAKE_PROJECT_VERSION)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)

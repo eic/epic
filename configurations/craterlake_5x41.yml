@@ -28,6 +28,8 @@ features:
     lfhcal:
     forward_insert:
     barrel_gdml:
+    barrel_flux_return:
+    forward_endcap_flux:
     backward:
     backward_endcap_flux:
   far_forward:
