@@ -46,6 +46,8 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
+find_package(covfie 0.15 REQUIRED)
+find_package(Boost COMPONENTS program_options)
 find_package(IRT2 2.1.1)
 
 #-----------------------------------------------------------------------------------
@@ -63,6 +65,7 @@ dd4hep_add_plugin(${a_lib_name}
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
+  PRIVATE covfie::core
   )
 set(WITH_IRT1_SUPPORT TRUE CACHE STRING "Enable constant definitions used by EICrecon integration in IRT1")
 if(WITH_IRT1_SUPPORT)
@@ -71,6 +74,16 @@ endif()
 if(IRT2_FOUND)
     target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT2_SUPPORT)
     target_link_libraries(${a_lib_name} PRIVATE IRT2)
+endif()
+
+#-----------------------------------------------------------------------------------
+# Field map converter tool (requires boost::program_options)
+if(Boost_program_options_FOUND)
+  add_executable(convert_fieldmap_to_covfie scripts/convert_fieldmap_to_covfie.cpp)
+  target_link_libraries(convert_fieldmap_to_covfie
+    PRIVATE covfie::core Boost::program_options
+    )
+  install(TARGETS convert_fieldmap_to_covfie DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
 #-----------------------------------------------------------------------------------
