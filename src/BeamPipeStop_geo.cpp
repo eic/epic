@@ -54,6 +54,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   ConeSegment s_start_disk(sensitive_thickness / 2, 0.0, rOuter2, 0.0, rEnd);
   Volume v_start_disk("stop_disk_" + motherName, s_start_disk, m_Vacuum);
+  v_start_disk.setVisAttributes(description.visAttributes(vis_name));
 
   v_start_disk.setLimitSet(description, "kill_limits");
 

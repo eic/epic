@@ -40,7 +40,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   exit_window = SubtractionSolid(exit_window, tube_el, Position(-posX, 0.0, 0.0));
 
   Volume vol(det_name + "_vol_ExitWindow", exit_window, description.material(mat_name));
-  vol.setVisAttributes(description.visAttributes(x_det.visStr()));
+  vol.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   Transform3D pos(RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ));
 

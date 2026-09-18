@@ -42,7 +42,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Detector assembly
   Assembly assembly(det_name);
-  assembly.setVisAttributes(description.visAttributes(x_det.attr<std::string>(_Unicode(vis))));
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   double detSizeXY  = getAttrOrDefault(x_det, _Unicode(sizeXY), 180 * mm);
   double detSizeZ   = getAttrOrDefault(x_det, _Unicode(sizeZ), 180 * mm);
