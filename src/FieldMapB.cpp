@@ -7,6 +7,7 @@
 #include <XML/Utilities.h>
 
 #include <cstdlib>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
