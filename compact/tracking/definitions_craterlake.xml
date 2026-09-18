@@ -107,21 +107,15 @@
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
 
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
-    <constant name="ForwardMPGD_zmin"             value="1285.0*mm"/>
-    <constant name="ForwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="70.0*mm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="70.0*mm"/>
-    <comment> rmax = active area radius </comment>
-    <constant name="ForwardMPGDMod1_rmax"         value="420*mm" />
-    <constant name="ForwardMPGDMod2_rmax"         value="420*mm" />
+    <constant name="ForwardMPGD_z1"             value="1285.0*mm"/>
+    <constant name="ForwardMPGD_z2"             value="1350*mm"/>
+    <constant name="ForwardMPGDMod_rmin"         value="90*mm" />
+    <constant name="ForwardMPGDMod_rmax"         value="450*mm" />
 
-    <constant name="BackwardMPGD_zmin"             value="1075.0*mm"/>
-    <constant name="BackwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="BackwardMPGDMod1_rmin"         value="50.0*mm" />
-    <constant name="BackwardMPGDMod2_rmin"         value="50.0*mm" />
-    <comment> rmax = active area radius </comment>
-    <constant name="BackwardMPGDMod1_rmax"         value="420.0*mm" />
-    <constant name="BackwardMPGDMod2_rmax"         value="420.0*mm" />
+    <constant name="BackwardMPGD_z1"             value="1075.0*mm"/>
+    <constant name="BackwardMPGD_z2"             value="1188.5*mm"/>
+    <constant name="BackwardMPGDMod_rmin"         value="50.0*mm" />
+    <constant name="BackwardMPGDMod_rmax"         value="450.0*mm" />
 
   </define>
   <comment> See compact/definitions.xml for reserved detector id
@@ -215,7 +209,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/700fa7f92568311408137b2002b513346b66277d/material-map.cbor"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/700fa7f92568311408137b2002b513346b66277d/material-map.cbor"/>
     </plugin>
   </plugins>
 
