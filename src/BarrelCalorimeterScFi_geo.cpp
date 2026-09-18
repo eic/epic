@@ -19,7 +19,10 @@
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include <algorithm>
+#include <cmath>
 #include <functional>
+#include <map>
 
 using namespace dd4hep;
 
@@ -53,7 +56,7 @@ std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, do
 std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double x, double z, double phi);
 
 // geometry helpers
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber,
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_number,
                  xml_comp_t x_fiber, const std::tuple<double, double, double, double>& dimensions);
 void buildSupport(Detector& desc, Volume& mother, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions);
@@ -237,7 +240,6 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 
   // calculate polygonal grid coordinates (vertices)
   auto grids = gridPoints(grid_n_phi, grid_dr, s_trd_x1, s_thick, hphi);
-  std::vector<int> f_id_count(grids.size(), 0);
   // use layer_number % 2 to add correct shifts for the adjacent fibers at layer boundary
   auto f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi,
                               (layer_number % 2 == 0));
@@ -249,60 +251,84 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   };
   std::vector<Fiber> fibers(f_pos.begin(), f_pos.end());
 
-  // build assembly for each grid and put fibers in
+  // build assembly for each grid and place fibers via paramVolume1D (one call per z-row)
   for (auto& gr : grids) {
     Assembly grid_vol(Form("fiber_grid_%i_%i", gr.ix, gr.iy));
 
-    // loop over all fibers that are not assigned to a grid
-    int f_id = 1;
+    // build TGeoPolygon once per grid for containment checks
+    TGeoPolygon poly(gr.points.size());
+    std::vector<double> vx, vy;
+    std::transform(gr.points.begin(), gr.points.end(), back_inserter(vx), std::mem_fn(&Point::x));
+    std::transform(gr.points.begin(), gr.points.end(), back_inserter(vy), std::mem_fn(&Point::y));
+    poly.SetXY(vx.data(), vy.data());
+    poly.FinishPolygon();
+
+    // group fibers in this grid by z-row: key = round(abs_z / f_spacing_z), value = sorted x positions relative to centroid
+    // Using the absolute z key (l in fiberPositions) avoids floating-point precision issues
+    std::map<int, std::vector<double>> rows;
     for (auto& fi : fibers) {
-      if (fi.assigned) {
+      if (fi.assigned)
         continue;
-      }
-
-      // use TGeoPolygon to help check if fiber is inside a grid
-      TGeoPolygon poly(gr.points.size());
-      std::vector<double> vx, vy;
-      std::transform(gr.points.begin(), gr.points.end(), back_inserter(vx), std::mem_fn(&Point::x));
-      std::transform(gr.points.begin(), gr.points.end(), back_inserter(vy), std::mem_fn(&Point::y));
-      poly.SetXY(vx.data(), vy.data());
-      poly.FinishPolygon();
-
       double f_xy[2] = {fi.pos.x(), fi.pos.y()};
-      if (not poly.Contains(f_xy)) {
+      if (!poly.Contains(f_xy))
         continue;
-      }
-
-      // place fiber in grid
-      auto p        = fi.pos - gr.mean_centroid;
-      auto clad_phv = grid_vol.placeVolume(f_vol_clad, Position(p.x(), p.y(), 0.));
-      clad_phv.addPhysVolID(f_id_fiber, f_id);
+      int z_key = static_cast<int>(std::round(fi.pos.y() / f_spacing_z));
+      rows[z_key].push_back(fi.pos.x() - gr.mean_centroid.x());
       fi.assigned = true;
-      f_id++;
     }
 
-    // only add this if this grid has fibers
-    if (f_id > 1) {
-      // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
-      Transform3D gr_tr(RotationZYX(0., 0., M_PI * 0.5),
-                        Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
-      auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
-      grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_n_phi + 1);
-      grid_vol.ptr()->Voxelize("");
-    }
-  }
+    if (rows.empty())
+      continue;
 
-  /*
-  // sanity check
-  size_t missing_fibers = 0;
-  for (auto &fi : fibers) {
-    if (not fi.assigned) {
-      missing_fibers++;
+    // sort x positions within each row
+    for (auto& [z_key, row_x] : rows)
+      std::sort(row_x.begin(), row_x.end());
+
+    // Place fibers using paramVolume1D (1D uniform translation), one call per z-row.
+    // Each row is wrapped in its own Assembly with physVolID(f_id_fiber, row_index * n_x_max) so
+    // that the VolumeManager cellID code is unique per row (DD4hep requires volID=0 for
+    // parameterised volumes; the copy number encodes the fiber column index).
+    // At init time the fiber field is OR'd: row_index * n_x_max | 0 = row_index * n_x_max.
+    // At runtime the copy_no is OR'd in: fiber = row_index * n_x_max + copy_no (no bit overlap).
+    // The "z" field is left at 0 from the physVolID side so that CartesianStripZ segmentation
+    // can freely encode the longitudinal position along the fiber.
+    int n_x_max = 1;
+    for (auto& [k, v] : rows)
+      n_x_max = std::max(n_x_max, static_cast<int>(v.size()));
+    {
+      int p = 1;
+      while (p < n_x_max)
+        p <<= 1;
+      n_x_max = p;
+    } // round up to power of 2
+
+    int row_index = 0;
+    for (auto& [z_key, row_x] : rows) {
+      int n_x        = static_cast<int>(row_x.size());
+      double z_rel   = z_key * f_spacing_z - gr.mean_centroid.y(); // y-position in grid_vol frame
+      double x_start = row_x.front(); // leftmost x relative to centroid
+
+      // row Assembly placed at (0, z_rel, 0) in grid_vol; fibers placed at (x_rel, 0, 0) inside it
+      Assembly row_vol(Form("fiber_row_%i", row_index));
+      PlacedVolume first_pv = row_vol.paramVolume1D(Transform3D(Position(x_start, 0., 0.)),
+                                                    f_vol_clad, static_cast<size_t>(n_x),
+                                                    Transform3D(Position(f_spacing_x, 0., 0.)));
+      // volID must be 0 for parameterised volumes; each copy's fiber column index arrives via copy_no
+      first_pv.addPhysVolID(f_id_fiber, 0);
+
+      auto row_phv = grid_vol.placeVolume(row_vol, Position(0., z_rel, 0.));
+      // row base offset in fiber field; OR'd with copy_no at runtime → fiber = row*n_x_max + col
+      row_phv.addPhysVolID(f_id_fiber, row_index * n_x_max);
+      ++row_index;
     }
+
+    // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
+    Transform3D gr_tr(RotationZYX(0., 0., M_PI * 0.5),
+                      Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
+    auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
+    grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_n_phi + 1);
+    grid_vol.ptr()->Voxelize("");
   }
-  std::cout << "built " << fibers.size() << " fibers, "
-            << missing_fibers << " of them failed to find a grid" << std::endl;
-  */
 }
 
 // simple aluminum sheet cover
