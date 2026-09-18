@@ -19,6 +19,9 @@
     <vis name="TrackerLayerVis"   ref="AnlGold"         visible="true"  showDaughters="true" />
     <vis name="TrackerModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="false" />
     <vis name="TrackerMPGDVis"    ref="AnlRed"          visible="true"  showDaughters="false" />
+    <vis name="MPGDReadoutVis"    ref="AnlDarkGreen"    visible="true"  showDaughters="true" />
+    <vis name="MPGDGasVis"        ref="AnlLightGray"    visible="true"  showDaughters="true" />
+    <vis name="MPGDInoxVis"       ref="AnlBlue"         visible="true"  showDaughters="true"/>
     <comment> Visualization for Barrel MMGAS (apply to layers) and GEM endcap (apply to modules) </comment>
     <vis name="TrackerGEMModuleVis"  ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
     <vis name="TrackerMMGASLayerVis" ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
