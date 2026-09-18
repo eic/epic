@@ -23,3 +23,7 @@ case "$(uname -s)" in
         fi
         ;;
 esac
+
+@PRELOAD_SETUP_LINES@
+@ASAN_SETUP_LINES@
+@UBSAN_SETUP_LINES@
