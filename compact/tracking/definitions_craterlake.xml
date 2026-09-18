@@ -119,7 +119,7 @@
     <constant name="ForwardMPGD_z2"             value="ForwardMPGD_z1 + ForwardMPGDMod_offset"/>
 
     <constant name="BackwardMPGD_z1"             value="1075.0*mm-12*mm"/>
-    <constant name="BackwardMPGDMod_offset"        value="118.0*mm"/>
+    <constant name="BackwardMPGDMod_offset"        value="103.0*mm"/>
     <constant name="BackwardMPGD_z2"             value="BackwardMPGD_z1 + BackwardMPGDMod_offset"/>
 
   </define>
