@@ -27,7 +27,7 @@ Overview
 Getting Started
 ---------------
 
-This assumes you have DD4hep installed in your environment. Please use eic-shell container (see the [EIC environment tutorial](https://eic.github.io/tutorial-setting-up-environment/)). If you just looking to do simulation and reconstruction with unmodified ePIC geometry you don't need to compile it yourself. Instruction below is for when you are looking to do development:
+This assumes you have DD4hep installed in your environment. Please use the eic-shell container (see the [EIC environment tutorial](https://eic.github.io/tutorial-setting-up-environment/)). If you are just looking to do simulation and reconstruction with unmodified ePIC geometry, you don't need to compile it yourself. The instructions below are for when you are looking to do development:
 
 Get a copy of the latest version from this repository:
 ```bash
