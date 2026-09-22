@@ -119,7 +119,7 @@
 
   <detectors>
     <detector
-      id="TrackerEndcapN_5_ID"
+      id="TrackerEndcapP_5_ID"
       name="ForwardMPGD"
       type="epic_MPGDTrapEndcapTracker"
       actsType="endcap"
@@ -263,7 +263,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardMPGD" />
-      <argument value="layer_pattern: str=ForwardMPGD_layer\d_N" />
+      <argument value="layer_pattern: str=ForwardMPGD_layer\d_P" />
     </plugin>
   </plugins>
 
