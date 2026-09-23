@@ -86,21 +86,21 @@
     <constant name="ForwardMPGDLayerPad" value="0*um" />
     <comment> Detector thickness </comment>
     <constant name="ForwardMPGDAnode_thickness"
-      value="ForwardMPGD_AnodeFCCopper_thickness 
-                                                                    + ForwardMPGD_AnodeFCBulk_thickness 
-                                                                    + ForwardMPGD_AnodeStructSkin_thickness 
-                                                                    + ForwardMPGD_PCB_thickness 
+      value="ForwardMPGD_AnodeFCCopper_thickness
+                                                                    + ForwardMPGD_AnodeFCBulk_thickness
+                                                                    + ForwardMPGD_AnodeStructSkin_thickness
+                                                                    + ForwardMPGD_PCB_thickness
                                                                     + ForwardMPGD_AnodeStructFrame_thickness" />
     <constant name="ForwardMPGDTransfer_thickess"
-      value="ForwardMPGD_GEMBulk_thickness 
+      value="ForwardMPGD_GEMBulk_thickness
                                                                     + ForwardMPGD_DriftFrame_thickness" />
     <constant name="ForwardMPGDDrift_thickness" value="ForwardMPGD_DriftFrame_thickness" />
     <constant name="ForwardMPGDCathode_thickness"
-      value="ForwardMPGD_CathodeBulk_thickness 
-                                                                    + ForwardMPGD_CathodeStructSkin_thickness 
-                                                                    + ForwardMPGD_CathodeStructFrame_thickness 
-                                                                    + ForwardMPGD_CathodeStructSkin_thickness 
-                                                                    + ForwardMPGD_CathodeFCBulk_thickness 
+      value="ForwardMPGD_CathodeBulk_thickness
+                                                                    + ForwardMPGD_CathodeStructSkin_thickness
+                                                                    + ForwardMPGD_CathodeStructFrame_thickness
+                                                                    + ForwardMPGD_CathodeStructSkin_thickness
+                                                                    + ForwardMPGD_CathodeFCBulk_thickness
                                                                     + ForwardMPGD_CathodeFCCopper_thickness" />
 
     <!-- <constant name="ForwardMPGDFrame_thickness"   value="2*ForwardMPGDWindowGap_thickness +
@@ -128,8 +128,8 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP" />
       <module name="ForwardModule1" vis="MPGDModuleVis">
-         <trd IR1N="ForwardMPGD_IR1N" IR2N="ForwardMPGD_IR2N" IR3N="ForwardMPGD_IR3N" 
-            IR1S="ForwardMPGD_IR1S" IR2S="ForwardMPGD_IR2S" IR3S="ForwardMPGD_IR3S" 
+         <trd IR1N="ForwardMPGD_IR1N" IR2N="ForwardMPGD_IR2N" IR3N="ForwardMPGD_IR3N"
+            IR1S="ForwardMPGD_IR1S" IR2S="ForwardMPGD_IR2S" IR3S="ForwardMPGD_IR3S"
             OR1="ForwardMPGD_OR1" OR2="ForwardMPGD_OR2" OR3="ForwardMPGD_OR3" OR4="ForwardMPGD_OR4"
             theta = "ForwardMPGDEndcapMod_angle/2"/>
         <box x="ForwardMPGD_overlap/2.0"/>
@@ -145,22 +145,22 @@
         <module_component thickness="ForwardMPGD_GEMBottomAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
         <module_component thickness="ForwardMPGD_GEMtopAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness" 
-        IR="2" OR="2" material="Honeycomb" 
+        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness"
+        IR="2" OR="2" material="Honeycomb"
         IRf="1" ORf="4" materialf="Fiberglass"
         sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_DriftGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="ForwardMPGD_DriftGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="true" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_TransferGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="ForwardMPGD_TransferGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness" 
-              IR="2" OR="2" material="Honeycomb" 
+        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness"
+              IR="2" OR="2" material="Honeycomb"
               IRf="1" ORf="1" materialf="Fiberglass"
               sensitive="false" vis="MPGDVis"/>
         <module_component thickness="ForwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
@@ -171,8 +171,8 @@
 
 
       <module name="ForwardModule2" vis="MPGDModuleVis">
-        <trd IR1N="ForwardMPGD_IR1N" IR2N="ForwardMPGD_IR2N" IR3N="ForwardMPGD_IR3N" 
-            IR1S="ForwardMPGD_IR1S" IR2S="ForwardMPGD_IR2S" IR3S="ForwardMPGD_IR3S" 
+        <trd IR1N="ForwardMPGD_IR1N" IR2N="ForwardMPGD_IR2N" IR3N="ForwardMPGD_IR3N"
+            IR1S="ForwardMPGD_IR1S" IR2S="ForwardMPGD_IR2S" IR3S="ForwardMPGD_IR3S"
             OR1="ForwardMPGD_OR1" OR2="ForwardMPGD_OR2" OR3="ForwardMPGD_OR3" OR4="ForwardMPGD_OR4"
             theta = "ForwardMPGDEndcapMod_angle/2"/>
         <box x="ForwardMPGD_overlap/2.0"/>
@@ -182,22 +182,22 @@
         <module_component thickness="ForwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
         <module_component thickness="ForwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness" 
-              IR="2" OR="2" material="Honeycomb" 
+        <module_component thickness="ForwardMPGD_AnodeStructCore_thickness"
+              IR="2" OR="2" material="Honeycomb"
               IRf="1" ORf="1" materialf="Fiberglass"
               sensitive="false" vis="MPGDVis"/>
 
-        <module_component thickness="ForwardMPGD_TransferGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="ForwardMPGD_TransferGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="false" vis="MPGDVis" />
-        <module_component thickness="ForwardMPGD_DriftGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="ForwardMPGD_DriftGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="true" vis="MPGDVis" />
 
-        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness" 
-        IR="2" OR="2" material="Honeycomb" 
+        <module_component thickness="ForwardMPGD_CathodeStructCore_thickness"
+        IR="2" OR="2" material="Honeycomb"
         IRf="1" ORf="4" materialf="Fiberglass"
         sensitive="false" vis="MPGDVis" />
 

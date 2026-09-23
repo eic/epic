@@ -41,7 +41,7 @@
     <constant name="BackwardMPGD_OR2" value="453.0*mm" />
     <constant name="BackwardMPGD_OR3" value="450.0*mm" />
     <constant name="BackwardMPGD_OR4" value="468.0*mm" />
-    
+
 
 
     <constant name="BackwardMPGD_AnodeFCCopper_thickness" value="5.0*um" />
@@ -86,21 +86,21 @@
     <constant name="BackwardMPGDLayerPad" value="0*um" />
     <comment> Detector thickness </comment>
     <constant name="BackwardMPGDAnode_thickness"
-      value="BackwardMPGD_AnodeFCCopper_thickness 
-                                                                    + BackwardMPGD_AnodeFCBulk_thickness 
-                                                                    + BackwardMPGD_AnodeStructSkin_thickness 
-                                                                    + BackwardMPGD_PCB_thickness 
+      value="BackwardMPGD_AnodeFCCopper_thickness
+                                                                    + BackwardMPGD_AnodeFCBulk_thickness
+                                                                    + BackwardMPGD_AnodeStructSkin_thickness
+                                                                    + BackwardMPGD_PCB_thickness
                                                                     + BackwardMPGD_AnodeStructFrame_thickness" />
     <constant name="BackwardMPGDTransfer_thickess"
-      value="BackwardMPGD_GEMBulk_thickness 
+      value="BackwardMPGD_GEMBulk_thickness
                                                                     + BackwardMPGD_DriftFrame_thickness" />
     <constant name="BackwardMPGDDrift_thickness" value="BackwardMPGD_DriftFrame_thickness" />
     <constant name="BackwardMPGDCathode_thickness"
-      value="BackwardMPGD_CathodeBulk_thickness 
-                                                                    + BackwardMPGD_CathodeStructSkin_thickness 
-                                                                    + BackwardMPGD_CathodeStructFrame_thickness 
-                                                                    + BackwardMPGD_CathodeStructSkin_thickness 
-                                                                    + BackwardMPGD_CathodeFCBulk_thickness 
+      value="BackwardMPGD_CathodeBulk_thickness
+                                                                    + BackwardMPGD_CathodeStructSkin_thickness
+                                                                    + BackwardMPGD_CathodeStructFrame_thickness
+                                                                    + BackwardMPGD_CathodeStructSkin_thickness
+                                                                    + BackwardMPGD_CathodeFCBulk_thickness
                                                                     + BackwardMPGD_CathodeFCCopper_thickness" />
 
     <!-- <constant name="BackwardMPGDFrame_thickness"   value="2*BackwardMPGDWindowGap_thickness +
@@ -122,8 +122,8 @@
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP" />
       <module name="BackwardModule1" vis="MPGDModuleVis">
-        <trd IR1N="BackwardMPGD_IR1N" IR2N="BackwardMPGD_IR2N" IR3N="BackwardMPGD_IR3N" 
-            IR1S="BackwardMPGD_IR1S" IR2S="BackwardMPGD_IR2S" IR3S="BackwardMPGD_IR3S" 
+        <trd IR1N="BackwardMPGD_IR1N" IR2N="BackwardMPGD_IR2N" IR3N="BackwardMPGD_IR3N"
+            IR1S="BackwardMPGD_IR1S" IR2S="BackwardMPGD_IR2S" IR3S="BackwardMPGD_IR3S"
             OR1="BackwardMPGD_OR1" OR2="BackwardMPGD_OR2" OR3="BackwardMPGD_OR3" OR4="BackwardMPGD_OR4"
             theta = "BackwardMPGDEndcapMod_angle/2"/>
          <box x="BackwardMPGD_overlap/2.0"/>
@@ -139,35 +139,35 @@
         <module_component thickness="BackwardMPGD_GEMBottomAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_GEMtopAA_thickness" IR="3" OR="3" material="Copper" sensitive="false" vis="MPGDVis" />
 
-         <module_component thickness="BackwardMPGD_CathodeStructCore_thickness" 
-        IR="2" OR="2" material="Honeycomb" 
+         <module_component thickness="BackwardMPGD_CathodeStructCore_thickness"
+        IR="2" OR="2" material="Honeycomb"
         IRf="1" ORf="4" materialf="Fiberglass"
         sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="BackwardMPGD_DriftGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="BackwardMPGD_DriftGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="true" vis="MPGDVis" />
-        <module_component thickness="BackwardMPGD_TransferGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="BackwardMPGD_TransferGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="false" vis="MPGDVis" />
 
-        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness" 
-              IR="2" OR="2" material="Honeycomb" 
+        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness"
+              IR="2" OR="2" material="Honeycomb"
               IRf="1" ORf="1" materialf="Fiberglass"
               sensitive="false" vis="MPGDVis"/>
-              
+
         <module_component thickness="BackwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_AnodeFCBulk_thickness" IR="1" OR="1" material="Kapton" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_AnodeFCCopper_thickness" IR="1" OR="1" material="Copper" sensitive="false" vis="MPGDVis" />
       </module>
-     
+
 
       <module name="BackwardModule2" vis="MPGDModuleVis">
-         <trd IR1N="BackwardMPGD_IR1N" IR2N="BackwardMPGD_IR2N" IR3N="BackwardMPGD_IR3N" 
-            IR1S="BackwardMPGD_IR1S" IR2S="BackwardMPGD_IR2S" IR3S="BackwardMPGD_IR3S" 
+         <trd IR1N="BackwardMPGD_IR1N" IR2N="BackwardMPGD_IR2N" IR3N="BackwardMPGD_IR3N"
+            IR1S="BackwardMPGD_IR1S" IR2S="BackwardMPGD_IR2S" IR3S="BackwardMPGD_IR3S"
             OR1="BackwardMPGD_OR1" OR2="BackwardMPGD_OR2" OR3="BackwardMPGD_OR3" OR4="BackwardMPGD_OR4"
             theta = "BackwardMPGDEndcapMod_angle/2"/>
         <box x="BackwardMPGD_overlap/2.0"/>
@@ -177,23 +177,23 @@
         <module_component thickness="BackwardMPGD_AnodeStructSkin_thickness" IR="1" OR="1" material="Fiberglass" sensitive="false" vis="MPGDVis" />
         <module_component thickness="BackwardMPGD_PCB_thickness" IR="1" OR="1" material="Fr4" sensitive="false" vis="MPGDVis" />
 
-        
-        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness" 
-              IR="2" OR="2" material="Honeycomb" 
+
+        <module_component thickness="BackwardMPGD_AnodeStructCore_thickness"
+              IR="2" OR="2" material="Honeycomb"
               IRf="1" ORf="1" materialf="Fiberglass"
               sensitive="false" vis="MPGDVis"/>
 
-        <module_component thickness="BackwardMPGD_TransferGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="BackwardMPGD_TransferGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="false" vis="MPGDVis" />
-        <module_component thickness="BackwardMPGD_DriftGas_thickness" 
-        IR="2" OR="2" material="Ar90IsoButane" 
+        <module_component thickness="BackwardMPGD_DriftGas_thickness"
+        IR="2" OR="2" material="Ar90IsoButane"
         IRf="1" ORf="4" materialf="PEEK"
         sensitive="true" vis="MPGDVis" />
 
-        <module_component thickness="BackwardMPGD_CathodeStructCore_thickness" 
-        IR="2" OR="2" material="Honeycomb" 
+        <module_component thickness="BackwardMPGD_CathodeStructCore_thickness"
+        IR="2" OR="2" material="Honeycomb"
         IRf="1" ORf="4" materialf="Fiberglass"
         sensitive="false" vis="MPGDVis" />
 
