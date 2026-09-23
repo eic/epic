@@ -7,6 +7,7 @@
 #include <XML/Utilities.h>
 
 #include <cstdlib>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -213,6 +214,12 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale) {
 
 // get field components
 void FieldMapB::fieldComponents(const double* pos, double* field) {
+  if (std::isnan(pos[0]) || std::isnan(pos[1]) || std::isnan(pos[2])) {
+    printout(ERROR, "FieldMapB", "fieldComponents called for pos = (%f, %f, %f)", pos[0], pos[1],
+             pos[2]);
+    std::_Exit(EXIT_FAILURE);
+  }
+
   // coordinate conversion
   auto p = coordTranslate_inv.has_value()
                ? coordTranslate_inv.value() * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2])
