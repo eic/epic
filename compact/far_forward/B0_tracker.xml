@@ -58,6 +58,12 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="B0Tracker_xpos" y="0" z="B0Tracker_zpos"/>
       <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
+      <!-- Empty ACTS layers `gap` outside the first and last faces, as for the ForwardTOF
+           (eic/epic#1089), so the ACTS volume covers every sensor. The faces are tilted by the
+           crossing angle, so their sensors reach |x| sin(crossing angle), a few mm, beyond the
+           layer in z, and `gap` must cover that. rmin and rmax only size the empty layers and
+           must stay within the radial range of the faces -->
+      <acts_guard gap="6*mm" rmin="40*mm" rmax="130*mm"/>
       <!-- ACTS layer settings, shared by every face -->
       <envelope vis="FFTrackerLayerVis" zmin_tolerance="1*mm" zmax_tolerance="1*mm"/>
       <layer_material surface="inner" binning="binPhi,binR" bins0="B0TrackerLayerMaterialPhiBins" bins1="B0TrackerLayerMaterialRBins"/>
@@ -495,7 +501,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="B0Tracker"/>
-      <argument value="layer_pattern: str=B0Tracker_station\d+_(front|back)_P"/>
+      <argument value="layer_pattern: str=B0Tracker_(station\d+_(front|back)|guard_\w+)_P"/>
     </plugin>
   </plugins>
 </lccdd>

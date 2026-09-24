@@ -15,6 +15,8 @@
  *   - <envelope> z tolerances and <layer_material>: ACTS settings for every face
  *   - <station id>: <position>, <support ref>, and a back and a front
  *     <face side> listing its <module x y [rotZ]> placements
+ *   - optional <acts_guard gap rmin rmax>: empty ACTS layers outside the first
+ *     and last faces
  *
  * Hierarchy station -> face -> module -> sensor, with these invariants:
  *   - One compact <face> is one ACTS disc layer, the back or front sensor
@@ -45,6 +47,7 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 using namespace dd4hep;
@@ -217,6 +220,10 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   }
   const std::string env_vis = getAttrOrDefault<std::string>(x_env, _Unicode(vis), "");
 
+  // First and last tracking faces, for the ACTS guard layers below
+  Position firstFacePos(0.0, 0.0, +std::numeric_limits<double>::infinity());
+  Position lastFacePos(0.0, 0.0, -std::numeric_limits<double>::infinity());
+
   for (xml_coll_t st(x_det, _Unicode(station)); st; ++st) {
     xml_comp_t x_station = st;
     const int station    = x_station.id();
@@ -263,6 +270,12 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
       }
       PlacedVolume facePV = assembly.placeVolume(faceVol, facePos);
       facePV.addPhysVolID("layer", layerID);
+      if (facePos.z() < firstFacePos.z()) {
+        firstFacePos = facePos;
+      }
+      if (facePos.z() > lastFacePos.z()) {
+        lastFacePos = facePos;
+      }
 
       DetElement faceDE(sdet, faceName + "_P", layerID);
       faceDE.setPlacement(facePV);
@@ -308,6 +321,31 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
 
       printout(DEBUG, det_name, "Layer %d (station %d %s) z=%8.3f mm", layerID, station,
                side.c_str(), facePos.z() / dd4hep::mm);
+    }
+  }
+
+  // Empty ACTS layers just outside the first and last faces widen the B0 tracking
+  // volume to the outer sensors of the tilted faces
+  if (xml_comp_t x_guard = x_det.child(_Unicode(acts_guard), false); x_guard.ptr()) {
+    if (!std::isfinite(firstFacePos.z())) {
+      throw std::runtime_error(det_name + ": <acts_guard> needs at least one <face>");
+    }
+    const Position gap(0.0, 0.0, x_guard.attr<double>(_Unicode(gap)));
+    const double rmin = x_guard.rmin();
+    const double rmax = x_guard.rmax();
+    int guardID       = 0;
+    for (const auto& [name, guardPos] :
+         {std::pair{"upstream", firstFacePos - gap}, std::pair{"downstream", lastFacePos + gap}}) {
+      const std::string guardName = det_name + "_guard_" + name;
+      // Half disc on the side away from the electron beam pipe
+      Volume guardVol(guardName, Tube(rmin, rmax, 0.5 * dd4hep::um, 0.5 * M_PI, 1.5 * M_PI),
+                      description.vacuum());
+      guardVol.setVisAttributes(description.invisible());
+      PlacedVolume guardPV = assembly.placeVolume(guardVol, guardPos);
+      // IDs above the layer IDs used by the faces
+      DetElement guardDE(sdet, guardName + "_P", 100 + guardID++);
+      guardDE.setPlacement(guardPV);
+      DD4hepDetectorHelper::ensureExtension<VariantParameters>(guardDE);
     }
   }
 
