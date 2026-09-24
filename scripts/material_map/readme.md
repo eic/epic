@@ -22,8 +22,10 @@ This takes about two hours, and >10GB disk space.
 
 ## Update the official material map
 1. You can either generate the map locally as described above, or download the artifact ```material_map``` from a PR CI.
-2. Check the generated comparison plots for any outstanding issues. Then upload the cbor file and relevant plots to [gitlab](https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/153).
-3. Copy the url of your uploaded cbor file, and update the [path](https://github.com/eic/epic/blob/540a9e1e255e276548993449be09bd275cb3ef05/compact/tracking/definitions_craterlake.xml#L203) at the bottom epic/compact/tracking/definitions_craterlake.xml with a PR.
+2. Check the generated comparison plots for any outstanding issues. Then upload the cbor file to [epic-data](https://github.com/eic/epic-data/) and relevant plots to [gitlab](https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/153).
+3. Copy the url of your uploaded cbor file with format:
+`https://raw.githubusercontent.com/eic/epic-data/<commit>/material-map.cbor`
+and update the [path](https://github.com/eic/epic/blob/540a9e1e255e276548993449be09bd275cb3ef05/compact/tracking/definitions_craterlake.xml#L203) at the bottom epic/compact/tracking/definitions_craterlake.xml with a PR.
 
 
 
