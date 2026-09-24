@@ -1,0 +1,389 @@
+name: field-performance-benchmark
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/field-*'
+  pull_request:
+    paths:
+      - 'src/FieldMapB.cpp'
+      - 'compact/fields/**'
+      - 'fieldmaps/**'
+      - 'scripts/benchmarks/field_performance_benchmark.py'
+      - '.github/workflows/field-performance-benchmark.yml'
+  schedule:
+    # Run nightly at 2 AM UTC to track performance over time
+    - cron: '0 2 * * *'
+  workflow_dispatch: # allow manual triggering
+    inputs:
+      benchmark_mode:
+        description: 'Benchmark mode (quick/full/comparison)'
+        required: false
+        default: 'quick'
+        type: choice
+        options:
+          - quick
+          - full
+          - comparison
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Benchmark configuration
+  BENCHMARK_QUICK_SAMPLES: "1000,10000"
+  BENCHMARK_FULL_SAMPLES: "1000,10000,100000,500000"
+  PERFORMANCE_THRESHOLD_DEGRADATION: "0.1"  # 10% performance degradation threshold
+
+jobs:
+  field-performance-benchmark:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+        optimization: [O2, O3]
+      fail-fast: false
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        # Need history for performance comparison
+        fetch-depth: 0
+
+    - name: Setup CVMFS
+      uses: cvmfs-contrib/github-action-cvmfs@v5
+
+    - name: Setup EIC environment and build
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        run: |
+          eic-info
+          echo "Setting up build environment..."
+          export CC=${{ matrix.compiler }}
+          export CXX=${{ matrix.compiler == 'gcc' && 'g++' || 'clang++' }}
+
+          # Build with specific optimization level
+          cmake -B build -S . \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install \
+            -DCMAKE_CXX_FLAGS="-${{ matrix.optimization }} -march=native -DBENCHMARK_BUILD" \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j$(nproc) --target install
+
+    - name: Install Python dependencies
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install numpy matplotlib psutil
+
+    - name: Determine benchmark parameters
+      id: benchmark-params
+      run: |
+        if [[ "${{ github.event.inputs.benchmark_mode }}" == "full" ]] || [[ "${{ github.event_name }}" == "schedule" ]]; then
+          echo "samples=${BENCHMARK_FULL_SAMPLES}" >> $GITHUB_OUTPUT
+          echo "mode=full" >> $GITHUB_OUTPUT
+        else
+          echo "samples=${BENCHMARK_QUICK_SAMPLES}" >> $GITHUB_OUTPUT
+          echo "mode=quick" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Download baseline performance data
+      if: github.event_name == 'pull_request'
+      uses: dawidd6/action-download-artifact@v6
+      with:
+        branch: ${{ github.event.pull_request.base.ref }}
+        name: field-performance-baseline-${{ matrix.compiler }}-${{ matrix.optimization }}
+        path: baseline/
+        if_no_artifact_found: warn
+      continue-on-error: true
+
+    - name: Run field performance benchmark
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          export PYTHONPATH=$HOME/.local/lib/python3.11/site-packages:$PYTHONPATH
+
+          echo "Running field performance benchmark..."
+          echo "Compiler: ${{ matrix.compiler }}, Optimization: ${{ matrix.optimization }}"
+          echo "Samples: ${{ steps.benchmark-params.outputs.samples }}"
+
+          # Run benchmark
+          python3 scripts/benchmarks/field_performance_benchmark.py \
+            --detector-path ${{ github.workspace }} \
+            --output-dir benchmark_results \
+            --samples $(echo "${{ steps.benchmark-params.outputs.samples }}" | tr ',' ' ') \
+            --verbose
+
+          # Add compiler and optimization info to results
+          cd benchmark_results
+          jq --arg compiler "${{ matrix.compiler }}" \
+             --arg optimization "${{ matrix.optimization }}" \
+             --arg commit "${{ github.sha }}" \
+             --arg branch "${{ github.ref_name }}" \
+             '.metadata += {compiler: $compiler, optimization: $optimization, commit: $commit, branch: $branch}' \
+             field_benchmark_results.json > temp.json && mv temp.json field_benchmark_results.json
+
+    - name: Compare with baseline (PR only)
+      if: github.event_name == 'pull_request'
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        run: |
+          if [ -f baseline/field_benchmark_results.json ]; then
+            echo "Comparing performance with baseline..."
+
+            # Create comparison script
+            cat > compare_performance.py << 'EOF'
+          import json
+          import sys
+          from pathlib import Path
+
+          def compare_results(baseline_file, current_file, threshold=0.1):
+              """Compare benchmark results and check for performance regressions."""
+
+              with open(baseline_file) as f:
+                  baseline = json.load(f)
+              with open(current_file) as f:
+                  current = json.load(f)
+
+              comparison = {
+                  'performance_changes': {},
+                  'regressions': [],
+                  'improvements': []
+              }
+
+              # Compare performance summaries
+              baseline_perf = baseline.get('performance_summary', {})
+              current_perf = current.get('performance_summary', {})
+
+              for config in baseline_perf:
+                  if config in current_perf:
+                      baseline_rate = baseline_perf[config].get('avg_evaluations_per_second', 0)
+                      current_rate = current_perf[config].get('avg_evaluations_per_second', 0)
+
+                      if baseline_rate > 0:
+                          change = (current_rate - baseline_rate) / baseline_rate
+                          comparison['performance_changes'][config] = {
+                              'baseline_rate': baseline_rate,
+                              'current_rate': current_rate,
+                              'change_percent': change * 100,
+                              'is_regression': change < -threshold,
+                              'is_improvement': change > threshold
+                          }
+
+                          if change < -threshold:
+                              comparison['regressions'].append(config)
+                          elif change > threshold:
+                              comparison['improvements'].append(config)
+
+              return comparison
+
+          if __name__ == '__main__':
+              baseline_file = sys.argv[1]
+              current_file = sys.argv[2]
+              threshold = float(sys.argv[3]) if len(sys.argv) > 3 else 0.1
+
+              comparison = compare_results(baseline_file, current_file, threshold)
+
+              # Save comparison results
+              with open('performance_comparison.json', 'w') as f:
+                  json.dump(comparison, f, indent=2)
+
+              # Print summary
+              print("Performance Comparison Summary:")
+              print("=" * 40)
+
+              if comparison['regressions']:
+                  print(f"⚠️  Performance regressions detected in: {', '.join(comparison['regressions'])}")
+                  for config in comparison['regressions']:
+                      change = comparison['performance_changes'][config]
+                      print(f"  {config}: {change['change_percent']:.1f}% slower")
+                  sys.exit(1)
+              elif comparison['improvements']:
+                  print(f"✅ Performance improvements in: {', '.join(comparison['improvements'])}")
+                  for config in comparison['improvements']:
+                      change = comparison['performance_changes'][config]
+                      print(f"  {config}: {change['change_percent']:.1f}% faster")
+              else:
+                  print("✅ No significant performance changes detected")
+
+          EOF
+
+            python3 compare_performance.py \
+              baseline/field_benchmark_results.json \
+              benchmark_results/field_benchmark_results.json \
+              ${{ env.PERFORMANCE_THRESHOLD_DEGRADATION }}
+          else
+            echo "No baseline data available for comparison"
+          fi
+
+    - name: Generate performance report
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        run: |
+          cd benchmark_results
+
+          # Create detailed markdown report
+          cat > performance_report.md << 'EOF'
+          # Field Performance Benchmark Report
+
+          **Configuration**: ${{ matrix.compiler }}-${{ matrix.optimization }}
+          **Commit**: ${{ github.sha }}
+          **Branch**: ${{ github.ref_name }}
+          **Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          ## Summary
+
+          EOF
+
+          # Extract key metrics and add to report
+          python3 -c "
+          import json
+          with open('field_benchmark_results.json') as f:
+              data = json.load(f)
+
+          summary = data.get('performance_summary', {})
+
+          print('| Configuration | Avg Evaluations/sec | Avg Time/eval (ns) | Scalability Score |')
+          print('|---------------|--------------------|--------------------|-------------------|')
+
+          for config, metrics in summary.items():
+              print(f'| {config} | {metrics.get(\"avg_evaluations_per_second\", 0):.0f} | {metrics.get(\"avg_time_per_evaluation_ns\", 0):.1f} | {metrics.get(\"scalability_score\", 0):.3f} |')
+          " >> performance_report.md
+
+          echo "" >> performance_report.md
+          echo "## Detailed Results" >> performance_report.md
+          echo "" >> performance_report.md
+          echo "See attached artifacts for full benchmark results and plots." >> performance_report.md
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: field-performance-results-${{ matrix.compiler }}-${{ matrix.optimization }}
+        path: |
+          benchmark_results/
+          performance_comparison.json
+        retention-days: 30
+
+    - name: Upload baseline for future comparisons
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: field-performance-baseline-${{ matrix.compiler }}-${{ matrix.optimization }}
+        path: benchmark_results/field_benchmark_results.json
+        retention-days: 90
+
+    - name: Comment on PR with results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          try {
+            // Read performance report
+            let reportContent = '## Field Performance Benchmark Results\\n\\n';
+            reportContent += `**Configuration**: ${{ matrix.compiler }}-${{ matrix.optimization }}\\n\\n`;
+
+            if (fs.existsSync('benchmark_results/performance_report.md')) {
+              const report = fs.readFileSync('benchmark_results/performance_report.md', 'utf8');
+              reportContent += report;
+            }
+
+            // Add comparison results if available
+            if (fs.existsSync('performance_comparison.json')) {
+              const comparison = JSON.parse(fs.readFileSync('performance_comparison.json', 'utf8'));
+
+              if (comparison.regressions && comparison.regressions.length > 0) {
+                reportContent += '\\n### ⚠️ Performance Regressions Detected\\n\\n';
+                for (const config of comparison.regressions) {
+                  const change = comparison.performance_changes[config];
+                  reportContent += `- **${config}**: ${change.change_percent.toFixed(1)}% slower (${change.current_rate.toFixed(0)} vs ${change.baseline_rate.toFixed(0)} eval/s)\\n`;
+                }
+              } else if (comparison.improvements && comparison.improvements.length > 0) {
+                reportContent += '\\n### ✅ Performance Improvements\\n\\n';
+                for (const config of comparison.improvements) {
+                  const change = comparison.performance_changes[config];
+                  reportContent += `- **${config}**: ${change.change_percent.toFixed(1)}% faster (${change.current_rate.toFixed(0)} vs ${change.baseline_rate.toFixed(0)} eval/s)\\n`;
+                }
+              }
+            }
+
+            reportContent += '\\n📊 Full benchmark results and plots available in workflow artifacts.';
+
+            // Find existing comment and update or create new one
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.data.find(comment =>
+              comment.user.login === 'github-actions[bot]' &&
+              comment.body.includes('Field Performance Benchmark Results')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: reportContent
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: reportContent
+              });
+            }
+          } catch (error) {
+            console.log('Error posting comment:', error);
+          }
+
+  performance-trend-analysis:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: field-performance-benchmark
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download recent performance data
+      uses: dawidd6/action-download-artifact@v6
+      with:
+        name: field-performance-baseline-gcc-O3
+        path: historical_data/
+        workflow_conclusion: success
+        branch: main
+        if_no_artifact_found: ignore
+      continue-on-error: true
+
+    - name: Generate performance trend report
+      run: |
+        echo "# Field Performance Trend Analysis" > trend_report.md
+        echo "" >> trend_report.md
+        echo "Tracking long-term performance trends for EPIC field evaluation." >> trend_report.md
+        echo "" >> trend_report.md
+        echo "Generated: $(date -u)" >> trend_report.md
+
+        # This would contain more sophisticated trend analysis
+        # For now, just a placeholder for the framework
+
+    - name: Upload trend analysis
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-trend-analysis
+        path: trend_report.md
+        retention-days: 365
