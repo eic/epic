@@ -289,6 +289,7 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
 
   DetElement det(det_name, det_id);
   Assembly assembly(det_name + "_assembly");
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   // Loop over the supports
   for (xml_coll_t su{x_det, _U(support)}; su; ++su) {

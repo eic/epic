@@ -36,7 +36,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
   map<string, Placements> sensitives;
   PlacedVolume pv;
 
-  assembly.setVisAttributes(description.invisible());
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {

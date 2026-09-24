@@ -24,6 +24,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   Material m_Al     = description.material("Aluminum");
   Material m_Vacuum = description.material("Vacuum");
   string vis_name   = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
