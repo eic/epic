@@ -1028,9 +1028,16 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         echo "### Capybara summary for PR ${{ github.event.pull_request.number }}" >> capybara_${{ github.event.pull_request.number }}.md
-        [ -d _site/pr/${{ github.event.pull_request.number }}/capybara/ ] && \
-          find _site/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-            "- [%f](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md || true
+        CAPY_DIR="_site/pr/${{ github.event.pull_request.number }}/capybara"
+        if [ -d "$CAPY_DIR" ]; then
+          while IFS= read -r dir; do
+            name=$(basename "$dir")
+            line="- [${name}](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/capybara/${name}/index.html)"
+            count=$(grep -cE "p(_KS)? = " "${dir}/capybara.log" 2>/dev/null) || count=0
+            line="${line} (Δ: ${count})"
+            echo "$line"
+          done < <(find "$CAPY_DIR" -mindepth 1 -maxdepth 1 -type d | sort) >> capybara_${{ github.event.pull_request.number }}.md
+        fi
         if [ -d _site/pr/${{ github.event.pull_request.number }}/material-map/Validation/ ]; then
           echo "### Material map validation" >> capybara_${{ github.event.pull_request.number }}.md
           echo "- [Validation plots](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/material-map/Validation/index.html)" >> capybara_${{ github.event.pull_request.number }}.md
