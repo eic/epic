@@ -1,249 +1,323 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2022 - 2026 Whitney Armstrong, Igor Korover, Tom Bleher
+
+/** \addtogroup Trackers Trackers
+ * \brief Type: **B0Tracker**.
+ * \author W. Armstrong, I. Korover, T. Bleher
+ *
+ * \ingroup trackers
+ *
+ * Compact elements read under <detector>:
+ *   - <module name="TrackingUnit">: <module_component> boxes (<box>, <position>,
+ *     material, sensitive) forming one double-sided sensor stave
+ *   - <support_stack>: <slice name material thickness> layers, listed upstream to
+ *     downstream, extruded along each <support_plate name> outline of <point x y>
+ *   - <envelope> z tolerances and <layer_material>: ACTS settings for every face
+ *   - <station id>: <position>, <support ref>, and a back and a front
+ *     <face side> listing its <module x y [rotZ]> placements
+ *
+ * Hierarchy station -> face -> module -> sensor, with these invariants:
+ *   - One compact <face> is one ACTS disc layer, the back or front sensor
+ *     stack of a <station>
+ *   - Layer id = 2*(station-1) + (1=back | 2=front), so the cellID layer field
+ *     is monotonic in z and separates front from back
+ *   - Module ids restart at 1 per face, so cellIDs do not depend on the
+ *     order of <station> blocks in the compact file
+ *   - TrackingUnit Assembly is built once and reused via placeVolume for
+ *     every (face, module position)
+ *
+ * @{
+ */
 
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/IDDescriptor.h"
 #include "DD4hep/Printout.h"
+#include "DD4hep/Readout.h"
 #include "DD4hep/Shapes.h"
+#include "DD4hepDetectorHelper.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
-#include <array>
-#include <map>
-#include "DD4hepDetectorHelper.h"
 
-using namespace std;
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <map>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
 using namespace dd4hep;
 using namespace dd4hep::rec;
-using namespace dd4hep::detail;
 
-/*! B0 Tracker.
- *
- * @author Whitney Armstrong
- *
- */
+namespace {
+struct SupportSlice {
+  Volume volume;
+  Position position;
+};
+
+} // namespace
+
 static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector sens) {
-  typedef vector<PlacedVolume> Placements;
-  xml_det_t x_det = e;
-  Material vacuum = description.vacuum();
-  int det_id      = x_det.id();
-  string det_name = x_det.nameStr();
+  xml_det_t x_det            = e;
+  const int det_id           = x_det.id();
+  const std::string det_name = x_det.nameStr();
+
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name);
+
+  Volume motherVol   = description.pickMotherVolume(sdet);
   xml::Component pos = x_det.position();
   xml::Component rot = x_det.rotation();
-
-  Volume motherVol = description.pickMotherVolume(sdet);
-  int m_id = 0, c_id = 0, n_sensor = 0;
-  PlacedVolume pv;
-
-  map<string, Volume> modules;
-  map<string, Placements> sensitives;
-  map<string, std::vector<VolPlane>> volplane_surfaces;
-  map<string, std::array<double, 2>> module_thicknesses;
+  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()),
+                        Position(pos.x(), pos.y(), pos.z()));
 
   // Set detector type flag
-  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
+  xml::setDetectorTypeFlag(x_det, sdet);
+  auto& detParams = DD4hepDetectorHelper::ensureExtension<VariantParameters>(sdet);
 
   // Add the volume boundary material if configured
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
     xml_comp_t x_boundary_material = bmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, detParams,
                                                     "boundary_material");
   }
 
-  assembly.setVisAttributes("InvisibleWithDaughters");
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
-  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
-    xml_comp_t x_mod = mi;
-    string m_nam     = x_mod.nameStr();
-    xml_comp_t trd   = x_mod.trd();
-
-    double posY;
-    double x1 = trd.x1();
-    double x2 = trd.x2();
-    double z  = trd.z();
-    double y1, y2, total_thickness = 0.;
-    xml_coll_t ci(x_mod, _U(module_component));
-    for (ci.reset(), total_thickness = 0.0; ci; ++ci)
-      total_thickness += xml_comp_t(ci).thickness();
-
-    y1 = y2 = total_thickness / 2;
-    Trapezoid m_solid(x1, x2, y1, y2, z);
-    Volume m_volume(m_nam, m_solid, vacuum);
-    m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
-
-    Solid frame_s;
-    if (x_mod.hasChild(_U(frame))) {
-      // build frame from trd (assumed to be smaller)
-      xml_comp_t m_frame     = x_mod.child(_U(frame));
-      xml_comp_t f_pos       = m_frame.child(_U(position));
-      xml_comp_t frame_trd   = m_frame.trd();
-      double frame_thickness = getAttrOrDefault(m_frame, _U(thickness), total_thickness);
-      double frame_x1        = frame_trd.x1();
-      double frame_x2        = frame_trd.x2();
-      double frame_z         = frame_trd.z();
-      // make the frame match the total thickness if thickness attribute is not given
-      Trapezoid f_solid1(x1, x2, frame_thickness / 2.0, frame_thickness / 2.0, z);
-      Trapezoid f_solid(frame_x1, frame_x2, frame_thickness / 2.0, frame_thickness / 2.0, frame_z);
-      SubtractionSolid frame_shape(f_solid1, f_solid);
-      frame_s = frame_shape;
-
-      Material f_mat = description.material(m_frame.materialStr());
-      Volume f_vol(m_nam + "_frame", frame_shape, f_mat);
-      // f_vol.setVisAttributes(description.visAttributes(m_frame.visStr()));
-
-      // figure out how to best place
-      pv = m_volume.placeVolume(f_vol, Position(f_pos.x(), f_pos.y(), f_pos.z()));
-    }
-
-    double thickness_so_far = 0.0;
-    for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
-      xml_comp_t c     = ci;
-      double c_thick   = c.thickness();
-      auto comp_x1     = getAttrOrDefault(c, _Unicode(x1), x1);
-      auto comp_x2     = getAttrOrDefault(c, _Unicode(x2), x2);
-      auto comp_height = getAttrOrDefault(c, _Unicode(height), z);
-
-      Material c_mat = description.material(c.materialStr());
-      string c_name  = _toString(c_id, "component%d");
-
-      Trapezoid comp_s1(comp_x1, comp_x2, c_thick / 2e0, c_thick / 2e0, comp_height);
-      Solid comp_shape = comp_s1;
-      if (frame_s.isValid()) {
-        comp_shape = SubtractionSolid(comp_s1, frame_s);
+  // Read the shared <module> definitions declared under <detector>
+  auto findModule = [&x_det](const std::string& name) {
+    xml_h found;
+    for (xml_coll_t it(x_det, _U(module)); it; ++it) {
+      xml_comp_t xm = it;
+      if (xm.nameStr() == name) {
+        found = xm;
+        break;
       }
-      Volume c_vol(c_name, comp_shape, c_mat);
-
-      c_vol.setVisAttributes(description.visAttributes(c.visStr()));
-      pv = m_volume.placeVolume(c_vol, Position(0, posY + c_thick / 2, 0));
-      if (c.isSensitive()) {
-        // std::cout << " adding sensitive volume" << c_name << "\n";
-        sdet.check(n_sensor > 2,
-                   "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
-        pv.addPhysVolID("sensor", n_sensor);
-        c_vol.setSensitiveDetector(sens);
-        sensitives[m_nam].push_back(pv);
-        ++n_sensor;
-
-        module_thicknesses[m_nam] = {thickness_so_far + c_thick / 2.0,
-                                     total_thickness - thickness_so_far - c_thick / 2.0};
-        // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        Vector3D u(-1., 0., 0.);
-        Vector3D v(0., -1., 0.);
-        Vector3D n(0., 0., 1.);
-        //    Vector3D o( 0. , 0. , 0. ) ;
-
-        // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-        // depending on wether the support is above or below the sensor
-        double inner_thickness = module_thicknesses[m_nam][0];
-        double outer_thickness = module_thicknesses[m_nam][1];
-
-        SurfaceType type(SurfaceType::Sensitive);
-
-        // if( isStripDetector )
-        //  type.setProperty( SurfaceType::Measurement1D , true ) ;
-
-        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-        volplane_surfaces[m_nam].push_back(surf);
-      }
-      posY += c_thick;
-      thickness_so_far += c_thick;
     }
-    modules[m_nam] = m_volume;
+    return found;
+  };
+
+  xml_comp_t trackingUnit = findModule("TrackingUnit");
+  if (!trackingUnit.ptr()) {
+    throw std::runtime_error(det_name +
+                             ": <module name=\"TrackingUnit\"> not found under <detector>");
   }
 
-  for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
-    xml_comp_t x_layer(li);
-    int l_id    = x_layer.id();
-    int mod_num = 1;
+  // Extent of the TrackingUnit stack in z, which sets the thickness of the
+  // ACTS measurement surfaces and the mounting on the support plates
+  double zMin = +std::numeric_limits<double>::infinity();
+  double zMax = -std::numeric_limits<double>::infinity();
+  for (xml_coll_t comp(trackingUnit, _U(module_component)); comp; ++comp) {
+    xml_comp_t xc      = comp;
+    const double pz    = xc.position().z();
+    const double halfZ = xml_dim_t(xc.child(_U(box))).z() / 2.0;
+    zMin               = std::min(zMin, pz - halfZ);
+    zMax               = std::max(zMax, pz + halfZ);
+  }
 
-    xml_comp_t l_env  = x_layer.child(_U(envelope));
-    string layer_name = det_name + std::string("_layer") + std::to_string(l_id);
+  // Build the TrackingUnit once; its sensitive placements and ACTS measurement
+  // planes are reused at every module position
+  Assembly moduleAsm(det_name + "_TrackingUnit");
+  moduleAsm.setVisAttributes(description,
+                             getAttrOrDefault<std::string>(trackingUnit, _Unicode(vis), ""));
+  std::vector<PlacedVolume> moduleSensVols;
+  std::vector<VolPlane> moduleSensSurfs;
 
-    std::string layer_vis       = l_env.attr<std::string>(_Unicode(vis));
-    double layer_rmin_tolerance = l_env.attr<double>(_Unicode(rmin_tolerance));
-    double layer_rmax_tolerance = l_env.attr<double>(_Unicode(rmax_tolerance));
-    double layer_zmin_tolerance = l_env.attr<double>(_Unicode(zmin_tolerance));
-    double layer_zmax_tolerance = l_env.attr<double>(_Unicode(zmax_tolerance));
-    double layer_length         = l_env.attr<double>(_Unicode(length));
-    double layer_zstart         = l_env.attr<double>(_Unicode(zstart));
-    double layer_center_z       = layer_zstart + layer_length / 2.0;
-    // printout(INFO,"ROOTGDMLParse","+++ Read geometry from GDML file file:%s",input.c_str());
-    // std::cout << "SiTracker Endcap layer " << l_id << " zstart = " << layer_zstart/dd4hep::mm << "mm ( " <<
-    // layer_length/dd4hep::mm << " mm thick )\n";
+  for (xml_coll_t comp(trackingUnit, _U(module_component)); comp; ++comp) {
+    xml_comp_t xc   = comp;
+    xml_dim_t x_box = xc.child(_U(box));
+    xml_dim_t x_pos = xc.position();
 
-    Assembly layer_vol(layer_name);
-    PlacedVolume layer_pv;
-    layer_pv = assembly.placeVolume(layer_vol, Position(0, 0, layer_center_z));
-    layer_pv.addPhysVolID("layer", l_id);
-    layer_name += "_P";
-    DetElement layer_element(sdet, layer_name, l_id);
-    layer_element.setPlacement(layer_pv);
+    Volume c_vol(det_name + "_" + xc.nameStr(),
+                 Box(x_box.x() / 2.0, x_box.y() / 2.0, x_box.z() / 2.0),
+                 description.material(xc.materialStr()));
+    c_vol.setVisAttributes(description, getAttrOrDefault<std::string>(xc, _Unicode(vis), ""));
+    PlacedVolume comp_pv = moduleAsm.placeVolume(c_vol, Position(x_pos.x(), x_pos.y(), x_pos.z()));
 
-    auto& layerParams =
-        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_element);
+    if (xc.isSensitive()) {
+      c_vol.setSensitiveDetector(sens);
+      comp_pv.addPhysVolID("sensor", static_cast<int>(moduleSensVols.size()) + 1);
+      moduleSensVols.push_back(comp_pv);
+      // Measurement plane; its inner and outer thicknesses span the whole stack
+      moduleSensSurfs.emplace_back(c_vol, SurfaceType(SurfaceType::Sensitive), x_pos.z() - zMin,
+                                   zMax - x_pos.z(), Vector3D(-1.0, 0.0, 0.0),
+                                   Vector3D(0.0, -1.0, 0.0), Vector3D(0.0, 0.0, 1.0));
+    }
+  }
 
-    for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
-      xml_comp_t x_ring    = ri;
-      double r             = x_ring.r();
-      double phi0          = x_ring.phi0(0);
-      double zstart        = x_ring.zstart();
-      double dz            = x_ring.dz(0);
-      int nmodules         = x_ring.nmodules();
-      string m_nam         = x_ring.moduleStr();
-      Volume m_vol         = modules[m_nam];
-      double iphi          = 2 * M_PI / nmodules;
-      double dphi          = dd4hep::getAttrOrDefault(x_ring, _Unicode(dphi), iphi);
-      double phi           = phi0;
-      Placements& sensVols = sensitives[m_nam];
+  // Check the sensor count against the 'sensor' field of the readout, so a
+  // module or readout change cannot silently overflow it
+  const int maxSensorID = sens.readout().idSpec().field("sensor")->maxValue();
+  if (static_cast<int>(moduleSensVols.size()) > maxSensorID) {
+    throw std::runtime_error(det_name + ": TrackingUnit has " +
+                             std::to_string(moduleSensVols.size()) +
+                             " sensitive components; the 'sensor' readout field holds at most " +
+                             std::to_string(maxSensorID));
+  }
 
-      for (int k = 0; k < nmodules; ++k) {
-        string m_base = _toString(l_id, "layer%d") + _toString(mod_num, "_module%d");
-        double x      = -r * std::cos(phi);
-        double y      = -r * std::sin(phi);
+  // Support plates: the <support_stack> slices, stacked upstream to downstream
+  // around the plate mid-plane and extruded along each <support_plate> outline
+  xml_comp_t x_stack         = x_det.child(_Unicode(support_stack));
+  const std::string stackVis = getAttrOrDefault<std::string>(x_stack, _Unicode(vis), "");
+  double supportThickness    = 0.0;
+  for (xml_coll_t sl(x_stack, _U(slice)); sl; ++sl) {
+    supportThickness += xml_comp_t(sl).thickness();
+  }
 
-        // if (!reflect) {
-        DetElement module(layer_element, m_base + "_pos", det_id);
-        pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
-                                                      Position(x, y, zstart + dz)));
-        pv.addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
-        module.setPlacement(pv);
-        for (size_t ic = 0; ic < sensVols.size(); ++ic) {
-          PlacedVolume sens_pv = sensVols[ic];
-          DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
-          comp_elt.setPlacement(sens_pv);
-          auto& comp_elt_params =
-              DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-          comp_elt_params.set<std::string>("axis_definitions", "XZY");
-          volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+  std::map<std::string, std::vector<SupportSlice>> supportPlates;
+  for (xml_coll_t pl(x_det, _Unicode(support_plate)); pl; ++pl) {
+    xml_comp_t x_plate          = pl;
+    const std::string plateName = x_plate.nameStr();
+    std::vector<double> xVertices;
+    std::vector<double> yVertices;
+    for (xml_coll_t point(x_plate, _U(point)); point; ++point) {
+      xml_comp_t x_point = point;
+      xVertices.push_back(x_point.x());
+      yVertices.push_back(x_point.y());
+    }
+    if (xVertices.size() < 3) {
+      throw std::runtime_error(det_name + ": " + plateName + " has fewer than three points");
+    }
+
+    auto& slices = supportPlates[plateName];
+    double zLow  = -supportThickness / 2.0;
+    for (xml_coll_t sl(x_stack, _U(slice)); sl; ++sl) {
+      xml_comp_t x_slice     = sl;
+      const double thickness = x_slice.thickness();
+      Volume sliceVol(plateName + "_" + x_slice.nameStr(),
+                      ExtrudedPolygon(xVertices, yVertices, {-thickness / 2., thickness / 2.},
+                                      {0., 0.}, {0., 0.}, {1., 1.}),
+                      description.material(x_slice.materialStr()));
+      sliceVol.setVisAttributes(description,
+                                getAttrOrDefault<std::string>(x_slice, _Unicode(vis), stackVis));
+      slices.push_back({sliceVol, Position(0.0, 0.0, zLow + thickness / 2.0)});
+      zLow += thickness;
+    }
+  }
+
+  // Distance from the support mid-plane to the tracking unit center, with the
+  // unit's lowest-z face flush on the support
+  const double moduleOffset = supportThickness / 2.0 - zMin;
+
+  // ACTS layer settings, shared by every face
+  xml_comp_t x_env = x_det.child(_U(envelope), false);
+  if (!x_env.ptr()) {
+    throw std::runtime_error(det_name + ": <envelope> not found under <detector>");
+  }
+  const double env_rmin_tol = getAttrOrDefault<double>(x_env, _Unicode(rmin_tolerance), 0.0);
+  const double env_rmax_tol = getAttrOrDefault<double>(x_env, _Unicode(rmax_tolerance), 0.0);
+  const double env_zmin_tol = getAttrOrDefault<double>(x_env, _Unicode(zmin_tolerance), 0.0);
+  const double env_zmax_tol = getAttrOrDefault<double>(x_env, _Unicode(zmax_tolerance), 0.0);
+  if (env_zmin_tol <= 0.0 || env_zmax_tol <= 0.0) {
+    printout(WARNING, det_name,
+             "Non-positive envelope z tolerance; the ACTS approach surfaces will collapse onto "
+             "the layer surfaces");
+  }
+  const std::string env_vis = getAttrOrDefault<std::string>(x_env, _Unicode(vis), "");
+
+  for (xml_coll_t st(x_det, _Unicode(station)); st; ++st) {
+    xml_comp_t x_station = st;
+    const int station    = x_station.id();
+
+    // Station origin, shared by its support plate and both faces
+    xml_dim_t x_station_pos = x_station.position();
+    const Position stationPos(x_station_pos.x(), x_station_pos.y(), x_station_pos.z());
+
+    // The ACTS measurement layers are the faces, so material maps project the
+    // support material onto the adjacent layer surfaces
+    for (xml_coll_t sup(x_station, _Unicode(support)); sup; ++sup) {
+      const std::string ref = xml_comp_t(sup).attr<std::string>(_Unicode(ref));
+      const auto plateIt    = supportPlates.find(ref);
+      if (plateIt == supportPlates.end()) {
+        throw std::runtime_error(det_name + ": station " + std::to_string(station) +
+                                 " has unknown <support ref=\"" + ref + "\">");
+      }
+      for (const auto& slice : plateIt->second) {
+        assembly.placeVolume(slice.volume, stationPos + slice.position);
+      }
+    }
+
+    for (xml_coll_t fc(x_station, _Unicode(face)); fc; ++fc) {
+      xml_comp_t x_face      = fc;
+      const std::string side = x_face.attr<std::string>(_Unicode(side));
+      if (side != "front" && side != "back") {
+        throw std::runtime_error(det_name + ": station " + std::to_string(station) +
+                                 " has side=\"" + side + "\"; expected \"front\" or \"back\"");
+      }
+      const bool isFront = side == "front";
+
+      // cellID layer field, monotonic in z and separating front from back
+      const int layerID = 2 * (station - 1) + (isFront ? 2 : 1);
+
+      // Face assembly at the TrackingUnit center, which is the center of its
+      // sensors, so the binned ACTS measurement surfaces sit at the sensor planes
+      const Position facePos(stationPos.x(), stationPos.y(),
+                             stationPos.z() + (isFront ? moduleOffset : -moduleOffset));
+
+      const std::string faceName = det_name + "_station" + std::to_string(station) + "_" + side;
+      Assembly faceVol(faceName);
+      if (!env_vis.empty()) {
+        faceVol.setVisAttributes(description.visAttributes(env_vis));
+      }
+      PlacedVolume facePV = assembly.placeVolume(faceVol, facePos);
+      facePV.addPhysVolID("layer", layerID);
+
+      DetElement faceDE(sdet, faceName + "_P", layerID);
+      faceDE.setPlacement(facePV);
+
+      // Place the shared TrackingUnit at each <module>; back modules are
+      // flipped about x so their lowest-z side also sits on the support
+      int moduleID = 1;
+      for (xml_coll_t mp(x_face, _U(module)); mp; ++mp, ++moduleID) {
+        xml_comp_t xm = mp;
+        RotationZYX modRot(getAttrOrDefault<double>(xm, _Unicode(rotZ), 0.0), 0.0,
+                           isFront ? 0.0 : M_PI);
+        PlacedVolume mod_pv =
+            faceVol.placeVolume(moduleAsm, Transform3D(modRot, Position(xm.x(), xm.y(), 0.0)));
+        mod_pv.addPhysVolID("module", moduleID);
+
+        DetElement modDE(faceDE, _toString(moduleID, "module%d"), moduleID);
+        modDE.setPlacement(mod_pv);
+
+        for (size_t ic = 0; ic < moduleSensVols.size(); ++ic) {
+          const int sensorID = static_cast<int>(ic) + 1;
+          DetElement comp_de(modDE, _toString(sensorID, "sensor%d"), sensorID);
+          comp_de.setPlacement(moduleSensVols[ic]);
+
+          auto& comp_de_params = DD4hepDetectorHelper::ensureExtension<VariantParameters>(comp_de);
+          comp_de_params.set<std::string>("axis_definitions", "XYZ");
+
+          volSurfaceList(comp_de)->push_back(moduleSensSurfs[ic]);
         }
-        dz = -dz;
-        phi += dphi;
-        ++mod_num;
       }
-    }
-    layer_vol->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", layer_rmin_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_r_max", layer_rmax_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_z_min", layer_zmin_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_z_max", layer_zmax_tolerance / dd4hep::mm);
+      faceVol->GetShape()->ComputeBBox();
 
-    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
-      xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
-                                                      "layer_material");
+      auto& faceParams = DD4hepDetectorHelper::ensureExtension<VariantParameters>(faceDE);
+      faceParams.set<double>("envelope_r_min", env_rmin_tol / dd4hep::mm);
+      faceParams.set<double>("envelope_r_max", env_rmax_tol / dd4hep::mm);
+      faceParams.set<double>("envelope_z_min", env_zmin_tol / dd4hep::mm);
+      faceParams.set<double>("envelope_z_max", env_zmax_tol / dd4hep::mm);
+
+      for (xml_coll_t lmat(x_det, _Unicode(layer_material)); lmat; ++lmat) {
+        xml_comp_t x_layer_material = lmat;
+        DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, faceParams,
+                                                        "layer_material");
+      }
+
+      printout(DEBUG, det_name, "Layer %d (station %d %s) z=%8.3f mm", layerID, station,
+               side.c_str(), facePos.z() / dd4hep::mm);
     }
   }
-  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()),
-                        Position(pos.x(), pos.y(), pos.z()));
-  pv = motherVol.placeVolume(assembly, posAndRot);
+
+  PlacedVolume pv = motherVol.placeVolume(assembly, posAndRot);
   pv.addPhysVolID("system", det_id);
   sdet.setPlacement(pv);
+
   return sdet;
 }
 
+//@}
 // clang-format off
 DECLARE_DETELEMENT(ip6_B0Tracker, create_B0Tracker)
