@@ -73,6 +73,7 @@
     <constant name="BackwardMPGD_CathodeFCBulk_thickness" value="50*um" />
 
     <constant name="BackwardMPGD_CathodeFCCopper_thickness" value="5.0*um" />
+
   </define>
 
   <comment>
@@ -82,8 +83,7 @@
   <define>
     <constant name="BackwardMPGDEndcapMod_angle"
       value="360.0*degree/BackwardMPGDEndcapMod_count*(1.0 + BackwardMPGDEndcap_overlap)" />
-    <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
-    <constant name="BackwardMPGDLayerPad" value="0*um" />
+    
     <comment> Detector thickness </comment>
     <constant name="BackwardMPGDAnode_thickness"
       value="BackwardMPGD_AnodeFCCopper_thickness
@@ -91,9 +91,10 @@
                                                                     + BackwardMPGD_AnodeStructSkin_thickness
                                                                     + BackwardMPGD_PCB_thickness
                                                                     + BackwardMPGD_AnodeStructFrame_thickness" />
-    <constant name="BackwardMPGDTransfer_thickess"
+    <constant name="BackwardMPGDTransfer_thickness"
       value="BackwardMPGD_GEMBulk_thickness
-                                                                    + BackwardMPGD_DriftFrame_thickness" />
+	    + BackwardMPGD_TransferFrame_thickness" />
+
     <constant name="BackwardMPGDDrift_thickness" value="BackwardMPGD_DriftFrame_thickness" />
     <constant name="BackwardMPGDCathode_thickness"
       value="BackwardMPGD_CathodeBulk_thickness
@@ -103,12 +104,11 @@
                                                                     + BackwardMPGD_CathodeFCBulk_thickness
                                                                     + BackwardMPGD_CathodeFCCopper_thickness" />
 
-    <!-- <constant name="BackwardMPGDFrame_thickness"   value="2*BackwardMPGDWindowGap_thickness +
-    BackwardMPGDDriftGap_thickness"/> -->
     <constant name="BackwardMPGDEndcapMod_thickness"
-      value="BackwardMPGDAnode_thickness + BackwardMPGDTransfer_thickess + BackwardMPGDDrift_thickness + BackwardMPGDCathode_thickness" />
+	    value="BackwardMPGDAnode_thickness + BackwardMPGDTransfer_thickness + BackwardMPGDDrift_thickness + BackwardMPGDCathode_thickness" />
+
     <constant name="BackwardMPGDEndcapLayer_thickness"
-      value="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDEndcapMod_dz + BackwardMPGDLayerPad" />
+      value="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset" />
   </define>
 
   <detectors>
@@ -217,7 +217,7 @@
         <envelope vis="MPGDLayerVis"
           rmin="BackwardMPGD_IR1N"
           rmax="sqrt(BackwardMPGD_overlap*BackwardMPGD_overlap+BackwardMPGD_OR1*BackwardMPGD_OR1)"
-          length="2 * BackwardMPGDEndcapLayer_thickness + 2 * BackwardMPGDMod_dzoffset"
+		length="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset" 
           zstart="BackwardMPGD_z1" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count"
           bins1="50" />
@@ -236,7 +236,7 @@
         <envelope vis="MPGDLayerVis"
           rmin="BackwardMPGD_IR1N"
           rmax="sqrt(BackwardMPGD_overlap*BackwardMPGD_overlap+BackwardMPGD_OR1*BackwardMPGD_OR1)"
-          length="2 * BackwardMPGDEndcapLayer_thickness + 2 * BackwardMPGDMod_dzoffset"
+	  length="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset" 
           zstart="BackwardMPGD_z2" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count"
           bins1="50" />

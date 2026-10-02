@@ -82,8 +82,6 @@
   <define>
     <constant name="ForwardMPGDEndcapMod_angle"
       value="360.0*degree/ForwardMPGDEndcapMod_count*(1.0 + ForwardMPGDEndcap_overlap)" />
-    <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
-    <constant name="ForwardMPGDLayerPad" value="0*um" />
     <comment> Detector thickness </comment>
     <constant name="ForwardMPGDAnode_thickness"
       value="ForwardMPGD_AnodeFCCopper_thickness
@@ -91,9 +89,9 @@
                                                                     + ForwardMPGD_AnodeStructSkin_thickness
                                                                     + ForwardMPGD_PCB_thickness
                                                                     + ForwardMPGD_AnodeStructFrame_thickness" />
-    <constant name="ForwardMPGDTransfer_thickess"
+    <constant name="ForwardMPGDTransfer_thickness"
       value="ForwardMPGD_GEMBulk_thickness
-                                                                    + ForwardMPGD_DriftFrame_thickness" />
+                                                                    + ForwardMPGD_TransferFrame_thickness" />
     <constant name="ForwardMPGDDrift_thickness" value="ForwardMPGD_DriftFrame_thickness" />
     <constant name="ForwardMPGDCathode_thickness"
       value="ForwardMPGD_CathodeBulk_thickness
@@ -106,13 +104,13 @@
     <!-- <constant name="ForwardMPGDFrame_thickness"   value="2*ForwardMPGDWindowGap_thickness +
     ForwardMPGDDriftGap_thickness"/> -->
     <constant name="ForwardMPGDEndcapMod_thickness"
-      value="ForwardMPGDAnode_thickness + ForwardMPGDTransfer_thickess + ForwardMPGDDrift_thickness + ForwardMPGDCathode_thickness" />
+      value="ForwardMPGDAnode_thickness + ForwardMPGDTransfer_thickness + ForwardMPGDDrift_thickness + ForwardMPGDCathode_thickness" />
     <constant name="ForwardMPGDEndcapLayer_thickness"
-      value="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDEndcapMod_dz + ForwardMPGDLayerPad" />
+      value="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDEndcapMod_dz" />
 
 
-    <constant name="ForwardMPGD_rmin" value="ForwardMPGD_IR1N - ForwardMPGDLayerPad" />
-    <constant name="ForwardMPGD_rmax" value="ForwardMPGD_OR4 + ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGD_rmin" value="ForwardMPGD_IR1N" />
+    <constant name="ForwardMPGD_rmax" value="ForwardMPGD_OR4" />
     <constant name="ForwardMPGD_zmin" value="ForwardMPGD_z1 - ForwardMPGD_z1" />
     <constant name="ForwardMPGD_zmax" value="ForwardMPGD_z2 + ForwardMPGD_z1" />
   </define>
@@ -225,7 +223,7 @@
       <layer id="1">
         <envelope vis="MPGDLayerVis"
           rmax="sqrt(ForwardMPGD_overlap*ForwardMPGD_overlap+ForwardMPGD_OR1*ForwardMPGD_OR1)"
-          length="2 * ForwardMPGDEndcapLayer_thickness + 2 * ForwardMPGDMod_dzoffset"
+          length="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDMod_dzoffset"
           zstart="ForwardMPGD_z1" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count"
           bins1="50" />
@@ -243,7 +241,7 @@
       <layer id="2">
         <envelope vis="MPGDLayerVis"
           rmax="sqrt(ForwardMPGD_overlap*ForwardMPGD_overlap+ForwardMPGD_OR1*ForwardMPGD_OR1)"
-          length="2 * ForwardMPGDEndcapLayer_thickness + 2 * ForwardMPGDMod_dzoffset"
+          length="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDMod_dzoffset"
           zstart="ForwardMPGD_z2" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count"
           bins1="50" />

@@ -108,13 +108,12 @@
 
     <comment> MPGD Endcap Parameters </comment>
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
-    <constant name="ForwardMPGD_z1"             value="1500.0*mm-24*mm"/>
-    <constant name="ForwardMPGDMod_offset"        value="118.0*mm"/>
-    <constant name="ForwardMPGD_z2"             value="ForwardMPGD_z1 + ForwardMPGDMod_offset"/>
+    <constant name="ForwardMPGD_z1"             value="1285*mm"/>
+    <comment> fixing fect 17.5mm not fare enough </comment>
+    <constant name="ForwardMPGD_z2"             value="1387.35*mm"/><comment> disk extends to: ForwardwardMPGD_z2 + envelope length(47.65mm) = 1435mm </comment>
 
-    <constant name="BackwardMPGD_z1"             value="1075.0*mm-12*mm"/>
-    <constant name="BackwardMPGDMod_offset"        value="103.0*mm"/>
-    <constant name="BackwardMPGD_z2"             value="BackwardMPGD_z1 + BackwardMPGDMod_offset"/>
+    <constant name="BackwardMPGD_z1"  value="1075*mm"/>
+    <constant name="BackwardMPGD_z2"  value="1177.35*mm"/> <comment> disk extends to: BackwardMPGD_z2 + envelope length(47.65mm) = 1225mm </comment>
 
 
   </define>
