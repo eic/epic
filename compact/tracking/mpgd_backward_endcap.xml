@@ -83,7 +83,7 @@
   <define>
     <constant name="BackwardMPGDEndcapMod_angle"
       value="360.0*degree/BackwardMPGDEndcapMod_count*(1.0 + BackwardMPGDEndcap_overlap)" />
-    
+
     <comment> Detector thickness </comment>
     <constant name="BackwardMPGDAnode_thickness"
       value="BackwardMPGD_AnodeFCCopper_thickness
@@ -93,7 +93,7 @@
                                                                     + BackwardMPGD_AnodeStructFrame_thickness" />
     <constant name="BackwardMPGDTransfer_thickness"
       value="BackwardMPGD_GEMBulk_thickness
-	    + BackwardMPGD_TransferFrame_thickness" />
+            + BackwardMPGD_TransferFrame_thickness" />
 
     <constant name="BackwardMPGDDrift_thickness" value="BackwardMPGD_DriftFrame_thickness" />
     <constant name="BackwardMPGDCathode_thickness"
@@ -105,7 +105,7 @@
                                                                     + BackwardMPGD_CathodeFCCopper_thickness" />
 
     <constant name="BackwardMPGDEndcapMod_thickness"
-	    value="BackwardMPGDAnode_thickness + BackwardMPGDTransfer_thickness + BackwardMPGDDrift_thickness + BackwardMPGDCathode_thickness" />
+            value="BackwardMPGDAnode_thickness + BackwardMPGDTransfer_thickness + BackwardMPGDDrift_thickness + BackwardMPGDCathode_thickness" />
 
     <constant name="BackwardMPGDEndcapLayer_thickness"
       value="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset" />
@@ -217,7 +217,7 @@
         <envelope vis="MPGDLayerVis"
           rmin="BackwardMPGD_IR1N"
           rmax="sqrt(BackwardMPGD_overlap*BackwardMPGD_overlap+BackwardMPGD_OR1*BackwardMPGD_OR1)"
-		length="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset" 
+                length="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset"
           zstart="BackwardMPGD_z1" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count"
           bins1="50" />
@@ -236,7 +236,7 @@
         <envelope vis="MPGDLayerVis"
           rmin="BackwardMPGD_IR1N"
           rmax="sqrt(BackwardMPGD_overlap*BackwardMPGD_overlap+BackwardMPGD_OR1*BackwardMPGD_OR1)"
-	  length="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset" 
+          length="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDMod_dzoffset"
           zstart="BackwardMPGD_z2" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count"
           bins1="50" />
