@@ -106,22 +106,15 @@
     <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
 
+    <comment> MPGD Endcap Parameters </comment>
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
-    <constant name="ForwardMPGD_zmin"             value="1285.0*mm"/>
-    <constant name="ForwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="70.0*mm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="70.0*mm"/>
-    <comment> rmax = active area radius </comment>
-    <constant name="ForwardMPGDMod1_rmax"         value="420*mm" />
-    <constant name="ForwardMPGDMod2_rmax"         value="420*mm" />
+    <constant name="ForwardMPGD_z1"             value="1285*mm"/>
+    <comment> fixing fect 17.5mm not fare enough </comment>
+    <constant name="ForwardMPGD_z2"             value="1387.35*mm"/><comment> disk extends to: ForwardwardMPGD_z2 + envelope length(47.65mm) = 1435mm </comment>
 
-    <constant name="BackwardMPGD_zmin"             value="1075.0*mm"/>
-    <constant name="BackwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="BackwardMPGDMod1_rmin"         value="50.0*mm" />
-    <constant name="BackwardMPGDMod2_rmin"         value="50.0*mm" />
-    <comment> rmax = active area radius </comment>
-    <constant name="BackwardMPGDMod1_rmax"         value="420.0*mm" />
-    <constant name="BackwardMPGDMod2_rmax"         value="420.0*mm" />
+    <constant name="BackwardMPGD_z1"  value="1075*mm"/>
+    <constant name="BackwardMPGD_z2"  value="1177.35*mm"/> <comment> disk extends to: BackwardMPGD_z2 + envelope length(47.65mm) = 1225mm </comment>
+
 
   </define>
   <comment> See compact/definitions.xml for reserved detector id
