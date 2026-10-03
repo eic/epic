@@ -3,10 +3,10 @@
 
   <define>
 
-    <constant name="ElectronBeamEnergy" value="10*GeV"  />
-    <constant name="IonBeamEnergy"      value="100*GeV" />
+    <constant name="ElectronBeamEnergy" value="9*GeV"  />
+    <constant name="IonBeamEnergy"      value="115*GeV" />
 
-    <constant name="FieldScaleFactor" value="250.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
+    <constant name="FieldScaleFactor" value="261.808511/275.000000"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
 
     <comment>
        Backwards Fields

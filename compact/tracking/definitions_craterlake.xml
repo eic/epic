@@ -98,7 +98,7 @@
     <constant name="InnerTrackerEndcapN_hadron_center_y" value="0.0*mm" />
     <constant name="InnerTrackerEndcapN_hadron_radius"   value="31.757*mm + Beampipe_bakeout_buffer" />
 
-    <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
+    <constant name="InnerTrackerEndcapP_zmin"        value="25.5*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="max(abs(InnerTrackerEndcapP_lepton_center_x) + InnerTrackerEndcapP_lepton_radius, abs(InnerTrackerEndcapP_hadron_center_x) + InnerTrackerEndcapP_hadron_radius)" />
     <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
 
@@ -303,8 +303,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/2df7751706c545ecda5957137695a0859a09a9ee/material-map.cbor"/>
-
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/700fa7f92568311408137b2002b513346b66277d/material-map.cbor"/>
     </plugin>
   </plugins>
 

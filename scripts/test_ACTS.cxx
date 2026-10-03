@@ -44,8 +44,8 @@ void test_ACTS(const char* compact = "epic.xml") {
   Acts::ViewConfig sensitiveView{.color = {0, 180, 240}};   // picton blue
   Acts::ViewConfig passiveView{.color = {240, 180, 0}};     // lightning yellow
   Acts::ViewConfig gridView{.color = {220, 0, 0}};          // scarlet red
-  Acts::GeometryContext trackingGeoCtx;
-  const Acts::TrackingVolume* world = acts_tracking_geometry->highestTrackingVolume();
+  Acts::GeometryContext trackingGeoCtx = Acts::GeometryContext::dangerouslyDefaultConstruct();
+  const Acts::TrackingVolume* world    = acts_tracking_geometry->highestTrackingVolume();
   // Export to obj+mtl
   Acts::ObjVisualization3D objVis;
   Acts::GeometryView3D::drawTrackingVolume(objVis, *world, trackingGeoCtx, containerView,
