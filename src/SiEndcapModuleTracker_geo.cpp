@@ -50,6 +50,7 @@ struct ComponentTemplate {
   bool rsu_bridge_fpc_pattern{false};
   bool rsu_adhesive_pattern{false};
   bool rsu_ancasic_pattern{false};
+  bool rsu_external_epoxy_pattern{false};
 };
 
 // One named RSU module type used by the tiled disk CSV.
@@ -60,6 +61,12 @@ struct ModuleTemplate {
   double total_thickness{0.0};
   double x_size{0.0};
   double y_size{0.0};
+  int rsu_count{0};
+  double lec_side_span{0.0};
+  double rec_side_span{0.0};
+  double lec_thickness{0.0};
+  double rec_thickness{0.0};
+  bool tiling_design{false};
 };
 
 // One placement row loaded from the CSV file.
@@ -248,6 +255,8 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     module_template.vis    = "TrackerModuleVis";
     module_template.x_size = description.constant<double>("SiEndcapModule6RSU_package_length");
     module_template.y_size = description.constant<double>("SiEndcapModule_width_corrugated");
+    module_template.lec_side_span = description.constant<double>("SiEndcapModule6RSU_left_extension");
+    module_template.rec_side_span = description.constant<double>("SiEndcapModule6RSU_right_extension");
 
     const double rsu_chain_length = 6.0 * description.constant<double>("SiEndcapRSU_length");
     const double sensor_x_offset =
@@ -284,11 +293,69 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     return module_template;
   };
 
+  auto build_tiling_module = [&](const string& name, int rsu_count, double baseplate_width) {
+    ModuleTemplate module_template;
+    module_template.name          = name;
+    module_template.vis           = "TrackerModuleVis";
+    module_template.rsu_count     = rsu_count;
+    module_template.tiling_design = true;
+    module_template.lec_side_span = description.constant<double>("SiEndcapTilingBLEC_length");
+    module_template.rec_side_span = description.constant<double>("SiEndcapTilingBREC_length");
+    module_template.lec_thickness = description.constant<double>("SiEndcapTilingLEC_thickness");
+    module_template.rec_thickness = description.constant<double>("SiEndcapTilingREC_thickness");
+    module_template.x_size = description.constant<double>(
+        rsu_count == 5 ? "SiEndcapTiling5RSU_package_length" : "SiEndcapTiling6RSU_package_length");
+    module_template.y_size = baseplate_width;
+
+    const double chain_length = rsu_count * description.constant<double>("SiEndcapRSU_length");
+    const double sensor_x_offset = -module_template.x_size / 2.0 + module_template.lec_side_span +
+                                   chain_length / 2.0;
+    const double bridge_fpc_stack =
+        description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
+        description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+    const double ancasic_stack = description.constant<double>("SiEndcapAncASICGlue_thickness") +
+                                 description.constant<double>("SiEndcapAncASIC_thickness");
+    auto add_component = [&](ComponentTemplate component) {
+      module_template.total_thickness += component.thickness;
+      module_template.components.push_back(component);
+    };
+
+    ComponentTemplate epoxy{description.constant<double>("SiEndcapTilingExternalEpoxy_thickness"),
+                            "SVT_Endcap_Glue", "SVTGlueVis"};
+    epoxy.rsu_external_epoxy_pattern = true;
+    add_component(epoxy);
+    add_component({description.constant<double>("SiEndcapTilingBaseplateCF_thickness"),
+                   "CarbonFiber", "SVTSupportVis"});
+    add_component({description.constant<double>("SiEndcapTilingFilm_thickness"),
+                   "SVT_Endcap_Glue", "SVTGlueVis", false, chain_length,
+                   description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
+                   1, false, true, false, false, true});
+    add_component({description.constant<double>("SiEndcapTilingSensor_thickness"),
+                   "Silicon", "SVTSensorVis", true, chain_length,
+                   description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
+                   rsu_count, true, true});
+    add_component({bridge_fpc_stack, "Kapton", "SVTReadoutVis", false, chain_length,
+                   baseplate_width, sensor_x_offset, 0.0, 1, false, false, false, true});
+    add_component({ancasic_stack, "Silicon", "SVTElectronicsVis", false, chain_length,
+                   baseplate_width, sensor_x_offset, 0.0, 1, false, false, false, false, false,
+                   true});
+    return module_template;
+  };
+
   // hard-coded EIC-LAS module size.
   map<string, ModuleTemplate> module_templates;
   module_templates.emplace("EIC_LAS_6RSU", build("EIC_LAS_6RSU", 130.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_5RSU", build("EIC_LAS_5RSU", 105.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_6RSU_CORR", build_corrugated_6rsu("EIC_LAS_6RSU_CORR"));
+  for (const string& group : {"A6", "B5", "B6"}) {
+    const int rsu_count = group[1] - '0';
+    const double width = description.constant<double>(
+        group[0] == 'A' ? "SiEndcapTilingBaseplateA_width" : "SiEndcapTilingBaseplateB_width");
+    for (const string& orientation : {"00", "01", "10", "11"}) {
+      const string name = group + orientation;
+      module_templates.emplace(name, build_tiling_module(name, rsu_count, width));
+    }
+  }
   return module_templates;
 }
 
@@ -304,6 +371,15 @@ double corrugated_6rsu_sensor_x_offset(Detector& description, const ModuleTempla
   return -module_template.x_size / 2.0 + end_extension + sensor_margin + rsu_chain_length / 2.0;
 }
 
+double tiling_sensor_x_offset(Detector& description, const ModuleTemplate& module_template,
+                              const string& handedness) {
+  const double chain_length = module_template.rsu_count *
+                              description.constant<double>("SiEndcapRSU_length");
+  const double end_span = handedness == "right" ? module_template.rec_side_span
+                                                  : module_template.lec_side_span;
+  return -module_template.x_size / 2.0 + end_span + chain_length / 2.0;
+}
+
 // The placement CSV reference is the midpoint of the RSU--LEC boundary. Keep
 // this derived from the same handed sensor-chain placement as the built module.
 double corrugated_6rsu_lec_boundary_x(Detector& description, const ModuleTemplate& module_template,
@@ -317,12 +393,15 @@ double corrugated_6rsu_lec_boundary_x(Detector& description, const ModuleTemplat
 
 ModuleTemplate with_corrugated_handedness(Detector& description, ModuleTemplate module_template,
                                           const string& handedness) {
-  if (module_template.name != "EIC_LAS_6RSU_CORR" || handedness.empty()) {
+  if ((!module_template.tiling_design && module_template.name != "EIC_LAS_6RSU_CORR") ||
+      handedness.empty()) {
     return module_template;
   }
 
   const double sensor_x_offset =
-      corrugated_6rsu_sensor_x_offset(description, module_template, handedness);
+      module_template.tiling_design
+          ? tiling_sensor_x_offset(description, module_template, handedness)
+          : corrugated_6rsu_sensor_x_offset(description, module_template, handedness);
   for (auto& component : module_template.components) {
     if (component.sensitive) {
       component.x_offset = sensor_x_offset;
@@ -1061,8 +1140,12 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         const double rec_length    = description.constant<double>("SiEndcapREC_length");
         const double lec_width     = description.constant<double>("SiEndcapLEC_width");
         const double rec_width     = description.constant<double>("SiEndcapREC_width");
-        const double lec_thickness = description.constant<double>("SiEndcapLEC_thickness");
-        const double rec_thickness = description.constant<double>("SiEndcapREC_thickness");
+        const double lec_thickness = module_template.tiling_design
+                                         ? module_template.lec_thickness
+                                         : description.constant<double>("SiEndcapLEC_thickness");
+        const double rec_thickness = module_template.tiling_design
+                                         ? module_template.rec_thickness
+                                         : description.constant<double>("SiEndcapREC_thickness");
         const double lec_x         = component.lec_after_rsu ? comp_x / 2.0 + lec_length / 2.0
                                                              : -comp_x / 2.0 - lec_length / 2.0;
         const double rec_x         = component.lec_after_rsu ? -comp_x / 2.0 - rec_length / 2.0
@@ -1121,6 +1204,19 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           }
         }
       }
+    } else if (component.rsu_external_epoxy_pattern) {
+      // Slide 4 places the external epoxy under the baseplate, in two edge
+      // glue lines. The film adhesive above carbon is a separate component.
+      const double glue_width = description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
+      const double y_center = y_size / 2.0 - glue_width / 2.0;
+      for (int edge : {-1, 1}) {
+        const string name = _toString(component_id, "component%d_external_epoxy") +
+                            (edge < 0 ? "_low" : "_high");
+        Box box_solid(x_size / 2.0, glue_width / 2.0, component.thickness / 2.0);
+        Volume box_volume(name, box_solid, material);
+        box_volume.setVisAttributes(description.visAttributes(component.vis));
+        prototype.volume.placeVolume(box_volume, Position(0.0, edge * y_center, z_position));
+      }
     } else if (component.rsu_adhesive_pattern) {
       auto place_adhesive_box = [&](const string& name, double box_x, double box_y, double pos_x,
                                     double pos_y) {
@@ -1163,10 +1259,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         return y_size / 2.0 + top_edge_offset - box_y / 2.0;
       };
 
-      const double lec_side_span =
-          description.constant<double>("SiEndcapModule6RSU_left_extension");
-      const double rec_side_span =
-          description.constant<double>("SiEndcapModule6RSU_right_extension");
+      const double lec_side_span = module_template.lec_side_span;
+      const double rec_side_span = module_template.rec_side_span;
       const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
       const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const double left_bridge_pos_y = bridge_fpc_y_center(
@@ -1181,11 +1275,17 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const auto [right_bridge_box_x, right_bridge_pos_x] =
           bridge_fpc_x_geometry(!lec_after_rsu, rec_side_span, right_bridge_x);
 
-      place_adhesive_box(_toString(component_id, "component%d_left_bridge_fpc_glue"),
-                         left_bridge_box_x, left_bridge_y, left_bridge_pos_x, left_bridge_pos_y);
-      place_adhesive_box(_toString(component_id, "component%d_right_bridge_fpc_glue"),
-                         right_bridge_box_x, right_bridge_y, right_bridge_pos_x,
-                         right_bridge_pos_y);
+      if (!module_template.tiling_design) {
+        // The supplied film is the silicon-to-carbon interface. Bridge-FPC
+        // adhesive is not specified by the slide, so keep these legacy boxes
+        // only in the old corrugated prototype.
+        place_adhesive_box(_toString(component_id, "component%d_left_bridge_fpc_glue"),
+                           left_bridge_box_x, left_bridge_y, left_bridge_pos_x,
+                           left_bridge_pos_y);
+        place_adhesive_box(_toString(component_id, "component%d_right_bridge_fpc_glue"),
+                           right_bridge_box_x, right_bridge_y, right_bridge_pos_x,
+                           right_bridge_pos_y);
+      }
     } else if (component.rsu_bridge_fpc_pattern) {
       auto place_passive_box = [&](const string& name, double box_x, double box_y,
                                    double box_thickness, double pos_x, double pos_y, double local_z,
@@ -1229,10 +1329,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         return y_size / 2.0 + top_edge_offset - box_y / 2.0;
       };
 
-      const double lec_side_span =
-          description.constant<double>("SiEndcapModule6RSU_left_extension");
-      const double rec_side_span =
-          description.constant<double>("SiEndcapModule6RSU_right_extension");
+      const double lec_side_span = module_template.lec_side_span;
+      const double rec_side_span = module_template.rec_side_span;
       const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
       const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const double left_bridge_pos_y = bridge_fpc_y_center(
@@ -1283,8 +1381,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const double left_bridge_pos_y = bridge_fpc_y_center(
           left_bridge_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
       const auto [left_bridge_box_x, left_bridge_pos_x] = bridge_fpc_x_geometry(
-          component.lec_after_rsu,
-          description.constant<double>("SiEndcapModule6RSU_left_extension"), left_bridge_x);
+          component.lec_after_rsu, module_template.lec_side_span, left_bridge_x);
 
       const double ancasic_x  = description.constant<double>("SiEndcapAncASIC_width");
       const double ancasic_y  = description.constant<double>("SiEndcapAncASIC_length");

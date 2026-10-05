@@ -58,6 +58,32 @@
     <constant name="SiEndcapModule6RSU_sensor_right_margin"  value="1.5*mm"/>
 
     <comment>
+      Supplied tiling-module dimensions for the five/six-RSU builder.
+      These do not change the legacy EIC_LAS_6RSU_CORR prototype above.
+      A/B denote 35/32 mm baseplates, not different RSU dimensions.
+      The catalogue remains the authoritative source for placed type IDs.
+    </comment>
+    <constant name="SiEndcapTiling5RSU_count"                 value="5"/>
+    <constant name="SiEndcapTiling6RSU_count"                 value="6"/>
+    <constant name="SiEndcapTilingBaseplateA_width"          value="35*mm"/>
+    <constant name="SiEndcapTilingBaseplateB_width"          value="32*mm"/>
+    <constant name="SiEndcapTilingBLEC_length"               value="20*mm"/>
+    <constant name="SiEndcapTilingBREC_length"               value="10*mm"/>
+    <constant name="SiEndcapTiling5RSU_package_length"       value="SiEndcapTiling5RSU_count*SiEndcapRSU_length + SiEndcapTilingBLEC_length + SiEndcapTilingBREC_length"/>
+    <constant name="SiEndcapTiling6RSU_package_length"       value="SiEndcapTiling6RSU_count*SiEndcapRSU_length + SiEndcapTilingBLEC_length + SiEndcapTilingBREC_length"/>
+
+    <comment>
+      Slide 4 material stack for both RSU counts. Film and external epoxy are
+      distinct solids in the tiling builder. Their absolute placement-z
+      references must still be matched to the supplied CSV in a later step.
+    </comment>
+    <constant name="SiEndcapTilingSensor_thickness"          value="50*um"/>
+    <constant name="SiEndcapTilingFilm_thickness"            value="60*um"/>
+    <constant name="SiEndcapTilingBaseplateCF_thickness"     value="150*um"/>
+    <constant name="SiEndcapTilingExternalEpoxy_thickness"   value="80*um"/>
+    <constant name="SiEndcapTilingEpoxyGlueLine_width"       value="2.5*mm"/>
+
+    <comment>
       Current corrugated module material stack.
       Do not confuse these with the legacy flat-module stack above.
     </comment>
@@ -79,6 +105,10 @@
     <constant name="SiEndcapREC_width"                       value="SiEndcapRSU_width"/>
     <constant name="SiEndcapLEC_thickness"                   value="SiEndcapSensor_thickness"/>
     <constant name="SiEndcapREC_thickness"                   value="SiEndcapSensor_thickness"/>
+    <constant name="SiEndcapTilingLEC_thickness"             value="SiEndcapTilingSensor_thickness"/>
+    <constant name="SiEndcapTilingREC_thickness"             value="SiEndcapTilingSensor_thickness"/>
+    <constant name="SiEndcapTiling5RSU_sensor_length"        value="SiEndcapTiling5RSU_count*SiEndcapRSU_length + SiEndcapLEC_length + SiEndcapREC_length"/>
+    <constant name="SiEndcapTiling6RSU_sensor_length"        value="SiEndcapTiling6RSU_count*SiEndcapRSU_length + SiEndcapLEC_length + SiEndcapREC_length"/>
 
     <comment>
       FPC dimensions are kept separate from LEC/REC chip-like placeholders.
