@@ -306,3 +306,82 @@ This closes the reader/transform compile gate. The production XML still
 selects the legacy CSV, so neither new scenario is active yet. Geometry
 export, per-disk metadata boundaries, complete placement counts in DD4hep,
 and overlap checks remain later review gates.
+
+## Step 6a: supplied-versus-current disk-boundary audit
+
+This is a read-only review checkpoint before changing geometry behavior.
+Files added/changed: `logs/audit_svt_disk_boundaries_step6a.py` and this log.
+Command: `python3 logs/audit_svt_disk_boundaries_step6a.py`. The script reads
+the staged metadata without modifying it and compares it with resolved values
+from `compact/tracking/definitions_craterlake.xml`.
+
+The `all_6rsu` and `rsu_opt` packages have identical z centers, outer radii,
+and opening primitives on every disk. Scenario selection therefore changes
+module types and placements, not disk boundaries. The supplied disk centers
+are ED4/ED3/ED2/ED1/ED0 = -1020/-850/-650/-450/-250 mm and
+HD0/HD1/HD2/HD3b/HD4 = 250/450/700/950/1200 mm. Relative to the current XML,
+ED1 and HD1 move 100 mm toward the interaction point and ED0/HD0 move 5 mm;
+the other six centers agree.
+
+The supplied outer radii are 230 mm for ED0/HD0, 405 mm for ED1/HD1, and
+430 mm for all outer disks. The current XML envelope radii resolve to 240,
+415, and 421.4 mm respectively. Thus the supplied inner and middle disks are
+10 mm smaller, while the supplied outer disks are 8.6 mm larger. The XML also
+adds a separate 0.001 mm layer-envelope allowance; that implementation detail
+is not included in the comparison above.
+
+The opening definitions differ materially. The current XML opening radii
+include `Beampipe_bakeout_buffer = 5 mm`, while metadata reports the source
+primitives directly. On ED0/ED1/HD0/HD1, metadata uses duplicated concentric
+31.750 mm circles, compared with the XML's 36.757 mm buffered circles. ED2
+introduces an offset second 15.900 mm circle that does not exist in the
+current XML. ED3 and ED4 retain two-circle openings but change their radii
+and centers. HD2/HD3b/HD4 each supply two identical circles centered at
++3.136/+8.736/+14.336 mm with radii 37.136/42.736/48.336 mm, rather than the
+current two distinct XML circles. These are topology/coordinate changes, not
+rounding effects.
+
+The metadata coordinates are detector-coordinate source values, whereas the
+existing `<beampipe_opening>` constants are consumed in a layer-local frame.
+Step 6b must explicitly transform source opening centers through the same
+negative-side layer reflection used for module placements. It must also make
+an explicit policy decision about the XML-only 5 mm bakeout buffer: silently
+adding it to source metadata would no longer implement the supplied boundary
+exactly. No such choice or geometry modification is made in this audit.
+
+## Step 6b: defer supplied disk-z movement
+
+User decision: consume the delivered CSVs unchanged but retain the current XML
+disk z centers until the proposed positions have been checked for conflicts
+with other detector systems. This is an explicit temporary compatibility
+translation, not a reinterpretation or edit of the source coordinates.
+
+For each tiling-directory row, the plugin now reads the corresponding
+`*_metadata.txt` and calculates
+`disk_z_shift = current_XML_global_layer_center - metadata_z_center_mm`.
+It adds this same shift to the source corrugation and sensor z references
+before constructing the module transform. Therefore their signed 0.030 or
+0.340 mm separation and the complete material-stack placement are unchanged.
+The shifts are ED4/ED3/ED2 = 0, ED1 = -100 mm, ED0 = -5 mm, HD0 = +5 mm,
+HD1 = +100 mm, and HD2/HD3b/HD4 = 0.
+
+Every placed tiling module records `source_disk_center_z_mm`,
+`source_corrugation_surface_z_mm`, `source_sensor_reference_z_mm`, and
+`applied_disk_z_shift_mm` as `VariantParameters`. This preserves both the
+provider coordinates and the temporary translation in the constructed
+geometry. The production XML still selects the legacy placement file.
+
+Validation command: `python3 logs/validate_svt_deferred_z_step6b.py`. It checks
+both packages and all 4,324 rows, confirming that translation preserves the
+source sensor-to-corrugation separation and every module's offset from its
+source disk center. Moving to the supplied disk z positions later requires
+only making the XML layer centers agree with metadata; the derived shifts then
+become zero without changing a CSV or a C++ shift table.
+
+Compile handoff: `logs/compile_svt_deferred_z_step6b.sh` records a focused
+out-of-tree build and writes `logs/compile_svt_deferred_z_step6b.txt`. Run the
+script inside `~/weic/eic-shell --version 26.09.0-stable`.
+
+**Compilation result (user run, 2026-10-05): PASS.** The saved output shows
+`src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
+linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.

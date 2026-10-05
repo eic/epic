@@ -91,6 +91,8 @@ struct ModuleRow {
   double y_origin{0.0};
   double z_corrugation_surface{0.0};
   double z_sensor_reference{0.0};
+  double source_disk_center_z{0.0};
+  double applied_disk_z_shift{0.0};
   bool tiling_coordinates{false};
   double rotation_z{0.0};
   double rotation_y{0.0};
@@ -1222,6 +1224,50 @@ vector<ModuleRow> load_tiling_module_directory(
   vector<ModuleRow> rows;
 
   for (size_t disk_id = 0; disk_id < disk_files.size(); ++disk_id) {
+    const fs::path metadata_path = directory / (disk_files[disk_id].first + "_metadata.txt");
+    std::ifstream metadata_input(metadata_path);
+    if (!metadata_input.is_open()) {
+      fail(fmt::format("missing {}", metadata_path.filename().string()));
+    }
+    map<string, string> metadata;
+    int metadata_line = 0;
+    while (std::getline(metadata_input, line)) {
+      ++metadata_line;
+      const size_t comment = line.find('#');
+      const string content = trim(line.substr(0, comment));
+      if (content.empty()) {
+        continue;
+      }
+      const size_t separator = content.find('=');
+      if (separator == string::npos) {
+        fail(fmt::format("{} line {} is not key = value metadata",
+                         metadata_path.filename().string(), metadata_line));
+      }
+      const string key = trim(content.substr(0, separator));
+      const string value = trim(content.substr(separator + 1));
+      if (key.empty() || value.empty() || !metadata.emplace(key, value).second) {
+        fail(fmt::format("{} line {} has an empty or repeated key",
+                         metadata_path.filename().string(), metadata_line));
+      }
+    }
+    if (!metadata.count("disk_id") || !metadata.count("z_center_mm")) {
+      fail(fmt::format("{} is missing disk_id or z_center_mm",
+                       metadata_path.filename().string()));
+    }
+    double source_disk_center_z = 0.0;
+    try {
+      if (std::stoi(metadata.at("disk_id")) != static_cast<int>(disk_id)) {
+        fail(fmt::format("{} has disk_id {}, expected {}", metadata_path.filename().string(),
+                         metadata.at("disk_id"), disk_id));
+      }
+      source_disk_center_z = std::stod(metadata.at("z_center_mm")) * mm;
+    } catch (const std::runtime_error&) {
+      throw;
+    } catch (const std::exception&) {
+      fail(fmt::format("{} has malformed disk_id or z_center_mm",
+                       metadata_path.filename().string()));
+    }
+
     const fs::path placement_path = directory / (disk_files[disk_id].first + "_modules.csv");
     std::ifstream input(placement_path);
     if (!input.is_open()) {
@@ -1296,6 +1342,7 @@ vector<ModuleRow> load_tiling_module_directory(
       }
 
       row.disk_key = disk_files[disk_id].second;
+      row.source_disk_center_z = source_disk_center_z;
       row.csv_line = line_number;
       row.x_size = module_template.x_size;
       row.y_size = module_template.y_size;
@@ -1341,19 +1388,27 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
 
   const double corrugation_reference_local =
       tiling_corrugation_reference_z(description, module_template);
-  const double global_module_center = source_row.z_corrugation_surface -
-                                      global_normal_sign * corrugation_reference_local;
   const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
+  // Keep the current XML disk z position while consuming the delivered CSV
+  // unchanged.  Translating both source z references by the same disk-center
+  // difference preserves the provider's corrugation-to-sensor stack exactly.
+  row.applied_disk_z_shift = global_layer_center - source_row.source_disk_center_z;
+  const double placed_corrugation_surface =
+      source_row.z_corrugation_surface + row.applied_disk_z_shift;
+  const double placed_sensor_reference =
+      source_row.z_sensor_reference + row.applied_disk_z_shift;
+  const double global_module_center = placed_corrugation_surface -
+                                      global_normal_sign * corrugation_reference_local;
   row.dz = layer_axis_sign * (global_module_center - global_layer_center);
 
   const double predicted_sensor =
       global_module_center +
       global_normal_sign * tiling_sensor_reference_z(description, module_template);
-  if (std::abs(predicted_sensor - source_row.z_sensor_reference) > 5.0e-5 * mm) {
+  if (std::abs(predicted_sensor - placed_sensor_reference) > 5.0e-5 * mm) {
     throw std::runtime_error(fmt::format(
-        "source ({},{},{},{}): modeled sensor z={} mm, CSV z_sensor_mm={} mm",
+        "source ({},{},{},{}): modeled sensor z={} mm, translated CSV z_sensor_mm={} mm",
         row.disk_id, row.row_index, row.module_index, row.module_name, predicted_sensor / mm,
-        source_row.z_sensor_reference / mm));
+        placed_sensor_reference / mm));
   }
   return row;
 }
@@ -1976,6 +2031,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         module_params.set<int>("source_row_index", row.row_index);
         module_params.set<int>("source_module_index", row.module_index);
         module_params.set<string>("source_type_id", row.module_name);
+        module_params.set<double>("source_disk_center_z_mm", row.source_disk_center_z / mm);
+        module_params.set<double>("source_corrugation_surface_z_mm",
+                                  row.z_corrugation_surface / mm);
+        module_params.set<double>("source_sensor_reference_z_mm",
+                                  row.z_sensor_reference / mm);
+        module_params.set<double>("applied_disk_z_shift_mm", row.applied_disk_z_shift / mm);
       }
 
       // Reattach the cached sensitive surfaces to the concrete placed module instance.
