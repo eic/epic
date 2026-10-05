@@ -385,3 +385,44 @@ script inside `~/weic/eic-shell --version 26.09.0-stable`.
 **Compilation result (user run, 2026-10-05): PASS.** The saved output shows
 `src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
 linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
+
+## Step 6c: supplied radial boundaries
+
+Commit `e474f8c7c` closed the reviewed Step 6a/6b checkpoint. Step 6c changes
+the tiling-directory path only: legacy CSV geometry continues using its XML
+boundaries, and production XML still selects that legacy path.
+
+The strict package reader now requires and parses each metadata file's module
+outer-radius target and two opening primitives. It accepts the delivered
+`a_mm == b_mm` circular primitives and rejects missing fields, non-circles,
+non-positive dimensions, wrong disk IDs, and unsupported radius targets. For
+an active tiling directory, these values replace the layer's XML radial
+boundary and opening definitions. The supplied centers are detector-global;
+their x coordinates are sign-flipped for reflected negative-z layer solids so
+the placed subtraction returns to the source global coordinate. No 5 mm XML
+bakeout buffer is added: the placements already have a minimum opening
+clearance of 4.99995 mm in the four-decimal source data.
+
+The nominal `outer_radius_mm` explicitly targets module corners. Because the
+CSV coordinates are rounded to 0.0001 mm, tangent corners extend only
+0.0000286--0.0000558 mm beyond the nominal radius. The constructed layer
+solid retains the existing 0.001 mm envelope allowance, i.e.
+`solid_rmax = metadata_outer_radius + 0.001 mm`; this is not folded into or
+reported as the design radius. Layer `VariantParameters` record the source z
+center, nominal outer radius, and applied allowance.
+
+Command: `python3 logs/audit_svt_radial_boundaries_step6c.py`. Result: PASS
+for all 2,160 `all_6rsu` and 2,164 `rsu_opt` full baseplate footprints. There
+are 384/386 nominal-radius rounding excursions respectively, but zero exceed
+the 0.001 mm layer allowance and no footprint intersects an opening. Sensor
+and film footprints are strict subsets of the checked full baseplates. The
+deferred-z regression check also remains PASS for every row.
+
+Compile handoff: run `bash logs/compile_svt_radial_boundaries_step6c.sh`
+inside `~/weic/eic-shell --version 26.09.0-stable`. It writes
+`logs/compile_svt_radial_boundaries_step6c.txt`.
+
+**Compilation result (user run, 2026-10-05): PASS.** The saved output shows
+`src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
+linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
+DD4hep construction/export remains a separate later validation gate.

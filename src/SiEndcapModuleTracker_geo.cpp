@@ -120,6 +120,14 @@ struct DiskBoundary {
   CircularOpening hadron_opening;
 };
 
+struct TilingDiskMetadata {
+  int disk_id{-1};
+  double center_z{0.0};
+  double outer_radius{0.0};
+  DiskBoundary::CircularOpening opening_0;
+  DiskBoundary::CircularOpening opening_1;
+};
+
 // Cached built module volume and its sensitive surfaces, reused across many placements.
 struct ModulePrototype {
   Volume volume;
@@ -1120,7 +1128,8 @@ vector<ModuleRow> load_module_rows(Detector& description, const string& file_nam
 // construction rather than silently dropping a supplied module.
 vector<ModuleRow> load_tiling_module_directory(
     Detector& description, const string& directory_name,
-    const map<string, ModuleTemplate>& module_templates) {
+    const map<string, ModuleTemplate>& module_templates,
+    map<string, TilingDiskMetadata>& disk_metadata) {
   namespace fs = std::filesystem;
   const fs::path directory(directory_name);
   auto fail = [&](const string& message) -> void {
@@ -1250,22 +1259,71 @@ vector<ModuleRow> load_tiling_module_directory(
                          metadata_path.filename().string(), metadata_line));
       }
     }
-    if (!metadata.count("disk_id") || !metadata.count("z_center_mm")) {
-      fail(fmt::format("{} is missing disk_id or z_center_mm",
-                       metadata_path.filename().string()));
-    }
-    double source_disk_center_z = 0.0;
-    try {
-      if (std::stoi(metadata.at("disk_id")) != static_cast<int>(disk_id)) {
-        fail(fmt::format("{} has disk_id {}, expected {}", metadata_path.filename().string(),
-                         metadata.at("disk_id"), disk_id));
+    const array<string, 13> required_metadata{{
+        "disk_id",
+        "z_center_mm",
+        "outer_radius_mm",
+        "n_opening_primitives",
+        "opening_primitive_0_cx_mm",
+        "opening_primitive_0_cy_mm",
+        "opening_primitive_0_a_mm",
+        "opening_primitive_0_b_mm",
+        "opening_primitive_1_cx_mm",
+        "opening_primitive_1_cy_mm",
+        "opening_primitive_1_a_mm",
+        "opening_primitive_1_b_mm",
+        "outer_radius_target",
+    }};
+    for (const auto& key : required_metadata) {
+      if (!metadata.count(key)) {
+        fail(fmt::format("{} is missing '{}'", metadata_path.filename().string(), key));
       }
-      source_disk_center_z = std::stod(metadata.at("z_center_mm")) * mm;
+    }
+    if (metadata.at("outer_radius_target") != "module") {
+      fail(fmt::format("{} has unsupported outer_radius_target '{}'",
+                       metadata_path.filename().string(), metadata.at("outer_radius_target")));
+    }
+    TilingDiskMetadata parsed_metadata;
+    try {
+      parsed_metadata.disk_id = std::stoi(metadata.at("disk_id"));
+      if (parsed_metadata.disk_id != static_cast<int>(disk_id)) {
+        fail(fmt::format("{} has disk_id {}, expected {}", metadata_path.filename().string(),
+                         parsed_metadata.disk_id, disk_id));
+      }
+      if (std::stoi(metadata.at("n_opening_primitives")) != 2) {
+        fail(fmt::format("{} must contain exactly two opening primitives",
+                         metadata_path.filename().string()));
+      }
+      parsed_metadata.center_z = std::stod(metadata.at("z_center_mm")) * mm;
+      parsed_metadata.outer_radius = std::stod(metadata.at("outer_radius_mm")) * mm;
+      auto read_opening = [&](int index) {
+        DiskBoundary::CircularOpening opening;
+        const string prefix = fmt::format("opening_primitive_{}_", index);
+        opening.center_x = std::stod(metadata.at(prefix + "cx_mm")) * mm;
+        opening.center_y = std::stod(metadata.at(prefix + "cy_mm")) * mm;
+        const double radius_a = std::stod(metadata.at(prefix + "a_mm")) * mm;
+        const double radius_b = std::stod(metadata.at(prefix + "b_mm")) * mm;
+        if (std::abs(radius_a - radius_b) > 1.0e-9 * mm || radius_a <= 0.0) {
+          fail(fmt::format("{} opening {} is not a positive circle",
+                           metadata_path.filename().string(), index));
+        }
+        opening.radius = radius_a;
+        return opening;
+      };
+      parsed_metadata.opening_0 = read_opening(0);
+      parsed_metadata.opening_1 = read_opening(1);
+      if (parsed_metadata.outer_radius <= 0.0) {
+        fail(fmt::format("{} has non-positive outer_radius_mm",
+                         metadata_path.filename().string()));
+      }
     } catch (const std::runtime_error&) {
       throw;
     } catch (const std::exception&) {
-      fail(fmt::format("{} has malformed disk_id or z_center_mm",
+      fail(fmt::format("{} has malformed disk boundary metadata",
                        metadata_path.filename().string()));
+    }
+    if (!disk_metadata.emplace(disk_files[disk_id].second, parsed_metadata).second) {
+      fail(fmt::format("metadata repeats disk key '{}'", disk_files[disk_id].second));
     }
 
     const fs::path placement_path = directory / (disk_files[disk_id].first + "_modules.csv");
@@ -1342,7 +1400,7 @@ vector<ModuleRow> load_tiling_module_directory(
       }
 
       row.disk_key = disk_files[disk_id].second;
-      row.source_disk_center_z = source_disk_center_z;
+      row.source_disk_center_z = parsed_metadata.center_z;
       row.csv_line = line_number;
       row.x_size = module_template.x_size;
       row.y_size = module_template.y_size;
@@ -1839,10 +1897,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     std::_Exit(EXIT_FAILURE);
   }
   vector<ModuleRow> module_rows;
+  map<string, TilingDiskMetadata> tiling_disk_metadata;
   if (!module_file.empty()) {
     const string resolved_input = resolve_input_file(module_file);
     module_rows = module_format == "tiling-directory"
-                      ? load_tiling_module_directory(description, resolved_input, module_templates)
+                      ? load_tiling_module_directory(description, resolved_input, module_templates,
+                                                     tiling_disk_metadata)
                       : load_module_rows(description, resolved_input, module_templates);
   } else {
     printout(
@@ -1894,6 +1954,20 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         std::_Exit(EXIT_FAILURE);
       }
     }
+    auto supplied_boundary = tiling_disk_metadata.find(disk.disk_key);
+    if (supplied_boundary != tiling_disk_metadata.end()) {
+      const TilingDiskMetadata& metadata = supplied_boundary->second;
+      // Metadata outer_radius_mm targets the module corners.  Keep the existing
+      // 1 um layer-envelope allowance so four-decimal source coordinates do not
+      // protrude by their observed sub-0.06 um rounding residual.
+      disk.rmax = metadata.outer_radius + 1.0 * um;
+      disk.has_beampipe_opening = true;
+      const double global_to_local_x = reflect ? -1.0 : 1.0;
+      disk.lepton_opening = metadata.opening_0;
+      disk.hadron_opening = metadata.opening_1;
+      disk.lepton_opening.center_x *= global_to_local_x;
+      disk.hadron_opening.center_x *= global_to_local_x;
+    }
     string layer_name = det_name + string("_layer") + to_string(layer_id);
     Volume layer_vol(layer_name, build_disk_solid(layer_name, disk), air);
     layer_vol.setVisAttributes(description.visAttributes(disk.vis));
@@ -1926,6 +2000,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     layerParams.set<double>("envelope_r_max", 0 * dd4hep::mm / dd4hep::mm);
     layerParams.set<double>("envelope_z_min", dd4hep::mm / dd4hep::mm);
     layerParams.set<double>("envelope_z_max", dd4hep::mm / dd4hep::mm);
+    if (supplied_boundary != tiling_disk_metadata.end()) {
+      const TilingDiskMetadata& metadata = supplied_boundary->second;
+      layerParams.set<double>("source_metadata_z_center_mm", metadata.center_z / mm);
+      layerParams.set<double>("source_metadata_outer_radius_mm", metadata.outer_radius / mm);
+      layerParams.set<double>("applied_outer_envelope_allowance_mm", 1.0 * um / mm);
+    }
 
     for (xml_coll_t fi(x_layer, _U(frame)); fi; ++fi) {
       // Layer frame workflow:
