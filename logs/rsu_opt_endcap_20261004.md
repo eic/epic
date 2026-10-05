@@ -256,3 +256,53 @@ LEC–first-RSU boundary for x/y and the corrugation reference surface for z,
 then validate the modeled sensor reference surface against `z_sensor_mm`.
 The global sign is taken directly from the supplied pair of z coordinates,
 so it remains correct on either disk side and corrugation facet.
+
+## Step 5b: strict package reader and coordinate transform
+
+Files changed after commit `9afa33cf5`: `src/SiEndcapModuleTracker_geo.cpp`,
+`logs/validate_svt_placement_transform_step5b.py`,
+`logs/compile_svt_placement_step5b.sh`, and this log. Production XML and
+all supplied CSV/metadata files remain unchanged.
+
+The plugin now accepts `format="tiling-directory"` with the existing
+`file` attribute pointing to either self-contained scenario directory.
+It reads and validates `catalog.csv` plus the ten exact disk files,
+including `HD3b_modules.csv`. Missing headers/files, catalogue/template
+dimension disagreements, unknown types, duplicate `(disk,row,module)`
+keys, ambiguous zero directions, and inconsistent z offsets are fatal.
+The legacy single-CSV reader remains available and unchanged in behavior.
+
+Disk IDs map to the existing XML layer keys as documented in step 5a.
+Each row retains `disk_id`, `row_index`, `mod_index`, and `type_id` in its
+DD4hep module name and `VariantParameters`. The supplied x/y point is used
+as the **midpoint** of the LEC–first-RSU boundary. The module extends
+toward x=0; rotations of 0 or 180 degrees about local z/y handle radial
+direction, chirality, sensor normal, and the negative-side layer reflection.
+
+The z transform renames `z_baseplate_mm` internally to
+`z_corrugation_surface`. It anchors the physical corrugation interface and
+checks the modeled sensor reference against `z_sensor_mm`. Following the
+provider clarification, outward epoxy is serially below the baseplate and
+the local sensor-reference displacement is 0.340 mm. For inward modules,
+the two epoxy edge lines lie above the baseplate edge rather than adding a
+serial layer; film plus sensor protrude 0.030 mm past the epoxy contact
+surface. Consequently the enclosing module thickness is 0.830 mm outward
+and 0.750 mm inward with the current bridge-FPC/AncASIC placeholders.
+
+Command: `python3 logs/validate_svt_placement_transform_step5b.py`.
+Result: **PASS** for all 2,160 `all_6rsu` modules and all 2,164 `rsu_opt`
+modules. Every LEC-boundary midpoint, corrugation z reference, and sensor z
+reference reconstructs exactly in detector coordinates. All four required
+rotation combinations are exercised in both packages. `git diff --check`
+and the compile-script shell syntax check also pass.
+
+C++ compilation: **PASS** (user run, 2026-10-05 19:38 UTC). The recorded
+`logs/compile_svt_placement_step5b.txt` shows Clang 20.1.8 compiling
+`src/SiEndcapModuleTracker_geo.cpp`, linking `lib/libepic.so`, and
+`[100%] Built target epic`. The command is preserved in
+`logs/compile_svt_placement_step5b.sh` for repetition.
+
+This closes the reader/transform compile gate. The production XML still
+selects the legacy CSV, so neither new scenario is active yet. Geometry
+export, per-disk metadata boundaries, complete placement counts in DD4hep,
+and overlap checks remain later review gates.
