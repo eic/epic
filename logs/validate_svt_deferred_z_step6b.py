@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the explicit temporary translation to current XML disk z centers."""
+"""Validate exact agreement between supplied and current XML disk z centers."""
 
 import csv
 from pathlib import Path
@@ -40,22 +40,22 @@ for scenario in SCENARIOS:
         directory = PACKAGE_ROOT / scenario
         metadata = read_metadata(directory / (disk + "_metadata.txt"))
         source_center = float(metadata["z_center_mm"])
-        shift = CURRENT_XML_Z_MM[disk] - source_center
-        assert abs(shift) < 1e-12, "XML and supplied disk center differ for {}".format(disk)
+        assert abs(CURRENT_XML_Z_MM[disk] - source_center) < 1e-12, (
+            "XML and supplied disk center differ for {}".format(disk)
+        )
         with (directory / (disk + "_modules.csv")).open(newline="") as stream:
             rows = list(csv.DictReader(stream))
         assert rows
         for row in rows:
             corrugation = float(row["z_baseplate_mm"])
             sensor = float(row["z_sensor_mm"])
-            translated_corrugation = corrugation + shift
-            translated_sensor = sensor + shift
-            assert abs((translated_sensor - translated_corrugation) - (sensor - corrugation)) < 1e-12
-            assert abs((translated_corrugation - CURRENT_XML_Z_MM[disk]) -
+            assert abs((corrugation - CURRENT_XML_Z_MM[disk]) -
                        (corrugation - source_center)) < 1e-12
+            separation = abs(sensor - corrugation)
+            assert min(abs(separation - 0.03), abs(separation - 0.34)) < 1e-12
             module_count += 1
-        print("  {:4s}: source={:7.1f} XML={:7.1f} shift={:+7.1f} modules={}".format(
-            disk, source_center, CURRENT_XML_Z_MM[disk], shift, len(rows)))
-    print("  PASS: {} modules preserve both source-reference offsets".format(module_count))
+        print("  {:4s}: source={:7.1f} XML={:7.1f} modules={}".format(
+            disk, source_center, CURRENT_XML_Z_MM[disk], len(rows)))
+    print("  PASS: {} modules use the source z frame directly".format(module_count))
 
-print("PASS: deferred disk-z translation is explicit and lossless")
+print("PASS: XML and supplied disk z centers agree; no translation is required")

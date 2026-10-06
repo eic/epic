@@ -91,8 +91,6 @@ struct ModuleRow {
   double y_origin{0.0};
   double z_corrugation_surface{0.0};
   double z_sensor_reference{0.0};
-  double source_disk_center_z{0.0};
-  double applied_disk_z_shift{0.0};
   bool tiling_coordinates{false};
   double rotation_z{0.0};
   double rotation_y{0.0};
@@ -1400,7 +1398,6 @@ vector<ModuleRow> load_tiling_module_directory(
       }
 
       row.disk_key = disk_files[disk_id].second;
-      row.source_disk_center_z = parsed_metadata.center_z;
       row.csv_line = line_number;
       row.x_size = module_template.x_size;
       row.y_size = module_template.y_size;
@@ -1447,26 +1444,18 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
   const double corrugation_reference_local =
       tiling_corrugation_reference_z(description, module_template);
   const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
-  // Keep the current XML disk z position while consuming the delivered CSV
-  // unchanged.  Translating both source z references by the same disk-center
-  // difference preserves the provider's corrugation-to-sensor stack exactly.
-  row.applied_disk_z_shift = global_layer_center - source_row.source_disk_center_z;
-  const double placed_corrugation_surface =
-      source_row.z_corrugation_surface + row.applied_disk_z_shift;
-  const double placed_sensor_reference =
-      source_row.z_sensor_reference + row.applied_disk_z_shift;
-  const double global_module_center = placed_corrugation_surface -
+  const double global_module_center = source_row.z_corrugation_surface -
                                       global_normal_sign * corrugation_reference_local;
   row.dz = layer_axis_sign * (global_module_center - global_layer_center);
 
   const double predicted_sensor =
       global_module_center +
       global_normal_sign * tiling_sensor_reference_z(description, module_template);
-  if (std::abs(predicted_sensor - placed_sensor_reference) > 5.0e-5 * mm) {
+  if (std::abs(predicted_sensor - source_row.z_sensor_reference) > 5.0e-5 * mm) {
     throw std::runtime_error(fmt::format(
-        "source ({},{},{},{}): modeled sensor z={} mm, translated CSV z_sensor_mm={} mm",
+        "source ({},{},{},{}): modeled sensor z={} mm, CSV z_sensor_mm={} mm",
         row.disk_id, row.row_index, row.module_index, row.module_name, predicted_sensor / mm,
-        placed_sensor_reference / mm));
+        source_row.z_sensor_reference / mm));
   }
   return row;
 }
@@ -1957,6 +1946,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     auto supplied_boundary = tiling_disk_metadata.find(disk.disk_key);
     if (supplied_boundary != tiling_disk_metadata.end()) {
       const TilingDiskMetadata& metadata = supplied_boundary->second;
+      const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
+      if (std::abs(global_layer_center - metadata.center_z) > 5.0e-5 * mm) {
+        throw std::runtime_error(fmt::format(
+            "disk '{}': XML center z={} mm disagrees with metadata z_center_mm={} mm",
+            disk.disk_key, global_layer_center / mm, metadata.center_z / mm));
+      }
       // Metadata outer_radius_mm targets the module corners.  Keep the existing
       // 1 um layer-envelope allowance so four-decimal source coordinates do not
       // protrude by their observed sub-0.06 um rounding residual.
@@ -2111,12 +2106,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         module_params.set<int>("source_row_index", row.row_index);
         module_params.set<int>("source_module_index", row.module_index);
         module_params.set<string>("source_type_id", row.module_name);
-        module_params.set<double>("source_disk_center_z_mm", row.source_disk_center_z / mm);
         module_params.set<double>("source_corrugation_surface_z_mm",
                                   row.z_corrugation_surface / mm);
         module_params.set<double>("source_sensor_reference_z_mm",
                                   row.z_sensor_reference / mm);
-        module_params.set<double>("applied_disk_z_shift_mm", row.applied_disk_z_shift / mm);
       }
 
       // Reattach the cached sensitive surfaces to the concrete placed module instance.

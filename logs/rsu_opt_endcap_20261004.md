@@ -386,6 +386,37 @@ script inside `~/weic/eic-shell --version 26.09.0-stable`.
 `src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
 linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
 
+## Step 6e: remove the temporary disk-z translation
+
+Commit `e9706b826` closed the reviewed upstream z-alignment checkpoint. Since
+all ten XML disk centers now equal the source metadata, the user requested
+removal of the temporary translation to avoid a misleading configuration path.
+
+The module row no longer stores a source disk center or applied z shift. CSV
+`z_baseplate_mm` (internally the corrugation reference) and `z_sensor_mm` are
+used directly in the module transform, and the `source_disk_center_z_mm` and
+`applied_disk_z_shift_mm` module parameters have been removed. The two useful
+source reference values remain recorded on each module.
+
+Instead of translating a mismatch, tiling-directory construction now requires
+the reflected/global XML layer center to equal metadata `z_center_mm` within
+0.00005 mm and throws a named disk error otherwise. This makes any future
+layout/XML divergence explicit. The historical Step 6b validator was updated
+in place to require exact center agreement and direct use of all source z
+references; its filename is retained so earlier log commands remain valid.
+
+Validation commands:
+`python3 logs/validate_svt_deferred_z_step6b.py`,
+`python3 logs/validate_svt_placement_transform_step5b.py`, and
+`python3 logs/audit_svt_radial_boundaries_step6c.py`.
+Compile handoff: run `bash logs/compile_svt_direct_z_step6e.sh` inside
+`~/weic/eic-shell --version 26.09.0-stable`. It writes
+`logs/compile_svt_direct_z_step6e.txt`.
+
+**Compilation result (user run, 2026-10-05): PASS.** The saved output shows
+`src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
+linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
+
 ## Step 6c: supplied radial boundaries
 
 Commit `e474f8c7c` closed the reviewed Step 6a/6b checkpoint. Step 6c changes
