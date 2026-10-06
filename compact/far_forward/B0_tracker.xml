@@ -327,48 +327,48 @@
       </module_layout>
       <module_layout name="B0ModuleLayout_St3">
         <face side="back">
-          <module x="-46.799*mm" y="23.000*mm"/>
-          <module x="-76.799*mm" y="23.000*mm"/>
-          <module x="-46.799*mm" y="69.000*mm"/>
-          <module x="-76.799*mm" y="69.000*mm"/>
-          <module x="-16.799*mm" y="56.852*mm"/>
-          <module x="13.201*mm" y="57.099*mm"/>
-          <module x="-16.799*mm" y="102.852*mm"/>
-          <module x="13.201*mm" y="103.099*mm"/>
+          <module x="-47.799*mm" y="23.000*mm"/>
+          <module x="-77.799*mm" y="23.000*mm"/>
+          <module x="-47.799*mm" y="69.000*mm"/>
+          <module x="-77.799*mm" y="69.000*mm"/>
+          <module x="-17.799*mm" y="57.727*mm"/>
+          <module x="12.201*mm" y="58.099*mm"/>
+          <module x="-17.799*mm" y="103.727*mm"/>
+          <module x="12.201*mm" y="104.099*mm"/>
           <module x="43.201*mm" y="23.000*mm"/>
           <module x="43.201*mm" y="69.000*mm"/>
-          <module x="-46.799*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="-76.799*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="-46.799*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-76.799*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-16.799*mm" y="-56.852*mm" rotZ="180*deg"/>
-          <module x="13.201*mm" y="-57.099*mm" rotZ="180*deg"/>
-          <module x="-16.799*mm" y="-102.852*mm" rotZ="180*deg"/>
-          <module x="13.201*mm" y="-103.099*mm" rotZ="180*deg"/>
+          <module x="-47.799*mm" y="-23.000*mm" rotZ="180*deg"/>
+          <module x="-77.799*mm" y="-23.000*mm" rotZ="180*deg"/>
+          <module x="-47.799*mm" y="-69.000*mm" rotZ="180*deg"/>
+          <module x="-77.799*mm" y="-69.000*mm" rotZ="180*deg"/>
+          <module x="-17.799*mm" y="-57.727*mm" rotZ="180*deg"/>
+          <module x="12.201*mm" y="-58.099*mm" rotZ="180*deg"/>
+          <module x="-17.799*mm" y="-103.727*mm" rotZ="180*deg"/>
+          <module x="12.201*mm" y="-104.099*mm" rotZ="180*deg"/>
           <module x="43.201*mm" y="-23.000*mm" rotZ="180*deg"/>
           <module x="43.201*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-106.799*mm" y="0.000*mm"/>
+          <module x="-107.799*mm" y="0.000*mm"/>
         </face>
         <face side="front">
-          <module x="-61.799*mm" y="23.000*mm"/>
-          <module x="-61.799*mm" y="69.000*mm"/>
-          <module x="-31.799*mm" y="51.248*mm"/>
-          <module x="-31.799*mm" y="97.248*mm"/>
-          <module x="-1.799*mm" y="57.099*mm"/>
-          <module x="-1.799*mm" y="103.099*mm"/>
-          <module x="28.201*mm" y="58.100*mm"/>
-          <module x="28.201*mm" y="104.100*mm"/>
-          <module x="-91.799*mm" y="46.000*mm"/>
-          <module x="-91.799*mm" y="0.000*mm"/>
-          <module x="-91.799*mm" y="-46.000*mm"/>
-          <module x="-61.799*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="-61.799*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-31.799*mm" y="-51.248*mm" rotZ="180*deg"/>
-          <module x="-31.799*mm" y="-97.248*mm" rotZ="180*deg"/>
-          <module x="-1.799*mm" y="-57.099*mm" rotZ="180*deg"/>
-          <module x="-1.799*mm" y="-103.099*mm" rotZ="180*deg"/>
-          <module x="28.201*mm" y="-58.100*mm" rotZ="180*deg"/>
-          <module x="28.201*mm" y="-104.100*mm" rotZ="180*deg"/>
+          <module x="-62.799*mm" y="23.000*mm"/>
+          <module x="-62.799*mm" y="69.000*mm"/>
+          <module x="-32.799*mm" y="51.774*mm"/>
+          <module x="-32.799*mm" y="97.774*mm"/>
+          <module x="-2.799*mm" y="58.099*mm"/>
+          <module x="-2.799*mm" y="104.099*mm"/>
+          <module x="27.201*mm" y="58.100*mm"/>
+          <module x="27.201*mm" y="104.100*mm"/>
+          <module x="-92.799*mm" y="46.000*mm"/>
+          <module x="-92.799*mm" y="0.000*mm"/>
+          <module x="-92.799*mm" y="-46.000*mm"/>
+          <module x="-62.799*mm" y="-23.000*mm" rotZ="180*deg"/>
+          <module x="-62.799*mm" y="-69.000*mm" rotZ="180*deg"/>
+          <module x="-32.799*mm" y="-51.774*mm" rotZ="180*deg"/>
+          <module x="-32.799*mm" y="-97.774*mm" rotZ="180*deg"/>
+          <module x="-2.799*mm" y="-58.099*mm" rotZ="180*deg"/>
+          <module x="-2.799*mm" y="-104.099*mm" rotZ="180*deg"/>
+          <module x="27.201*mm" y="-58.100*mm" rotZ="180*deg"/>
+          <module x="27.201*mm" y="-104.100*mm" rotZ="180*deg"/>
         </face>
       </module_layout>
       <module_layout name="B0ModuleLayout_St4">
