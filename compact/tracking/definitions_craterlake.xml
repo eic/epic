@@ -108,9 +108,9 @@
 
     <comment> MPGD Endcap Parameters </comment>
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
+    <comment> +55.2mm needed to clear support overlap </comment>
     <constant name="ForwardMPGD_z1"             value="1285*mm"/>
-    <comment> fixing fect 17.5mm not fare enough </comment>
-    <constant name="ForwardMPGD_z2"             value="1387.35*mm"/><comment> disk extends to: ForwardwardMPGD_z2 + envelope length(47.65mm) = 1435mm </comment>
+    <constant name="ForwardMPGD_z2"             value="1387.35*mm + 55.2*mm"/> <comment> disk extends to: ForwardMPGD_z2 + envelope length(47.65mm) = 1442.55mm</comment>
 
     <constant name="BackwardMPGD_z1"  value="1075*mm"/>
     <constant name="BackwardMPGD_z2"  value="1177.35*mm"/> <comment> disk extends to: BackwardMPGD_z2 + envelope length(47.65mm) = 1225mm </comment>
