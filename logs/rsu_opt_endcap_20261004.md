@@ -426,3 +426,37 @@ inside `~/weic/eic-shell --version 26.09.0-stable`. It writes
 `src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
 linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
 DD4hep construction/export remains a separate later validation gate.
+
+## Step 6d: restore upstream-aligned disk z positions
+
+Before proceeding to support geometry, `origin/main` was fetched and compared
+with this branch. The branch is already based on the fetched main commit
+`f9617538a` (51 commits ahead, 0 behind), so merge and normal rebase operations
+would be no-ops. Two later branch changes had nevertheless moved the inner
+disk center from 250 to 255 mm and the middle disk center from 450 to 550 mm.
+
+This focused forward fix restores the current upstream/main values:
+`InnerTrackerEndcapP_zmin = 25.0 cm` and
+`TrackerEndcapPDisk1_zmin = 45.0 cm`. Their negative-side aliases therefore
+restore ED0/HD0 to -250/+250 mm and ED1/HD1 to -450/+450 mm. All ten XML disk
+centers now equal the supplied metadata centers exactly. No radial boundary,
+opening, layer-thickness, module, or source-data value changes in this step.
+
+The generic C++ translation remains deliberately in place, but its derived
+`applied_disk_z_shift_mm` is now zero on every disk. The rerunnable Step 6a and
+6b audit tables were updated to the current XML state, and the z validator now
+requires every derived shift to be zero. Earlier log sections remain as the
+historical record of why the temporary shift mechanism was introduced; this
+section supersedes their nonzero-shift status.
+
+Validation commands:
+`python3 logs/audit_svt_disk_boundaries_step6a.py`,
+`python3 logs/validate_svt_deferred_z_step6b.py`, and
+`python3 logs/audit_svt_radial_boundaries_step6c.py`.
+Compile handoff: run `bash logs/compile_svt_upstream_z_alignment_step6d.sh`
+inside `~/weic/eic-shell --version 26.09.0-stable`; output is written to
+`logs/compile_svt_upstream_z_alignment_step6d.txt`.
+
+**Compilation result (user run, 2026-10-05): PASS.** The saved output shows
+`src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
+linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.

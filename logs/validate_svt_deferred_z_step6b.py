@@ -13,10 +13,10 @@ CURRENT_XML_Z_MM = {
     "ED4": -1020.0,
     "ED3": -850.0,
     "ED2": -650.0,
-    "ED1": -550.0,
-    "ED0": -255.0,
-    "HD0": 255.0,
-    "HD1": 550.0,
+    "ED1": -450.0,
+    "ED0": -250.0,
+    "HD0": 250.0,
+    "HD1": 450.0,
     "HD2": 700.0,
     "HD3b": 950.0,
     "HD4": 1200.0,
@@ -41,6 +41,7 @@ for scenario in SCENARIOS:
         metadata = read_metadata(directory / (disk + "_metadata.txt"))
         source_center = float(metadata["z_center_mm"])
         shift = CURRENT_XML_Z_MM[disk] - source_center
+        assert abs(shift) < 1e-12, "XML and supplied disk center differ for {}".format(disk)
         with (directory / (disk + "_modules.csv")).open(newline="") as stream:
             rows = list(csv.DictReader(stream))
         assert rows
