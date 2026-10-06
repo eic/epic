@@ -11,8 +11,9 @@
       both faces of a support plate.
       - The stations sit on the ion axis, the axis of the hadron beam pipe, at
         B0TrackerStationN_zpos (global z, from a preliminary optimization).
-      - B0TrackerStationXOffset shifts the plates and modules toward the
-        electron beam.
+      - B0TrackerStationXOffset moves the plates and modules 1.8 mm toward the
+        electron beam (the CAD centres the plate cut-outs on the beam pipe), so the
+        station-3 back-face +x modules clear the 31 mm beam pipe by 1.3 mm.
     </comment>
     <constant name="B0TrackerStation1_zpos" value="5850.0*mm"/>
     <constant name="B0TrackerStation2_zpos" value="6272.2*mm"/>
@@ -28,8 +29,8 @@
     <constant name="B0TrackerSensorWidth" value="1.6*cm"/>
     <constant name="B0TrackerSensorLength" value="1.6*cm"/>
     <constant name="B0TrackerSensorOverlap" value="1.0*mm"/>
-    <constant name="B0TrackerASICWidth" value="1.6*cm"/>
-    <constant name="B0TrackerASICLength" value="1.6*cm"/>
+    <constant name="B0TrackerASICWidth" value="B0TrackerSensorWidth"/>
+    <constant name="B0TrackerASICLength" value="B0TrackerSensorLength"/>
     <!-- TrackingUnit stack: sensors, each on its ASIC, alternate between the two PCB faces -->
     <constant name="B0TrackerASIC_zpos" value="B0TrackerPCBThickness/2 + B0TrackerASICThickness/2"/>
     <constant name="B0TrackerSensor_zpos" value="B0TrackerPCBThickness/2 + B0TrackerASICThickness + B0TrackerSensorThickness/2"/>
@@ -50,10 +51,13 @@
     </detector>
     <detector id="B0Tracker_Station_1_ID" name="B0Tracker" type="ip6_B0Tracker" readout="B0TrackerHits" vis="FFTrackerVis">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <!-- Placed at the IP and rotated by the crossing angle, so the stations sit on the ion
+           axis. ACTS assigns an endcap to the negative side if its z is below 0, so this z=0
+           placement makes B0 the positive endcap, paired with the companion above -->
       <position x="0*mm" y="0*mm" z="0*mm"/>
       <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
-      <!-- Empty ACTS layers `gap` outside the first and last faces, as for the ForwardTOF
-           (eic/epic#1089), so the ACTS volume covers every sensor. The faces are tilted by the
+      <!-- Empty ACTS layers `gap` outside the first and last faces, following the ForwardTOF
+           approach (eic/epic#1089), so the ACTS volume covers every sensor. The faces are tilted by the
            crossing angle, so their sensors reach |x| sin(crossing angle), a few mm, beyond the
            layer in z, and `gap` must cover that. rmin and rmax only size the empty layers and
            must stay within the radial range of the faces -->
