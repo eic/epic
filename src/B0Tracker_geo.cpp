@@ -1,26 +1,24 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 - 2026 Whitney Armstrong, Igor Korover, Tom Bleher
+// Copyright (C) 2026 Tom Bleher, Igor Korover
 
-/** \addtogroup Trackers Trackers
- * \brief Type: **B0Tracker**.
- * \author W. Armstrong, I. Korover, T. Bleher
+/*! B0 Tracker.
  *
- * \ingroup trackers
- *
+ * @author Tom Bleher, Igor Korover
  * Compact elements read under <detector>:
  *   - <module name="TrackingUnit">: <module_component> boxes (<box>, <position>,
  *     material, sensitive) forming one double-sided sensor stave
  *   - <support_stack>: <slice name material thickness> layers, listed upstream to
  *     downstream, extruded along each <support_plate name> outline of <point x y>
  *   - <envelope> z tolerances and <layer_material>: ACTS settings for every face
- *   - <station id>: <position>, <support ref>, and a back and a front
- *     <face side> listing its <module x y [rotZ]> placements
+ *   - <module_layout name>: a back and a front <face side>, each listing its
+ *     <module x y [rotZ]> placements
+ *   - <station id>: <position>, <support ref>, and <layout ref>
  *   - optional <acts_guard gap rmin rmax>: empty ACTS layers outside the first
  *     and last faces
  *
  * Hierarchy station -> face -> module -> sensor, with these invariants:
- *   - One compact <face> is one ACTS disc layer, the back or front sensor
- *     stack of a <station>
+ *   - Each <face> of a station's layout is one ACTS disc layer, the back or
+ *     front sensor stack of that <station>
  *   - Layer id = 2*(station-1) + (1=back | 2=front), so the cellID layer field
  *     is monotonic in z and separates front from back
  *   - Module ids restart at 1 per face, so cellIDs do not depend on the
@@ -89,10 +87,10 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
-  // Read the shared <module> definitions declared under <detector>
-  auto findModule = [&x_det](const std::string& name) {
+  // Find the <tag name="..."> element under <detector>
+  auto findNamed = [&x_det](const xml::Strng_t& tag, const std::string& name) {
     xml_h found;
-    for (xml_coll_t it(x_det, _U(module)); it; ++it) {
+    for (xml_coll_t it(x_det, tag); it; ++it) {
       xml_comp_t xm = it;
       if (xm.nameStr() == name) {
         found = xm;
@@ -102,7 +100,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     return found;
   };
 
-  xml_comp_t trackingUnit = findModule("TrackingUnit");
+  xml_comp_t trackingUnit = findNamed(_U(module), "TrackingUnit");
   if (!trackingUnit.ptr()) {
     throw std::runtime_error(det_name +
                              ": <module name=\"TrackingUnit\"> not found under <detector>");
@@ -246,7 +244,15 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
       }
     }
 
-    for (xml_coll_t fc(x_station, _Unicode(face)); fc; ++fc) {
+    const std::string layoutRef =
+        xml_comp_t(x_station.child(_Unicode(layout))).attr<std::string>(_Unicode(ref));
+    const xml_h x_layout = findNamed(_Unicode(module_layout), layoutRef);
+    if (!x_layout.ptr()) {
+      throw std::runtime_error(det_name + ": station " + std::to_string(station) +
+                               " has unknown <layout ref=\"" + layoutRef + "\">");
+    }
+
+    for (xml_coll_t fc(x_layout, _Unicode(face)); fc; ++fc) {
       xml_comp_t x_face      = fc;
       const std::string side = x_face.attr<std::string>(_Unicode(side));
       if (side != "front" && side != "back") {

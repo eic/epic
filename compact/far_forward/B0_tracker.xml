@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 - 2026 Whitney Armstrong, Alex Jentsch, Igor Korover, Tom Bleher -->
+<!-- Copyright (C) 2026 Tom Bleher, Igor Korover -->
 
 <lccdd>
   <define>
@@ -12,19 +12,13 @@
       - The stations sit on the ion axis, the axis of the hadron beam pipe, at
         B0TrackerStationN_zpos (global z, from a preliminary optimization).
       - B0TrackerStationXOffset shifts the plates and modules toward the
-        electron beam. This centers the beam pipe (31 mm outer radius) in its
-        narrowest gap, between the station 3 modules beside the plate cut-out,
-        with 1.3 mm clearance per side; centered on the cut-out, those modules
-        would cut 0.5 mm into the pipe.
+        electron beam.
     </comment>
     <constant name="B0TrackerStation1_zpos" value="5850.0*mm"/>
     <constant name="B0TrackerStation2_zpos" value="6272.2*mm"/>
     <constant name="B0TrackerStation3_zpos" value="6601.0*mm"/>
     <constant name="B0TrackerStation4_zpos" value="6880.0*mm"/>
     <constant name="B0TrackerStationXOffset" value="1.8*mm"/>
-    <constant name="B0Tracker_zpos" value="B0TrackerStation1_zpos"/>
-    <constant name="B0Tracker_xpos" value="B0Tracker_zpos*tan(ionCrossingAngle)"/>
-    <constant name="B0Tracker_rotation" value="ionCrossingAngle"/>
     <constant name="B0TrackerPCBThickness" value="1.0*mm"/>
     <constant name="B0TrackerCoolingSheetThickness" value="0.5*mm"/>
     <constant name="B0TrackerSensorThickness" value="0.05*mm"/>
@@ -56,8 +50,8 @@
     </detector>
     <detector id="B0Tracker_Station_1_ID" name="B0Tracker" type="ip6_B0Tracker" readout="B0TrackerHits" vis="FFTrackerVis">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <position x="B0Tracker_xpos" y="0" z="B0Tracker_zpos"/>
-      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
+      <position x="0*mm" y="0*mm" z="0*mm"/>
+      <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
       <!-- Empty ACTS layers `gap` outside the first and last faces, as for the ForwardTOF
            (eic/epic#1089), so the ACTS volume covers every sensor. The faces are tilted by the
            crossing angle, so their sensors reach |x| sin(crossing angle), a few mm, beyond the
@@ -277,14 +271,11 @@
         <point x="57.797*mm" y="55.361*mm"/>
         <point x="49.487*mm" y="41.386*mm"/>
       </support_plate>
-      <!-- One <station> per support plate. Each <face> is one ACTS disc layer, the back
-           (upstream) or front (downstream) modules of the plate, with cellID layer
-           2*(id-1) + (1=back|2=front). Module IDs follow the <module> order, so reordering them
-           changes the cellIDs. The TrackingUnit is symmetric under rotZ="180*deg", which only
-           changes the sensor numbering and the local u/v directions -->
-      <station id="1">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="(B0TrackerStation1_zpos - B0Tracker_zpos)/cos(ionCrossingAngle)"/>
-        <support ref="B0SupportPlate1"/>
+      <!-- Module layouts. Each <face> is one ACTS disc layer, the back (upstream) or front
+           (downstream) modules of a support plate. Module IDs follow the <module> order, so
+           reordering them changes the cellIDs. The TrackingUnit is symmetric under
+           rotZ="180*deg", which only changes the sensor numbering and the local u/v directions -->
+      <module_layout name="B0ModuleLayout_St12">
         <face side="back">
           <module x="-47.799*mm" y="23.000*mm"/>
           <module x="-77.799*mm" y="23.000*mm"/>
@@ -333,62 +324,8 @@
           <module x="27.201*mm" y="-58.099*mm" rotZ="180*deg"/>
           <module x="27.201*mm" y="-104.099*mm" rotZ="180*deg"/>
         </face>
-      </station>
-      <station id="2">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="(B0TrackerStation2_zpos - B0Tracker_zpos)/cos(ionCrossingAngle)"/>
-        <support ref="B0SupportPlate2"/>
-        <face side="back">
-          <module x="-47.799*mm" y="23.000*mm"/>
-          <module x="-77.799*mm" y="23.000*mm"/>
-          <module x="-47.799*mm" y="69.000*mm"/>
-          <module x="-77.799*mm" y="69.000*mm"/>
-          <module x="-17.799*mm" y="57.727*mm"/>
-          <module x="12.201*mm" y="58.099*mm"/>
-          <module x="42.201*mm" y="58.099*mm"/>
-          <module x="-17.799*mm" y="103.727*mm"/>
-          <module x="12.201*mm" y="104.099*mm"/>
-          <module x="42.201*mm" y="104.099*mm"/>
-          <module x="-47.799*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="-77.799*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="-47.799*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-77.799*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-17.799*mm" y="-57.727*mm" rotZ="180*deg"/>
-          <module x="12.201*mm" y="-58.099*mm" rotZ="180*deg"/>
-          <module x="42.201*mm" y="-58.099*mm" rotZ="180*deg"/>
-          <module x="-17.799*mm" y="-103.727*mm" rotZ="180*deg"/>
-          <module x="12.201*mm" y="-104.099*mm" rotZ="180*deg"/>
-          <module x="42.201*mm" y="-104.099*mm" rotZ="180*deg"/>
-          <module x="-107.799*mm" y="0.000*mm"/>
-        </face>
-        <face side="front">
-          <module x="-62.799*mm" y="23.000*mm"/>
-          <module x="-62.799*mm" y="69.000*mm"/>
-          <module x="-32.799*mm" y="51.774*mm"/>
-          <module x="-32.799*mm" y="97.774*mm"/>
-          <module x="-2.799*mm" y="58.099*mm"/>
-          <module x="-2.799*mm" y="104.099*mm"/>
-          <module x="27.201*mm" y="58.099*mm"/>
-          <module x="27.201*mm" y="104.099*mm"/>
-          <module x="57.201*mm" y="58.099*mm"/>
-          <module x="57.201*mm" y="-58.099*mm" rotZ="180*deg"/>
-          <module x="57.201*mm" y="104.099*mm"/>
-          <module x="57.201*mm" y="-104.099*mm" rotZ="180*deg"/>
-          <module x="-92.799*mm" y="46.000*mm"/>
-          <module x="-92.799*mm" y="0.000*mm"/>
-          <module x="-92.799*mm" y="-46.000*mm"/>
-          <module x="-62.799*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="-62.799*mm" y="-69.000*mm" rotZ="180*deg"/>
-          <module x="-32.799*mm" y="-51.774*mm" rotZ="180*deg"/>
-          <module x="-32.799*mm" y="-97.774*mm" rotZ="180*deg"/>
-          <module x="-2.799*mm" y="-58.099*mm" rotZ="180*deg"/>
-          <module x="-2.799*mm" y="-104.099*mm" rotZ="180*deg"/>
-          <module x="27.201*mm" y="-58.099*mm" rotZ="180*deg"/>
-          <module x="27.201*mm" y="-104.099*mm" rotZ="180*deg"/>
-        </face>
-      </station>
-      <station id="3">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="(B0TrackerStation3_zpos - B0Tracker_zpos)/cos(ionCrossingAngle)"/>
-        <support ref="B0SupportPlate3"/>
+      </module_layout>
+      <module_layout name="B0ModuleLayout_St3">
         <face side="back">
           <module x="-46.799*mm" y="23.000*mm"/>
           <module x="-76.799*mm" y="23.000*mm"/>
@@ -433,10 +370,8 @@
           <module x="28.201*mm" y="-58.100*mm" rotZ="180*deg"/>
           <module x="28.201*mm" y="-104.100*mm" rotZ="180*deg"/>
         </face>
-      </station>
-      <station id="4">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="(B0TrackerStation4_zpos - B0Tracker_zpos)/cos(ionCrossingAngle)"/>
-        <support ref="B0SupportPlate4"/>
+      </module_layout>
+      <module_layout name="B0ModuleLayout_St4">
         <face side="back">
           <module x="-54.086*mm" y="23.000*mm"/>
           <module x="-84.086*mm" y="23.000*mm"/>
@@ -485,14 +420,36 @@
           <module x="20.914*mm" y="-64.386*mm" rotZ="180*deg"/>
           <module x="20.914*mm" y="-110.386*mm" rotZ="180*deg"/>
         </face>
+      </module_layout>
+      <!-- One <station> per support plate, on the ion axis, with cellID layer
+           2*(id-1) + (1=back|2=front) for its faces -->
+      <station id="1">
+        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation1_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate1"/>
+        <layout ref="B0ModuleLayout_St12"/>
+      </station>
+      <station id="2">
+        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation2_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate2"/>
+        <layout ref="B0ModuleLayout_St12"/>
+      </station>
+      <station id="3">
+        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation3_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate3"/>
+        <layout ref="B0ModuleLayout_St3"/>
+      </station>
+      <station id="4">
+        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation4_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate4"/>
+        <layout ref="B0ModuleLayout_St4"/>
       </station>
     </detector>
   </detectors>
   <readouts>
     <readout name="B0TrackerHits">
       <comment>
-        Effective 70 um pixels, about 20 um resolution (70 um / sqrt(12)), standing in for the
-        charge sharing of the AC-LGAD sensors
+        Effective 70um cells, about 20um resolution (70um/sqrt(12)), standing in for charge
+        sharing in the 500um-pitch AC-LGAD pixels until a dedicated digitization exists
       </comment>
       <segmentation type="CartesianGridXY" grid_size_x="0.070*mm" grid_size_y="0.070*mm"/>
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
