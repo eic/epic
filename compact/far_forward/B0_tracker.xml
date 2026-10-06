@@ -11,15 +11,13 @@
       both faces of a support plate.
       - The stations sit on the ion axis, the axis of the hadron beam pipe, at
         B0TrackerStationN_zpos (global z, from a preliminary optimization).
-      - B0TrackerStationXOffset moves the plates and modules 1.8 mm toward the
-        electron beam (the CAD centres the plate cut-outs on the beam pipe), so the
-        station-3 back-face +x modules clear the 31 mm beam pipe by 1.3 mm.
+      - The plate cut-outs are centred on the ion axis, as the CAD centres them on the
+        beam pipe.
     </comment>
     <constant name="B0TrackerStation1_zpos" value="5850.0*mm"/>
     <constant name="B0TrackerStation2_zpos" value="6272.2*mm"/>
     <constant name="B0TrackerStation3_zpos" value="6601.0*mm"/>
     <constant name="B0TrackerStation4_zpos" value="6880.0*mm"/>
-    <constant name="B0TrackerStationXOffset" value="1.8*mm"/>
     <constant name="B0TrackerPCBThickness" value="1.0*mm"/>
     <constant name="B0TrackerCoolingSheetThickness" value="0.5*mm"/>
     <constant name="B0TrackerSensorThickness" value="0.05*mm"/>
@@ -339,8 +337,8 @@
           <module x="12.201*mm" y="58.099*mm"/>
           <module x="-17.799*mm" y="103.727*mm"/>
           <module x="12.201*mm" y="104.099*mm"/>
-          <module x="43.201*mm" y="23.000*mm"/>
-          <module x="43.201*mm" y="69.000*mm"/>
+          <module x="45.779*mm" y="23.000*mm"/>
+          <module x="45.779*mm" y="69.000*mm"/>
           <module x="-47.799*mm" y="-23.000*mm" rotZ="180*deg"/>
           <module x="-77.799*mm" y="-23.000*mm" rotZ="180*deg"/>
           <module x="-47.799*mm" y="-69.000*mm" rotZ="180*deg"/>
@@ -349,8 +347,8 @@
           <module x="12.201*mm" y="-58.099*mm" rotZ="180*deg"/>
           <module x="-17.799*mm" y="-103.727*mm" rotZ="180*deg"/>
           <module x="12.201*mm" y="-104.099*mm" rotZ="180*deg"/>
-          <module x="43.201*mm" y="-23.000*mm" rotZ="180*deg"/>
-          <module x="43.201*mm" y="-69.000*mm" rotZ="180*deg"/>
+          <module x="45.779*mm" y="-23.000*mm" rotZ="180*deg"/>
+          <module x="45.779*mm" y="-69.000*mm" rotZ="180*deg"/>
           <module x="-107.799*mm" y="0.000*mm"/>
         </face>
         <face side="front">
@@ -408,9 +406,9 @@
           <module x="-9.086*mm" y="110.386*mm"/>
           <module x="20.914*mm" y="64.386*mm"/>
           <module x="20.914*mm" y="110.386*mm"/>
-          <module x="50.914*mm" y="23.000*mm"/>
+          <module x="54.086*mm" y="23.000*mm"/>
           <module x="50.914*mm" y="69.000*mm"/>
-          <module x="50.914*mm" y="-23.000*mm" rotZ="180*deg"/>
+          <module x="54.086*mm" y="-23.000*mm" rotZ="180*deg"/>
           <module x="50.914*mm" y="-69.000*mm" rotZ="180*deg"/>
           <module x="-99.086*mm" y="46.000*mm"/>
           <module x="-99.086*mm" y="0.000*mm"/>
@@ -428,22 +426,22 @@
       <!-- One <station> per support plate, on the ion axis, with cellID layer
            2*(id-1) + (1=back|2=front) for its faces -->
       <station id="1">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation1_zpos/cos(ionCrossingAngle)"/>
+        <position x="0*mm" y="0*mm" z="B0TrackerStation1_zpos/cos(ionCrossingAngle)"/>
         <support ref="B0SupportPlate1"/>
         <layout ref="B0ModuleLayout_St12"/>
       </station>
       <station id="2">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation2_zpos/cos(ionCrossingAngle)"/>
+        <position x="0*mm" y="0*mm" z="B0TrackerStation2_zpos/cos(ionCrossingAngle)"/>
         <support ref="B0SupportPlate2"/>
         <layout ref="B0ModuleLayout_St12"/>
       </station>
       <station id="3">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation3_zpos/cos(ionCrossingAngle)"/>
+        <position x="0*mm" y="0*mm" z="B0TrackerStation3_zpos/cos(ionCrossingAngle)"/>
         <support ref="B0SupportPlate3"/>
         <layout ref="B0ModuleLayout_St3"/>
       </station>
       <station id="4">
-        <position x="B0TrackerStationXOffset" y="0*mm" z="B0TrackerStation4_zpos/cos(ionCrossingAngle)"/>
+        <position x="0*mm" y="0*mm" z="B0TrackerStation4_zpos/cos(ionCrossingAngle)"/>
         <support ref="B0SupportPlate4"/>
         <layout ref="B0ModuleLayout_St4"/>
       </station>
