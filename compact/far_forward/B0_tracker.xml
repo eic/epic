@@ -59,7 +59,9 @@
            crossing angle, so their sensors reach |x| sin(crossing angle), a few mm, beyond the
            layer in z, and `gap` must cover that. rmin and rmax only size the empty layers and
            must stay within the radial range of the faces -->
-      <acts_guard gap="6*mm" rmin="40*mm" rmax="130*mm"/>
+      <acts_guard gap="6*mm" rmin="40*mm" rmax="130*mm">
+        <layer_material surface="representing" binning="binPhi,binR" bins0="B0TrackerLayerMaterialPhiBins" bins1="B0TrackerLayerMaterialRBins"/>
+      </acts_guard>
       <!-- ACTS layer settings, shared by every face -->
       <envelope vis="FFTrackerLayerVis" zmin_tolerance="1*mm" zmax_tolerance="1*mm"/>
       <layer_material surface="inner" binning="binPhi,binR" bins0="B0TrackerLayerMaterialPhiBins" bins1="B0TrackerLayerMaterialRBins"/>

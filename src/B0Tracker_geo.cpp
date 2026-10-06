@@ -214,7 +214,10 @@ void addActsGuardLayers(Detector& description, DetElement sdet, Assembly assembl
     PlacedVolume guardPV = assembly.placeVolume(guardVol, guardPos);
     DetElement guardDE(sdet, guardName + "_P", guardID++);
     guardDE.setPlacement(guardPV);
-    DD4hepDetectorHelper::ensureExtension<VariantParameters>(guardDE);
+    auto& guardParams = DD4hepDetectorHelper::ensureExtension<VariantParameters>(guardDE);
+    for (xml_coll_t lmat(x_guard, _Unicode(layer_material)); lmat; ++lmat) {
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(lmat, guardParams, "layer_material");
+    }
   }
 }
 
