@@ -386,6 +386,123 @@ script inside `~/weic/eic-shell --version 26.09.0-stable`.
 `src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
 linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
 
+## Step 7a: corrugated-support source audit
+
+This is a read-only checkpoint. Files added/changed:
+`logs/audit_svt_corrugation_rows_step7a.py` and this log. No geometry, XML,
+catalogue, placement, or metadata value changed. The PDF corrugation and
+beampipe-pitch slides were rendered locally for visual inspection because the
+login node lacked `pdftotext`.
+
+The slide defines two physical profiles: 33/36 mm pitch, 6 mm surface-to-
+surface depth, 45-degree webs, 5 mm mid-surface bend radius, 0.15 mm skin,
+and zero-skin flat widths 6.36/7.86 mm. Their inward-module keep-clear
+envelopes are 20.56 x 1.00 and 21.94 x 1.00 mm respectively. The pitch slide
+calls uniform 33 mm reasonable for ED0/ED1/HD0/HD1 and says 36 mm is a
+reasonable starting point for the remaining disks; it does not itself define
+disk-specific transition coordinates.
+
+The current support is not either slide profile. XML supplies a uniform
+34.77 mm pitch, 35-degree web, 6 mm depth, and 0.15 mm skin. C++ constructs
+straight flat/web boxes with no 5 mm bends or explicit keep-clear profile.
+The shared row file repeats this same 34.77 mm profile on every disk and is
+therefore not a source for the delivered design.
+
+Command: `python3 logs/audit_svt_corrugation_rows_step7a.py`. Both placement
+packages encode the same support-row families and corrugation surfaces; only
+module counts/types differ. ED0, ED1, HD0, and HD1 are unambiguous uniform
+33 mm lattices: adjacent opposite-surface module rows are separated by
+16.5 mm, same-surface rows by 33 mm, and their corrugation references alternate
+exactly at disk center +/-3 mm.
+
+The delivered outer disks are not uniform 36 mm module-row layouts. They use
+central 35 mm-wide `A` baseplate rows and outer 32 mm-wide `B` rows. In
+`rsu_opt`, the row-index regions are:
+
+| Disk | Central A rows | Outer B rows |
+|---|---:|---:|
+| ED4 | 11-35 | 0-10, 36-47 |
+| ED3 | 15-33 | 0-14, 34-47 |
+| ED2 | 17-31 | 0-16, 32-47 |
+| HD2 | 17-31 | 0-16, 32-47 |
+| HD3b | 12-34 | 0-11, 35-46 |
+| HD4 | 8-38 | 0-7, 39-46 |
+
+This confirms central 36 mm and outer 33 mm *nominal support families* in the
+provided design, despite the slide's simpler recommendation language. The
+measured module y spacings are not exact support pitches in these disks:
+same-surface separations range roughly 33-37 mm around the A/B transitions.
+This agrees with the documented source-algorithm behavior that module y origins
+may move within the keep-clear envelope. Consequently module centers are valid
+for identifying row family, face, and ordering, but must not be copied as
+corrugation bend/flat centerlines.
+
+What is fully specified for Step 7b: the uniform 33 mm profile and its absolute
+row lattice on ED0/ED1/HD0/HD1. What remains absent from the delivered CSV and
+metadata: explicit outer-disk corrugation centerline coordinates through the
+33-to-36 mm transition, including which curved segment absorbs the phase
+change. Step 7b can therefore implement and validate the four uniform disks
+without inventing transition geometry. Exact outer-disk construction should
+wait for a provider row/transition definition or be labeled as a documented
+reconstruction rather than source-exact.
+
+**Additional source audit (`ES_material/20261001/`, user request):** The user
+confirmed that `A` rows map to the 36 mm support profile and `B` rows to the
+33 mm profile. `ES_material/20261001/README.docx` identifies three studies:
+baseline = 34.77 mm with centered modules, transition = 33/36 mm with modules
+allowed to shift according to projectivity, and projective = a hypothetical
+unbuildable maximum-acceptance layout. It explicitly instructs users to take
+`transition/rsu6` or `transition/rsu_opt`; the staged preferred package is the
+transition `rsu_opt` design.
+
+The transition delivery contains catalogues, module coordinates, metadata,
+tiling SVGs, and row/module-gap and acceptance reports. It contains no source
+code, configuration, support-row table, corrugation-center field, phase anchor,
+or 33/36 join rule. Inspection of the SVG XML confirms that its rectangles and
+row labels are generated from module/baseplate coordinates; it does not draw or
+encode the underlying corrugation centerline. `row_gap_report.txt` likewise
+reports module-row separations. Thus the 20261001 material confirms the pitch
+families and confirms that modules may shift away from channel centers, but it
+does not supply the two missing construction definitions: an absolute support
+phase per outer disk and the geometry of each unlike-pitch half-cell/join.
+
+## Step 7b: reconstruct the supplied 33/36 mm flat-center lattice
+
+The reviewed A/B row table plus the agreed centered join convention closes the
+two apparent gaps above. Type A denotes the 35 mm baseplate on the 36 mm
+same-surface corrugation pitch; type B denotes the 32 mm baseplate on the 33 mm
+pitch. Since consecutive row indices alternate corrugation surfaces, adjacent
+flat-center separations are 18.0 mm within A, 16.5 mm within B, and the centered
+A/B join is `(18.0 + 16.5)/2 = 17.25 mm`.
+
+`logs/generate_svt_corrugation_lattice_step7b.py` reads the staged
+`rsu_opt` placement package only to obtain each disk's ordered row indices,
+A/B family, and alternating source surface. It anchors an odd row count at
+`y=0`; for an even row count it centers the middle pair about `y=0`, then
+propagates the three allowed separations outward. It writes the derived,
+human-readable flat-center table
+`compact/tracking/SVT_endcap_corrugation_rows_33_36.csv`. The source placement
+CSVs remain unchanged.
+
+ED4 demonstrates that this is the intended absolute phase rather than an
+arbitrary choice. Its central A rows 23/24 land at `+9/-9 mm`; propagating the
+A lattice and centered joins puts B rows 10 and 36 at `+242.25/-224.25 mm`
+and the outer rows at `+407.25/-405.75 mm`, exactly matching the delivered
+unshifted B-module rows. The same check holds throughout the delivery except
+for a 0.0391 mm module displacement at the lower A/B transition of HD3b and
+HD4, consistent with the transition study's explicit allowance for projective
+module motion within a channel.
+
+Validation command:
+`python3 logs/validate_svt_corrugation_lattice_step7b.py`. It requires every
+adjacent separation to follow the A/B formula, every family to match the
+source row, centered phase, alternating source surfaces, and B-module residuals
+below 0.05 mm. This checkpoint defines row flat centers only; it deliberately
+does not yet connect the table to the C++ support builder, because that builder's
+older CSV describes whole symmetric cells rather than explicit alternating
+flat centers. The next small implementation step is to teach the builder this
+explicit-row representation and validate its generated support pieces.
+
 ## Step 6e: remove the temporary disk-z translation
 
 Commit `e9706b826` closed the reviewed upstream z-alignment checkpoint. Since
