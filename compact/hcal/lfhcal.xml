@@ -21,8 +21,8 @@
     </documentation>
 
     <comment> FIXME: Need actual values once they are decided upon </comment>
-    <constant name="LFHCALLayer_NSteelRepeatSFirst"    value="5"/> <!--      6 x 10 steel layers -->
-    <constant name="LFHCALLayer_NSteelRepeatS"    value="10"/> <!--      6 x 10 steel layers -->
+    <constant name="LFHCALLayer_NSteelRepeatSFirst"    value="5"/>
+    <constant name="LFHCALLayer_NSteelRepeatS"    value="10"/>
     <constant name="LFHCALLayer_NTungstenRepeat"  value="0"/>
     <constant name="Mod_MountingPlateThickness" value="25.4* mm"/>
     <constant name="Mod_SideWallThickness"    value="1.9* mm"/>
@@ -156,12 +156,12 @@
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="2">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="3">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
@@ -177,6 +177,11 @@
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="6">
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="7">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>

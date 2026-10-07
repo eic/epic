@@ -296,7 +296,7 @@
         <module_component
             name="ASICBackLeft"
             material="Kapton"
-            sensitive="true"
+            sensitive="false"
             width="BarrelTOF_Sensor_width"
             length="BarrelTOF_ASIC_length"
             thickness="BarrelTOF_ASIC_thickness"
@@ -314,7 +314,7 @@
         <module_component
             name="ASICBackRight"
             material="Kapton"
-            sensitive="true"
+            sensitive="false"
             width="BarrelTOF_Sensor_width"
             length="BarrelTOF_ASIC_length"
             thickness="BarrelTOF_ASIC_thickness"

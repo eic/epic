@@ -256,7 +256,7 @@
     <D value="200" unit="kg/m3"/>
     <fraction n="1" ref="C"/>
   </material>
-   <material name="Ultem"> 
+   <material name="Ultem">
     <D value="1.43" unit="g/cm3"/>
     <composite n="37" ref="C"/>
     <composite n="24" ref="H"/>
