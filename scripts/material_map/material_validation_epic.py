@@ -4,6 +4,7 @@
 
 import os
 import argparse
+from pathlib import Path
 
 import acts
 import acts.examples.dd4hep
@@ -12,6 +13,7 @@ from acts.examples import Sequencer
 import epic
 from material_validation import runMaterialValidation
 
+u = acts.UnitConstants
 
 if "__main__" == __name__:
 
@@ -24,16 +26,16 @@ if "__main__" == __name__:
         help="input xml file containing ePIC geometry",
     )
     p.add_argument(
-        "--matFile",
+        "--matFileBase",
         type=str,
-        default="material-map.json",
-        help="input material map file with extension, can be either xx.json or xx.cbor",
+        default="",
+        help="base name for the input material map file (without extension). Script will search for .json, .cbor, or .root formats (optional)",
     )
     p.add_argument(
         "--outputName",
         type=str,
-        default="propagation-material.root",
-        help="customized name of the output rootfile",
+        default="propagation-material",
+        help="customized name of the output rootfile (without .root extension)",
     )
     p.add_argument(
         "-n","--nevents",
@@ -50,14 +52,29 @@ if "__main__" == __name__:
 
     args = p.parse_args()
 
-    detector = epic.getDetector(args.xmlFile, args.matFile)
+    # Resolve material file if base name provided
+    matFile = ""
+    if len(args.matFileBase) > 0:
+        # Search for material map file with any valid extension
+        valid_extensions = [".json", ".cbor", ".root"]
+        for ext in valid_extensions:
+            candidate = Path(args.matFileBase + ext)
+            if candidate.exists():
+                matFile = str(candidate)
+                break
+
+    detector = epic.getDetector(args.xmlFile, matFile)
     trackingGeometry = detector.trackingGeometry()
     decorators = detector.contextDecorators()
 
-    field = acts.ConstantBField(acts.Vector3(0, 0, 0))
+    materialSurfaces = trackingGeometry.extractMaterialSurfaces()
 
-    runMaterialValidation(args.nevents, args.ntracks,
-        trackingGeometry, decorators, field,
-        outputDir=os.getcwd(), outputName=args.outputName,
-        s=Sequencer(events=args.nevents, numThreads=-1)
+    s = Sequencer(events=args.nevents, numThreads=-1)
+
+    runMaterialValidation(
+        surfaces=materialSurfaces,
+        s=s,
+        tracksPerEvent=args.ntracks,
+        outputFileBase=os.path.join(os.getcwd(), args.outputName),
+        trackingGeometry=trackingGeometry,
     ).run()
