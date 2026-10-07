@@ -147,6 +147,16 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   auto surf    = surfMgr.opticalSurface("DIRC_MirrorOpticalSurface");
   SkinSurface skin(desc, det, Form("dirc_mirror_optical_surface"), surf, mirror_vol);
   skin.isValid();
+  //---- Bar lateral surface: UNIFIED model with micro-facet roughness.
+  //     sigma_alpha = 0.02 rad (polished quartz, typical for hpDIRC simulations).
+  //     This causes photons near the TIR critical angle to scatter at micro-facets
+  //     and refract out of the bar, physically limiting unphysically long paths.
+  //     Note: DD4hep compact XML does not currently support the sigma_alpha
+  //     attribute, so it is set here via TGeoOpticalSurface::SetSigmaAlpha().
+  auto bar_surf = surfMgr.opticalSurface("DIRC_BarOpticalSurface");
+  bar_surf->SetSigmaAlpha(0.02);
+  SkinSurface bar_skin(desc, det, Form("dirc_bar_optical_surface"), bar_surf, bar_vol);
+  bar_skin.isValid();
 
   //---- Define Envelope_box_vol that holds 4*10bars+glue+mirror
   //---- Place Envelope_box_vol inside dirc_module
