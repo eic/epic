@@ -282,7 +282,7 @@
        <arg value="file:CAD/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml"/>
        <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L3cut/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml"/>
     </plugin>
-    
+
     <plugin name="epic_FileLoader">
        <arg value="cache:CAD/L4"/>
        <arg value="file:CAD/L4/Carbon_Composite_L4_ASCII.gdml"/>
@@ -399,8 +399,8 @@
        <arg value="url:https://raw.githubusercontent.com/eic/epic-data/refs/heads/SVTOB_UK/SVTOB_CAD/Feb-2026/L4cut/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
     </plugin>
 
-    
-    
+
+
   </plugins>
 
 </lccdd>

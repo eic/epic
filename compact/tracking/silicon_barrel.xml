@@ -5,14 +5,14 @@
   <define>
     <comment>
          This version is for the hybrid_OB version, in which the curved surface of the is modelled by a series of flat strips, with separate modules on
-         the top and bottom of the stave.  The passive materal is modelled as tessellated solids imported from .gdml files.         
+         the top and bottom of the stave.  The passive materal is modelled as tessellated solids imported from .gdml files.
     </comment>
 
     <constant name="SiBarrelSensorCu_thickness"         value="2.5*um" />
     <constant name="SiBarrelSensorActiveSi_thickness"   value="14*um" />
     <constant name="SiBarrelSensorInactiveSi_thickness" value="36*um" />
     <constant name="SiBarrelSensor_thickness" value="SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness + SiBarrelSensorInactiveSi_thickness" />
-    <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness" />        
+    <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness" />
     <constant name="SiBarrelSiliconGap_width" value="1*mm" />
     <constant name="SiBarrelStave1_width" value="3.848*cm" />
     <constant name="SiBarrelStave2_width" value="3.848*cm" />
@@ -33,8 +33,8 @@
 
    <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
    <constant name="SiBarrelSiliconCurveRadius" value="90.075*mm" />
-   <constant name="SiBarrelSiliconHeightFromStaveCentre1" value="4.35*mm"/>  
-   <constant name="SiBarrelSiliconHeightFromStaveCentre2" value="4.35*mm"/>  
+   <constant name="SiBarrelSiliconHeightFromStaveCentre1" value="4.35*mm"/>
+   <constant name="SiBarrelSiliconHeightFromStaveCentre2" value="4.35*mm"/>
    <constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconHeightFromStaveCentre1" />
    <constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconHeightFromStaveCentre2" />
    <constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconHeightFromStaveCentre1" />
@@ -45,7 +45,7 @@
    <constant name="SiBarrel_ShortThickness" value="0.5*SiBarrelSensorMod_thickness" />
    <constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelSiliconHeightFromStaveCentre1"  />
    <constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelSiliconHeightFromStaveCentre2"  />
- 
+
    <constant name="SiBarrel1_Module0_Position" value="-187.126*mm" />
    <constant name="SiBarrel1_Module1_Position" value="-62.7931*mm" />
    <constant name="SiBarrel1_Module2_Position" value="62.5436*mm" />
@@ -77,13 +77,13 @@
     <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
-    <constant name="SiBarrelLayer_thickness" value="1.6*cm" />     
+    <constant name="SiBarrelLayer_thickness" value="1.6*cm" />
     <constant name="SiBarrelLayer1_rmin" value="SiBarrelStave1_rc - SiBarrelLayer_thickness / 2" />
     <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
     <constant name="SiBarrelLayer2_rmin" value="SiBarrelStave2_rc -  SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
-    </define>    
+    </define>
       <detectors>
         <documentation level="5">
           ### Actual detectors
@@ -330,9 +330,9 @@
              vis="TrackerLayerVis">
         <position x="0" y="SiBarrel1_Passive3_Position" z="SiBarrelUpperCurveAxis2" />
    </module_component>
-   
+
         <module_component name="Carbon_Composite.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/Carbon_Composite_ASCII.gdml" />
-        
+
        <module_component name="FPC_Mockup_L3_L3_Full001_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
         <module_component name="FPC_Mockup_L3_L3_Full_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
         <module_component name="K9_Split_CrossBrace_L004_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L004_ASCII.gdml" />
@@ -345,7 +345,7 @@
         <module_component name="K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" />
         <module_component name="MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" />
         <module_component name="MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" />
-        
+
 
       </module>
       <comment> Layers composed of many arrayed modules </comment>
@@ -857,7 +857,7 @@
         <module_component name="K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" />
         <module_component name="MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
         <module_component name="MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
-        <module_component name="Carbon_Composite_L4_ASCII.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/Carbon_Composite_L4_ASCII.gdml" /> 
+        <module_component name="Carbon_Composite_L4_ASCII.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/Carbon_Composite_L4_ASCII.gdml" />
       </module>
       <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
