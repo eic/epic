@@ -14,5 +14,16 @@ sensitive silicon excludes bias, backbone, and powerswitch strips.
 
 The package validation and SHA-256 checksums are recorded in
 `logs/validate_svt_handoff_step2.txt` and `logs/stage_svt_handoff_step3.txt`.
-Geometry configuration files do not select these packages yet; the scenario
-switch is a later implementation step.
+The geometry selects `rsu_opt/` as the preferred package. To run the supplied
+all-six-RSU alternative, change the shared package name in the six detector
+`module_placements` entries from `rsu_opt` to `all_6rsu`; no catalogue,
+placement, metadata, or corrugation file needs modification.
+
+## Follow-up
+
+- Ask the placement provider to deliver an authoritative corrugation-row CSV
+  with each package, including empty support rows beyond populated module rows.
+- Promote the current audit generator into a maintained helper that accepts a
+  package directory, output path, family-to-pitch mapping, join convention,
+  and centering convention. Keep generated tables labeled as reconstructed
+  until they have been compared with a provider-supplied table.

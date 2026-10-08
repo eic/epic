@@ -15,9 +15,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLACEMENTS = ROOT / "compact/tracking/silicon_disks/rsu_opt"
-OUTPUT = ROOT / "compact/tracking/SVT_endcap_corrugation_rows_33_36.csv"
+OUTPUT = ROOT / "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
 DISKS = ("ED4", "ED3", "ED2", "ED1", "ED0", "HD0", "HD1", "HD2", "HD3b", "HD4")
 PITCH_MM = {"A": 36.0, "B": 33.0}
+FLAT_WIDTH_MM = {"A": 7.86, "B": 6.36}
 
 
 def load_rows(disk):
@@ -67,6 +68,7 @@ with OUTPUT.open("w", newline="") as stream:
         "surface_offset_mm",
         "family",
         "pitch_mm",
+        "flat_width_mm",
     )
     writer = csv.DictWriter(stream, fieldnames=fieldnames, lineterminator="\n")
     writer.writeheader()
@@ -86,6 +88,7 @@ with OUTPUT.open("w", newline="") as stream:
                     "surface_offset_mm": f"{surface_z - disk_center_z:.3f}",
                     "family": family,
                     "pitch_mm": f"{PITCH_MM[family]:.3f}",
+                    "flat_width_mm": f"{FLAT_WIDTH_MM[family]:.3f}",
                 }
             )
 

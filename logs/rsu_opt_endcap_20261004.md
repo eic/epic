@@ -386,123 +386,6 @@ script inside `~/weic/eic-shell --version 26.09.0-stable`.
 `src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
 linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
 
-## Step 7a: corrugated-support source audit
-
-This is a read-only checkpoint. Files added/changed:
-`logs/audit_svt_corrugation_rows_step7a.py` and this log. No geometry, XML,
-catalogue, placement, or metadata value changed. The PDF corrugation and
-beampipe-pitch slides were rendered locally for visual inspection because the
-login node lacked `pdftotext`.
-
-The slide defines two physical profiles: 33/36 mm pitch, 6 mm surface-to-
-surface depth, 45-degree webs, 5 mm mid-surface bend radius, 0.15 mm skin,
-and zero-skin flat widths 6.36/7.86 mm. Their inward-module keep-clear
-envelopes are 20.56 x 1.00 and 21.94 x 1.00 mm respectively. The pitch slide
-calls uniform 33 mm reasonable for ED0/ED1/HD0/HD1 and says 36 mm is a
-reasonable starting point for the remaining disks; it does not itself define
-disk-specific transition coordinates.
-
-The current support is not either slide profile. XML supplies a uniform
-34.77 mm pitch, 35-degree web, 6 mm depth, and 0.15 mm skin. C++ constructs
-straight flat/web boxes with no 5 mm bends or explicit keep-clear profile.
-The shared row file repeats this same 34.77 mm profile on every disk and is
-therefore not a source for the delivered design.
-
-Command: `python3 logs/audit_svt_corrugation_rows_step7a.py`. Both placement
-packages encode the same support-row families and corrugation surfaces; only
-module counts/types differ. ED0, ED1, HD0, and HD1 are unambiguous uniform
-33 mm lattices: adjacent opposite-surface module rows are separated by
-16.5 mm, same-surface rows by 33 mm, and their corrugation references alternate
-exactly at disk center +/-3 mm.
-
-The delivered outer disks are not uniform 36 mm module-row layouts. They use
-central 35 mm-wide `A` baseplate rows and outer 32 mm-wide `B` rows. In
-`rsu_opt`, the row-index regions are:
-
-| Disk | Central A rows | Outer B rows |
-|---|---:|---:|
-| ED4 | 11-35 | 0-10, 36-47 |
-| ED3 | 15-33 | 0-14, 34-47 |
-| ED2 | 17-31 | 0-16, 32-47 |
-| HD2 | 17-31 | 0-16, 32-47 |
-| HD3b | 12-34 | 0-11, 35-46 |
-| HD4 | 8-38 | 0-7, 39-46 |
-
-This confirms central 36 mm and outer 33 mm *nominal support families* in the
-provided design, despite the slide's simpler recommendation language. The
-measured module y spacings are not exact support pitches in these disks:
-same-surface separations range roughly 33-37 mm around the A/B transitions.
-This agrees with the documented source-algorithm behavior that module y origins
-may move within the keep-clear envelope. Consequently module centers are valid
-for identifying row family, face, and ordering, but must not be copied as
-corrugation bend/flat centerlines.
-
-What is fully specified for Step 7b: the uniform 33 mm profile and its absolute
-row lattice on ED0/ED1/HD0/HD1. What remains absent from the delivered CSV and
-metadata: explicit outer-disk corrugation centerline coordinates through the
-33-to-36 mm transition, including which curved segment absorbs the phase
-change. Step 7b can therefore implement and validate the four uniform disks
-without inventing transition geometry. Exact outer-disk construction should
-wait for a provider row/transition definition or be labeled as a documented
-reconstruction rather than source-exact.
-
-**Additional source audit (`ES_material/20261001/`, user request):** The user
-confirmed that `A` rows map to the 36 mm support profile and `B` rows to the
-33 mm profile. `ES_material/20261001/README.docx` identifies three studies:
-baseline = 34.77 mm with centered modules, transition = 33/36 mm with modules
-allowed to shift according to projectivity, and projective = a hypothetical
-unbuildable maximum-acceptance layout. It explicitly instructs users to take
-`transition/rsu6` or `transition/rsu_opt`; the staged preferred package is the
-transition `rsu_opt` design.
-
-The transition delivery contains catalogues, module coordinates, metadata,
-tiling SVGs, and row/module-gap and acceptance reports. It contains no source
-code, configuration, support-row table, corrugation-center field, phase anchor,
-or 33/36 join rule. Inspection of the SVG XML confirms that its rectangles and
-row labels are generated from module/baseplate coordinates; it does not draw or
-encode the underlying corrugation centerline. `row_gap_report.txt` likewise
-reports module-row separations. Thus the 20261001 material confirms the pitch
-families and confirms that modules may shift away from channel centers, but it
-does not supply the two missing construction definitions: an absolute support
-phase per outer disk and the geometry of each unlike-pitch half-cell/join.
-
-## Step 7b: reconstruct the supplied 33/36 mm flat-center lattice
-
-The reviewed A/B row table plus the agreed centered join convention closes the
-two apparent gaps above. Type A denotes the 35 mm baseplate on the 36 mm
-same-surface corrugation pitch; type B denotes the 32 mm baseplate on the 33 mm
-pitch. Since consecutive row indices alternate corrugation surfaces, adjacent
-flat-center separations are 18.0 mm within A, 16.5 mm within B, and the centered
-A/B join is `(18.0 + 16.5)/2 = 17.25 mm`.
-
-`logs/generate_svt_corrugation_lattice_step7b.py` reads the staged
-`rsu_opt` placement package only to obtain each disk's ordered row indices,
-A/B family, and alternating source surface. It anchors an odd row count at
-`y=0`; for an even row count it centers the middle pair about `y=0`, then
-propagates the three allowed separations outward. It writes the derived,
-human-readable flat-center table
-`compact/tracking/SVT_endcap_corrugation_rows_33_36.csv`. The source placement
-CSVs remain unchanged.
-
-ED4 demonstrates that this is the intended absolute phase rather than an
-arbitrary choice. Its central A rows 23/24 land at `+9/-9 mm`; propagating the
-A lattice and centered joins puts B rows 10 and 36 at `+242.25/-224.25 mm`
-and the outer rows at `+407.25/-405.75 mm`, exactly matching the delivered
-unshifted B-module rows. The same check holds throughout the delivery except
-for a 0.0391 mm module displacement at the lower A/B transition of HD3b and
-HD4, consistent with the transition study's explicit allowance for projective
-module motion within a channel.
-
-Validation command:
-`python3 logs/validate_svt_corrugation_lattice_step7b.py`. It requires every
-adjacent separation to follow the A/B formula, every family to match the
-source row, centered phase, alternating source surfaces, and B-module residuals
-below 0.05 mm. This checkpoint defines row flat centers only; it deliberately
-does not yet connect the table to the C++ support builder, because that builder's
-older CSV describes whole symmetric cells rather than explicit alternating
-flat centers. The next small implementation step is to teach the builder this
-explicit-row representation and validate its generated support pieces.
-
 ## Step 6e: remove the temporary disk-z translation
 
 Commit `e9706b826` closed the reviewed upstream z-alignment checkpoint. Since
@@ -608,3 +491,548 @@ inside `~/weic/eic-shell --version 26.09.0-stable`; output is written to
 **Compilation result (user run, 2026-10-05): PASS.** The saved output shows
 `src/SiEndcapModuleTracker_geo.cpp` compiled successfully, `lib/libepic.so`
 linked, `[100%] Built target epic`, and the script's final `RESULT: PASS`.
+
+## Step 7a: corrugated-support source audit
+
+This is a read-only checkpoint. Files added/changed:
+`logs/audit_svt_corrugation_rows_step7a.py` and this log. No geometry, XML,
+catalogue, placement, or metadata value changed. The PDF corrugation and
+beampipe-pitch slides were rendered locally for visual inspection because the
+login node lacked `pdftotext`.
+
+The slide defines two physical profiles: 33/36 mm pitch, 6 mm surface-to-
+surface depth, 45-degree webs, 5 mm mid-surface bend radius, 0.15 mm skin,
+and zero-skin flat widths 6.36/7.86 mm. Their inward-module keep-clear
+envelopes are 20.56 x 1.00 and 21.94 x 1.00 mm respectively. The pitch slide
+calls uniform 33 mm reasonable for ED0/ED1/HD0/HD1 and says 36 mm is a
+reasonable starting point for the remaining disks; it does not itself define
+disk-specific transition coordinates.
+
+The current support is not either slide profile. XML supplies a uniform
+34.77 mm pitch, 35-degree web, 6 mm depth, and 0.15 mm skin. C++ constructs
+straight flat/web boxes with no 5 mm bends or explicit keep-clear profile.
+The shared row file repeats this same 34.77 mm profile on every disk and is
+therefore not a source for the delivered design.
+
+Command: `python3 logs/audit_svt_corrugation_rows_step7a.py`. Both placement
+packages encode the same support-row families and corrugation surfaces; only
+module counts/types differ. ED0, ED1, HD0, and HD1 are unambiguous uniform
+33 mm lattices: adjacent opposite-surface module rows are separated by
+16.5 mm, same-surface rows by 33 mm, and their corrugation references alternate
+exactly at disk center +/-3 mm.
+
+The delivered outer disks are not uniform 36 mm module-row layouts. They use
+central 35 mm-wide `A` baseplate rows and outer 32 mm-wide `B` rows. In
+`rsu_opt`, the row-index regions are:
+
+| Disk | Central A rows | Outer B rows |
+|---|---:|---:|
+| ED4 | 11-35 | 0-10, 36-47 |
+| ED3 | 15-33 | 0-14, 34-47 |
+| ED2 | 17-31 | 0-16, 32-47 |
+| HD2 | 17-31 | 0-16, 32-47 |
+| HD3b | 12-34 | 0-11, 35-46 |
+| HD4 | 8-38 | 0-7, 39-46 |
+
+This confirms central 36 mm and outer 33 mm *nominal support families* in the
+provided design, despite the slide's simpler recommendation language. The
+measured module y spacings are not exact support pitches in these disks:
+same-surface separations range roughly 33-37 mm around the A/B transitions.
+This agrees with the documented source-algorithm behavior that module y origins
+may move within the keep-clear envelope. Consequently module centers are valid
+for identifying row family, face, and ordering, but must not be copied as
+corrugation bend/flat centerlines.
+
+What is fully specified for Step 7b: the uniform 33 mm profile and its absolute
+row lattice on ED0/ED1/HD0/HD1. What remains absent from the delivered CSV and
+metadata: explicit outer-disk corrugation centerline coordinates through the
+33-to-36 mm transition, including which curved segment absorbs the phase
+change. Step 7b can therefore implement and validate the four uniform disks
+without inventing transition geometry. Exact outer-disk construction should
+wait for a provider row/transition definition or be labeled as a documented
+reconstruction rather than source-exact.
+
+**Additional source audit (`ES_material/20261001/`, user request):** The user
+confirmed that `A` rows map to the 36 mm support profile and `B` rows to the
+33 mm profile. `ES_material/20261001/README.docx` identifies three studies:
+baseline = 34.77 mm with centered modules, transition = 33/36 mm with modules
+allowed to shift according to projectivity, and projective = a hypothetical
+unbuildable maximum-acceptance layout. It explicitly instructs users to take
+`transition/rsu6` or `transition/rsu_opt`; the staged preferred package is the
+transition `rsu_opt` design.
+
+The transition delivery contains catalogues, module coordinates, metadata,
+tiling SVGs, and row/module-gap and acceptance reports. It contains no source
+code, configuration, support-row table, corrugation-center field, phase anchor,
+or 33/36 join rule. Inspection of the SVG XML confirms that its rectangles and
+row labels are generated from module/baseplate coordinates; it does not draw or
+encode the underlying corrugation centerline. `row_gap_report.txt` likewise
+reports module-row separations. Thus the 20261001 material confirms the pitch
+families and confirms that modules may shift away from channel centers, but it
+does not supply the two missing construction definitions: an absolute support
+phase per outer disk and the geometry of each unlike-pitch half-cell/join.
+
+## Step 7b: reconstruct the supplied 33/36 mm flat-center lattice
+
+The reviewed A/B row table plus the agreed centered join convention closes the
+two apparent gaps above. Type A denotes the 35 mm baseplate on the 36 mm
+same-surface corrugation pitch; type B denotes the 32 mm baseplate on the 33 mm
+pitch. Since consecutive row indices alternate corrugation surfaces, adjacent
+flat-center separations are 18.0 mm within A, 16.5 mm within B, and the centered
+A/B join is `(18.0 + 16.5)/2 = 17.25 mm`.
+
+`logs/generate_svt_corrugation_lattice_step7b.py` reads the staged
+`rsu_opt` placement package only to obtain each disk's ordered row indices,
+A/B family, and alternating source surface. It anchors an odd row count at
+`y=0`; for an even row count it centers the middle pair about `y=0`, then
+propagates the three allowed separations outward. It writes the derived,
+human-readable flat-center table
+`compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv`. The source placement
+CSVs remain unchanged.
+
+ED4 demonstrates that this is the intended absolute phase rather than an
+arbitrary choice. Its central A rows 23/24 land at `+9/-9 mm`; propagating the
+A lattice and centered joins puts B rows 10 and 36 at `+242.25/-224.25 mm`
+and the outer rows at `+407.25/-405.75 mm`, exactly matching the delivered
+unshifted B-module rows. The same check holds throughout the delivery except
+for a 0.0391 mm module displacement at the lower A/B transition of HD3b and
+HD4, consistent with the transition study's explicit allowance for projective
+module motion within a channel.
+
+Validation command:
+`python3 logs/validate_svt_corrugation_lattice_step7b.py`. It requires every
+adjacent separation to follow the A/B formula, every family to match the
+source row, centered phase, alternating source surfaces, and B-module residuals
+below 0.05 mm. This checkpoint defines row flat centers only; it deliberately
+does not yet connect the table to the C++ support builder, because that builder's
+older CSV describes whole symmetric cells rather than explicit alternating
+flat centers. The next small implementation step is to teach the builder this
+explicit-row representation and validate its generated support pieces.
+
+## Step 7c: explicit-flat corrugation builder
+
+Commit `fd2eb3c5b` closes the reviewed Step 7a/7b audit and reconstructed
+lattice checkpoint. Step 7c adds an independent explicit-flat input path to
+`src/SiEndcapModuleTracker_geo.cpp`; the legacy symmetric whole-cell loader and
+builder remain available without behavior changes.
+
+The new loader recognizes the columns `disk`, `row_index`, `row_y_mm`,
+`surface_offset_mm`, and `pitch_mm`. It loads both positive- and negative-y
+flat centers for the requested disk and does not mirror them. The builder
+places each flat once and connects each adjacent pair with one straight carbon
+web. Module placement is not involved, so the supplied projective module
+offsets remain unchanged.
+
+The explicit offsets are physical corrugation surfaces at +/-3 mm. For the
+0.15 mm carbon skin, flat-volume centers are therefore at +/-2.925 mm. The
+sharp-junction simulation approximation omits the slide's 5 mm bend radius but
+preserves the 45-degree carbon mid-surface web: its z and y spans are both
+`6.0 - 0.15 = 5.85 mm`. Consequently the connected flat widths are 10.65 mm
+for the 33 mm profile and 12.15 mm for the 36 mm profile. At a centered
+17.25 mm A/B join, half of those two flat widths plus the 5.85 mm web span
+again equals the supplied flat-center separation exactly.
+
+`python3 logs/validate_svt_explicit_corrugation_builder_step7c.py` passes for
+all ten disks. It verifies one web per adjacent pair, positive flat widths,
+continuous joins, alternating +/-2.925 mm flat-volume centers, and 45-degree
+webs. The recorded compilation command is
+`bash logs/compile_svt_explicit_corrugation_step7c.sh`; it must be run inside
+the user's configured EIC shell. Production XML still points to the legacy
+34.77 mm whole-cell table, so this checkpoint does not yet activate or alter
+the detector geometry.
+
+The derived table was subsequently relocated to
+`compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv` so the
+corrugation input remains grouped with the two silicon-disk placement
+packages. The generator and both validators use the organized path.
+
+**Compilation result (user run, 2026-10-06): PASS.** The saved output in
+`logs/compile_svt_explicit_corrugation_step7c.txt` shows
+`src/SiEndcapModuleTracker_geo.cpp` compiled, `lib/libepic.so` linked,
+`[100%] Built target epic`, and `RESULT: PASS`.
+
+**Follow-up TODO:** request an authoritative corrugation-row table with future
+placement deliveries, including unpopulated support rows. Also promote the
+current reconstruction generator from `logs/` to a maintained `scripts/`
+helper with explicit package, output, pitch-map, join, and centering inputs.
+Until a provider table is available, keep the checked-in table identified as
+a documented reconstruction and compare the two tables when it arrives.
+
+## Step 7d: atomically activate `rsu_opt` modules and support
+
+The production fragment now selects
+`compact/tracking/silicon_disks/rsu_opt` with
+`format="tiling-directory"` in all six silicon-endcap detector blocks. All ten
+corrugated layer blocks select the organized explicit-flat table, and the
+corrugation angle changes from the legacy 35 degrees to the slide value of
+45 degrees. Module placements and their projective offsets remain byte-for-byte
+source values. Switching to the supplied all-six-RSU scenario requires changing
+the shared package name in the six detector declarations to `all_6rsu`; the
+metadata boundaries and reconstructed support are common to both deliveries.
+
+The activation review caught a coordinate issue that was invisible for the
+old z-symmetric support. CSV `surface_offset_mm` is detector-global, whereas
+ED detectors are built in a reflected local assembly. The explicit builder now
+negates the surface offset before placing ED carbon volumes, so the final
+global corrugation face remains the supplied +/-3 mm face. HD offsets pass
+through unchanged. This transformation affects only support coordinates;
+module transforms already handled reflection independently.
+
+Validation command:
+`python3 logs/validate_svt_scenario_activation_step7d.py`. Result: PASS. It
+requires exactly six `rsu_opt` package selectors, ten explicit support-table
+selectors, the 45-degree constant, all ten placement/metadata file pairs, the
+catalogue, and complete corrugation disk coverage. The Step 7b and Step 7c
+validators also remain PASS, including the reflected/global surface recovery.
+The Step 7b validator now checks both selectable packages permanently:
+`rsu_opt` matches all 426 populated rows, while `all_6rsu` matches all 424
+populated rows and deliberately leaves only ED4 support rows 0 and 47 empty.
+There are no A/B-family or +/-3 mm surface mismatches. Both packages preserve
+the same maximum 0.7891 mm projective module shift and 0.0391 mm B-row shift.
+
+The full geometry gate is recorded in
+`logs/check_svt_rsu_opt_geometry_step7d.sh`. Run it inside the configured EIC
+shell; it configures/builds/installs through `setup_local.sh`, exports
+`epic_craterlake_tracking_only_disk_modules.xml`, and runs both overlap checks.
+The production activation remains uncommitted until that output is reviewed.
+
+**First geometry run (2026-10-06): invalid support fallback.** The input CSV
+was installed, but the support loader searched its `disk` column with XML layer
+keys such as `OuterTrackerEndcapN_disk4`; the table contains source keys such
+as `ED4`. Every explicit lookup therefore returned empty, emitted missing
+legacy `h_mm`/`theta_deg` warnings, and constructed `frame_uniform...` fallback
+pieces. The resulting support-related overlap list does not test the intended
+33/36 mm geometry.
+
+The loader now converts all ten XML layer keys to the same ED/HD source keys
+used by the tiling-package loader before reading explicit support rows. The
+activation validator permanently checks all ten mappings. The geometry script
+now reports `RESULT: COMPLETE` rather than `PASS`, because successful overlap
+commands may still report physical intersections. A second full geometry run
+is required; its log should contain explicit `frame_flat...`/`frame_web...`
+pieces and no fallback warnings before its overlaps are interpreted.
+
+## Step 7e: classify the valid explicit-support overlap run
+
+The second Step 7d run loaded explicit flats/webs with zero fallback records.
+`python3 logs/analyze_svt_overlaps_step7e.py` parses only the concise
+`scripts/checkOverlaps.py` records, avoiding Geant4's repeated bidirectional
+warnings. Its reported overlap values are centimetres and are converted to mm.
+The 4,454 records divide into only three classes:
+
+- 1,675 module-mother/module-mother overlaps, all exactly 0.230 mm;
+- 1,059 module-mother/flat overlaps, 0.370--0.374886 mm;
+- 1,720 module-mother/web overlaps, 0.358033--0.358747 mm.
+
+Every concise record names a rectangular air module mother (`A...` or `B...`).
+None names an actual sensor, baseplate, adhesive, bridge-FPC, AncASIC, or other
+module child solid. A direct source-coordinate reconstruction reproduces the
+0.230 mm module-mother overlaps along z: that depth is exactly the modeled
+150 um baseplate plus 80 um external-epoxy reference inset. The approximately
+0.37 mm support intersections likewise reflect the empty rectangular mother
+envelope spanning across the physical corrugation contact. These enclosing air
+boxes overlap even though the real component shapes need not do so, making the
+current hierarchy invalid for navigation and hiding the component-level test.
+
+## Step 7f: remove artificial module air envelopes
+
+The tiling module prototype is now a reusable DD4hep `Assembly` containing the
+same component solids and sensitive surfaces, instead of a full package-sized
+air `Box`. This follows existing repository module-assembly patterns and does
+not alter any component size, material, local coordinate, global transform,
+source metadata, or sensitive-surface attachment. It removes only the
+artificial solid whose overlaps dominated Step 7e, allowing the next geometry
+check to test the actual components against each other and the support.
+
+Lightweight Step 7c/7d validators and `git diff --check` pass. The full rerun is
+recorded in `logs/check_svt_component_geometry_step7f.sh` and writes a separate
+`logs/check_svt_component_geometry_step7f.txt`, preserving the Step 7d evidence.
+
+**Step 7f geometry result (2026-10-06): component overlaps remain.** The air
+mother-box overlaps disappear, exposing 1,092 unique component-level pairs
+from 1,096 Geant4 reports. Command:
+`python3 logs/analyze_svt_component_overlaps_step7f.py`.
+
+The support intersections occur exclusively on inward-facing module types:
+
+- 388 web/AncASIC pairs, with measured penetration up to 0.149982 mm;
+- 271 flat/sensor-bias pairs;
+- 135 flat/powerswitch-strip pairs;
+- 88 flat/backbone-strip pairs;
+- 26 web/**active-silicon** pairs;
+- 10 web/bridge-FPC pairs, plus eight other web/inactive-silicon pairs.
+
+There are also 147 inward/outward external-epoxy intersections and ten
+inward/outward baseplate intersections between neighboring module assemblies.
+Nine independent beampipe/layer-envelope reports remain, with the largest
+reported penetration 4.90662 mm. No legacy corrugation fallback is present.
+
+The support result invalidates the connected sharp-corner approximation as
+currently constructed. The slide's nominal zero-skin straight-flat widths are
+6.36/7.86 mm, whereas forcing straight 45-degree webs to meet flats without
+the omitted 5 mm bends enlarged them to 10.65/12.15 mm. That additional carbon
+occupies part of the documented inward-module keep-clear region. Because active
+silicon and electronics are affected, do not suppress these reports or move
+source modules heuristically. The next support revision must use the slide's
+keep-clear geometry—either explicit rounded bends or a documented conservative
+gap/cutout approximation—then rerun component overlaps. The module-component
+and beampipe categories should be addressed separately after support clearance.
+
+## Step 7g: conservative approximation of the omitted 5 mm bends
+
+The explicit table now records the slide's nominal zero-skin straight-flat
+width per row: 6.36 mm for the 33 mm/B profile and 7.86 mm for the 36 mm/A
+profile. The loader requires and uses `flat_width_mm` directly rather than
+enlarging flats to force a sharp connection.
+
+For every B/B, A/A, and centered A/B interval, the space between facing flat
+edges is 10.14 mm. A 45-degree straight carbon mid-surface web spanning the
+5.85 mm separation between the 0.15 mm skin midplanes uses 5.85 mm in y. It is
+centered in the available interval, leaving 2.145 mm on each side for the
+omitted curved bend. The finite rotated skin projection reduces the empty
+solid-to-solid gap slightly but leaves it positive. This deliberately
+underestimates bend material rather than putting invented carbon inside the
+documented module-clearance region.
+
+The generator, checked-in CSV, loader, and analytical validator all carry the
+explicit flat widths. Step 7b verifies both placement packages unchanged;
+Step 7c verifies 6.36/7.86 mm flats, 45-degree webs, constant 10.14 mm
+flat-edge intervals, and 2.145 mm omitted-bend gaps for all disks and A/B
+joins. All lightweight checks pass. The full rerun is recorded separately in
+`logs/check_svt_conservative_bends_step7g.sh` and writes
+`logs/check_svt_conservative_bends_step7g.txt`.
+
+**Step 7g geometry result (2026-10-06): the conservative bend gaps do not
+resolve the component overlaps.** The rerun contains 1,100 unique pairs from
+1,103 Geant4 reports, compared with 1,092 unique pairs from 1,096 reports in
+Step 7f. The principal classes are 404 web/inward-AncASIC, 340
+flat/inward-sensor-bias, 99 flat/inward-powerswitch, 45
+flat/inward-backbone, and 18 web/inward-active-silicon pairs. There are also
+162 inward/outward external-epoxy and nine inward/outward baseplate pairs,
+plus ten beampipe/layer-envelope reports. No fallback support was built.
+
+The support intersections are distributed across all ten disks (54 pairs per
+HD0 side and approximately 99--103 per other disk side), so they are not an
+isolated A/B-transition defect. They are consistent with the supplied inward
+module convention: for example, HD0 row 1 has a corrugation reference at
+247.000 mm and an inward sensor reference at 247.030 mm. The provider states
+that inward modules intrude into the corrugation channel by the sensor and
+adhesive delta. The current support, however, models every flat and web as an
+uninterrupted box across the complete disk x-span. It therefore leaves solid
+carbon in the intended intrusion/clearance region. Changing flat width in y
+cannot address that missing x-dependent clearance.
+
+Do not move the source modules, change their z references, or suppress these
+reports. The next support step must represent module openings/clearances (or
+another explicitly documented material-removal approximation) in the flats
+and webs. The module-to-module and beampipe/layer-envelope reports remain
+independent follow-up categories.
+
+## Step 7h: placement-aware inward keep-clear gaps
+
+The 6 mm corrugation depth is outer-face to outer-face and already includes the
+0.15 mm corrugated carbon. The correct flat intervals are therefore
+`-3.000..-2.850 mm` and `+2.850..+3.000 mm`, with midplanes at +/-2.925 mm and
+a 5.85 mm midplane separation. The exploratory opposite-side interpretation
+was not retained.
+
+The slide defines virtual keep-clear regions only for inward-facing modules:
+20.56 x 1.00 mm for B/33 mm and 21.94 x 1.00 mm for A/36 mm. In the slide,
+detector-local x is out of the page and the quoted width is along local y. The
+rectangle extends from the applicable outer corrugation face by 1 mm toward
+the channel. It is a required empty region, not a physical air volume; inward
+module material is intended to occupy it.
+
+The straight-flat/web simulation approximation now uses each inward module's
+actual transformed package x interval and source y/surface coordinates. If a
+finite-thickness flat or oblique support piece enters that module's virtual y-z
+rectangle, the piece's disk-clipped x intervals are split at both module edges
+and the intersecting x section is omitted. Outward modules create no gaps.
+This conservatively shortens both flat and oblique carbon over the module
+footprint instead of attempting the slide's 5 mm-radius contour. The A/B widths
+and 1 mm depth are named XML constants consumed directly by the C++ builder.
+No source module coordinate, corrugation row, or physical module component is
+changed.
+
+The recorded full rerun remains `logs/check_svt_keep_clear_step7h.sh`. Its
+component overlap result must confirm that support/inward-module intersections
+are removed; module/module and beampipe/layer-envelope categories are separate.
+
+**Step 7h geometry result (2026-10-07): support clearance passes.** The build,
+export, and both overlap commands completed. Parsing the Geant4 report gives
+197 reports and 190 unique pairs. There are **zero** flat/module, web/module,
+support/support, or fallback-support pairs. This removes every support-related
+category seen in Steps 7f/7g, including active silicon, inactive sensor strips,
+AncASICs, and bridge FPCs.
+
+The remaining unique pairs are 176 inward/outward external-epoxy pairs, four
+inward/outward baseplate pairs, and ten beampipe/layer-envelope reports (maximum
+reported penetration 4.25735 mm). The module-pair reports are independent of
+the support clipping; Geant4's sampled report count can vary between runs, so
+the pair geometry—not the small count change from Step 7g—is the next item to
+audit. The beampipe reports remain a separate layer-solid/opening issue.
+
+## Step 7i: source-coordinate module-pair audit
+
+`python3 logs/audit_svt_module_pair_overlaps_step7i.py` reconstructs the exact
+axis-aligned package, baseplate, and two 2.5 mm edge-glue footprints from the
+rsu_opt catalogue and source placements. It uses the already validated
+LEC-boundary transform; no geometry or source data is changed.
+
+The result shows that the Geant4 report substantially undersamples thin partial
+intersections. There are 1,676 projected full-package baseplate pairs and 3,352
+edge-epoxy pairs (low and high edge for each baseplate pair). Every pair is in
+the same source row, has one inward- and one outward-facing module, and shares
+the same corrugation reference surface. The pattern occurs on all ten disks.
+Projected x-overlap lengths range from 24.0000 to 124.8780 mm; baseplates share
+their full 32 or 35 mm y width, while each epoxy pair shares the full 2.5 mm
+edge-strip width. Representative ED0 row 1 B511/B501 boxes overlap by
+71.0688 mm in x on both glue edges.
+
+Therefore the 176 epoxy and four baseplate pairs seen by Geant4 are not isolated
+defects and must not be repaired by merging only the sampled epoxy volumes. At
+least one current mechanical assumption is incomplete: the carbon baseplate
+may not span the full catalogue package length, inward/outward modules may use
+a different mechanical stack relationship, or the delivered placement optimizes
+sensor coverage without enforcing these package solids. This needs a provider
+clarification before changing module material dimensions or coordinates.
+
+The provider SVGs narrow this ambiguity. Their unfilled `baseplate footprint`
+rectangles are exactly the catalogue package dimensions: for example, ED0 B5
+rectangles are 138.330 x 32.000 mm and B6 rectangles are 159.996 x 32.000 mm.
+Thus the current full-package x extent is not an implementation invention. The
+combined SVG explicitly draws overlapping inward/outward baseplate rectangles;
+ED0 row 1 B511 and B501 reproduce the same 71.0688 mm overlap found by the
+audit. Their active-area rectangles overlap in projection as well.
+
+Each disk is also delivered as four filtered views:
+`front/back x inward/outward`. The legend defines FRONT as active area bridging
+ridges and BACK as active area bridging furrows; this classification is distinct
+from inward/outward facing. The filtered SVGs show that projected overlaps are
+intended to be evaluated in separate facing categories. However, SVG contains
+only x-y rectangles and no component thickness or z interval, so it does not
+specify how the mechanically overlapping baseplates/adhesive are separated in
+z. The gap reports likewise group row spacing by FRONT/BACK and do not provide
+an inward/outward baseplate z-clearance rule. The provider must still clarify
+the 3D stack relationship; changing the x footprint is no longer a supported
+resolution.
+
+## Step 7j: provisional outward-module z separation
+
+Pending the provider's 3D stack clarification, outward-facing modules receive
+a named, editable `SiEndcapTilingOutwardModule_z_offset = 0.230 mm`. The value
+is exactly the modeled 0.080 mm external epoxy plus 0.150 mm carbon baseplate.
+The complete outward module is translated farther away from its corrugation
+surface along its source sensor-facing normal; inward modules and all source
+CSV values remain unchanged.
+
+In a surface-relative coordinate pointing into the channel, the inward epoxy
+and baseplate remain at `-0.080..0.000` and `-0.230..-0.080 mm`. The translated
+outward epoxy and baseplate occupy `-0.310..-0.230` and
+`-0.460..-0.310 mm`. Thus the two backing stacks have no volume overlap and
+touch only at `-0.230 mm`. This is explicitly provisional: it moves every
+outward sensor reference 0.230 mm away from its supplied `z_sensor_mm` and
+leaves the translated module away from the nominal corrugation contact.
+
+Module parameters retain `source_corrugation_surface_z_mm` and
+`source_sensor_reference_z_mm`, and additionally record
+`applied_outward_z_offset_mm` and `placed_sensor_reference_z_mm` so the
+temporary assumption is visible in exported geometry. Command:
+`python3 logs/validate_svt_provisional_z_offset_step7j.py`; result PASS. The
+recorded compile/export/overlap rerun is
+`logs/check_svt_provisional_z_offset_step7j.sh`.
+
+**Step 7j geometry result (2026-10-08): provisional module separation
+passes.** The build, export, and both overlap commands completed. The Geant4
+log contains 12 reports representing ten unique pairs, all classified as
+beampipe/layer-envelope intersections. There are zero module/module,
+module/support, support/support, epoxy, baseplate, sensor, electronics, or
+fallback-support pairs. Thus the 0.230 mm provisional outward translation
+removes the backing-stack intersections exactly as intended, while preserving
+the Step 7h support clearance.
+
+This result validates the temporary simulation geometry, not the underlying
+mechanical interpretation. Keep the offset visibly provisional until the
+provider confirms the intended facing-dependent z relationship. The remaining
+ten beampipe/layer-envelope reports are independent of module placement and
+should be handled as a separate disk-solid/opening task.
+
+## Step 7k: beampipe/layer-envelope overlap audit
+
+The twelve Step 7j Geant4 reports collapse to ten unique pairs, all between a
+10 mm-thick disk-layer air mother and a beampipe volume. They affect HD2, HD3b,
+HD4, ED3, and ED4. No physical module or corrugation component appears in
+these reports, so this is a boolean layer-envelope problem rather than a new
+module-placement or support-clearance problem.
+
+The audit found that `DiskBoundary::lepton_opening` and
+`DiskBoundary::hadron_opening` currently serve three different purposes:
+
+1. rejecting delivered module rectangles that cross a source opening;
+2. clipping corrugated carbon-support x intervals; and
+3. subtracting holes from the full 10 mm-thick layer mother.
+
+When tiling metadata is loaded, its opening primitives overwrite the XML
+beampipe openings for all three purposes. That conflates a two-dimensional
+source-layout exclusion with the physical clearance required by the installed
+EPIC beampipe across the complete layer thickness.
+
+There are two independent numerical mismatches:
+
+| Disk | delivered metadata circle `(cx, r)` [mm] | physical XML opening `(cx, r)` [mm] | observation |
+|---|---:|---:|---|
+| HD2 | `(+3.136, 37.136)` | `(-1.440, 40.488)` | metadata is displaced toward positive x; overlap samples are on negative x |
+| HD3b | `(+8.736, 42.736)` | `(-7.066, 46.111)` | opposite center direction; largest sampled penetration is 4.9619 mm |
+| HD4 | `(+14.336, 48.336)` | `(-12.692, 51.734)` | opposite center direction |
+| ED3 | centered circle `(0, 34.900)` | centered circle `(0, 38.500)` | sampled point has radius 35.207 mm, outside metadata but inside XML opening |
+| ED4 | centered circle `(0, 34.900)` | centered circle `(0, 38.500)` | sampled points reach radius about 38.10 mm, outside metadata but inside XML opening |
+
+The HD metadata signs are source-exact and also appear in the provider SVGs;
+they must not be silently edited. They nevertheless do not follow the current
+EPIC downstream beampipe direction. On the electron side, the metadata opening
+is simply smaller than the pipe-aware layer opening. The existing XML comments
+state that its openings are evaluated at the disk face nearest the IP for the
+10 mm layer thickness and include `Beampipe_bakeout_buffer = 5 mm`. That is the
+appropriate physical-envelope convention.
+
+Recommended next change: retain separate **source placement openings** from
+metadata for `module_inside_disk`, and retain separate **physical layer
+openings** from XML for `build_disk_solid` and corrugation clipping. This keeps
+the supplied module selection and CSVs exact while preventing the air mother
+or carbon support from occupying the beampipe clearance. Do not add 5 mm to
+the metadata or change its center signs. No source data or geometry was changed
+in this audit step.
+
+### Step 7k upstream-main correction (2026-10-08)
+
+After refreshing `origin/main` to `25fb5c1d1` (2026-10-05), comparison showed
+that the two-circle XML openings above are branch-local and must not be treated
+as the latest upstream dimensions. Current upstream main still uses the legacy
+trap-endcap geometry with a single centered scalar `rmin`; it has no
+`beampipe_opening` elements or per-pipe opening centers. Its own XML describes
+these radii as enlarged approximations for the beampipe offset that need to be
+fixed later.
+
+The evaluated upstream-main design `rmin` values for the affected disks are:
+
+| Disk | upstream-main `rmin` [mm] | expression before evaluation |
+|---|---:|---|
+| HD2 | 38.460 | `32.86 + 5.0 + 0.6` |
+| HD3 | 50.920 | `39.29 + 5.0 + 6.63` |
+| HD4 | 63.420 | `45.72 + 5.0 + 12.70` |
+| ED3 | 40.061 | `34.244 + 5.0 + 0.817` |
+| ED4 | 46.353 | `38.043 + 5.0 + 3.310` |
+
+The legacy layer mother subtracts a further 1.001 mm through its layer and ACTS
+envelope allowances, so its actual centered solid boundary is approximately
+37.459, 49.919, 62.419, 39.060, and 45.352 mm respectively. Those dimensions
+are useful conservative cross-checks, but they cannot specify the exact
+two-circle opening required by the new tiled geometry.
+
+Therefore the architectural recommendation to separate source-placement and
+physical-envelope openings remains valid, but the branch-local two-circle XML
+numbers are not an authoritative physical input. Before implementing that
+separation, derive the physical opening from the current beampipe geometry or
+adopt and clearly label an upstream-main-style conservative centered opening.
+The fetched remote reference changed only `.git` metadata; no worktree geometry
+or source data was changed.

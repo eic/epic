@@ -67,6 +67,10 @@
     <constant name="SiEndcapTiling6RSU_count"                 value="6"/>
     <constant name="SiEndcapTilingBaseplateA_width"          value="35*mm"/>
     <constant name="SiEndcapTilingBaseplateB_width"          value="32*mm"/>
+    <constant name="SiEndcapTilingKeepClearA_width"          value="21.94*mm"/>
+    <constant name="SiEndcapTilingKeepClearB_width"          value="20.56*mm"/>
+    <constant name="SiEndcapTilingKeepClear_depth"           value="1.00*mm"/>
+    <constant name="SiEndcapTilingOutwardModule_z_offset"    value="0.230*mm"/>
     <constant name="SiEndcapTilingBLEC_length"               value="20*mm"/>
     <constant name="SiEndcapTilingBREC_length"               value="10*mm"/>
     <constant name="SiEndcapTiling5RSU_package_length"       value="SiEndcapTiling5RSU_count*SiEndcapRSU_length + SiEndcapTilingBLEC_length + SiEndcapTilingBREC_length"/>
@@ -142,7 +146,7 @@
 
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.15*mm"/>
     <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
-    <constant name="SiEndcapCorrugation_theta"              value="35*deg"/>
+    <constant name="SiEndcapCorrugation_theta"              value="45*deg"/>
     <constant name="SiEndcapCorrugation_d"                  value="34.77*mm/2"/>
 
     <comment> Global Si endcap variables </comment>
@@ -188,7 +192,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <module_placements file="compact/tracking/silicon_disks/rsu_opt" format="tiling-directory"/>
       <comment>
         Module geometry comes from the plugin. This detector uses the
         corrugation-aware placement CSV so modules sit on both sides of the frame.
@@ -210,7 +214,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -224,7 +228,7 @@
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <comment><module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/></comment>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <module_placements file="compact/tracking/silicon_disks/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="InnerTrackerEndcap_active_rmin"
@@ -242,7 +246,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -318,7 +322,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <module_placements file="compact/tracking/silicon_disks/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="MiddleTrackerEndcapP_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -336,7 +340,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -349,7 +353,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <module_placements file="compact/tracking/silicon_disks/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="MiddleTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -367,7 +371,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -380,7 +384,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <module_placements file="compact/tracking/silicon_disks/rsu_opt" format="tiling-directory"/>
       <layer id="2" name="OuterTrackerEndcapP_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"
@@ -398,7 +402,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -419,7 +423,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -440,7 +444,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
       </layer>
@@ -453,7 +457,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/SVT_endcap_modules_corrugation_6rsu_corr_generated_reference.csv" format="csv"/>
+      <module_placements file="compact/tracking/silicon_disks/rsu_opt" format="tiling-directory"/>
       <layer id="2" name="OuterTrackerEndcapN_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"
@@ -471,7 +475,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -492,7 +496,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -513,7 +517,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          rowwise_placement="compact/tracking/SVT_endcap_corrugation_rows_uniform.csv"/>
+          rowwise_placement="compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
       </layer>

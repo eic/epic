@@ -91,6 +91,8 @@ struct ModuleRow {
   double y_origin{0.0};
   double z_corrugation_surface{0.0};
   double z_sensor_reference{0.0};
+  double applied_z_offset{0.0};
+  double placed_sensor_reference{0.0};
   bool tiling_coordinates{false};
   double rotation_z{0.0};
   double rotation_y{0.0};
@@ -160,10 +162,34 @@ struct CorrugationRow {
   int csv_line{0};
 };
 
+// One explicitly positioned corrugation flat. Unlike CorrugationRow, this
+// representation contains both sides of y=0 and is never mirrored. Adjacent
+// entries are joined once by the straight-web simulation approximation.
+struct CorrugationFlat {
+  int row_index{0};
+  double row_y{0.0};
+  double surface_offset{0.0};
+  double pitch{0.0};
+  double flat_width{0.0};
+  int csv_line{0};
+};
+
 // Axis-aligned y footprint used to require full containment in the disk x-y cross-section.
 struct FrameFootprint {
   double y_min{0.0};
   double y_max{0.0};
+};
+
+// Virtual (unplaced) exclusion region for one inward-facing module.  Carbon
+// pieces whose y-z footprint enters this envelope are shortened in x over the
+// module package footprint.
+struct CorrugationKeepClear {
+  double x_min{0.0};
+  double x_max{0.0};
+  double y_min{0.0};
+  double y_max{0.0};
+  double z_min{0.0};
+  double z_max{0.0};
 };
 
 // Trim whitespace around CSV fields and free-form text values.
@@ -761,6 +787,94 @@ vector<CorrugationRow> load_corrugation_rows(const string& file_name, const stri
   return rows;
 }
 
+// Load the explicit-flat schema used by the supplied 33/36 mm transition
+// design. Returning an empty vector lets the caller retain the legacy
+// symmetric whole-cell CSV path.
+vector<CorrugationFlat> load_corrugation_flats(const string& file_name, const string& disk_key) {
+  std::ifstream input(file_name);
+  if (!input) {
+    return {};
+  }
+
+  map<string, size_t> header_index;
+  vector<CorrugationFlat> flats;
+  string line;
+  int line_number = 0;
+  while (std::getline(input, line)) {
+    ++line_number;
+    string trimmed = trim(line);
+    if (trimmed.empty() || trimmed[0] == '#') {
+      continue;
+    }
+
+    vector<string> fields = split_csv_line(line);
+    if (header_index.empty()) {
+      for (size_t idx = 0; idx < fields.size(); ++idx) {
+        header_index[fields[idx]] = idx;
+      }
+      const vector<string> required_headers{
+          "disk", "row_index", "row_y_mm", "surface_offset_mm", "pitch_mm", "flat_width_mm"};
+      if (std::any_of(required_headers.begin(), required_headers.end(),
+                      [&](const string& header) { return !header_index.count(header); })) {
+        return {};
+      }
+      continue;
+    }
+
+    auto get_field = [&](const string& key) -> string {
+      auto iter = header_index.find(key);
+      if (iter == header_index.end() || iter->second >= fields.size()) {
+        return "";
+      }
+      return fields[iter->second];
+    };
+
+    if (get_field("disk") != disk_key) {
+      continue;
+    }
+    try {
+      CorrugationFlat flat;
+      flat.csv_line       = line_number;
+      flat.row_index      = std::stoi(get_field("row_index"));
+      flat.row_y          = std::stod(get_field("row_y_mm")) * mm;
+      flat.surface_offset = std::stod(get_field("surface_offset_mm")) * mm;
+      flat.pitch          = std::stod(get_field("pitch_mm")) * mm;
+      flat.flat_width     = std::stod(get_field("flat_width_mm")) * mm;
+      flats.push_back(flat);
+    } catch (const std::exception&) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("skipping malformed explicit corrugation flat at line {} in '{}'",
+                           line_number, file_name));
+    }
+  }
+
+  std::sort(flats.begin(), flats.end(), [](const CorrugationFlat& lhs,
+                                           const CorrugationFlat& rhs) {
+    return lhs.row_y < rhs.row_y;
+  });
+  return flats;
+}
+
+// Convert the XML layer key used by DiskBoundary back to the short source key
+// used by the delivered placement/metadata files and the reconstructed support
+// table. Keep this mapping identical to load_tiling_module_directory().
+string source_corrugation_disk_key(const string& layer_key) {
+  static const map<string, string> source_key_by_layer{
+      {"OuterTrackerEndcapN_disk4", "ED4"},
+      {"OuterTrackerEndcapN_disk3", "ED3"},
+      {"OuterTrackerEndcapN_disk2", "ED2"},
+      {"MiddleTrackerEndcapN_disk1", "ED1"},
+      {"InnerTrackerEndcapN_disk1", "ED0"},
+      {"InnerTrackerEndcapP_disk1", "HD0"},
+      {"MiddleTrackerEndcapP_disk1", "HD1"},
+      {"OuterTrackerEndcapP_disk2", "HD2"},
+      {"OuterTrackerEndcapP_disk3", "HD3b"},
+      {"OuterTrackerEndcapP_disk4", "HD4"},
+  };
+  auto source_key = source_key_by_layer.find(layer_key);
+  return source_key == source_key_by_layer.end() ? layer_key : source_key->second;
+}
+
 // Place the corrugated carbon frame as an insensitive layer component.
 // Assumptions:
 // - h is the surface-to-surface peak/valley envelope.
@@ -769,7 +883,8 @@ vector<CorrugationRow> load_corrugation_rows(const string& file_name, const stri
 // - y0=0 keeps the central lower flat centered at y=0; it is split there so no
 //   single frame volume crosses the xz plane.
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
-                           const CorrugatedFrameConfig& config) {
+                           const CorrugatedFrameConfig& config, bool reflect,
+                           const vector<CorrugationKeepClear>& keep_clears) {
   if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
       config.theta <= 0.0) {
     printout(
@@ -813,7 +928,34 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
       }
       const double segment_y_center = (segment_y_min + segment_y_max) / 2.0;
       const FrameFootprint footprint{segment_y_min, segment_y_max};
-      const auto intervals = contained_x_intervals(disk, footprint);
+      vector<pair<double, double>> intervals = contained_x_intervals(disk, footprint);
+      const double z_projection = std::abs(std::sin(angle)) * local_y_half +
+                                  std::abs(std::cos(angle)) * local_z_half;
+      const double piece_z_min = z_center - z_projection;
+      const double piece_z_max = z_center + z_projection;
+      for (const auto& keep_clear : keep_clears) {
+        const bool overlaps_y = segment_y_min < keep_clear.y_max &&
+                                segment_y_max > keep_clear.y_min;
+        const bool overlaps_z = piece_z_min < keep_clear.z_max &&
+                                piece_z_max > keep_clear.z_min;
+        if (!overlaps_y || !overlaps_z) {
+          continue;
+        }
+        vector<pair<double, double>> shortened;
+        for (const auto& [x_min, x_max] : intervals) {
+          if (keep_clear.x_max <= x_min || keep_clear.x_min >= x_max) {
+            shortened.emplace_back(x_min, x_max);
+            continue;
+          }
+          if (keep_clear.x_min > x_min) {
+            shortened.emplace_back(x_min, std::min(keep_clear.x_min, x_max));
+          }
+          if (keep_clear.x_max < x_max) {
+            shortened.emplace_back(std::max(keep_clear.x_max, x_min), x_max);
+          }
+        }
+        intervals = std::move(shortened);
+      }
       for (const auto& [x_min, x_max] : intervals) {
         const double x_half = (x_max - x_min) / 2.0;
         if (x_half <= 0.0) {
@@ -880,8 +1022,76 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   };
 
   if (!config.rowwise_placement.empty()) {
+    const string resolved_rows = resolve_input_file(config.rowwise_placement);
+    const auto flats =
+        load_corrugation_flats(resolved_rows, source_corrugation_disk_key(disk.disk_key));
+    if (!flats.empty()) {
+      vector<double> flat_widths;
+      vector<double> flat_z_centers;
+      flat_widths.reserve(flats.size());
+      flat_z_centers.reserve(flats.size());
+
+      // The CSV offsets are the outer faces of the full h envelope.  Carbon
+      // extends toward the channel, leaving h-thickness between mid-surfaces.
+      const double explicit_y_step = center_delta / std::tan(config.theta);
+
+      for (const auto& flat : flats) {
+        const double flat_width = flat.flat_width;
+        const double local_surface_offset = reflect ? -flat.surface_offset : flat.surface_offset;
+        if (flat_width <= 0.0 ||
+            std::abs(local_surface_offset) <= config.thickness / 2.0) {
+          printout(WARNING, "SiEndcapModuleTracker",
+                   fmt::format("skipping explicit corrugation table for disk '{}': invalid flat "
+                               "at CSV line {}",
+                               disk.disk_key, flat.csv_line));
+          return 0;
+        }
+        const double surface_sign = local_surface_offset > 0.0 ? 1.0 : -1.0;
+        const double flat_z = config.z_center_offset + local_surface_offset -
+                              surface_sign * config.thickness / 2.0;
+        flat_widths.push_back(flat_width);
+        flat_z_centers.push_back(flat_z);
+      }
+
+      for (size_t index = 0; index < flats.size(); ++index) {
+        place_piece(fmt::format("flat{}", flats[index].row_index),
+                    config.y0 + flats[index].row_y, flat_widths[index] / 2.0,
+                    flat_z_centers[index], flat_widths[index] / 2.0,
+                    config.thickness / 2.0, 0.0);
+      }
+
+      for (size_t index = 0; index + 1 < flats.size(); ++index) {
+        const double left_edge = config.y0 + flats[index].row_y + flat_widths[index] / 2.0;
+        const double right_edge =
+            config.y0 + flats[index + 1].row_y - flat_widths[index + 1] / 2.0;
+        const double available_y_gap = right_edge - left_edge;
+        const double web_y_span = explicit_y_step;
+        const double web_z_span = flat_z_centers[index + 1] - flat_z_centers[index];
+        if (available_y_gap < web_y_span) {
+          printout(WARNING, "SiEndcapModuleTracker",
+                   fmt::format("skipping explicit corrugation table for disk '{}': rows {} and "
+                               "{} leave insufficient space for a straight web",
+                               disk.disk_key, flats[index].row_index,
+                               flats[index + 1].row_index));
+          return 0;
+        }
+
+        const double web_angle = std::atan2(web_z_span, web_y_span);
+        const double web_length = std::hypot(web_y_span, web_z_span);
+        const double web_y_projection =
+            std::abs(std::cos(web_angle)) * web_length / 2.0 +
+            std::abs(std::sin(web_angle)) * config.thickness / 2.0;
+        place_piece(fmt::format("web{}_{}", flats[index].row_index,
+                                flats[index + 1].row_index),
+                    (left_edge + right_edge) / 2.0, web_y_projection,
+                    (flat_z_centers[index] + flat_z_centers[index + 1]) / 2.0,
+                    web_length / 2.0, config.thickness / 2.0, web_angle);
+      }
+      return placed_count;
+    }
+
     const auto rows =
-        load_corrugation_rows(resolve_input_file(config.rowwise_placement), disk.disk_key);
+        load_corrugation_rows(resolved_rows, disk.disk_key);
     if (!rows.empty()) {
       for (const auto& row : rows) {
         const string row_tag = fmt::format("row{}", row.csv_line);
@@ -1444,9 +1654,8 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
   const double corrugation_reference_local =
       tiling_corrugation_reference_z(description, module_template);
   const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
-  const double global_module_center = source_row.z_corrugation_surface -
-                                      global_normal_sign * corrugation_reference_local;
-  row.dz = layer_axis_sign * (global_module_center - global_layer_center);
+  double global_module_center = source_row.z_corrugation_surface -
+                                global_normal_sign * corrugation_reference_local;
 
   const double predicted_sensor =
       global_module_center +
@@ -1457,6 +1666,13 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
         row.disk_id, row.row_index, row.module_index, row.module_name, predicted_sensor / mm,
         source_row.z_sensor_reference / mm));
   }
+  if (module_template.outward_facing) {
+    row.applied_z_offset =
+        description.constant<double>("SiEndcapTilingOutwardModule_z_offset");
+    global_module_center += global_normal_sign * row.applied_z_offset;
+  }
+  row.placed_sensor_reference = predicted_sensor + global_normal_sign * row.applied_z_offset;
+  row.dz = layer_axis_sign * (global_module_center - global_layer_center);
   return row;
 }
 
@@ -1465,11 +1681,13 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
 ModulePrototype build_module_prototype(Detector& description, SensitiveDetector& sens,
                                        const ModuleTemplate& module_template) {
   ModulePrototype prototype;
-  Material air        = description.material("Air");
   const double x_size = module_template.x_size;
   const double y_size = module_template.y_size;
-  Box module_solid(x_size / 2.0, y_size / 2.0, module_template.total_thickness / 2.0);
-  prototype.volume = Volume(module_template.name, module_solid, air);
+  // Opposite-facing modules may have overlapping rectangular bounding boxes
+  // even when none of their material components intersect. Use an assembly so
+  // Geant4 navigates and checks the actual silicon/carbon/adhesive/electronics
+  // solids instead of an artificial air mother box.
+  prototype.volume = Assembly(module_template.name);
   prototype.volume.setVisAttributes(description.visAttributes(module_template.vis));
 
   double z_position       = -module_template.total_thickness / 2.0;
@@ -1963,6 +2181,40 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       disk.lepton_opening.center_x *= global_to_local_x;
       disk.hadron_opening.center_x *= global_to_local_x;
     }
+
+    vector<CorrugationKeepClear> keep_clears;
+    if (module_format == "tiling-directory") {
+      const double layer_axis_sign = reflect ? -1.0 : 1.0;
+      const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
+      const double keep_depth = description.constant<double>("SiEndcapTilingKeepClear_depth");
+      for (const auto& source_row : module_rows) {
+        if (source_row.disk_key != disk.disk_key) {
+          continue;
+        }
+        auto module_template_it = module_templates.find(source_row.module_name);
+        if (module_template_it == module_templates.end() ||
+            module_template_it->second.outward_facing) {
+          continue;
+        }
+        ModuleTemplate module_template =
+            with_corrugated_handedness(description, module_template_it->second,
+                                       source_row.handedness);
+        const ModuleRow row = module_row_in_layer_coordinates(
+            description, source_row, module_template, disk, reflect);
+        const double keep_width = description.constant<double>(
+            source_row.module_name[0] == 'A' ? "SiEndcapTilingKeepClearA_width"
+                                             : "SiEndcapTilingKeepClearB_width");
+        const double local_surface =
+            layer_axis_sign * (source_row.z_corrugation_surface - global_layer_center);
+        const double channel_edge =
+            local_surface - std::copysign(keep_depth, local_surface);
+        keep_clears.push_back({row.x_min, row.x_min + row.x_size,
+                               source_row.y_origin - keep_width / 2.0,
+                               source_row.y_origin + keep_width / 2.0,
+                               std::min(local_surface, channel_edge),
+                               std::max(local_surface, channel_edge)});
+      }
+    }
     string layer_name = det_name + string("_layer") + to_string(layer_id);
     Volume layer_vol(layer_name, build_disk_solid(layer_name, disk), air);
     layer_vol.setVisAttributes(description.visAttributes(disk.vis));
@@ -2012,7 +2264,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         continue;
       }
       const int placed_frame_count =
-          place_corrugated_frame(description, layer_vol, disk, frame_config);
+          place_corrugated_frame(description, layer_vol, disk, frame_config, reflect,
+                                 keep_clears);
       if (placed_frame_count == 0) {
         printout(WARNING, "SiEndcapModuleTracker",
                  fmt::format("no corrugated frame pieces placed for '{}' disk '{}'", det_name,
@@ -2110,6 +2363,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                   row.z_corrugation_surface / mm);
         module_params.set<double>("source_sensor_reference_z_mm",
                                   row.z_sensor_reference / mm);
+        module_params.set<double>("applied_outward_z_offset_mm",
+                                  row.applied_z_offset / mm);
+        module_params.set<double>("placed_sensor_reference_z_mm",
+                                  row.placed_sensor_reference / mm);
       }
 
       // Reattach the cached sensitive surfaces to the concrete placed module instance.
