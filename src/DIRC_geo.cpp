@@ -74,7 +74,14 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   printout(DEBUG, "DIRC_geo", "dirc_pos_z      = %12.4f", dirc_pos_z);
   printout(DEBUG, "DIRC_geo", "dirc_pos_z exp  = %12.4f", FAKE_dirc_pos_z_exp);
 
-  //---- Detector type
+  //---- Detector type: tracker
+  //
+  //  Note on npsim configuration (see eic/npsim):
+  //  npsim uses VolumeDispatchAction + VolumeDispatchFilter for cb_DIRC, routing steps
+  //  per logical-volume regex:
+  //    mcp_vol -> Geant4OpticalTrackerAction  (opticalphoton filter)
+  //    bar_vol -> Geant4TrackerWeightedAction (EnergyDepositMinimumCut: eDep > 0 only)
+  //  Both sub-actions share the DIRCHits collection; use surface=0/1 to distinguish.
   sens.setType("tracker");
 
   //---- Entire DIRC assembly
@@ -106,6 +113,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
               bar_length / 2); // the box volume for a bar, not a "bar box"
   Volume bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
   bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
+  bar_vol.setSensitiveDetector(sens);
+  bar_vol.setLimitSet(desc, xml_bar.limitsStr());
+  printout(DEBUG, "DIRC_geo", "bar_vol set as sensitive detector with step limit");
 
   //---- define glue_vol
   xml_comp_t xml_glue   = xml_module.child(_Unicode(glue));
@@ -183,9 +193,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
       Envelope_box_vol.placeVolume(glue_vol,
                                    Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
       Envelope_box_vol.placeVolume(bar_vol, Position(0, y, z))
+          .addPhysVolID("surface", 1)
           .addPhysVolID("section", z_index)
           .addPhysVolID("bar", y_index);
-      //
+
       if (y_index == 4 && z_index == 0) {
         barZmax = z + bar_length / 2.;
       }
@@ -333,7 +344,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   Position mcp_position(prism_position_x, mcp_position_z, 0);
   RotationX mcp_rotation(-M_PI / 2.);
   //
-  Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position));
+  Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position))
+      .addPhysVolID("surface", 0); // surface=0 for MCP photon detection
 
   //---- Place modules -----------------------------------------------
   const int module_repeat = xml_module.repeat();
