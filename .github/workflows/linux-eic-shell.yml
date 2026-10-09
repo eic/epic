@@ -218,6 +218,14 @@ jobs:
       # NOTE: This list of detector configurations must be kept in sync with the configurations linked in README.md.
       detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
 
+  convert-to-dot:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/convert-to-dot.yml
+    with:
+      detector_configs: ${{needs.list-detector-configs.outputs.configs_csv}}
+
   dump-constants:
     runs-on: ubuntu-latest
     needs: build
@@ -603,7 +611,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v24
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -672,7 +680,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v24
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -732,7 +740,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v24
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -798,7 +806,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v24
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -854,7 +862,7 @@ jobs:
     steps:
       - name: Download capybara artifact (other PRs)
         id: download_capybara
-        uses: dawidd6/action-download-artifact@v24
+        uses: dawidd6/action-download-artifact@v27
         if: github.event.pull_request.number != matrix.pr
         with:
           commit: ${{ matrix.head_sha }}
@@ -871,7 +879,7 @@ jobs:
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
       - name: Download material_map artifact (other PRs)
         id: download_material_map
-        uses: dawidd6/action-download-artifact@v24
+        uses: dawidd6/action-download-artifact@v27
         if: github.event.pull_request.number != matrix.pr
         with:
           commit: ${{ matrix.head_sha }}
@@ -915,7 +923,7 @@ jobs:
       # - If we run this on the main branch, we have to download from this pipeline with download-artifact.
       - name: Download capybara artifact (in PR)
         id: download_capybara
-        uses: dawidd6/action-download-artifact@v24
+        uses: dawidd6/action-download-artifact@v27
         if: github.ref_name != 'main'
         with:
           branch: main
@@ -932,7 +940,7 @@ jobs:
           path: publishing_docs/capybara/
       - name: Download material_map artifact (in PR)
         id: download_material_map
-        uses: dawidd6/action-download-artifact@v24
+        uses: dawidd6/action-download-artifact@v27
         if: github.ref_name != 'main'
         with:
           branch: main
@@ -988,6 +996,7 @@ jobs:
     needs:
     - convert-to-gdml
     - convert-to-tgeo
+    - convert-to-dot
     - merge-constants
     - merge-parameter-table
     - merge-dawn-view
