@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2026 Whitney Armstrong, Aditya Yalavatti, Sam Henry
+// Copyright (C) 2026 Whitney Armstrong, Tuna Tasali, Sam Henry, Shujie Li
 
 /** \addtogroup Trackers Trackers
  * \brief Type: **BarrelTrackerWithFrame**.
@@ -18,21 +18,21 @@
 #include "XML/Utilities.h"
 #include <array>
 #include "DD4hepDetectorHelper.h"
+#include "TGDMLParseBiggerFiles.h"
 
 /*
-This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels
+This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels, and import
+passive components from GDML files.
 
 A curved component (identified by the word "Curved" in the name) is a segment of a cylinder. This is constructed by a series of flat segments
 The number of segments is set in the xml file, together with the radius, anglular range, length, thickness, and the inner and outer thicknesses
-used to set the sensitive surface.
-
-This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface where the axis is displaced
-from the beam line. Therefore the curved surface is modelled as a series of flat segments.
-
+used to set the sensitive surface. This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface
+where the axis is displaced from the beam line. Therefore the curved surface is modelled as a series of flat segments.
 Unlike in BarrelTrackerWithFrame, the position of components (related to the centre of the stave) must now be given in the xml files.
 
-17 April 2026. Sam Henry
+Passive components are modelled as a tessellated solid, imported from a .gdml file, with the filename given in the xml file.
 
+8 September 2026. Sam Henry
 */
 
 using namespace std;
@@ -94,7 +94,7 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
 
   sens.setType("tracker");
 
-  // Loop over the suports
+  // Loop over the suports - change this one maybe
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
     xml_comp_t x_support     = su;
     double support_thickness = getAttrOrDefault(x_support, _U(thickness), 2.0 * mm);
@@ -133,6 +133,8 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
     // pv = assembly.placeVolume(support_vol, Position(0, 0, support_zstart + support_length / 2));
   }
 
+  TGDMLParseBiggerFiles* parser = new TGDMLParseBiggerFiles();
+
   // loop over the modules
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
@@ -158,51 +160,13 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       throw runtime_error("CurvedTrackerBarrel: sensor stack thicknesses must be positive");
     }
 
-    int ncomponents        = 0;
-    int sensor_number      = 1;
-    double total_thickness = 0;
+    int ncomponents   = 0;
+    int sensor_number = 1;
 
-    // Compute module total thickness from components
-    // add pos z to allow several components being placed at the same z without double-counting the total thickness.
-    xml_coll_t ci(x_mod, _U(module_component));
-    for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      xml_comp_t x_pos = xml_comp_t(ci).position(false);
-      double mod_z_off = 0;
-      if (x_pos)
-        mod_z_off = x_pos.z(0);
-      total_thickness += xml_comp_t(ci).thickness() + mod_z_off;
-    }
     // the module assembly volume
     Assembly m_vol(m_nam);
     volumes[m_nam] = m_vol;
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
-
-    // Optional module frame.
-    if (x_mod.hasChild(_U(frame))) {
-      xml_comp_t m_frame = x_mod.child(_U(frame));
-      // xmleles[m_nam]  = x_mod;
-      double frame_thickness = m_frame.thickness();
-      double frame_width     = m_frame.width();
-      double frame_height    = getAttrOrDefault<double>(m_frame, _U(height), 5.0 * mm);
-      double tanth           = frame_height / (frame_width / 2.0);
-      double costh           = 1. / sqrt(1 + tanth * tanth);
-      double frame_height2   = frame_height - frame_thickness - frame_thickness / costh;
-      double frame_width2    = 2.0 * frame_height2 / tanth;
-
-      Trd1 moduleframe_part1(frame_width / 2, 0.001 * mm, m_frame.length() / 2, frame_height / 2);
-      Trd1 moduleframe_part2(frame_width2 / 2, 0.001 * mm, m_frame.length() / 2 + 0.01 * mm,
-                             frame_height2 / 2);
-
-      SubtractionSolid moduleframe(moduleframe_part1, moduleframe_part2,
-                                   Position(0.0, frame_thickness, 0.0));
-      Volume v_moduleframe(m_nam + "_vol", moduleframe,
-                           description.material(m_frame.materialStr()));
-      v_moduleframe.setVisAttributes(description, m_frame.visStr());
-      m_vol.placeVolume(v_moduleframe,
-                        Position(0.0, 0.0, frame_height / 2 + total_thickness / 2.0));
-    }
-
-    double thickness_so_far = 0.0;
 
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
       xml_comp_t x_comp  = mci;
@@ -210,7 +174,6 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       xml_comp_t x_rot   = x_comp.rotation(false);
       const string c_nam = _toString(ncomponents, "component%d");
 
-      Volume c_vol;
       if (x_comp.nameStr().find("Curved") != std::string::npos) {
         const bool build_sensor_stack =
             sensor_stack && x_comp.nameStr().find("CurvedSi") != std::string::npos;
@@ -316,67 +279,58 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
         }
         // thickness of curved layer is height of curve
 
-        thickness_so_far += x_comp.thickness();
-
       } else { // not a curved component
-        Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
-        c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
 
+        // New code that constructs component from GDML files. Import the GDML file from the "file" attribute of the module_component
+        std::string gdml_file  = getAttrOrDefault<std::string>(x_comp, _Unicode(file), " ");
+        std::string given_name = getAttrOrDefault<std::string>(x_comp, _Unicode(name), " ");
+
+        Volume c_vol(c_nam);
+        c_vol = parser->GDMLReadFile(gdml_file.c_str());
+
+        //check the validity of the volume
+        if (!c_vol.isValid()) {
+          printout(WARNING, "BarrelTrackerOuter", "%s", gdml_file.c_str());
+          printout(WARNING, "BarrelTrackerOuter", "c_vol invalid, GDML parser failed!");
+          std::_Exit(EXIT_FAILURE);
+        }
+        c_vol.import();
+        c_vol.setMaterial(description.material(x_comp.materialStr()));
+        printout(WARNING, "BarrelTrackerOuter", "%s", x_comp.materialStr().c_str());
+        //risky bit, might quickly fill up memory if too many solids are imported
+        TessellatedSolid c_sol(c_vol.solid());
+        //note: c_sol gets casted automatically to parent class TGeoTessellated by the copy constructor. IDK why?
+        c_sol->CloseShape(true, true, true); //otherwise you get an infinite bounding box
+        c_sol->CheckClosure(
+            true, true); //fix any flipped orientation in facets, the second 'true' is for verbose
+        c_vol.setSolid(c_sol);
+
+        c_vol.setRegion(description, x_comp.regionStr());
+        c_vol.setLimitSet(description, x_comp.limitsStr());
+        c_vol.setVisAttributes(description, x_comp.visStr());
+
+        //place the volume
         if (x_pos && x_rot) {
           Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0));
-          RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+          RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0) + M_PI / 2);
           pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
         } else if (x_rot) {
           Position c_pos(0, 0, 0);
           pv = m_vol.placeVolume(
-              c_vol, Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
+              c_vol,
+              Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0) + M_PI / 2), c_pos));
         } else if (x_pos) {
           pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0)));
         } else {
-          pv = m_vol.placeVolume(c_vol, Position(0, 0, 0));
+          //the c_rot is a temporary adjustment I added
+          RotationZYX c_rot(0, 0, +M_PI / 2);
+          pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, Position(0, 0, 0)));
         }
-        c_vol.setRegion(description, x_comp.regionStr());
-        c_vol.setLimitSet(description, x_comp.limitsStr());
         c_vol.setVisAttributes(description, x_comp.visStr());
-        if (x_comp.isSensitive()) {
-          pv.addPhysVolID("sensor", sensor_number++);
-          c_vol.setSensitiveDetector(sens);
-          sensitives[m_nam].push_back(pv);
-          module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
-                                       total_thickness - thickness_so_far -
-                                           x_comp.thickness() / 2.0};
-
-          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-          Vector3D u(-1., 0., 0.);
-          Vector3D v(0., -1., 0.);
-          Vector3D n(0., 0., 1.);
-          //    Vector3D o( 0. , 0. , 0. ) ;
-
-          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-          // depending on wether the support is above or below the sensor
-          double inner_thickness = module_thicknesses[m_nam][0];
-          double outer_thickness = module_thicknesses[m_nam][1];
-
-          SurfaceType type(SurfaceType::Sensitive);
-
-          // if( isStripDetector )
-          //  type.setProperty( SurfaceType::Measurement1D , true ) ;
-
-          VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-          volplane_surfaces[m_nam].push_back(surf);
-
-          //--------------------------------------------
-        }
-
-        thickness_so_far += x_comp.thickness();
-      }
-      // apply relative offsets in z-position used to stack components side-by-side
-      if (x_pos) {
-
-        thickness_so_far += x_pos.z(0);
       }
     }
   }
+  delete parser;
 
   // now build the layers
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
