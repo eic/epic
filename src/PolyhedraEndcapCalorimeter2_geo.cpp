@@ -71,7 +71,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double sliceZ = -l_thick / 2;
     for (xml_coll_t xs(x_layer, _U(slice)); xs; ++xs) {
       xml_comp_t x_slice = xs;
-      string s_name      = _toString(s_num, "slice%d");
+      string s_name      = l_name + _toString(s_num, "_slice%d");
       double s_thick     = x_slice.thickness();
       Material s_mat     = description.material(x_slice.materialStr());
       Volume s_vol(s_name, PolyhedraRegular(numsides, rmin, rmax, s_thick), s_mat);
