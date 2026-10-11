@@ -1,249 +1,280 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2022 - 2026 Whitney Armstrong, Tom Bleher, Igor Korover
+
+/*! B0 Tracker: stations, each a support plate with sensor staves on both faces.
+ *
+ * @author Whitney Armstrong, Tom Bleher, Igor Korover
+ *
+ * Each <station> places a <support_plate> (the <support_stack> slices extruded
+ * along its outline) and a <module_layout> of front and back <face>. Every face
+ * is one ACTS disc layer holding the shared TrackingUnit at its <module>
+ * positions. The cellID layer is 2*(station-1) + (1 front | 2 back), so it is
+ * monotonic in z, and module ids restart per face.
+ *
+ * @{
+ */
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/Printout.h"
 #include "DD4hep/Shapes.h"
+#include "DD4hepDetectorHelper.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
-#include <array>
-#include <map>
-#include "DD4hepDetectorHelper.h"
 
-using namespace std;
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <map>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
 using namespace dd4hep;
 using namespace dd4hep::rec;
-using namespace dd4hep::detail;
 
-/*! B0 Tracker.
- *
- * @author Whitney Armstrong
- *
- */
+namespace {
+
+struct SupportSlice {
+  Volume volume;
+  Position position;
+};
+
+struct SupportPlates {
+  std::map<std::string, std::vector<SupportSlice>> slices; // by plate name
+  double thickness = 0.0;
+};
+
+struct TrackingUnit {
+  Assembly assembly;
+  std::vector<PlacedVolume> sensors; // sensor id = index + 1
+  std::vector<VolPlane> surfaces;
+  double z_min = +std::numeric_limits<double>::infinity(); // z extent of the whole stack
+  double z_max = -std::numeric_limits<double>::infinity();
+};
+
+xml_h find_named(xml_det_t x_det, const xml::Strng_t& tag, const std::string& name) {
+  for (xml_coll_t it(x_det, tag); it; ++it) {
+    xml_comp_t x = it;
+    if (x.nameStr() == name) {
+      return x;
+    }
+  }
+  return xml_h();
+}
+
+TrackingUnit build_tracking_unit(Detector& description, SensitiveDetector sens,
+                                 const std::string& det_name, xml_comp_t x_unit) {
+  TrackingUnit unit;
+  unit.assembly = Assembly(det_name + "_TrackingUnit");
+  unit.assembly.setVisAttributes(description,
+                                 getAttrOrDefault<std::string>(x_unit, _Unicode(vis), ""));
+
+  // The stack extent is needed first: it sets the sensor surface thicknesses below
+  for (xml_coll_t comp(x_unit, _U(module_component)); comp; ++comp) {
+    xml_comp_t x_comp   = comp;
+    const double pz     = x_comp.position().z();
+    const double half_z = xml_dim_t(x_comp.child(_U(box))).z() / 2.0;
+    unit.z_min          = std::min(unit.z_min, pz - half_z);
+    unit.z_max          = std::max(unit.z_max, pz + half_z);
+  }
+
+  const Vector3D u(-1.0, 0.0, 0.0);
+  const Vector3D v(0.0, -1.0, 0.0);
+  const Vector3D n(0.0, 0.0, 1.0);
+  for (xml_coll_t comp(x_unit, _U(module_component)); comp; ++comp) {
+    xml_comp_t x_comp = comp;
+    xml_dim_t x_box   = x_comp.child(_U(box));
+    xml_dim_t x_pos   = x_comp.position();
+
+    Volume vol(det_name + "_" + x_comp.nameStr(),
+               Box(x_box.x() / 2.0, x_box.y() / 2.0, x_box.z() / 2.0),
+               description.material(x_comp.materialStr()));
+    vol.setVisAttributes(description, getAttrOrDefault<std::string>(x_comp, _Unicode(vis), ""));
+    PlacedVolume pv = unit.assembly.placeVolume(vol, Position(x_pos.x(), x_pos.y(), x_pos.z()));
+
+    if (x_comp.isSensitive()) {
+      vol.setSensitiveDetector(sens);
+      pv.addPhysVolID("sensor", static_cast<int>(unit.sensors.size()) + 1);
+      unit.sensors.push_back(pv);
+      // DDRec inner/outer thickness: the extent of the stave stack on either side of the
+      // sensor
+      unit.surfaces.emplace_back(vol, SurfaceType(SurfaceType::Sensitive), x_pos.z() - unit.z_min,
+                                 unit.z_max - x_pos.z(), u, v, n);
+    }
+  }
+  return unit;
+}
+
+// Slices are stacked upstream to downstream, centered on the plate mid-plane
+SupportPlates build_support_plates(Detector& description, xml_det_t x_det) {
+  SupportPlates plates;
+  xml_comp_t x_stack          = x_det.child(_Unicode(support_stack));
+  const std::string stack_vis = getAttrOrDefault<std::string>(x_stack, _Unicode(vis), "");
+  for (xml_coll_t sl(x_stack, _U(slice)); sl; ++sl) {
+    plates.thickness += xml_comp_t(sl).thickness();
+  }
+
+  for (xml_coll_t pl(x_det, _Unicode(support_plate)); pl; ++pl) {
+    xml_comp_t x_plate           = pl;
+    const std::string plate_name = x_plate.nameStr();
+    std::vector<double> xs;
+    std::vector<double> ys;
+    for (xml_coll_t point(x_plate, _U(point)); point; ++point) {
+      xs.push_back(xml_comp_t(point).x());
+      ys.push_back(xml_comp_t(point).y());
+    }
+
+    auto& slices = plates.slices[plate_name];
+    double z_low = -plates.thickness / 2.0;
+    for (xml_coll_t sl(x_stack, _U(slice)); sl; ++sl) {
+      xml_comp_t x_slice     = sl;
+      const double thickness = x_slice.thickness();
+      Volume vol(plate_name + "_" + x_slice.nameStr(),
+                 ExtrudedPolygon(xs, ys, {-thickness / 2.0, thickness / 2.0}, {0.0, 0.0},
+                                 {0.0, 0.0}, {1.0, 1.0}),
+                 description.material(x_slice.materialStr()));
+      vol.setVisAttributes(description,
+                           getAttrOrDefault<std::string>(x_slice, _Unicode(vis), stack_vis));
+      slices.push_back({vol, Position(0.0, 0.0, z_low + thickness / 2.0)});
+      z_low += thickness;
+    }
+  }
+  return plates;
+}
+
+} // namespace
+
 static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector sens) {
-  typedef vector<PlacedVolume> Placements;
-  xml_det_t x_det = e;
-  Material vacuum = description.vacuum();
-  int det_id      = x_det.id();
-  string det_name = x_det.nameStr();
+  xml_det_t x_det            = e;
+  const int det_id           = x_det.id();
+  const std::string det_name = x_det.nameStr();
+
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name);
+
+  Volume mother_vol  = description.pickMotherVolume(sdet);
   xml::Component pos = x_det.position();
   xml::Component rot = x_det.rotation();
+  Transform3D pos_and_rot(RotationZYX(rot.z(), rot.y(), rot.x()),
+                          Position(pos.x(), pos.y(), pos.z()));
 
-  Volume motherVol = description.pickMotherVolume(sdet);
-  int m_id = 0, c_id = 0, n_sensor = 0;
-  PlacedVolume pv;
-
-  map<string, Volume> modules;
-  map<string, Placements> sensitives;
-  map<string, std::vector<VolPlane>> volplane_surfaces;
-  map<string, std::array<double, 2>> module_thicknesses;
-
-  // Set detector type flag
-  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
-
-  // Add the volume boundary material if configured
+  xml::setDetectorTypeFlag(x_det, sdet);
+  auto& det_params = DD4hepDetectorHelper::ensureExtension<VariantParameters>(sdet);
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
-    xml_comp_t x_boundary_material = bmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
-                                                    "boundary_material");
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(bmat, det_params, "boundary_material");
   }
 
-  assembly.setVisAttributes("InvisibleWithDaughters");
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
-  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
-    xml_comp_t x_mod = mi;
-    string m_nam     = x_mod.nameStr();
-    xml_comp_t trd   = x_mod.trd();
+  const TrackingUnit unit =
+      build_tracking_unit(description, sens, det_name, x_det.child(_U(module)));
+  const SupportPlates plates = build_support_plates(description, x_det);
 
-    double posY;
-    double x1 = trd.x1();
-    double x2 = trd.x2();
-    double z  = trd.z();
-    double y1, y2, total_thickness = 0.;
-    xml_coll_t ci(x_mod, _U(module_component));
-    for (ci.reset(), total_thickness = 0.0; ci; ++ci)
-      total_thickness += xml_comp_t(ci).thickness();
+  // Plate mid-plane to module center, with the module's z_min side flush on the plate
+  const double module_offset = plates.thickness / 2.0 - unit.z_min;
 
-    y1 = y2 = total_thickness / 2;
-    Trapezoid m_solid(x1, x2, y1, y2, z);
-    Volume m_volume(m_nam, m_solid, vacuum);
-    m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
+  xml_comp_t x_env          = x_det.child(_U(envelope));
+  const double env_rmin_tol = x_env.attr<double>(_Unicode(rmin_tolerance));
+  const double env_rmax_tol = x_env.attr<double>(_Unicode(rmax_tolerance));
+  const double env_zmin_tol = x_env.attr<double>(_Unicode(zmin_tolerance));
+  const double env_zmax_tol = x_env.attr<double>(_Unicode(zmax_tolerance));
+  const std::string env_vis = getAttrOrDefault<std::string>(x_env, _Unicode(vis), "");
 
-    Solid frame_s;
-    if (x_mod.hasChild(_U(frame))) {
-      // build frame from trd (assumed to be smaller)
-      xml_comp_t m_frame     = x_mod.child(_U(frame));
-      xml_comp_t f_pos       = m_frame.child(_U(position));
-      xml_comp_t frame_trd   = m_frame.trd();
-      double frame_thickness = getAttrOrDefault(m_frame, _U(thickness), total_thickness);
-      double frame_x1        = frame_trd.x1();
-      double frame_x2        = frame_trd.x2();
-      double frame_z         = frame_trd.z();
-      // make the frame match the total thickness if thickness attribute is not given
-      Trapezoid f_solid1(x1, x2, frame_thickness / 2.0, frame_thickness / 2.0, z);
-      Trapezoid f_solid(frame_x1, frame_x2, frame_thickness / 2.0, frame_thickness / 2.0, frame_z);
-      SubtractionSolid frame_shape(f_solid1, f_solid);
-      frame_s = frame_shape;
+  for (xml_coll_t st(x_det, _Unicode(station)); st; ++st) {
+    xml_comp_t x_station = st;
+    const int station    = x_station.id();
+    if (station < 1) {
+      throw std::runtime_error(det_name + ": station ids start at 1");
+    }
+    xml_dim_t x_station_pos = x_station.position();
+    const Position station_pos(x_station_pos.x(), x_station_pos.y(), x_station_pos.z());
 
-      Material f_mat = description.material(m_frame.materialStr());
-      Volume f_vol(m_nam + "_frame", frame_shape, f_mat);
-      // f_vol.setVisAttributes(description.visAttributes(m_frame.visStr()));
-
-      // figure out how to best place
-      pv = m_volume.placeVolume(f_vol, Position(f_pos.x(), f_pos.y(), f_pos.z()));
+    // The plates are passive: material mapping projects them onto the faces
+    for (xml_coll_t sup(x_station, _Unicode(support)); sup; ++sup) {
+      const std::string ref = xml_comp_t(sup).attr<std::string>(_Unicode(ref));
+      const auto plate_it   = plates.slices.find(ref);
+      if (plate_it == plates.slices.end()) {
+        throw std::runtime_error(det_name + ": unknown <support ref=\"" + ref + "\">");
+      }
+      for (const auto& slice : plate_it->second) {
+        assembly.placeVolume(slice.volume, station_pos + slice.position);
+      }
     }
 
-    double thickness_so_far = 0.0;
-    for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
-      xml_comp_t c     = ci;
-      double c_thick   = c.thickness();
-      auto comp_x1     = getAttrOrDefault(c, _Unicode(x1), x1);
-      auto comp_x2     = getAttrOrDefault(c, _Unicode(x2), x2);
-      auto comp_height = getAttrOrDefault(c, _Unicode(height), z);
-
-      Material c_mat = description.material(c.materialStr());
-      string c_name  = _toString(c_id, "component%d");
-
-      Trapezoid comp_s1(comp_x1, comp_x2, c_thick / 2e0, c_thick / 2e0, comp_height);
-      Solid comp_shape = comp_s1;
-      if (frame_s.isValid()) {
-        comp_shape = SubtractionSolid(comp_s1, frame_s);
-      }
-      Volume c_vol(c_name, comp_shape, c_mat);
-
-      c_vol.setVisAttributes(description.visAttributes(c.visStr()));
-      pv = m_volume.placeVolume(c_vol, Position(0, posY + c_thick / 2, 0));
-      if (c.isSensitive()) {
-        // std::cout << " adding sensitive volume" << c_name << "\n";
-        sdet.check(n_sensor > 2,
-                   "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
-        pv.addPhysVolID("sensor", n_sensor);
-        c_vol.setSensitiveDetector(sens);
-        sensitives[m_nam].push_back(pv);
-        ++n_sensor;
-
-        module_thicknesses[m_nam] = {thickness_so_far + c_thick / 2.0,
-                                     total_thickness - thickness_so_far - c_thick / 2.0};
-        // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        Vector3D u(-1., 0., 0.);
-        Vector3D v(0., -1., 0.);
-        Vector3D n(0., 0., 1.);
-        //    Vector3D o( 0. , 0. , 0. ) ;
-
-        // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-        // depending on wether the support is above or below the sensor
-        double inner_thickness = module_thicknesses[m_nam][0];
-        double outer_thickness = module_thicknesses[m_nam][1];
-
-        SurfaceType type(SurfaceType::Sensitive);
-
-        // if( isStripDetector )
-        //  type.setProperty( SurfaceType::Measurement1D , true ) ;
-
-        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-        volplane_surfaces[m_nam].push_back(surf);
-      }
-      posY += c_thick;
-      thickness_so_far += c_thick;
+    const std::string layout_ref =
+        xml_comp_t(x_station.child(_Unicode(layout))).attr<std::string>(_Unicode(ref));
+    const xml_h x_layout = find_named(x_det, _Unicode(module_layout), layout_ref);
+    if (!x_layout.ptr()) {
+      throw std::runtime_error(det_name + ": unknown <layout ref=\"" + layout_ref + "\">");
     }
-    modules[m_nam] = m_volume;
-  }
 
-  for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
-    xml_comp_t x_layer(li);
-    int l_id    = x_layer.id();
-    int mod_num = 1;
+    for (xml_coll_t fc(x_layout, _Unicode(face)); fc; ++fc) {
+      xml_comp_t x_face      = fc;
+      const std::string side = x_face.attr<std::string>(_Unicode(side));
+      if (side != "front" && side != "back") {
+        throw std::runtime_error(det_name + ": <face side=\"" + side +
+                                 "\">, expected \"front\" or \"back\"");
+      }
+      const bool is_front = side == "front";
+      const int layer_id  = 2 * (station - 1) + (is_front ? 1 : 2);
 
-    xml_comp_t l_env  = x_layer.child(_U(envelope));
-    string layer_name = det_name + std::string("_layer") + std::to_string(l_id);
+      // ACTS centers the disc layer on the face origin, so put it at the unit
+      // center, midway between the sensor planes
+      const Position face_pos(station_pos.x(), station_pos.y(),
+                              station_pos.z() + (is_front ? -module_offset : module_offset));
 
-    std::string layer_vis       = l_env.attr<std::string>(_Unicode(vis));
-    double layer_rmin_tolerance = l_env.attr<double>(_Unicode(rmin_tolerance));
-    double layer_rmax_tolerance = l_env.attr<double>(_Unicode(rmax_tolerance));
-    double layer_zmin_tolerance = l_env.attr<double>(_Unicode(zmin_tolerance));
-    double layer_zmax_tolerance = l_env.attr<double>(_Unicode(zmax_tolerance));
-    double layer_length         = l_env.attr<double>(_Unicode(length));
-    double layer_zstart         = l_env.attr<double>(_Unicode(zstart));
-    double layer_center_z       = layer_zstart + layer_length / 2.0;
-    // printout(INFO,"ROOTGDMLParse","+++ Read geometry from GDML file file:%s",input.c_str());
-    // std::cout << "SiTracker Endcap layer " << l_id << " zstart = " << layer_zstart/dd4hep::mm << "mm ( " <<
-    // layer_length/dd4hep::mm << " mm thick )\n";
+      const std::string face_name = det_name + "_station" + std::to_string(station) + "_" + side;
+      Assembly face_vol(face_name);
+      face_vol.setVisAttributes(description, env_vis);
+      PlacedVolume face_pv = assembly.placeVolume(face_vol, face_pos);
+      face_pv.addPhysVolID("layer", layer_id);
 
-    Assembly layer_vol(layer_name);
-    PlacedVolume layer_pv;
-    layer_pv = assembly.placeVolume(layer_vol, Position(0, 0, layer_center_z));
-    layer_pv.addPhysVolID("layer", l_id);
-    layer_name += "_P";
-    DetElement layer_element(sdet, layer_name, l_id);
-    layer_element.setPlacement(layer_pv);
+      DetElement face_de(sdet, face_name + "_P", layer_id);
+      face_de.setPlacement(face_pv);
 
-    auto& layerParams =
-        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_element);
+      // Front modules are flipped about y so they also sit on the plate; flipping about y
+      // keeps the stave's orientation along y, so rotZ means the same on both faces
+      int module_id = 1;
+      for (xml_coll_t mp(x_face, _U(module)); mp; ++mp, ++module_id) {
+        xml_comp_t x_mod = mp;
+        RotationZYX mod_rot(getAttrOrDefault<double>(x_mod, _Unicode(rotZ), 0.0),
+                            is_front ? M_PI : 0.0, 0.0);
+        PlacedVolume mod_pv = face_vol.placeVolume(
+            unit.assembly, Transform3D(mod_rot, Position(x_mod.x(), x_mod.y(), 0.0)));
+        mod_pv.addPhysVolID("module", module_id);
 
-    for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
-      xml_comp_t x_ring    = ri;
-      double r             = x_ring.r();
-      double phi0          = x_ring.phi0(0);
-      double zstart        = x_ring.zstart();
-      double dz            = x_ring.dz(0);
-      int nmodules         = x_ring.nmodules();
-      string m_nam         = x_ring.moduleStr();
-      Volume m_vol         = modules[m_nam];
-      double iphi          = 2 * M_PI / nmodules;
-      double dphi          = dd4hep::getAttrOrDefault(x_ring, _Unicode(dphi), iphi);
-      double phi           = phi0;
-      Placements& sensVols = sensitives[m_nam];
+        DetElement mod_de(face_de, _toString(module_id, "module%d"), module_id);
+        mod_de.setPlacement(mod_pv);
 
-      for (int k = 0; k < nmodules; ++k) {
-        string m_base = _toString(l_id, "layer%d") + _toString(mod_num, "_module%d");
-        double x      = -r * std::cos(phi);
-        double y      = -r * std::sin(phi);
-
-        // if (!reflect) {
-        DetElement module(layer_element, m_base + "_pos", det_id);
-        pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
-                                                      Position(x, y, zstart + dz)));
-        pv.addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
-        module.setPlacement(pv);
-        for (size_t ic = 0; ic < sensVols.size(); ++ic) {
-          PlacedVolume sens_pv = sensVols[ic];
-          DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
-          comp_elt.setPlacement(sens_pv);
-          auto& comp_elt_params =
-              DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-          comp_elt_params.set<std::string>("axis_definitions", "XZY");
-          volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
+        for (size_t i = 0; i < unit.sensors.size(); ++i) {
+          const int sensor_id = static_cast<int>(i) + 1;
+          DetElement sensor_de(mod_de, _toString(sensor_id, "sensor%d"), sensor_id);
+          sensor_de.setPlacement(unit.sensors[i]);
+          DD4hepDetectorHelper::ensureExtension<VariantParameters>(sensor_de).set<std::string>(
+              "axis_definitions", "XYZ");
+          volSurfaceList(sensor_de)->push_back(unit.surfaces[i]);
         }
-        dz = -dz;
-        phi += dphi;
-        ++mod_num;
+      }
+
+      auto& face_params = DD4hepDetectorHelper::ensureExtension<VariantParameters>(face_de);
+      face_params.set<double>("envelope_r_min", env_rmin_tol / dd4hep::mm);
+      face_params.set<double>("envelope_r_max", env_rmax_tol / dd4hep::mm);
+      face_params.set<double>("envelope_z_min", env_zmin_tol / dd4hep::mm);
+      face_params.set<double>("envelope_z_max", env_zmax_tol / dd4hep::mm);
+      for (xml_coll_t lmat(x_det, _Unicode(layer_material)); lmat; ++lmat) {
+        DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(lmat, face_params, "layer_material");
       }
     }
-    layer_vol->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", layer_rmin_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_r_max", layer_rmax_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_z_min", layer_zmin_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_z_max", layer_zmax_tolerance / dd4hep::mm);
-
-    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
-      xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
-                                                      "layer_material");
-    }
   }
-  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()),
-                        Position(pos.x(), pos.y(), pos.z()));
-  pv = motherVol.placeVolume(assembly, posAndRot);
+
+  PlacedVolume pv = mother_vol.placeVolume(assembly, pos_and_rot);
   pv.addPhysVolID("system", det_id);
   sdet.setPlacement(pv);
+
   return sdet;
 }
 
+//@}
 // clang-format off
 DECLARE_DETELEMENT(ip6_B0Tracker, create_B0Tracker)
