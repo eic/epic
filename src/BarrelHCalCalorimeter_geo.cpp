@@ -22,9 +22,13 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 
-#include "TVector3.h"
-#include "TGDMLParse.h"
 #include "FileLoaderHelper.h"
+#include "G4OCCTSectorImport.h"
+#include "TGDMLParse.h"
+#include "TVector3.h"
+
+#include <exception>
+#include <limits>
 
 using namespace std;
 using namespace dd4hep;
@@ -82,16 +86,28 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double tilePlaneRotate = 0.0;
   double tile_tolerance  = 0.2; // Tile tolerance in mm to avoid overlaps
 
-  // Sector steel tessellated shape gdml file info
-  xml_comp_t x_det_sec_gdmlfile = x_det.child("sec_gdmlfile");
-  std::string sec_gdml_file =
-      getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(file), " ");
-  ;
-  std::string sec_gdml_material =
-      getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(material), " ");
-  std::string sec_gdml_url = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(url), " ");
-  std::string sec_gdml_cache =
-      getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(cache), " ");
+  // Sector steel source info
+  const bool use_g4occt_sector = x_det.hasChild(_Unicode(sec_stepfile));
+  std::string sec_source_file;
+  std::string sec_source_material;
+  std::string sec_source_url;
+  std::string sec_source_cache;
+
+  if (use_g4occt_sector) {
+    xml_comp_t x_det_sec_stepfile = x_det.child(_Unicode(sec_stepfile));
+    sec_source_file = getAttrOrDefault<std::string>(x_det_sec_stepfile, _Unicode(file), " ");
+    sec_source_material =
+        getAttrOrDefault<std::string>(x_det_sec_stepfile, _Unicode(material), " ");
+    sec_source_url   = getAttrOrDefault<std::string>(x_det_sec_stepfile, _Unicode(url), " ");
+    sec_source_cache = getAttrOrDefault<std::string>(x_det_sec_stepfile, _Unicode(cache), " ");
+  } else {
+    xml_comp_t x_det_sec_gdmlfile = x_det.child("sec_gdmlfile");
+    sec_source_file = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(file), " ");
+    sec_source_material =
+        getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(material), " ");
+    sec_source_url   = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(url), " ");
+    sec_source_cache = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(cache), " ");
+  }
 
   xml_comp_t x_det_csec_gdmlfile = x_det.child("csec_gdmlfile");
   std::string csec_gdml_file =
@@ -184,26 +200,57 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   TGDMLParse parser;
 
   // sector
-  EnsureFileFromURLExists(sec_gdml_url, sec_gdml_file, sec_gdml_cache);
-  if (!fs::exists(fs::path(sec_gdml_file))) {
-    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + sec_gdml_file + " does not exist");
+  EnsureFileFromURLExists(sec_source_url, sec_source_file, sec_source_cache);
+  if (!fs::exists(fs::path(sec_source_file))) {
+    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + sec_source_file + " does not exist");
     printout(ERROR, "BarrelHCalCalorimeter_geo",
              "use a FileLoader plugin before the field element");
     std::_Exit(EXIT_FAILURE);
   }
 
-  Volume barrel_sector_vol = parser.GDMLReadFile(sec_gdml_file.c_str());
-  if (!barrel_sector_vol.isValid()) {
-    printout(WARNING, "BarrelHCalCalorimeter", "%s", sec_gdml_file.c_str());
-    printout(WARNING, "BarrelHCalCalorimeter", "barrel_sector_vol invalid, GDML parser failed!");
-    std::_Exit(EXIT_FAILURE);
+  Volume barrel_sector_vol;
+  if (use_g4occt_sector) {
+    G4OCCTSectorGeometry geometry;
+    try {
+      geometry = ImportSectorSTEPWithG4OCCT("BarrelHCALSector", sec_source_file);
+    } catch (const std::exception& ex) {
+      printout(ERROR, "BarrelHCalCalorimeter", "%s", ex.what());
+      std::_Exit(EXIT_FAILURE);
+    }
+
+    const std::size_t n_triangles = geometry.triangles.size();
+    if (n_triangles > static_cast<std::size_t>(std::numeric_limits<int>::max())) {
+      printout(ERROR, "BarrelHCalCalorimeter",
+               "G4OCCT sector tessellation produced too many triangles");
+      std::_Exit(EXIT_FAILURE);
+    }
+
+    TessellatedSolid barrel_sector_solid("BarrelHCALSector_tess", static_cast<int>(n_triangles));
+    for (const auto& tri : geometry.triangles) {
+      barrel_sector_solid.addFacet(
+          TessellatedSolid::Vertex(tri.v[0].x, tri.v[0].y, tri.v[0].z) * dd4hep::mm,
+          TessellatedSolid::Vertex(tri.v[1].x, tri.v[1].y, tri.v[1].z) * dd4hep::mm,
+          TessellatedSolid::Vertex(tri.v[2].x, tri.v[2].y, tri.v[2].z) * dd4hep::mm);
+    }
+    barrel_sector_solid.ptr()->CloseShape(true, true, false);
+    Material sector_material = description.material(sec_source_material.c_str());
+    barrel_sector_vol        = Volume("BarrelHCALSector", barrel_sector_solid, sector_material);
+    barrel_sector_vol.setVisAttributes(description, x_det.visStr());
+  } else {
+    barrel_sector_vol = parser.GDMLReadFile(sec_source_file.c_str());
+    if (!barrel_sector_vol.isValid()) {
+      printout(WARNING, "BarrelHCalCalorimeter", "%s", sec_source_file.c_str());
+      printout(WARNING, "BarrelHCalCalorimeter", "barrel_sector_vol invalid, GDML parser failed!");
+      std::_Exit(EXIT_FAILURE);
+    }
+    barrel_sector_vol.import();
+    barrel_sector_vol.setVisAttributes(description, x_det.visStr());
+    TessellatedSolid barrel_sector_solid = barrel_sector_vol.solid();
+    barrel_sector_solid->CloseShape(true, true,
+                                    true); // tesselated solid not closed by import!
+    Material sector_material = description.material(sec_source_material.c_str());
+    barrel_sector_vol.setMaterial(sector_material);
   }
-  barrel_sector_vol.import();
-  barrel_sector_vol.setVisAttributes(description, x_det.visStr());
-  TessellatedSolid barrel_sector_solid = barrel_sector_vol.solid();
-  barrel_sector_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
-  Material sector_material = description.material(sec_gdml_material.c_str());
-  barrel_sector_vol.setMaterial(sector_material);
 
   // chimney sector
   EnsureFileFromURLExists(csec_gdml_url, csec_gdml_file, csec_gdml_cache);
