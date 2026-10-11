@@ -60,7 +60,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                     "boundary_material");
   }
 
-  assembly.setVisAttributes(description.invisible());
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
