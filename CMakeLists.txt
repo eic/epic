@@ -59,7 +59,7 @@ file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  USES ROOT::Core ROOT::Gdml
+  USES ROOT::Core ROOT::Gdml ROOT::ROOTTPython
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
@@ -99,6 +99,13 @@ endforeach()
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_full.xml
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
     RENAME ${PROJECT_NAME}.xml
+    )
+
+#-----------------------------------------------------------------------------------
+# Install the Python geometry plugins.
+install(DIRECTORY python/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/python
+    FILES_MATCHING PATTERN "*.py"
     )
 
 #-----------------------------------------------------------------------------------
