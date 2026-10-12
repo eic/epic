@@ -345,7 +345,9 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
                                  bool outward_facing) {
     ModuleTemplate module_template;
     module_template.name          = name;
-    module_template.vis           = "TrackerModuleVis";
+    // Tiling modules are assemblies with no solid of their own. Their dedicated
+    // visualization must expose the component daughters in geometry viewers.
+    module_template.vis           = "SVTModuleVis";
     module_template.rsu_count     = rsu_count;
     module_template.tiling_design = true;
     module_template.outward_facing = outward_facing;
