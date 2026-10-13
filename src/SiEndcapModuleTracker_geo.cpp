@@ -84,10 +84,12 @@ struct ModuleRow {
   double dz{0.0};
   bool facing_positive_z{true};
   string handedness;
+  string source_handedness;
   int disk_id{-1};
   int row_index{-1};
   int module_index{-1};
   double x_origin{0.0};
+  double source_x_origin{0.0};
   double y_origin{0.0};
   double z_corrugation_surface{0.0};
   double z_sensor_reference{0.0};
@@ -129,6 +131,8 @@ struct TilingDiskMetadata {
   int disk_id{-1};
   double center_z{0.0};
   double outer_radius{0.0};
+  DiskBoundary::CircularOpening source_opening_0;
+  DiskBoundary::CircularOpening source_opening_1;
   DiskBoundary::CircularOpening opening_0;
   DiskBoundary::CircularOpening opening_1;
 };
@@ -270,6 +274,22 @@ bool parse_handedness(const string& value, string& handedness) {
     return true;
   }
   return false;
+}
+
+// The supplied tiling package uses the engineer convention (+x toward the
+// ring center), opposite the fixed EPIC detector x direction. Apply this once
+// at ingestion; y, z, and facing are common to both conventions.
+constexpr double engineer_to_epic_x_sign = -1.0;
+
+string reflected_handedness(const string& source_handedness) {
+  if (source_handedness == "left") {
+    return "right";
+  }
+  if (source_handedness == "right") {
+    return "left";
+  }
+  throw std::runtime_error(
+      fmt::format("cannot reflect unsupported handedness '{}'", source_handedness));
 }
 
 // to do: add RSU structure, as well as detailed of the module.
@@ -1530,8 +1550,12 @@ vector<ModuleRow> load_tiling_module_directory(
         opening.radius = radius_a;
         return opening;
       };
-      parsed_metadata.opening_0 = read_opening(0);
-      parsed_metadata.opening_1 = read_opening(1);
+      parsed_metadata.source_opening_0 = read_opening(0);
+      parsed_metadata.source_opening_1 = read_opening(1);
+      parsed_metadata.opening_0 = parsed_metadata.source_opening_0;
+      parsed_metadata.opening_1 = parsed_metadata.source_opening_1;
+      parsed_metadata.opening_0.center_x *= engineer_to_epic_x_sign;
+      parsed_metadata.opening_1.center_x *= engineer_to_epic_x_sign;
       if (parsed_metadata.outer_radius <= 0.0) {
         fail(fmt::format("{} has non-positive outer_radius_mm",
                          metadata_path.filename().string()));
@@ -1582,7 +1606,8 @@ vector<ModuleRow> load_tiling_module_directory(
         row.row_index = std::stoi(field("row_index"));
         row.module_index = std::stoi(field("mod_index"));
         row.module_name = field("type_id");
-        row.x_origin = std::stod(field("x_origin_mm")) * mm;
+        row.source_x_origin = std::stod(field("x_origin_mm")) * mm;
+        row.x_origin = engineer_to_epic_x_sign * row.source_x_origin;
         row.y_origin = std::stod(field("y_origin_mm")) * mm;
         // Despite its source name, z_baseplate_mm is the corrugation/facet
         // reference surface, not the center of the carbon baseplate.
@@ -1623,7 +1648,8 @@ vector<ModuleRow> load_tiling_module_directory(
       row.csv_line = line_number;
       row.x_size = module_template.x_size;
       row.y_size = module_template.y_size;
-      row.handedness = catalog_handedness.at(row.module_name);
+      row.source_handedness = catalog_handedness.at(row.module_name);
+      row.handedness = reflected_handedness(row.source_handedness);
       row.facing_positive_z = source_delta > 0.0;
       row.tiling_coordinates = true;
       const double boundary_magnitude =
@@ -2256,6 +2282,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       const TilingDiskMetadata& metadata = supplied_boundary->second;
       layerParams.set<double>("source_metadata_z_center_mm", metadata.center_z / mm);
       layerParams.set<double>("source_metadata_outer_radius_mm", metadata.outer_radius / mm);
+      layerParams.set<double>("source_engineer_opening_0_center_x_mm",
+                              metadata.source_opening_0.center_x / mm);
+      layerParams.set<double>("source_engineer_opening_1_center_x_mm",
+                              metadata.source_opening_1.center_x / mm);
+      layerParams.set<double>("placed_epic_opening_0_center_x_mm",
+                              metadata.opening_0.center_x / mm);
+      layerParams.set<double>("placed_epic_opening_1_center_x_mm",
+                              metadata.opening_1.center_x / mm);
+      layerParams.set<double>("engineer_to_epic_x_sign", engineer_to_epic_x_sign);
       layerParams.set<double>("applied_outer_envelope_allowance_mm", 1.0 * um / mm);
     }
 
@@ -2363,6 +2398,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         module_params.set<int>("source_row_index", row.row_index);
         module_params.set<int>("source_module_index", row.module_index);
         module_params.set<string>("source_type_id", row.module_name);
+        module_params.set<double>("source_engineer_x_origin_mm", row.source_x_origin / mm);
+        module_params.set<double>("placed_epic_x_origin_mm", row.x_origin / mm);
+        module_params.set<string>("source_engineer_handedness", row.source_handedness);
+        module_params.set<string>("placed_epic_handedness", row.handedness);
         module_params.set<double>("source_corrugation_surface_z_mm",
                                   row.z_corrugation_surface / mm);
         module_params.set<double>("source_sensor_reference_z_mm",

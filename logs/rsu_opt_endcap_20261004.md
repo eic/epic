@@ -1556,3 +1556,64 @@ sampling and introduces no new overlap category. The comparison is recorded by
 `logs/compare_svt_detector_aligned_layers_step7u.py`. Together with the static
 transform proof, this satisfies the acceptance condition for the focused
 detector-aligned-layer commit.
+
+## Step 7v: apply the engineer-to-EPIC x convention
+
+The delivered tiling package uses the engineer coordinate convention in which
+positive x points toward the center of the ring. The fixed EPIC detector and
+beam-pipe geometry use the opposite x direction. The `tiling-directory` loader
+now applies exactly one explicit conversion at ingestion:
+
+```text
+x_EPIC = -x_engineer
+y_EPIC =  y_engineer
+z_EPIC =  z_engineer
+```
+
+Because this is a spatial reflection, the placed module handedness is also
+exchanged (`LEFT <-> RIGHT`). Facing is unchanged. The module builder already
+constructs handed geometry from the row handedness, so the original source
+type ID remains the provenance identifier while the geometry is built with the
+opposite handedness. No source CSV, catalogue, or metadata file is modified.
+
+The raw and converted values are both retained in DD4hep variant parameters.
+Modules record `source_engineer_x_origin_mm`, `placed_epic_x_origin_mm`,
+`source_engineer_handedness`, and `placed_epic_handedness`. Layers record the
+raw engineer and placed EPIC opening-center x values plus
+`engineer_to_epic_x_sign`. Existing source disk/row/module/type identifiers and
+all y/z/facing metadata remain unchanged.
+
+Only source-derived geometry receives this conversion: module placements,
+source placement openings, and module-dependent corrugation keep-clears. The
+beam pipe, physical XML subtraction openings, disk positions, and corrugation
+surface itself remain fixed in EPIC coordinates. The present physical opening
+dimensions are still the temporary Step-7n source-shaped holes; Step 7t's
+beam-pipe-derived physical dimensions remain a separate later change.
+
+`logs/validate_svt_engineer_to_epic_step7v.py` checks both `rsu_opt` and
+`all_6rsu`. All 4,324 centers reflect exactly, all types have one unique
+dimension/facing-matched opposite-chirality partner, and every transformed
+source opening aligns with the current physical-hole side. The minimum nominal
+source clearance is 4.999950 mm. Relative to the current source-shaped hole
+plus its 5 mm buffer, the -0.000050 mm residual is source rounding below the
+0.0001 mm intersection tolerance; neither scenario has a rectangle
+intersection.
+
+Run `bash logs/check_svt_engineer_to_epic_step7v.sh` inside the stable EIC
+shell. It rebuilds, exports the tracking-only `rsu_opt` geometry, and runs both
+overlap checkers. The expected change is removal of the 378 deterministic
+module/mother extrusions caused by source placements and physical holes being
+on opposite sides. Visually verify that both endcaps remain complete and that
+their openings follow the fixed beam pipe. Do not commit Step 7v until runtime
+and visual checks are satisfactory.
+
+Runtime validation completed successfully on 2026-10-13. The project rebuilt
+through `[100%] Built target Components_epic`, and the installed tracking-only
+geometry exported successfully. ROOT checked 628,936 candidates at 0.01 mm
+tolerance and reported exactly zero illegal overlaps or extrusions. The
+independent Geant4 geometry test also completed without an overlap exception.
+Thus the explicit engineer-to-EPIC x conversion removed all 378 prior
+source-opening/module-mother conflicts without leaving another reported
+overlap category. Visual inspection of both endcaps was also completed and
+accepted on 2026-10-13. Step 7v therefore satisfies its static, build, ROOT,
+Geant4, and visual acceptance checks.
