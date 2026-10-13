@@ -2207,10 +2207,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             "disk '{}': XML center z={} mm disagrees with metadata z_center_mm={} mm",
             disk.disk_key, global_layer_center / mm, metadata.center_z / mm));
       }
-      // Metadata outer_radius_mm targets the module corners.  Keep the existing
-      // 1 um layer-envelope allowance so four-decimal source coordinates do not
-      // protrude by their observed sub-0.06 um rounding residual.
-      disk.rmax = metadata.outer_radius + 1.0 * um;
+      // XML owns the constructed layer boundary. Metadata only verifies that
+      // it preserves the supplied module-corner radius and the explicit 1 um
+      // allowance for four-decimal source-coordinate rounding.
+      const double expected_layer_outer_radius = metadata.outer_radius + 1.0 * um;
+      if (std::abs(disk.rmax - expected_layer_outer_radius) > 5.0e-5 * mm) {
+        throw std::runtime_error(fmt::format(
+            "disk '{}': XML rmax={} mm disagrees with metadata outer_radius_mm={} mm "
+            "plus the 0.001 mm layer allowance",
+            disk.disk_key, disk.rmax / mm, metadata.outer_radius / mm));
+      }
       if (!disk.has_beampipe_opening) {
         throw std::runtime_error(fmt::format(
             "disk '{}': supplied tiling metadata requires an XML physical beampipe opening",

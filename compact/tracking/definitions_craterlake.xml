@@ -72,6 +72,14 @@
     <comment> Main parameters for the silicon disks </comment>
     <comment>  5cm thickness per endcap including room for corrugation and support structures.   </comment>
     <constant name="SiTrackerEndcapLayer_thickness" value="10*mm" />
+    <comment>
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
+      Supplied module-footprint outer radii. The layer XML adds its separate
+      1 um containment allowance; metadata verifies but does not set geometry.
+    </comment>
+    <constant name="SiEndcapTilingInner_outer_radius"  value="230*mm" />
+    <constant name="SiEndcapTilingMiddle_outer_radius" value="405*mm" />
+    <constant name="SiEndcapTilingOuter_outer_radius"  value="430*mm" />
     <comment> Scalar inner cutoffs are derived from the two-circle beampipe opening plus the bakeout buffer </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
     <comment>
@@ -100,7 +108,7 @@
 
     <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="max(abs(InnerTrackerEndcapP_lepton_center_x) + InnerTrackerEndcapP_lepton_radius, abs(InnerTrackerEndcapP_hadron_center_x) + InnerTrackerEndcapP_hadron_radius)" />
-    <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
+    <constant name="InnerTrackerEndcapP_rmax"        value="SiEndcapTilingInner_outer_radius" />
 
     <comment> Positive disk openings from the two-circle beampipe helper </comment>
     <constant name="TrackerEndcapPDisk1_lepton_center_x" value="0.0*mm" />
@@ -112,7 +120,7 @@
 
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="max(abs(TrackerEndcapPDisk1_lepton_center_x) + TrackerEndcapPDisk1_lepton_radius, abs(TrackerEndcapPDisk1_hadron_center_x) + TrackerEndcapPDisk1_hadron_radius)" />
-    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapDisk_rmax - 15*mm" />
+    <constant name="TrackerEndcapPDisk1_rmax"        value="SiEndcapTilingMiddle_outer_radius" />
 
     <constant name="TrackerEndcapPDisk2_lepton_center_x" value="-3.1360*mm" />
     <constant name="TrackerEndcapPDisk2_lepton_center_y" value="0.0*mm" />
@@ -122,7 +130,7 @@
     <constant name="TrackerEndcapPDisk2_hadron_radius"   value="37.1360*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="max(abs(TrackerEndcapPDisk2_lepton_center_x) + TrackerEndcapPDisk2_lepton_radius, abs(TrackerEndcapPDisk2_hadron_center_x) + TrackerEndcapPDisk2_hadron_radius)" />
-    <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerEndcapDisk_rmax * .98" />
+    <constant name="TrackerEndcapPDisk2_rmax"        value="SiEndcapTilingOuter_outer_radius" />
 
     <constant name="TrackerEndcapPDisk3_lepton_center_x" value="-8.7360*mm" />
     <constant name="TrackerEndcapPDisk3_lepton_center_y" value="0.0*mm" />
@@ -132,7 +140,7 @@
     <constant name="TrackerEndcapPDisk3_hadron_radius"   value="42.7360*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk3_zmin"        value="95.0*cm" />
     <constant name="TrackerEndcapPDisk3_rmin"        value="max(abs(TrackerEndcapPDisk3_lepton_center_x) + TrackerEndcapPDisk3_lepton_radius, abs(TrackerEndcapPDisk3_hadron_center_x) + TrackerEndcapPDisk3_hadron_radius)" />
-    <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapDisk_rmax * .98" />
+    <constant name="TrackerEndcapPDisk3_rmax"        value="SiEndcapTilingOuter_outer_radius" />
 
     <constant name="TrackerEndcapPDisk4_lepton_center_x" value="-14.3360*mm" />
     <constant name="TrackerEndcapPDisk4_lepton_center_y" value="0.0*mm" />
@@ -142,7 +150,7 @@
     <constant name="TrackerEndcapPDisk4_hadron_radius"   value="48.3360*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="120.0*cm" />
     <constant name="TrackerEndcapPDisk4_rmin"        value="max(abs(TrackerEndcapPDisk4_lepton_center_x) + TrackerEndcapPDisk4_lepton_radius, abs(TrackerEndcapPDisk4_hadron_center_x) + TrackerEndcapPDisk4_hadron_radius)" />
-    <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapDisk_rmax * .98" />
+    <constant name="TrackerEndcapPDisk4_rmax"        value="SiEndcapTilingOuter_outer_radius" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)</comment>
     <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />

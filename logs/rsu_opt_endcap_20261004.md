@@ -1617,3 +1617,31 @@ source-opening/module-mother conflicts without leaving another reported
 overlap category. Visual inspection of both endcaps was also completed and
 accepted on 2026-10-13. Step 7v therefore satisfies its static, build, ROOT,
 Geant4, and visual acceptance checks.
+
+## Step 7w: make XML authoritative for disk outer radii
+
+Metadata verification is retained, but metadata no longer mutates constructed
+geometry. Previously the tiling loader silently replaced each layer's XML
+`rmax` with `outer_radius_mm + 0.001 mm`. That made the delivered metadata,
+rather than compact XML, the effective geometry authority.
+
+The three supplied module-footprint boundaries are now named XML constants:
+230 mm for ED0/HD0, 405 mm for ED1/HD1, and 430 mm for the six outer disks.
+Every layer continues to add the explicit 0.001 mm containment allowance for
+the placement CSV's four-decimal rounding. C++ now compares the already parsed
+XML `rmax` with `metadata outer_radius_mm + 0.001 mm` and throws on a mismatch;
+it never assigns an XML boundary from metadata. This is numerically identical
+to the accepted Step 7v geometry while making configuration ownership explicit.
+
+`logs/validate_svt_xml_radius_authority_step7w.py` checks the XML constants and
+aliases, the ten layer allowances, both metadata packages, and the absence of
+the old C++ assignment. Run
+`bash logs/check_svt_xml_radius_authority_step7w.sh` inside the stable EIC
+shell to rebuild, export, and repeat ROOT and Geant4 overlap checks. Expected
+result: zero overlaps because this step changes authority, not dimensions.
+
+Runtime validation completed successfully on 2026-10-13. The build and
+installed tracking-only export completed, ROOT checked 628,936 candidates at
+0.01 mm tolerance and reported zero illegal overlaps or extrusions, and the
+independent Geant4 test completed without an overlap exception. This confirms
+that moving outer-radius authority to XML preserved the accepted geometry.
