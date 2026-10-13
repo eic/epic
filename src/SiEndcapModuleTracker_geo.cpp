@@ -895,7 +895,7 @@ string source_corrugation_disk_key(const string& layer_key) {
 // - y0=0 keeps the central lower flat centered at y=0; it is split there so no
 //   single frame volume crosses the xz plane.
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
-                           const CorrugatedFrameConfig& config, bool reflect,
+                           const CorrugatedFrameConfig& config,
                            const vector<CorrugationKeepClear>& keep_clears) {
   if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
       config.theta <= 0.0) {
@@ -1049,7 +1049,7 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
 
       for (const auto& flat : flats) {
         const double flat_width = flat.flat_width;
-        const double local_surface_offset = reflect ? -flat.surface_offset : flat.surface_offset;
+        const double local_surface_offset = flat.surface_offset;
         if (flat_width <= 0.0 ||
             std::abs(local_surface_offset) <= config.thickness / 2.0) {
           printout(WARNING, "SiEndcapModuleTracker",
@@ -1640,32 +1640,30 @@ vector<ModuleRow> load_tiling_module_directory(
 
 ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow& source_row,
                                           const ModuleTemplate& module_template,
-                                          const DiskBoundary& disk, bool reflect) {
+                                          double global_layer_center) {
   if (!source_row.tiling_coordinates) {
     return source_row;
   }
 
   ModuleRow row = source_row;
-  const double layer_axis_sign = reflect ? -1.0 : 1.0;
+  // Both layer frames are detector-aligned. Only z is made relative to the
+  // signed layer center; detector x/y and intrinsic axis directions are direct.
   const double global_x_center = source_row.x_min + source_row.x_size / 2.0;
-  const double local_x_center = layer_axis_sign * global_x_center;
-  row.x_min = local_x_center - row.x_size / 2.0;
+  row.x_min = global_x_center - row.x_size / 2.0;
   row.y_min = source_row.y_origin - row.y_size / 2.0;
 
   const double global_normal_sign =
       source_row.z_sensor_reference > source_row.z_corrugation_surface ? 1.0 : -1.0;
-  const double local_normal_sign = layer_axis_sign * global_normal_sign;
-  row.rotation_y = local_normal_sign > 0.0 ? 0.0 : M_PI;
+  row.rotation_y = global_normal_sign > 0.0 ? 0.0 : M_PI;
 
   const double boundary_local =
       tiling_lec_boundary_x(description, module_template, row.handedness);
-  const double boundary_layer = layer_axis_sign * source_row.x_origin - local_x_center;
+  const double boundary_layer = source_row.x_origin - global_x_center;
   const double local_x_axis_sign = boundary_layer / boundary_local;
-  row.rotation_z = local_x_axis_sign * local_normal_sign > 0.0 ? 0.0 : M_PI;
+  row.rotation_z = local_x_axis_sign * global_normal_sign > 0.0 ? 0.0 : M_PI;
 
   const double corrugation_reference_local =
       tiling_corrugation_reference_z(description, module_template);
-  const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
   double global_module_center = source_row.z_corrugation_surface -
                                 global_normal_sign * corrugation_reference_local;
 
@@ -1684,7 +1682,7 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
     global_module_center += global_normal_sign * row.applied_z_offset;
   }
   row.placed_sensor_reference = predicted_sensor + global_normal_sign * row.applied_z_offset;
-  row.dz = layer_axis_sign * (global_module_center - global_layer_center);
+  row.dz = global_module_center - global_layer_center;
   return row;
 }
 
@@ -2079,7 +2077,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_det_t x_det = e;
   int det_id      = x_det.id();
   string det_name = x_det.nameStr();
-  bool reflect = x_det.reflect(false);
+  // The legacy XML attribute now selects the negative-z detector side only;
+  // it no longer rotates or reflects the layer coordinate frame.
+  bool negative_z = x_det.reflect(false);
 
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name);
@@ -2175,7 +2175,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     auto supplied_boundary = tiling_disk_metadata.find(disk.disk_key);
     if (supplied_boundary != tiling_disk_metadata.end()) {
       const TilingDiskMetadata& metadata = supplied_boundary->second;
-      const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
+      const double global_layer_center = negative_z ? -disk.center_z : disk.center_z;
       if (std::abs(global_layer_center - metadata.center_z) > 5.0e-5 * mm) {
         throw std::runtime_error(fmt::format(
             "disk '{}': XML center z={} mm disagrees with metadata z_center_mm={} mm",
@@ -2191,17 +2191,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             disk.disk_key));
       }
       disk.has_source_opening = true;
-      const double global_to_local_x = reflect ? -1.0 : 1.0;
       disk.source_lepton_opening = metadata.opening_0;
       disk.source_hadron_opening = metadata.opening_1;
-      disk.source_lepton_opening.center_x *= global_to_local_x;
-      disk.source_hadron_opening.center_x *= global_to_local_x;
     }
 
     vector<CorrugationKeepClear> keep_clears;
     if (module_format == "tiling-directory") {
-      const double layer_axis_sign = reflect ? -1.0 : 1.0;
-      const double global_layer_center = reflect ? -disk.center_z : disk.center_z;
+      const double global_layer_center = negative_z ? -disk.center_z : disk.center_z;
       const double keep_depth = description.constant<double>("SiEndcapTilingKeepClear_depth");
       for (const auto& source_row : module_rows) {
         if (source_row.disk_key != disk.disk_key) {
@@ -2216,12 +2212,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             with_corrugated_handedness(description, module_template_it->second,
                                        source_row.handedness);
         const ModuleRow row = module_row_in_layer_coordinates(
-            description, source_row, module_template, disk, reflect);
+            description, source_row, module_template, global_layer_center);
         const double keep_width = description.constant<double>(
             source_row.module_name[0] == 'A' ? "SiEndcapTilingKeepClearA_width"
                                              : "SiEndcapTilingKeepClearB_width");
-        const double local_surface =
-            layer_axis_sign * (source_row.z_corrugation_surface - global_layer_center);
+        const double local_surface = source_row.z_corrugation_surface - global_layer_center;
         const double channel_edge =
             local_surface - std::copysign(keep_depth, local_surface);
         keep_clears.push_back({row.x_min, row.x_min + row.x_size,
@@ -2235,17 +2230,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     Volume layer_vol(layer_name, build_disk_solid(layer_name, disk), air);
     layer_vol.setVisAttributes(description.visAttributes(disk.vis));
 
-    // The detector XML uses reflect="true" for the negative-z side. The layer solid
-    // itself is built in local coordinates and then mirrored here during placement.
-    PlacedVolume layer_pv;
-    if (reflect) {
-      layer_pv = assembly.placeVolume(
-          layer_vol, Transform3D(RotationZYX(0.0, -M_PI, 0.0), Position(0, 0, -disk.center_z)));
-      layer_name += "_N";
-    } else {
-      layer_pv = assembly.placeVolume(layer_vol, Position(0, 0, disk.center_z));
-      layer_name += "_P";
-    }
+    // Keep both endcap layer axes aligned with detector coordinates. The XML
+    // reflect flag now selects only the signed z position, not a rotated frame.
+    const double global_layer_center = negative_z ? -disk.center_z : disk.center_z;
+    PlacedVolume layer_pv = assembly.placeVolume(layer_vol, Position(0, 0, global_layer_center));
+    layer_name += negative_z ? "_N" : "_P";
     layer_pv.addPhysVolID("layer", layer_id);
 
     DetElement layer_element(sdet, layer_name, layer_id);
@@ -2273,15 +2262,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     for (xml_coll_t fi(x_layer, _U(frame)); fi; ++fi) {
       // Layer frame workflow:
       // A type="corrugated" frame is an insensitive carbon support component that
-      // shares this tiled layer's envelope, z placement, reflection, and openings.
+      // shares this tiled layer's envelope, z placement, and openings.
       xml_comp_t x_frame(fi);
       CorrugatedFrameConfig frame_config;
       if (!parse_corrugated_frame(x_frame, frame_config)) {
         continue;
       }
       const int placed_frame_count =
-          place_corrugated_frame(description, layer_vol, disk, frame_config, reflect,
-                                 keep_clears);
+          place_corrugated_frame(description, layer_vol, disk, frame_config, keep_clears);
       if (placed_frame_count == 0) {
         printout(WARNING, "SiEndcapModuleTracker",
                  fmt::format("no corrugated frame pieces placed for '{}' disk '{}'", det_name,
@@ -2312,7 +2300,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           with_corrugated_handedness(description, module_template_it->second,
                                      source_row.handedness);
       ModuleRow row = module_row_in_layer_coordinates(description, source_row, module_template,
-                                                      disk, reflect);
+                                                      global_layer_center);
 
       if (!module_inside_disk(row, disk)) {
         const string message =
@@ -2355,7 +2343,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                              row.row_index, row.module_index, row.module_name)
                                : _toString(layer_id, "layer%d") +
                                      _toString(mod_num, "_module%d") +
-                                     (reflect ? "_neg" : "_pos");
+                                     (negative_z ? "_neg" : "_pos");
       DetElement module_element(layer_element, module_name, mod_num);
       // The optional facing column flips the module around local y so the sensor can
       // face either +z or -z within the layer volume.
@@ -2408,7 +2396,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Place the full detector assembly in its mother volume. The tiny signed z offset is
   // kept from the original pattern to avoid coincident-placement edge cases.
-  PlacedVolume pv = motherVol.placeVolume(assembly, Position(0, 0, reflect ? -1.0e-9 : 1.0e-9));
+  PlacedVolume pv =
+      motherVol.placeVolume(assembly, Position(0, 0, negative_z ? -1.0e-9 : 1.0e-9));
   pv.addPhysVolID("system", det_id);
   sdet.setPlacement(pv);
   return sdet;

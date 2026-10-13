@@ -1,0 +1,6 @@
+ROOT baseline/current: 377/377
+ROOT only-before/only-after: 0/0
+Geant4 baseline/current: 377/378
+Geant4 only-before/only-after: 0/1
+PASS: deterministic ROOT overlap identities are unchanged
+NOTE: Geant4 pair differences are allowed because surface sampling is stochastic

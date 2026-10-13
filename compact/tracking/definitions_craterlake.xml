@@ -149,7 +149,7 @@
     <constant name="InnerTrackerEndcapN_rmin"        value="max(abs(InnerTrackerEndcapN_lepton_center_x) + InnerTrackerEndcapN_lepton_radius, abs(InnerTrackerEndcapN_hadron_center_x) + InnerTrackerEndcapN_hadron_radius)" />
     <constant name="InnerTrackerEndcapN_rmax"        value="InnerTrackerEndcapP_rmax" />
 
-    <comment> Negative disk openings are in reflected local-layer coordinates </comment>
+    <comment> Negative disk openings use detector-aligned layer coordinates </comment>
     <constant name="TrackerEndcapNDisk1_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_lepton_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_lepton_radius"   value="31.750*mm + Beampipe_bakeout_buffer " />
@@ -173,7 +173,7 @@
     <constant name="TrackerEndcapNDisk3_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk3_lepton_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk3_lepton_radius"   value="34.9000*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapNDisk3_hadron_center_x" value="-21.2544*mm" />
+    <constant name="TrackerEndcapNDisk3_hadron_center_x" value="21.2544*mm" />
     <constant name="TrackerEndcapNDisk3_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk3_hadron_radius"   value="15.9000*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapNDisk3_zmin"        value="85*cm" />
@@ -183,7 +183,7 @@
     <constant name="TrackerEndcapNDisk4_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk4_lepton_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk4_lepton_radius"   value="34.9000*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapNDisk4_hadron_center_x" value="-25.5053*mm" />
+    <constant name="TrackerEndcapNDisk4_hadron_center_x" value="25.5053*mm" />
     <constant name="TrackerEndcapNDisk4_hadron_center_y" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk4_hadron_radius"   value="15.9000*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapNDisk4_zmin"        value="102*cm" />
