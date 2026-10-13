@@ -1036,3 +1036,472 @@ separation, derive the physical opening from the current beampipe geometry or
 adopt and clearly label an upstream-main-style conservative centered opening.
 The fetched remote reference changed only `.git` metadata; no worktree geometry
 or source data was changed.
+
+## Step 7l: physical beampipe-clearance audit
+
+`logs/audit_svt_beampipe_clearance_step7l.py` traces the beampipe parameters in
+`compact/central_beampipe.xml`, `compact/definitions.xml`, and
+`src/IP6BeamPipe.cpp`. This is a read-only numerical audit; no beampipe, SVT,
+placement, or metadata geometry was changed.
+
+The displaced upstream pipe is rotated by 25 mrad. The downstream hadron cone
+has a 45 mrad full opening angle and its axis is rotated by half that angle
+about `z = 661 mm`. In both reflected and unreflected SVT layer-local
+coordinates, the displaced physical pipe extends toward negative x. The
+delivered ED metadata has the same negative sign, while the delivered HD
+metadata has a positive center. Metadata therefore remains a source-layout
+constraint and is not a reliable physical subtraction definition.
+
+The branch-local XML center values reveal their provenance: they agree, to
+their 0.001 mm rounding, with evaluating the pipe axes 25 mm beyond each disk
+center. They were constructed for the former 50 mm-thick endcap envelope. The
+current tiled layer is 10 mm thick, so its far face is only 5 mm beyond the
+center. The retained XML openings consequently include an additional 20 mm of
+pipe-axis projection:
+
+| Disk | current far-face z [mm] | physical displaced center at far face [mm] | branch XML center [mm] | conservative x excess [mm] |
+|---|---:|---:|---:|---:|
+| ED3 | -855 | -21.3795 | -21.880 | 0.5001 |
+| ED4 | -1025 | -25.6303 | -26.130 | 0.5001 |
+| HD2 | +705 | -0.9902 | -1.440 | 0.4501 |
+| HD3b | +955 | -6.6161 | -7.066 | 0.4501 |
+| HD4 | +1205 | -12.2421 | -12.692 | 0.4501 |
+
+The branch XML then adds the common 5 mm bakeout buffer. Its centered physical
+openings are 38.500 mm on ED3/ED4 and 36.757 mm on HD2/HD3b/HD4. Its displaced
+buffered radii are 19.285, 19.285, 40.488, 46.111, and 51.734 mm respectively.
+The extra 0.45--0.50 mm projection is conservative and much smaller than the
+explicit buffer. It does not explain the reported intersections.
+
+Conclusion: the remaining overlaps arise because loading tiling metadata
+overwrites these physical XML openings before both `build_disk_solid` and
+support clipping. The next implementation step should preserve two boundary
+sets in `DiskBoundary`: source openings from metadata for
+`module_inside_disk`, and physical openings from XML for the layer subtraction
+and corrugation containment. The existing XML physical openings can be retained
+as safe conservative values; changing the beampipe implementation is neither
+needed nor justified by this audit.
+
+This was the pre-Step-7n audit conclusion. Step 7n supersedes the numerical
+XML values with provider-exact page-7 circles plus the same 5 mm buffer, while
+retaining the source/physical boundary separation established here.
+
+## Step 7m: comparison with sensor-tiling slides 7 and 8
+
+Pages 7 and 8 of `20260929 - EIC local mtg. sensor tiling.pdf` were inspected
+directly and compared with the copied placement packages, metadata, and
+corrugation table. Existing validators were rerun:
+`python3 logs/audit_svt_radial_boundaries_step6c.py` and
+`python3 logs/validate_svt_corrugation_lattice_step7b.py`; both pass.
+
+Page 7's plotted tiling-opening entries agree with the delivered metadata to
+the precision printed on the slide:
+
+| Disk group | Slide opening `(cx, r)` [mm] | delivered metadata [mm] | result |
+|---|---:|---:|---|
+| ED0, ED1 | `(0, 31.75)` | `(0, 31.7500)` | exact |
+| ED2 | `(0, 34.90)` | `(0, 34.9000)` | exact |
+| ED3 | `(0, 34.90)` and `(-21.25, 15.90)` | `(0, 34.9000)` and `(-21.2544, 15.9000)` | exact after slide rounding |
+| ED4 | `(0, 34.90)` and `(-25.51, 15.90)` | `(0, 34.9000)` and `(-25.5053, 15.9000)` | exact after slide rounding |
+| HD0, HD1 | `(0, 31.75)` | `(0, 31.7500)` | exact |
+| HD2 | `(+3.14, 37.14)` | `(+3.1360, 37.1360)` | exact after slide rounding |
+| HD3 / delivered HD3b | `(+8.74, 42.74)` | `(+8.7360, 42.7360)` | exact after slide rounding |
+| HD4 | `(+14.34, 48.34)` | `(+14.3360, 48.3360)` | exact after slide rounding |
+
+The supplied disk centers also match page 7 exactly:
+ED0--ED4 are -250, -450, -650, -850, and -1020 mm; HD0--HD4 are +250,
++450, +700, +950, and +1200 mm. The slide calls the +950 mm disk HD3,
+whereas the delivery consistently names it HD3b.
+
+Page 8 states that tiling is discrete and that baseplate clearance drops to
+the required 5 mm at discontinuities. The full-rectangle audit confirms a
+minimum delivered baseplate-to-metadata-opening clearance of
+4.99994991--4.99998402 mm over all ten rsu_opt disks; the sub-0.000051 mm
+difference from 5 mm is source-coordinate rounding. No opening violation is
+present.
+
+The pitch recommendations also agree with the delivered construction:
+
+- ED0, ED1, HD0, and HD1 contain only B rows and use uniform 33 mm pitch.
+- The remaining disks use 36 mm A rows in their central region and 33 mm B
+  rows outside, with centered 17.25 mm A/B joins. This is a mixed realization
+  of page 8's recommendation to *start from* 36 mm for these disks, not a
+  uniform-36-mm construction. The two-facet transition is specified elsewhere
+  in the same slide deck and is explicit in the delivered row types.
+- No delivered row uses the optional pitch above 36.25 mm mentioned on page 8.
+
+Therefore the delivered geometry is source-exact with the page 7 opening
+table and satisfies page 8's 5 mm clearance and pitch guidance. These slide
+openings must remain the source-placement boundaries. The larger branch XML
+openings are the corresponding physical layer/support clearances, including
+the 5 mm bakeout allowance and full-z-envelope projection; they are not a
+contradiction of the slide table.
+
+## Step 7n: separate supplied and physical beampipe openings
+
+`DiskBoundary` now retains two independent opening pairs. XML
+`lepton_opening`/`hadron_opening` circles cut the layer mother and clip the
+corrugated carbon support. Metadata `source_lepton_opening` and
+`source_hadron_opening` circles are used only by `module_inside_disk` to
+validate the delivered placement. Loading tiling metadata no longer overwrites
+the physical XML holes. A tiling package without an XML physical opening is a
+named configuration error rather than an implicit fallback.
+
+The XML opening constants now reproduce the page-7 supplied values exactly.
+For the positive-z HD disks, supplied positive x is converted to negative
+layer-local x. Physical radii add the existing user-configurable
+`Beampipe_bakeout_buffer = 5 mm`; metadata and CSV files remain unchanged.
+Thus the source placement retains its measured 4.99995--4.99998 mm clearance,
+while the layer/support hole reaches that same clearance boundary.
+
+The requested provenance comment
+`From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/`
+was added once to each relevant user-configurable XML block, including module,
+material-stack, electronics/FPC/AncASIC, corrugation, and opening parameters.
+
+Static validation command:
+`python3 logs/validate_svt_opening_separation_step7n.py`. The recorded full
+build/export/overlap command is
+`bash logs/check_svt_opening_separation_step7n.sh`; run it inside the stable
+EIC shell. The acceptance criterion is zero beampipe/layer and
+beampipe/support overlaps for the rsu_opt geometry.
+
+### Step 7n geometry result: failed coordinate-frame acceptance
+
+The 2026-10-12 build, install, export, ROOT overlap check, and Geant4 overlap
+check completed. The original beampipe/layer-envelope reports are gone, and
+there are no beampipe/support reports. However, the larger physical holes now
+cut through modules: ROOT reports 378 daughter extrusions and Geant4 samples
+377 protrusions. All Geant4 reports are daughter-versus-mother violations, not
+sibling-volume intersections.
+
+Only 28 modules on the five disks with displaced openings are involved:
+
+| Disk | unique affected modules | ROOT reports | maximum ROOT overlap |
+|---|---:|---:|---:|
+| ED3 | 4 | 12 | 0.225366 cm |
+| ED4 | 4 | 16 | 0.650434 cm |
+| HD2 | 6 | 24 | 0.627161 cm |
+| HD3b | 7 | 95 | 0.677 cm |
+| HD4 | 7 | 230 | 0.677 cm |
+
+The 377 classified component reports comprise 227 detailed RSU silicon
+pieces, 52 bridge-FPC pieces, 34 external-epoxy pieces, 28 baseplates, 24
+film/glue pieces, and 12 LEC/REC pieces. The broad component distribution is
+expected when a subtraction hole crosses an assembled module; it does not
+indicate hundreds of independent placement errors.
+
+Root cause: Step 7n changed only the physical-opening x convention. Module
+coordinates and metadata placement openings retained the existing source-to-
+layer transform. Consequently, their displaced-circle centers are on opposite
+sides of the layer:
+
+| Disk | placement-opening local `cx` [mm] | physical-opening local `cx` [mm] | separation [mm] |
+|---|---:|---:|---:|
+| ED3 | +21.2544 | -21.2544 | 42.5088 |
+| ED4 | +25.5053 | -25.5053 | 51.0106 |
+| HD2 | +3.1360 | -3.1360 | 6.2720 |
+| HD3b | +8.7360 | -8.7360 | 17.4720 |
+| HD4 | +14.3360 | -14.3360 | 28.6720 |
+
+The static placement audit still passed because it checked modules against the
+metadata opening on their original side. Adding 5 mm to a coincident source
+circle would place the physical boundary at the baseplate edge, but moving its
+center to the opposite side invalidated that relationship. This was the
+incorrect assumption in Step 7n.
+
+The result demonstrates two facts simultaneously: the sign-flipped holes cover
+the installed EPIC beampipe, while the delivered module layout is cleared
+around the opposite-sign slide openings. A valid correction must apply one
+coordinate convention consistently. The likely source-exact solution is to
+transform the complete delivered x geometry—including module origins,
+opening centers, and handedness/chirality—not only the holes. That transform
+must be audited before implementation because a reflection in x changes
+chirality. Simply enlarging the current holes further or ignoring mother
+extrusions is not acceptable.
+
+### Step 7o rejected hypothesis: full-x reflection
+
+An initial Step 7o audit considered the transformation required by the Step 7n failure
+without changing the delivered CSV files or activating a new builder path. The
+candidate transformation is:
+
+- reflect every supplied global module and opening x coordinate, `x -> -x`;
+- preserve `y`, `z_baseplate_mm`, `z_sensor_mm`, and INWARD/OUTWARD facing;
+- exchange LEFT and RIGHT chirality, hence exchange the final catalogue
+  orientation digit (`A600 <-> A601`, `A610 <-> A611`, and likewise for B5/B6);
+- retain the original `(disk_id,row_index,mod_index)` as source provenance even
+  though its spatial x ordering is reversed.
+
+`logs/audit_svt_full_x_reflection_step7o.py` verifies all 2,164 delivered
+modules. The catalogue supplies exactly one same-size, same-RSU-count,
+same-facing opposite-chirality partner for every type, and the mapping is a
+bijection. After the complete coordinate transform, every supplied opening
+maps to the Step 7n physical XML opening; the XML radius is the source radius
+plus the configured 5 mm facility clearance. Negative-z disks require both
+the global-x reflection and the existing reflected-layer global-to-local sign,
+which is why reflecting only the XML center was not a valid transformation.
+
+The audit also exposes an ID-policy detail: retaining source `mod_index`
+reverses its x ordering in 426 multi-module rows. The IDs should remain
+unchanged for traceability unless downstream software explicitly requires
+left-to-right numbering; changing IDs is not geometrically necessary.
+
+A rectangle-versus-circle precheck remains deliberately conservative. It
+flags 67 mirrored module envelopes against the source opening plus 5 mm, but
+the module prototypes are assemblies and do not fill those rectangles. The
+same approximation flags centered-disk modules that produced no runtime
+mother-volume reports. It therefore cannot be used to accept or reject the
+physical geometry. Exact acceptance still requires a temporary,
+configuration-gated full-reflection builder path followed by ROOT and Geant4
+overlap checks. No production geometry was changed in this initial audit.
+
+This hypothesis is rejected. Page 2 of the provider slides defines the EIC
+detector frame explicitly: +z is hadron-going, +y points upward, and +x points
+toward the inside of the ring. The provider states that `module.csv` origins
+are detector coordinates. Therefore their x values are authoritative detector-
+frame coordinates and must not be reflected arbitrarily. The initial audit
+scripts were moved to `tmp/retained/2026-10-12/logs/` so they cannot be mistaken
+for an approved implementation path.
+
+### Step 7o corrected coordinate-convention audit
+
+The positive-z layers have `x_local = x_detector`. The existing negative-z
+layer placement uses `Ry(pi)`, so `x_local = -x_detector`. Applying only those
+required transforms gives:
+
+| Disk | provider detector x [mm] | required layer-local x [mm] | Step 7n XML local x [mm] |
+|---|---:|---:|---:|
+| ED3 | -21.2544 | +21.2544 | -21.2544 |
+| ED4 | -25.5053 | +25.5053 | -25.5053 |
+| HD2 | +3.1360 | +3.1360 | -3.1360 |
+| HD3b | +8.7360 | +8.7360 | -8.7360 |
+| HD4 | +14.3360 | +14.3360 | -14.3360 |
+
+Thus all five displaced Step 7n physical XML openings are opposite the
+provider openings when expressed in the same layer-local frame. This is not,
+by itself, authorization to change either subsystem. The module and source-
+metadata transform is consistent with page 2 and must remain unchanged. The
+negative-local-x XML holes follow the currently installed EPIC beam-pipe
+geometry. Their cutting through source-exact modules therefore exposes a real
+cross-subsystem incompatibility between the delivered tiling and the current
+central beam pipe. It must not be hidden by reflecting the SVT delivery or by
+moving only the layer hole. The central beam-pipe sign/convention and the
+provider's assumed physical beam line require reconciliation before another
+geometry implementation step.
+
+The recorded read-only check is
+`bash logs/check_svt_coordinate_convention_step7o.sh`.
+
+## Step 7p: translation-only negative-z dependency audit
+
+The negative-z `Ry(pi)` is coupled to six compensating transformations in the
+current builder: module x, module z, module normal, source-opening x,
+keep-clear x/z, and corrugation surface z. It also affects the physical XML
+opening coordinates through the layer placement. Removing only the layer
+rotation would therefore be incorrect.
+
+The source-exact translation-only formulation is:
+
+- place every layer at its signed detector `z_center_mm`, with identity rotation;
+- use supplied module x/y and source-opening x directly as layer-local x/y;
+- use `z_source - z_layer_center` directly as layer-local z;
+- derive module `rotation_y` from the supplied global sensor-normal sign;
+- derive `rotation_z` from the global LEC-boundary direction and chirality;
+- use supplied corrugation surface offsets without a negative-side sign flip;
+- construct keep-clears directly in that same detector-aligned local frame.
+
+`logs/audit_svt_translation_only_step7p.py` checks every row in both delivered
+packages. It proves that removing the layer rotation and all corresponding
+compensation signs preserves the final detector-frame module centers and
+intrinsic x/y/z-axis directions. Facing, chirality, type IDs, row/module IDs,
+and the source CSV files do not change.
+
+Physical XML openings require separate coordinate migration to preserve their
+current detector-frame geometry. HD local coordinates remain unchanged. ED
+local x becomes the current global x when the layer rotation is removed:
+
+| Disk | current local x [mm] | current global x [mm] | translation-only local x [mm] |
+|---|---:|---:|---:|
+| ED3 | -21.2544 | +21.2544 | +21.2544 |
+| ED4 | -25.5053 | +25.5053 | +25.5053 |
+| HD2 | -3.1360 | -3.1360 | -3.1360 |
+| HD3b | -8.7360 | -8.7360 | -8.7360 |
+| HD4 | -14.3360 | -14.3360 | -14.3360 |
+
+This migration table preserves the existing physical hole locations; it does
+not resolve the opposite-sign disagreement between the installed beam pipe and
+the provider's openings.
+
+All six active detector blocks use `tiling-directory`; none actively uses the
+legacy plain-CSV placement path. This matters because legacy rows bypass the
+detector-coordinate conversion and would not be invariant under a simple
+rotation removal. The commented legacy path must remain disabled or receive a
+separate migration before future use.
+
+Corrugation solids are also invariant analytically. On ED, the old local web
+angle is the negative of its detector-frame angle. Composing `Rx(-a)` with the
+old layer `Ry(pi)` produces the same oriented box as direct `Rx(+a)`, up to
+sign reversals of symmetric box axes. Flat centers, physical-hole clipping,
+and keep-clear clipping similarly map to identical detector-frame regions.
+Because module global transforms are unchanged, their attached ACTS surface
+transforms are unchanged as well. Runtime export and overlap checks remain
+mandatory implementation validation. The Step 7p audit itself is read-only.
+
+### Step 7q read-only central-beam-pipe provenance review
+
+The apparent sign conflict is not caused solely by the SVT layer transform.
+The central beam-pipe model independently encodes a negative crossing-angle
+direction. `compact/definitions.xml` defines `CrossingAngle = -0.025 rad` and
+labels the IP6 beam-pipe parameter block with `Note might need cleaning`.
+`src/IP6BeamPipe.cpp` applies each pipe component's crossing angle with
+`RotationY(crossing_angle)`. The downstream outgoing-hadron cone uses
+`-HadronConeOpenAngle/2`, while the upstream assembly is subsequently placed
+with `Ry(pi)` because `<upstream reflect="true">`.
+
+The resulting detector-frame directions are negative x at positive z and
+positive x at negative z. These are opposite the centers of the supplied SVT
+opening primitives, which are positive x on HD and negative x on ED. Removing
+the SVT layer `Ry(pi)` does not alter the actual beam-pipe volumes.
+
+The signs are longstanding and connected to more than the central pipe. The
+upstream/downstream reflection structure dates to the 2021 IP6 beam-pipe
+implementation. The present central geometry was updated in commit
+`63e5b94150` (2025-05-10, PR #842) from the vacuum group's v250331 CAD drawing;
+the commit states that it changes default beam-pipe geometry. The negative
+`CrossingAngle` was centralized in commit `07664144a9` (2025-05-18, PR #867)
+and is also consumed by far-forward beamline elements. Therefore changing its
+sign is not an SVT-local correction and must not be done without beamline
+ownership/validation.
+
+No code comment explicitly relates the beam-pipe x sign to the page-2
+`+x toward the inside of the ring` convention. Also, the supplied tiling values
+are bounding-circle centers, not explicitly documented pipe-axis coordinates;
+one must not infer a pipe-axis sign from them alone. Nevertheless, the runtime
+mother-volume intersections show that the current physical pipe clearance and
+the delivered tiling opening occupy opposite regions. The evidence supports a
+cross-deliverable convention/provenance question, not an arbitrary forced
+change to either geometry.
+
+## Step 7r: restore tiling-module visibility
+
+The optimized modules were present in the geometry but absent from the default
+web display. Each reusable module prototype is a DD4hep `Assembly`, which has
+no solid of its own. The generic `TrackerModuleVis` used by the tiling builder
+has `showDaughters="false"` in the default `compact/display.xml`, so the viewer
+hid every physical component inside each assembly. The visible blue strips
+were the corrugated carbon support; the apparently random white regions were
+deterministic support keep-clears for hidden inward-facing modules.
+
+The supplied five/six-RSU tiling builder now assigns `SVTModuleVis` to its
+assembly prototypes. That existing dedicated visualization has
+`showDaughters="true"` in the default, detailed, and geoviewer profiles. The
+generic tracker visualization is unchanged, and no placement or material
+geometry is modified. Static validation is recorded in
+`logs/validate_svt_module_visualization_step7r.py`; the rebuild/export command
+is `bash logs/check_svt_module_visualization_step7r.sh` inside the stable EIC
+shell.
+
+## Step 7s: engineer-to-EPIC coordinate-convention audit
+
+The beam-pipe geometry and the corresponding physical SVT openings are now
+treated as fixed. The delivered tiling files use the engineer convention in
+which positive x points toward the center of the ring. Comparing every source
+opening to the existing physical openings supports one consistent boundary
+conversion:
+
+```text
+x_EPIC = -x_engineer
+y_EPIC =  y_engineer
+z_EPIC =  z_engineer
+```
+
+This is a reflection, not merely a translation or a layer-placement detail.
+Consequently, module LEFT/RIGHT chirality must also be exchanged while facing
+is preserved. Both delivered catalogues contain a unique opposite-chirality
+partner with the same RSU count, dimensions, and facing for every type. Source
+CSV values, type IDs, disk/row/module indices, and metadata must remain
+unchanged for provenance; the conversion belongs at the tiling-loader boundary.
+
+The current negative-z layer `Ry(pi)` is an internal DD4hep local-frame choice.
+It may be retained initially. With `s_layer=-1` on ED and `+1` on HD, the
+complete source-to-layer conversion is `x_local=-s_layer*x_engineer`. The same
+conversion must be applied to module centers, LEC-boundary coordinates, source
+opening metadata, keep-clear placement, and all validation. Applying a minus
+sign only to module centers would be incomplete.
+
+`logs/audit_svt_engineer_to_epic_step7s.py` checks both `rsu_opt` and
+`all_6rsu`. All 4,324 modules have a unique chirality partner and all
+transformed source openings match or are contained by the current physical
+openings. The smallest source-opening clearance is 4.999950 mm; after the
+physical opening's 5 mm construction allowance it is -0.000050 mm. This is a
+0.05 micrometre source-rounding residual, below the audit's 0.1 micrometre
+intersection tolerance, and produces zero rectangle intersections in both
+scenarios.
+
+Recommended implementation sequence:
+
+1. Add one explicit engineer-to-EPIC convention conversion to the
+   `tiling-directory` loader path; do not edit the source CSVs or beam pipe.
+2. Preserve source type/chirality as metadata, but construct the mirrored
+   LEFT/RIGHT geometry partner. Preserve facing and all y/z quantities.
+3. Route modules, opening metadata, corrugation keep-clears, and boundary
+   validation through the same conversion helper.
+4. Retain the existing layer `Ry(pi)` for this change to avoid combining a
+   source-convention correction with a local-frame refactor.
+5. Rebuild/export and repeat ROOT and Geant4 overlap checks for both scenarios.
+   The static audit predicts removal of the present opening/module conflicts,
+   but runtime validation remains mandatory.
+6. Only after the transformed geometry is validated, consider removing
+   `Ry(pi)` as a separate detector-aligned-local-frame cleanup.
+
+Run the reproducible read-only audit with
+`bash logs/check_svt_engineer_to_epic_step7s.sh`.
+
+## Step 7t: disk-z versus physical beam-pipe subtraction audit
+
+The physical subtraction circles were re-evaluated with
+`disk_layout/scripts/beampipe_envelope_circles.py`, using the fixed current
+EPIC beam-pipe definition. The utility is used only for its beam-pipe envelope
+calculation; no obsolete `disk_layout` module placements are used.
+
+Step 6d moved ED0/HD0 from -255/+255 mm back to -250/+250 mm and ED1/HD1 from
+-550/+550 mm back to -450/+450 mm. All old and new positions lie in the
+constant-radius, unsplit pipe region. The helper returns the same centered
+31.757 mm outer-wall circle at every one of those positions. Therefore those
+z changes do not require different opening centers or radii. The current XML's
+31.750 mm unbuffered value is the tiling source value, however; the physical
+beam-pipe value is 31.757 mm before the common 5 mm bakeout allowance.
+
+The wider audit confirms that Step 7n incorrectly made the physical
+subtractions reproduce the source-placement circles. These are independent
+boundaries. Evaluating the pipe at the face of each 10 mm layer farthest from
+the IP gives the following physical circles. ED centers shown here have been
+converted from global coordinates into the current reflected layer-local
+frame; HD local and global x are identical.
+
+| Disks | centered physical circle `(cx,r)` [mm] | displaced physical circle `(cx,r)` [mm] |
+|---|---:|---:|
+| ED0, ED1, ED2 | `(0, 31.757)` | same circle |
+| ED3 | `(0, 33.500)` | `(-21.3795, 14.285)` |
+| ED4 | `(0, 33.500)` | `(-25.6303, 14.285)` |
+| HD0, HD1 | `(0, 31.757)` | same circle |
+| HD2 | `(0, 31.757)` | `(-0.9902, 35.038)` |
+| HD3b | `(0, 31.757)` | `(-6.6161, 40.661)` |
+| HD4 | `(0, 31.757)` | `(-12.2421, 46.284)` |
+
+The XML subtraction radii should add `Beampipe_bakeout_buffer = 5 mm` to each
+radius above. The source metadata openings must remain unchanged and continue
+to govern only module-placement validation. In particular, physical and
+source circles are not expected to coincide after this correction.
+
+This supersedes Step 7s's temporary check that transformed source openings
+coincide with the current Step-7n physical holes. That equality helped expose
+the x-convention mapping, but it is not a valid physical-opening requirement.
+The `x_EPIC=-x_engineer` conclusion remains consistent with the pipe direction;
+the opening sets must simply be validated independently after implementation.
+
+The reproducible output is generated by
+`bash logs/check_svt_moved_disk_beampipe_openings_step7t.sh` and recorded in
+`logs/check_svt_moved_disk_beampipe_openings_step7t.txt`. No XML or C++
+geometry was changed in this read-only audit.

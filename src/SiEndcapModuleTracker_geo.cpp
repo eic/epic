@@ -100,7 +100,9 @@ struct ModuleRow {
   int csv_line{0};
 };
 
-// The per-layer geometric boundary used for placement filtering and solid building.
+// Per-layer geometric boundaries. Physical openings come from XML and cut the
+// layer/support; source openings come from tiling metadata and validate the
+// delivered module placement without redefining the physical mother solid.
 struct DiskBoundary {
   string disk_key;
   int layer_id{0};
@@ -118,6 +120,9 @@ struct DiskBoundary {
   bool has_beampipe_opening{false};
   CircularOpening lepton_opening;
   CircularOpening hadron_opening;
+  bool has_source_opening{false};
+  CircularOpening source_lepton_opening;
+  CircularOpening source_hadron_opening;
 };
 
 struct TilingDiskMetadata {
@@ -574,8 +579,13 @@ bool module_inside_disk(const ModuleRow& row, const DiskBoundary& disk) {
     }
   }
 
-  if (disk.has_beampipe_opening && (rectangle_intersects_opening(disk.lepton_opening) ||
-                                    rectangle_intersects_opening(disk.hadron_opening))) {
+  const bool has_placement_opening = disk.has_source_opening || disk.has_beampipe_opening;
+  const auto& placement_lepton =
+      disk.has_source_opening ? disk.source_lepton_opening : disk.lepton_opening;
+  const auto& placement_hadron =
+      disk.has_source_opening ? disk.source_hadron_opening : disk.hadron_opening;
+  if (has_placement_opening && (rectangle_intersects_opening(placement_lepton) ||
+                                rectangle_intersects_opening(placement_hadron))) {
     return false;
   }
   return true;
@@ -2069,7 +2079,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_det_t x_det = e;
   int det_id      = x_det.id();
   string det_name = x_det.nameStr();
-  bool reflect    = x_det.reflect(false);
+  bool reflect = x_det.reflect(false);
 
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name);
@@ -2140,9 +2150,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                     : det_name + "_disk" + std::to_string(layer_id);
     xml_comp_t x_beampipe_opening(x_layer.child(_Unicode(beampipe_opening), false));
     if (x_beampipe_opening) {
-      // The opening describes the beampipe exclusion in the layer-local x-y plane as
-      // two circles: the centered lepton pipe and the shifted hadron pipe. Both
-      // circles define the subtraction envelope and remain active for module rejection.
+      // XML describes the physical beampipe clearance in the layer-local x-y
+      // plane. These circles cut the mother solid and clip carbon support.
       disk.has_beampipe_opening = true;
       disk.lepton_opening.center_x =
           getAttrOrDefault(x_beampipe_opening, _Unicode(lepton_center_x), 0.0);
@@ -2176,12 +2185,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // 1 um layer-envelope allowance so four-decimal source coordinates do not
       // protrude by their observed sub-0.06 um rounding residual.
       disk.rmax = metadata.outer_radius + 1.0 * um;
-      disk.has_beampipe_opening = true;
+      if (!disk.has_beampipe_opening) {
+        throw std::runtime_error(fmt::format(
+            "disk '{}': supplied tiling metadata requires an XML physical beampipe opening",
+            disk.disk_key));
+      }
+      disk.has_source_opening = true;
       const double global_to_local_x = reflect ? -1.0 : 1.0;
-      disk.lepton_opening = metadata.opening_0;
-      disk.hadron_opening = metadata.opening_1;
-      disk.lepton_opening.center_x *= global_to_local_x;
-      disk.hadron_opening.center_x *= global_to_local_x;
+      disk.source_lepton_opening = metadata.opening_0;
+      disk.source_hadron_opening = metadata.opening_1;
+      disk.source_lepton_opening.center_x *= global_to_local_x;
+      disk.source_hadron_opening.center_x *= global_to_local_x;
     }
 
     vector<CorrugationKeepClear> keep_clears;

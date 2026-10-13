@@ -31,6 +31,7 @@
 
     <comment>
       Current corrugated EIC-LAS 6-RSU module parameters.
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
       These constants define the active EIC_LAS_6RSU_CORR implementation.
       Keep future corrugated-module dimensions in this block unless they are
       row/disk-level parameters such as corrugation pitch/height/angle.
@@ -59,6 +60,7 @@
 
     <comment>
       Supplied tiling-module dimensions for the five/six-RSU builder.
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
       These do not change the legacy EIC_LAS_6RSU_CORR prototype above.
       A/B denote 35/32 mm baseplates, not different RSU dimensions.
       The catalogue remains the authoritative source for placed type IDs.
@@ -77,6 +79,7 @@
     <constant name="SiEndcapTiling6RSU_package_length"       value="SiEndcapTiling6RSU_count*SiEndcapRSU_length + SiEndcapTilingBLEC_length + SiEndcapTilingBREC_length"/>
 
     <comment>
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
       Slide 4 material stack for both RSU counts. Film and external epoxy are
       distinct solids in the tiling builder. Their absolute placement-z
       references must still be matched to the supplied CSV in a later step.
@@ -99,6 +102,7 @@
 
     <comment>
       First-pass passive electronics placeholders for the corrugated module.
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
       LEC/REC dimensions are intentionally XML-driven because the mechanical
       design is still evolving. The first implementation should keep these
       as simple passive boxes and avoid detailed chip/FPC routing.
@@ -116,6 +120,7 @@
 
     <comment>
       FPC dimensions are kept separate from LEC/REC chip-like placeholders.
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
       Bridge FPCs are local end/readout features. Main FPC geometry is
       row-dependent and intentionally deferred until the placement-reference
       migration is stable.
@@ -134,6 +139,7 @@
 
     <comment>
       First-pass AncASIC package on the left (LEC-side) bridge FPC.
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
       Width is local x; length is local y. The outer-edge clearance is measured
       from the FPC edge farthest from the LEC to the nearest ASIC edge.
     </comment>
@@ -144,6 +150,10 @@
     <constant name="SiEndcapAncASIC_top_clearance"           value="1.0*mm"/>
     <constant name="SiEndcapAncASIC_outer_edge_clearance"    value="5.0*mm"/>
 
+    <comment>
+      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
+      User-configurable corrugation dimensions for the supplied tiling geometry.
+    </comment>
     <constant name="SiEndcapCorrugationCF_thickness"        value="0.15*mm"/>
     <constant name="SiEndcapCorrugation_h"                  value="6.0*mm"/>
     <constant name="SiEndcapCorrugation_theta"              value="45*deg"/>
@@ -161,10 +171,9 @@
     </comment>
 
     <comment>
-      Per-disk beampipe openings from scripts/beampipe_envelope_circles.py.
-      The module mother volume subtracts the explicit lepton and hadron beampipe
-      openings in the plugin. The same circles are also used for placement rejection.
-      For reflected N-side layers, hadron_center_x is expressed in the local layer frame.
+      Physical per-disk beampipe openings are XML-driven. The module mother and
+      carbon support use these buffered layer-local circles. Supplied metadata
+      circles remain separate and are used only for source-placement rejection.
     </comment>
   </define>
 
