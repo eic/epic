@@ -7,7 +7,7 @@ from decimal import Decimal
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1] / "compact/tracking/silicon_disks"
+ROOT = Path(__file__).resolve().parents[1] / "compact/tracking/silicon_disks_tiling/20261001_ES"
 DISKS = (
     ("ED4", "OuterTrackerEndcapN_disk4", -1),
     ("ED3", "OuterTrackerEndcapN_disk3", -1),

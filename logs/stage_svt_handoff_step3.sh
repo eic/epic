@@ -5,7 +5,7 @@ set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source_root="$project_root/ES_material"
-target_root="$project_root/compact/tracking/silicon_disks"
+target_root="$project_root/compact/tracking/silicon_disks_tiling/20261001_ES"
 log_path="$project_root/logs/stage_svt_handoff_step3.txt"
 
 if [[ -e "$target_root/all_6rsu" || -e "$target_root/rsu_opt" ]]; then

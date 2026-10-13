@@ -1645,3 +1645,45 @@ installed tracking-only export completed, ROOT checked 628,936 candidates at
 0.01 mm tolerance and reported zero illegal overlaps or extrusions, and the
 independent Geant4 test completed without an overlap exception. This confirms
 that moving outer-radius authority to XML preserved the accepted geometry.
+
+## Step 7x: version the tiling delivery and complete installation
+
+The permanent tiling data moved from `compact/tracking/silicon_disks/` to the
+explicit version/provider path
+`compact/tracking/silicon_disks_tiling/20261001_ES/`. The `rsu_opt` and
+`all_6rsu` packages and their shared reconstructed corrugation table remain in
+that delivery. All data files are git renames with unchanged contents.
+Production XML and active validation/generation scripts now use the versioned
+path; historical output transcripts remain historical records.
+
+The stable top-level README defines the version-directory contract. The
+delivery README records the Ernst S. 20261001 source, coordinate conversion,
+scenario counts, active-area convention, reconstructed corrugation status, and
+provisional z-offset approximation. Neither permanent README depends on files
+under `logs/`. Future deliveries belong beside `20261001_ES` and must be
+selected through an explicit XML path rather than a mutable `latest` alias.
+
+The CMake compact-data filter now installs `*_metadata.txt` in addition to
+XML, GDML, and CSV files. The narrow suffix avoids installing arbitrary text
+documentation while making the strict metadata verification available from
+the installed detector tree.
+
+Static validation is
+`python3 logs/validate_svt_tiling_delivery_layout_step7x.py`. Runtime handoff
+is `bash logs/check_svt_tiling_delivery_layout_step7x.sh` inside the stable EIC
+shell. The runtime script verifies both installed packages, changes away from
+the source root, then exports and runs the fast ROOT overlap checker. This
+specifically guards against source-tree fallback masking an incomplete
+installation. The slow Geant4 overlap test is intentionally omitted because
+all geometry data are exact renames and no positions or solids change in this
+step.
+
+Runtime validation completed successfully on 2026-10-13. CMake installed both
+catalogues, all twenty placement CSVs, all twenty metadata files, and the
+shared corrugation table under the versioned `20261001_ES` path. The script
+then changed to `out/`, where no source-relative compact path exists, and
+successfully exported the installed tracking-only geometry. This proves that
+the loader resolved the complete installed package rather than falling back to
+the source tree. ROOT checked 628,936 candidates at 0.01 mm tolerance and
+reported zero illegal overlaps or extrusions. Step 7x therefore satisfies its
+layout, installation, export, and fast overlap acceptance checks.

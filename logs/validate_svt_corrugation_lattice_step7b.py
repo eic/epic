@@ -7,8 +7,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LATTICE = ROOT / "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
-PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks"
+LATTICE = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
+PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES"
 SCENARIOS = ("rsu_opt", "all_6rsu")
 PITCH_MM = {"A": 36.0, "B": 33.0}
 

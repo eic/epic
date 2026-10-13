@@ -52,7 +52,7 @@ def main():
     seen = set()
     placement_z_differences = set()
     for scenario in ("all_6rsu", "rsu_opt"):
-        directory = ROOT / "compact/tracking/silicon_disks" / scenario
+        directory = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES" / scenario
         path = directory / "catalog.csv"
         with path.open() as stream:
             rows = list(csv.DictReader(stream))

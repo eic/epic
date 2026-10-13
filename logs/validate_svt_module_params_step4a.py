@@ -52,7 +52,7 @@ def main():
 
     for scenario in SCENARIOS:
         count = 0
-        with (ROOT / "compact/tracking/silicon_disks" / scenario / "catalog.csv").open() as stream:
+        with (ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES" / scenario / "catalog.csv").open() as stream:
             for row in csv.DictReader(stream):
                 n = int(row["rsu_count"])
                 assert n == int(constants[f"SiEndcapTiling{n}RSU_count"])

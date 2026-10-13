@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFINITIONS = ROOT / "compact/tracking/definitions_craterlake.xml"
 MODULES = ROOT / "compact/tracking/silicon_disks_modules.xml"
 CPP = ROOT / "src/SiEndcapModuleTracker_geo.cpp"
-PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks"
+PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES"
 SCENARIOS = ("rsu_opt", "all_6rsu")
 EXPECTED_RADII_MM = {
     "ED0": 230.0,

@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks"
+PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES"
 SCENARIOS = ("rsu_opt", "all_6rsu")
 DISKS = ("ED4", "ED3", "ED2", "ED1", "ED0", "HD0", "HD1", "HD2", "HD3b", "HD4")
 

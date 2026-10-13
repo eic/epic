@@ -8,7 +8,7 @@ from math import hypot
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1] / "compact/tracking/silicon_disks"
+ROOT = Path(__file__).resolve().parents[1] / "compact/tracking/silicon_disks_tiling/20261001_ES"
 
 
 def read_catalog(path):

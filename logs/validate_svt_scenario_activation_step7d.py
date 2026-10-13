@@ -8,8 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 XML_PATH = ROOT / "compact/tracking/silicon_disks_modules.xml"
-PACKAGE = ROOT / "compact/tracking/silicon_disks/rsu_opt"
-CORRUGATION = ROOT / "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
+PACKAGE = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt"
+CORRUGATION = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
 EXPECTED_DISKS = {"ED4", "ED3", "ED2", "ED1", "ED0", "HD0", "HD1", "HD2", "HD3b", "HD4"}
 EXPECTED_LAYER_MAP = {
     "OuterTrackerEndcapN_disk4": "ED4",
@@ -30,13 +30,13 @@ placements = root.findall(".//module_placements")
 active_placements = [item for item in placements if item.get("format") == "tiling-directory"]
 assert len(active_placements) == 6
 assert {item.get("file") for item in active_placements} == {
-    "compact/tracking/silicon_disks/rsu_opt"
+    "compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt"
 }
 
 frames = root.findall(".//frame[@type='corrugated']")
 assert len(frames) == 10
 assert {frame.get("rowwise_placement") for frame in frames} == {
-    "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
+    "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
 }
 
 constants = {item.get("name"): item.get("value") for item in root.findall(".//constant")}

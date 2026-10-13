@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LATTICE = ROOT / "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
+LATTICE = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
 THICKNESS = 0.150
 WEB_SPAN = 6.000 - THICKNESS
 KEEP_WIDTH = {"A": 21.94, "B": 20.56}

@@ -13,11 +13,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks"
+PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES"
 CPP = ROOT / "src/SiEndcapModuleTracker_geo.cpp"
 DEFINITIONS = ROOT / "compact/tracking/definitions_craterlake.xml"
 MODULES_XML = ROOT / "compact/tracking/silicon_disks_modules.xml"
-CORRUGATION = ROOT / "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
+CORRUGATION = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
 SCENARIOS = ("rsu_opt", "all_6rsu")
 DISKS = ("ED4", "ED3", "ED2", "ED1", "ED0", "HD0", "HD1", "HD2", "HD3b", "HD4")
 

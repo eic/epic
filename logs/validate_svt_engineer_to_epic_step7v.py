@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks"
+PACKAGE_ROOT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES"
 CPP = ROOT / "src/SiEndcapModuleTracker_geo.cpp"
 DEFINITIONS = ROOT / "compact/tracking/definitions_craterlake.xml"
 SCENARIOS = ("rsu_opt", "all_6rsu")

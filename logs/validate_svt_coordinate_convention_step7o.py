@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = ROOT / "compact/tracking/silicon_disks/rsu_opt"
+PACKAGE = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt"
 DEFINITIONS = ROOT / "compact/tracking/definitions_craterlake.xml"
 
 DISKS = {

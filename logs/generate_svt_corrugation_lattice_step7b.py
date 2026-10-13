@@ -14,8 +14,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PLACEMENTS = ROOT / "compact/tracking/silicon_disks/rsu_opt"
-OUTPUT = ROOT / "compact/tracking/silicon_disks/SVT_endcap_corrugation_rows_33_36.csv"
+PLACEMENTS = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt"
+OUTPUT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
 DISKS = ("ED4", "ED3", "ED2", "ED1", "ED0", "HD0", "HD1", "HD2", "HD3b", "HD4")
 PITCH_MM = {"A": 36.0, "B": 33.0}
 FLAT_WIDTH_MM = {"A": 7.86, "B": 6.36}
