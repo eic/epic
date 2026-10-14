@@ -1687,3 +1687,109 @@ the loader resolved the complete installed package rather than falling back to
 the source tree. ROOT checked 628,936 candidates at 0.01 mm tolerance and
 reported zero illegal overlaps or extrusions. Step 7x therefore satisfies its
 layout, installation, export, and fast overlap acceptance checks.
+
+## Step 7y: detector-aligned physical-opening audit
+
+Before changing production geometry, the Step 7t beam-pipe calculation was
+re-expressed in the detector-aligned layer frame introduced by Step 7u. The
+fixed current EPIC beam-pipe XML is the geometry authority. The existing
+`disk_layout/scripts/beampipe_envelope_circles.py` utility is used only to
+evaluate that beam-pipe envelope; no `disk_layout` module placement or tiling
+input is used.
+
+For each disk, the two beam-pipe outer-wall circles are evaluated at the face
+of the current 10 mm layer farthest from the interaction point. The resulting
+unbuffered physical circles are:
+
+| Disk | outer face z [mm] | lepton `(cx,r)` [mm] | hadron `(cx,r)` [mm] |
+|---|---:|---:|---:|
+| ED0 | -255 | `(0, 31.757000)` | `(0, 31.757000)` |
+| ED1 | -455 | `(0, 31.757000)` | `(0, 31.757000)` |
+| ED2 | -655 | `(0, 31.757000)` | `(0, 31.757000)` |
+| ED3 | -855 | `(0, 33.500000)` | `(+21.379454, 14.285000)` |
+| ED4 | -1025 | `(0, 33.500000)` | `(+25.630340, 14.285000)` |
+| HD0 | +255 | `(0, 31.757000)` | `(0, 31.757000)` |
+| HD1 | +455 | `(0, 31.757000)` | `(0, 31.757000)` |
+| HD2 | +705 | `(0, 31.757000)` | `(-0.990167, 35.037842)` |
+| HD3b | +955 | `(0, 31.757000)` | `(-6.616117, 40.661072)` |
+| HD4 | +1205 | `(0, 31.757000)` | `(-12.242066, 46.284301)` |
+
+The XML physical subtraction radii must add the separately configurable
+`Beampipe_bakeout_buffer = 5 mm` to these values. The ED3/ED4 displaced-circle
+centers are positive in the current detector-aligned frame; the negative signs
+shown in Step 7t were only their coordinates in the former `Ry(pi)` layer
+frame. HD displaced-circle centers remain negative.
+
+The comparison finds 28 changed x/y/r fields out of 60; all twenty y centers
+already agree at zero. This large count and the maximum 16.579 mm radius
+correction do not indicate movement of the beam pipe. They show that the
+present physical XML holes still duplicate the supplied source-tiling opening
+approximations. ED0/ED1/HD0/HD1 differ only by the source value 31.750 mm
+versus the physical outer-wall value 31.757 mm; the outer disks show the
+expected larger difference between source-placement boundaries and the actual
+two-circle pipe envelope.
+
+Run the reproducible read-only audit with
+`bash logs/check_svt_detector_aligned_physical_openings_step7y.sh`. Its full
+field-by-field comparison is recorded in
+`logs/check_svt_detector_aligned_physical_openings_step7y.txt`. This checkpoint
+does not modify production XML, C++, source metadata, placements, corrugation,
+or beam-pipe geometry.
+
+## Step 7z: apply beam-pipe-derived physical openings
+
+The physical `beampipe_opening` constants in
+`compact/tracking/definitions_craterlake.xml` now use the detector-aligned
+values audited in Step 7y. Only the physical subtraction centers and radii
+changed. Every radius continues to add the separately configurable
+`Beampipe_bakeout_buffer = 5 mm`.
+
+The opening-block comment no longer attributes these physical dimensions to
+the Ernst S. tiling delivery: they are derived from the fixed current EPIC
+beam-pipe geometry. The supplied tiling openings remain unchanged in the
+versioned metadata and continue to validate source module placement. Module
+CSVs, catalogues, corrugation, disk z positions, disk outer radii, C++, and the
+beam-pipe definition are unchanged. Outdated XML wording about reflecting the
+negative-z layer was also corrected to match the detector-aligned Step 7u
+implementation.
+
+`logs/validate_svt_physical_openings_step7z.py` verifies all sixty physical
+x/y/r fields, the independent 5 mm buffer, the source/physical authority
+separation, and both delivered placement scenarios. The historical Step 7v
+engineer-coordinate validator was narrowed to its intended source-coordinate
+scope so it no longer requires source placement openings to equal independent
+physical pipe openings.
+
+The conservative two-dimensional precheck treats each module as its full
+catalogue rectangle. It reports 56 near contacts in each scenario, with a
+maximum rectangular-envelope intrusion of 0.047675 mm. The affected counts
+are ED0: 12, ED1: 12, HD0: 12, HD1: 12, HD2: 2, HD3b: 3, and HD4: 3. Those
+rectangles include empty corners outside the detailed module solids, so this
+result is not itself a geometry overlap. It does make exact-solid ROOT overlap
+validation a mandatory acceptance gate; no arbitrary opening or placement
+adjustment is applied to conceal it.
+
+Run `bash logs/check_svt_physical_openings_step7z.sh` inside the stable EIC
+shell. It runs the static opening, coordinate-convention, and XML-radius
+checks; rebuilds and installs; exports the tracking-only geometry; and runs the
+deterministic ROOT overlap checker at 0.01 mm tolerance followed by the
+independent Geant4 overlap checker. Visually inspect both endcaps and confirm
+that both opening unions follow the fixed beam pipe. Do not commit Step 7z
+until the ROOT, Geant4, and visual reviews pass.
+
+Runtime validation completed successfully on 2026-10-14. All static checks
+passed, the project rebuilt through `[100%] Built target Components_epic`, and
+the installed tracking-only geometry exported successfully. ROOT examined
+628,936 candidates at 0.01 mm tolerance and reported exactly zero illegal
+overlaps or extrusions. Geant4 converted the geometry and completed its
+independent overlap test without an overlap report or exception at the
+script's configured 0.1 mm tolerance. Therefore the 56 conservative
+catalogue-rectangle near contacts do not correspond to overlaps of the
+detailed solids at the tested tolerances. Visual acceptance remains pending;
+do not commit Step 7z until both endcaps and their two-circle openings have
+been inspected.
+
+Visual inspection was completed and accepted on 2026-10-14. Both endcaps are
+complete and their two-circle openings follow the fixed beam-pipe geometry.
+Step 7z therefore satisfies its static, build, export, ROOT, Geant4, and visual
+acceptance checks and is ready to commit.

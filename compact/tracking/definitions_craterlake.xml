@@ -83,28 +83,29 @@
     <comment> Scalar inner cutoffs are derived from the two-circle beampipe opening plus the bakeout buffer </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
     <comment>
-      From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
-      The unbuffered centers and radii below reproduce the supplied page-7
-      tiling openings. The physical layer/support holes add the facility-required
-      5 mm bakeout clearance. Center x values are in the local layer frame, so
-      the supplied positive-x HD openings are sign-reversed for DD4hep.
+      Physical layer/support openings derived from the fixed EPIC beam-pipe
+      geometry at the face of each 10 mm layer farthest from the interaction
+      point. The values below describe the unbuffered beam-pipe outer-wall
+      circles in detector-aligned EPIC coordinates; their radii add the
+      facility-required 5 mm bakeout clearance. Supplied tiling openings remain
+      separate metadata used only to validate source module placements.
     </comment>
 
 
-    <comment> Inner tracker beampipe openings, hadron side (+z) and reflected electron side (-z) </comment>
+    <comment> Inner tracker beampipe openings on the positive- and negative-z sides </comment>
     <constant name="InnerTrackerEndcapP_lepton_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapP_lepton_center_y" value="0.0*mm" />
-    <constant name="InnerTrackerEndcapP_lepton_radius"   value="31.750*mm + Beampipe_bakeout_buffer " />
+    <constant name="InnerTrackerEndcapP_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
     <constant name="InnerTrackerEndcapP_hadron_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapP_hadron_center_y" value="0.0*mm" />
-    <constant name="InnerTrackerEndcapP_hadron_radius"   value="31.750*mm + Beampipe_bakeout_buffer" />
+    <constant name="InnerTrackerEndcapP_hadron_radius"   value="31.757000*mm + Beampipe_bakeout_buffer" />
 
     <constant name="InnerTrackerEndcapN_lepton_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapN_lepton_center_y" value="0.0*mm" />
-    <constant name="InnerTrackerEndcapN_lepton_radius"   value="31.750*mm + Beampipe_bakeout_buffer " />
+    <constant name="InnerTrackerEndcapN_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
     <constant name="InnerTrackerEndcapN_hadron_center_x" value="0.0*mm" />
     <constant name="InnerTrackerEndcapN_hadron_center_y" value="0.0*mm" />
-    <constant name="InnerTrackerEndcapN_hadron_radius"   value="31.750*mm + Beampipe_bakeout_buffer" />
+    <constant name="InnerTrackerEndcapN_hadron_radius"   value="31.757000*mm + Beampipe_bakeout_buffer" />
 
     <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="max(abs(InnerTrackerEndcapP_lepton_center_x) + InnerTrackerEndcapP_lepton_radius, abs(InnerTrackerEndcapP_hadron_center_x) + InnerTrackerEndcapP_hadron_radius)" />
@@ -113,46 +114,46 @@
     <comment> Positive disk openings from the two-circle beampipe helper </comment>
     <constant name="TrackerEndcapPDisk1_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk1_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk1_lepton_radius"   value="31.750*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapPDisk1_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapPDisk1_hadron_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk1_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk1_hadron_radius"   value="31.750*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk1_hadron_radius"   value="31.757000*mm + Beampipe_bakeout_buffer" />
 
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="max(abs(TrackerEndcapPDisk1_lepton_center_x) + TrackerEndcapPDisk1_lepton_radius, abs(TrackerEndcapPDisk1_hadron_center_x) + TrackerEndcapPDisk1_hadron_radius)" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="SiEndcapTilingMiddle_outer_radius" />
 
-    <constant name="TrackerEndcapPDisk2_lepton_center_x" value="-3.1360*mm" />
+    <constant name="TrackerEndcapPDisk2_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk2_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk2_lepton_radius"   value="37.1360*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapPDisk2_hadron_center_x" value="-3.1360*mm" />
+    <constant name="TrackerEndcapPDisk2_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapPDisk2_hadron_center_x" value="-0.990167*mm" />
     <constant name="TrackerEndcapPDisk2_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk2_hadron_radius"   value="37.1360*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk2_hadron_radius"   value="35.037842*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="max(abs(TrackerEndcapPDisk2_lepton_center_x) + TrackerEndcapPDisk2_lepton_radius, abs(TrackerEndcapPDisk2_hadron_center_x) + TrackerEndcapPDisk2_hadron_radius)" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="SiEndcapTilingOuter_outer_radius" />
 
-    <constant name="TrackerEndcapPDisk3_lepton_center_x" value="-8.7360*mm" />
+    <constant name="TrackerEndcapPDisk3_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk3_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk3_lepton_radius"   value="42.7360*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapPDisk3_hadron_center_x" value="-8.7360*mm" />
+    <constant name="TrackerEndcapPDisk3_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapPDisk3_hadron_center_x" value="-6.616117*mm" />
     <constant name="TrackerEndcapPDisk3_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk3_hadron_radius"   value="42.7360*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk3_hadron_radius"   value="40.661072*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk3_zmin"        value="95.0*cm" />
     <constant name="TrackerEndcapPDisk3_rmin"        value="max(abs(TrackerEndcapPDisk3_lepton_center_x) + TrackerEndcapPDisk3_lepton_radius, abs(TrackerEndcapPDisk3_hadron_center_x) + TrackerEndcapPDisk3_hadron_radius)" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="SiEndcapTilingOuter_outer_radius" />
 
-    <constant name="TrackerEndcapPDisk4_lepton_center_x" value="-14.3360*mm" />
+    <constant name="TrackerEndcapPDisk4_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapPDisk4_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk4_lepton_radius"   value="48.3360*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapPDisk4_hadron_center_x" value="-14.3360*mm" />
+    <constant name="TrackerEndcapPDisk4_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapPDisk4_hadron_center_x" value="-12.242066*mm" />
     <constant name="TrackerEndcapPDisk4_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapPDisk4_hadron_radius"   value="48.3360*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk4_hadron_radius"   value="46.284301*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="120.0*cm" />
     <constant name="TrackerEndcapPDisk4_rmin"        value="max(abs(TrackerEndcapPDisk4_lepton_center_x) + TrackerEndcapPDisk4_lepton_radius, abs(TrackerEndcapPDisk4_hadron_center_x) + TrackerEndcapPDisk4_hadron_radius)" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="SiEndcapTilingOuter_outer_radius" />
 
-    <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)</comment>
+    <comment> Main parameters for the negative-z silicon disks (positive z magnitudes are used here)</comment>
     <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />
     <constant name="InnerTrackerEndcapN_rmin"        value="max(abs(InnerTrackerEndcapN_lepton_center_x) + InnerTrackerEndcapN_lepton_radius, abs(InnerTrackerEndcapN_hadron_center_x) + InnerTrackerEndcapN_hadron_radius)" />
     <constant name="InnerTrackerEndcapN_rmax"        value="InnerTrackerEndcapP_rmax" />
@@ -160,40 +161,40 @@
     <comment> Negative disk openings use detector-aligned layer coordinates </comment>
     <constant name="TrackerEndcapNDisk1_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk1_lepton_radius"   value="31.750*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapNDisk1_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapNDisk1_hadron_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk1_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk1_hadron_radius"   value="31.750*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk1_hadron_radius"   value="31.757000*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
     <constant name="TrackerEndcapNDisk1_rmin"        value="max(abs(TrackerEndcapNDisk1_lepton_center_x) + TrackerEndcapNDisk1_lepton_radius, abs(TrackerEndcapNDisk1_hadron_center_x) + TrackerEndcapNDisk1_hadron_radius)" />
     <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
 
     <constant name="TrackerEndcapNDisk2_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk2_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk2_lepton_radius"   value="34.9000*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapNDisk2_lepton_radius"   value="31.757000*mm + Beampipe_bakeout_buffer " />
     <constant name="TrackerEndcapNDisk2_hadron_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk2_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk2_hadron_radius"   value="34.9000*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk2_hadron_radius"   value="31.757000*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapNDisk2_zmin"        value="65*cm" />
     <constant name="TrackerEndcapNDisk2_rmin"        value="max(abs(TrackerEndcapNDisk2_lepton_center_x) + TrackerEndcapNDisk2_lepton_radius, abs(TrackerEndcapNDisk2_hadron_center_x) + TrackerEndcapNDisk2_hadron_radius)"   />
     <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
 
     <constant name="TrackerEndcapNDisk3_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk3_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk3_lepton_radius"   value="34.9000*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapNDisk3_hadron_center_x" value="21.2544*mm" />
+    <constant name="TrackerEndcapNDisk3_lepton_radius"   value="33.500000*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapNDisk3_hadron_center_x" value="21.379454*mm" />
     <constant name="TrackerEndcapNDisk3_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk3_hadron_radius"   value="15.9000*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk3_hadron_radius"   value="14.285000*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapNDisk3_zmin"        value="85*cm" />
     <constant name="TrackerEndcapNDisk3_rmin"        value="max(abs(TrackerEndcapNDisk3_lepton_center_x) + TrackerEndcapNDisk3_lepton_radius, abs(TrackerEndcapNDisk3_hadron_center_x) + TrackerEndcapNDisk3_hadron_radius)" />
     <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
 
     <constant name="TrackerEndcapNDisk4_lepton_center_x" value="0.0*mm" />
     <constant name="TrackerEndcapNDisk4_lepton_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk4_lepton_radius"   value="34.9000*mm + Beampipe_bakeout_buffer " />
-    <constant name="TrackerEndcapNDisk4_hadron_center_x" value="25.5053*mm" />
+    <constant name="TrackerEndcapNDisk4_lepton_radius"   value="33.500000*mm + Beampipe_bakeout_buffer " />
+    <constant name="TrackerEndcapNDisk4_hadron_center_x" value="25.630340*mm" />
     <constant name="TrackerEndcapNDisk4_hadron_center_y" value="0.0*mm" />
-    <constant name="TrackerEndcapNDisk4_hadron_radius"   value="15.9000*mm + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapNDisk4_hadron_radius"   value="14.285000*mm + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapNDisk4_zmin"        value="102*cm" />
     <constant name="TrackerEndcapNDisk4_rmin"        value="max(abs(TrackerEndcapNDisk4_lepton_center_x) + TrackerEndcapNDisk4_lepton_radius, abs(TrackerEndcapNDisk4_hadron_center_x) + TrackerEndcapNDisk4_hadron_radius)" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
