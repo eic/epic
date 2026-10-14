@@ -256,6 +256,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
           volSurfaceList(sensor_de)->push_back(unit.surfaces[i]);
         }
       }
+      face_vol->GetShape()->ComputeBBox();
 
       auto& face_params = DD4hepDetectorHelper::ensureExtension<VariantParameters>(face_de);
       face_params.set<double>("envelope_r_min", env_rmin_tol / dd4hep::mm);
@@ -267,6 +268,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
       }
     }
   }
+  assembly->GetShape()->ComputeBBox();
 
   PlacedVolume pv = mother_vol.placeVolume(assembly, pos_and_rot);
   pv.addPhysVolID("system", det_id);
