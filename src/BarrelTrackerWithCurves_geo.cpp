@@ -18,7 +18,7 @@
 #include "XML/Utilities.h"
 #include <array>
 #include "DD4hepDetectorHelper.h"
-#include "TGDMLParseBiggerFiles.h"
+#include "TGDMLParse.h"
 
 /*
 This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels, and import
@@ -133,7 +133,7 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
     // pv = assembly.placeVolume(support_vol, Position(0, 0, support_zstart + support_length / 2));
   }
 
-  TGDMLParseBiggerFiles* parser = new TGDMLParseBiggerFiles();
+  TGDMLParse* parser = new TGDMLParse();
 
   // loop over the modules
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
