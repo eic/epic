@@ -1793,3 +1793,371 @@ Visual inspection was completed and accepted on 2026-10-14. Both endcaps are
 complete and their two-circle openings follow the fixed beam-pipe geometry.
 Step 7z therefore satisfies its static, build, export, ROOT, Geant4, and visual
 acceptance checks and is ready to commit.
+
+**Visual-acceptance correction (2026-10-14):** the beam-pipe openings remain
+visually accepted, but the overall module/corrugation geometry does not. A
+subsequent edge-on inspection showed that the two external-epoxy glue lines do
+not overlap corrugation facets in y in either `rsu_opt` or `all_6rsu`. This is
+not primarily the provisional Step 7j z translation: the generated support
+table incorrectly treats module channel centers as same-surface flat centers.
+The provisional outward-module z separation remains a distinct unresolved
+mechanical approximation, but it does not explain this y mismatch. Therefore
+the earlier visual acceptance applies only to the physical beam-pipe openings;
+it must not be used as acceptance of the module/support registration.
+
+## Step 8b: audit epoxy-to-facet y registration
+
+`logs/audit_svt_epoxy_facet_y_step8b.py` compares every 2.5 mm external-epoxy
+edge strip with same-surface corrugation flats. For example, an ED0 B module
+centered at `y=189.750 mm` has glue intervals `173.750--176.250 mm` and
+`203.250--205.750 mm`, while the current 6.36 mm flat at that module center
+spans only `186.570--192.930 mm`. The intervals have no y overlap.
+
+The intended construction uses module coordinates as channel centers. Each
+module is supported by the neighboring same-surface facets on either side.
+Equivalently, the interior facet centers retain the reconstructed y lattice
+but use the surface opposite the module row at that y; one additional boundary
+facet is required beyond each end of the row lattice. This rule also handles
+the A/B transition: the 17.25 mm centered join and 6.36/7.86 mm facet widths
+fully cover the 2.5 mm glue lines.
+
+The read-only audit finds zero current y contacts among 4,328 `rsu_opt` glue
+strips and zero among 4,320 `all_6rsu` strips. With the neighboring-facet phase
+and two boundary facets, all 4,328 and 4,320 strips respectively have the full
+2.500 mm y overlap. This invalidates the Step 7b interpretation and all later
+visual acceptance of the corrugation registration. No production geometry or
+source placement file was changed by this audit.
+
+## Step 8a: select and validate the all-six-RSU scenario
+
+Production selection changed atomically from `rsu_opt` to `all_6rsu` by
+replacing the same scenario-directory suffix in all six active
+`module_placements` elements. No C++, module dimension, transform, opening,
+corrugation, disk-position, or beam-pipe parameter changed. All ten layers
+continue to use the shared `SVT_endcap_corrugation_rows_33_36.csv` table.
+
+The older delivery-layout and scenario-activation validators are now
+scenario-neutral: they require all six detector blocks to select one complete
+scenario and reject a mixed selection. The focused Step 8a validator further
+requires the selected scenario to be `all_6rsu`, counts exactly 2,160 modules
+across the ten disks, and verifies that every referenced catalogue type has
+six RSUs.
+
+Run `bash logs/check_svt_all_6rsu_step8a.sh` inside the stable EIC shell. It
+runs the complete static validation set, rebuilds and installs, exports the
+tracking-only geometry, and runs both ROOT and Geant4 overlap checks. Visually
+inspect both endcaps before committing the scenario change.
+
+The first automated run completed the static checks, build, installation,
+export, and ROOT check. Its long single-threaded Geant4 process remained
+healthy at 99.9% CPU and emitted no overlap diagnostic, but the interactive
+orchestration session terminated it before a completion marker was recorded.
+That partial execution is retained in
+`logs/check_svt_all_6rsu_step8a.txt` and is not counted as a Geant4 pass.
+`logs/check_svt_all_6rsu_geant_step8a.sh` can restart only the unchanged
+installed geometry's Geant4 check. Do not run it until the systematic
+epoxy-to-facet y-registration error from Step 8b has been corrected. The
+provisional 0.230 mm outward-module z separation must then be assessed as a
+separate mechanical issue.
+
+## Step 8c: correct corrugation facet coordinates
+
+The shared production corrugation table has been regenerated with the
+neighboring-facet phase established in Step 8b. Interior facet y coordinates
+retain the reconstructed 33/36 mm lattice, but each facet now uses the surface
+opposite the module channel centered at the same y. One same-surface boundary
+facet was added beyond each end of every disk's module-row lattice. For
+example, ED0 now contains 26 facets from `y=+206.250 mm` through
+`y=-206.250 mm`; its 24 delivered module channel centers remain unchanged at
+`+189.750` through `-189.750 mm`.
+
+Only the derived shared corrugation CSV, its generator/validators, permanent
+delivery documentation, and development checks changed. Source module CSVs,
+catalogues, metadata, module dimensions, C++, beam-pipe geometry, disk
+positions, and the provisional outward-module z offset are unchanged.
+
+The corrected static checks pass for both scenarios. All 4,328 `rsu_opt` and
+4,320 `all_6rsu` external-epoxy strips have exactly 2.500 mm of y overlap with
+a neighboring same-surface facet. The support consists of 26--50 facets and
+25--49 webs per disk, retains alternating +/-3 mm surfaces, the centered
+17.25 mm A/B joins, 45-degree straight webs, and the conservative 2.145 mm
+omitted-bend gap on each side.
+
+Run `bash logs/check_svt_corrugation_y_registration_step8c.sh` inside the
+stable EIC shell. It repeats the static checks, rebuilds/installs, exports the
+tracking-only geometry, and runs the deterministic ROOT overlap check at
+0.01 mm. Geant4 is deliberately deferred until the edge-on visual review
+confirms that the epoxy strips now land on the corrugation facets.
+
+**Step 8c build/ROOT/visual result (2026-10-15): PASS.** The recorded command
+completed all static checks, rebuilt and installed through `[100%] Built target
+Components_epic`, and exported the installed `all_6rsu` tracking-only geometry.
+ROOT examined 641,926 candidates at 0.01 mm tolerance and found zero illegal
+overlaps or extrusions. The user's edge-on visual review found the corrected
+facet registration much more reasonable than the rejected same-row phase.
+
+The remaining acceptance check is the independent Geant4 scan of this exact
+installed geometry. Run
+`bash logs/check_svt_corrugation_y_registration_geant_step8c.sh` inside the
+same stable EIC shell; it does not rebuild or change the selected scenario.
+
+**Step 8c Geant4 result (2026-10-15): FAIL.** The continuation completed the
+geometry conversion and overlap scan at 0.1 mm tolerance, but reported 136
+unique intersections. Classification with
+`python3 logs/analyze_svt_component_overlaps_step7f.py
+logs/check_svt_corrugation_y_registration_geant_step8c.txt` shows one clean
+category: all 136 pairs are corrected corrugation flats fully encapsulating
+Kapton or aluminium volumes from inward-facing bridge FPCs. There are no
+reported web, silicon, baseplate, external-epoxy, AncASIC, outward-module,
+beam-pipe, support/support, or fallback-support intersections. The affected
+module-type counts are A610: 2, A611: 4, B610: 67, and B611: 63; all ten disk
+layers contribute. The left/right split is 56/80, and the Kapton/aluminium
+split is 63/73. The scan completed normally, so these warnings are a geometry
+failure rather than an interrupted-run artifact.
+
+The cause is a mismatch between the documented central keep-clear and the
+current simplified rectangular bridge-FPC envelopes. For a B module, both FPC
+rectangles reach `y=-16.000 mm` relative to the module center, whereas the
+20.56 mm keep-clear ends at `y=-10.280 mm`. The corrected neighboring facet is
+centered at `y=-16.500 mm` and spans `-19.680..-13.320 mm`, giving 2.680 mm of
+y intersection with either FPC. For an A module, the FPC lower edge is
+`y=-14.500 mm` and the neighboring 7.86 mm facet spans
+`-21.930..-14.070 mm`, giving 0.430 mm of y intersection. The much smaller A
+intersection is consistent with only six sampled A reports versus 130 B
+reports. In z, the inward FPC stack occupies the channel immediately beyond
+the supplied corrugation-reference surface, so this y intersection becomes a
+real carbon/FPC collision; it is not merely a projected-y warning.
+
+The PDF states that the keep-clear must accommodate bridge FPCs and their
+feed-through, but the first-pass 24.50/25.78 mm rectangular FPC placeholders
+extend outside the slide's 20.56/21.94 mm central keep-clear widths. Therefore
+do not undo the corrected facet phase or move source modules to hide these
+reports. The next step must resolve this explicit modeling conflict: either
+represent the real FPC routing inside the keep-clear, or conservatively remove
+carbon only under the current FPC footprints. No production geometry was
+changed during this Geant4 review, and Step 8c must not be committed as an
+accepted geometry yet. The zero-overlap ROOT result is insufficient for these
+assembly-contained thin volumes; retain the independent Geant4 gate.
+
+## Step 8d: correct bridge-FPC registration on the module
+
+Before changing the corrugation for the Step 8c overlap reports, correct the
+first-pass module model itself. The bridge FPC is no longer serialized above
+the film and sensor. Its 80 um Kapton plus 30 um aluminium stack now starts
+directly on the baseplate surface, with no z gap. The AncASIC remains mounted
+on that FPC: 80 um adhesive followed by the 300 um package. Consequently the
+sensor and electronics are parallel branches on the baseplate. The physical
+module envelope is now 0.640 mm inward and 0.720 mm outward, rather than the
+incorrect serial sums of 0.750 and 0.830 mm. The supplied corrugation-to-sensor
+reference differences remain exactly 0.030 mm inward and 0.340 mm outward, so
+no source placement or reference surface changes.
+
+In y, the configured 24.50/25.78 mm bridge-FPC lengths are treated as maximum
+rectangle lengths. Their existing top edges are retained, while the lower
+edge is clipped when necessary at the inner edge of the 2.5 mm external-epoxy
+line. A modules already clear the epoxy and retain their full lengths: left
+`-14.50..+10.00 mm`, right `-14.50..+11.28 mm`. B modules are shortened by
+2.50 mm: left `-13.50..+8.50 mm` (22.00 mm) and right
+`-13.50..+9.78 mm` (23.28 mm). The FPC and epoxy may touch at their boundary
+but have no positive-area y intersection.
+
+In x, `SiEndcapBridgeFPC_LEC_REC_gap = 0.5 mm` now defines the requested gap
+from the adjacent end cap rather than from the module's outer edge. Measured
+from the RSU-chain boundary toward the applicable baseplate end, the LEC-side
+sequence is 4.5 mm LEC, 0.5 mm gap, then 10.0 mm FPC; 5.0 mm of the 20 mm BLEC
+span remains outside it. The REC-side sequence is 1.5 mm REC, 0.5 mm gap, then
+4.0 mm FPC; 4.0 mm of the 10 mm BREC span remains outside it. Chirality only
+reverses the x signs. The legacy `EIC_LAS_6RSU_CORR` outer-edge clearance is
+retained under its old XML name and is not changed by this tiling correction.
+
+Relative to the supplied corrugation surface, the corrected inward FPC spans
+`-80..+30 um`, its AncASIC adhesive `+30..+110 um`, and the AncASIC package
+`+110..+410 um`, where positive points into the corrugation channel. For an
+outward module the corresponding intervals are `+230..+340 um`,
+`+340..+420 um`, and `+420..+720 um`. These values are checked independently
+of the later carbon-clearance decision.
+
+`logs/validate_svt_fpc_registration_step8d.py` checks the effective A/B y
+dimensions, zero FPC/epoxy y overlap, exact 0.5 mm LEC/REC gaps, direct
+baseplate contact, parallel-stack thicknesses, and the FPC/AncASIC z
+intervals. It and the existing module/reference validators pass for both
+`all_6rsu` and `rsu_opt`; all LEC-boundary midpoints and both supplied z
+references still reconstruct exactly. No corrugation coordinate, source CSV,
+beam-pipe geometry, disk position, or provisional outward-module translation
+changed.
+
+Run `bash logs/check_svt_fpc_registration_step8d.sh` inside the stable EIC
+shell. It records the static checks, build/install, geometry export, and ROOT
+overlap scan. Visually confirm direct FPC/baseplate contact, no FPC/epoxy
+intersection, and the 0.5 mm gaps to LEC/REC before running another Geant4
+scan. The known Step 8c carbon/FPC reports are deliberately a separate next
+decision.
+
+**Step 8d build/ROOT/visual result (2026-10-15): PASS.** The recorded command
+completed the static checks, build/install, and export of the selected
+`all_6rsu` geometry. ROOT examined 640,218 candidates at 0.01 mm tolerance and
+reported zero illegal overlaps or extrusions. The user visually confirmed
+that the FPCs now contact the baseplate, stop at the epoxy, and have the
+intended placement relative to LEC/REC.
+
+Run `bash logs/check_svt_fpc_registration_geant_step8d.sh` inside the same
+stable EIC shell for the independent Geant4 scan. It reuses the exact installed
+geometry and records its output separately; it does not rebuild or modify the
+selected scenario.
+
+**Step 8d Geant4 result (2026-10-15): PARTIAL / 15 reports.** The scan of the
+installed `all_6rsu` geometry completed normally. Fourteen reports are
+corrugation flats against inward bridge-FPC aluminium; no inward Kapton,
+AncASIC, silicon, baseplate, external epoxy, web, opening, or support/support
+intersection was reported. This is the expected residual after putting the
+FPC directly on the baseplate: relative to the corrugation surface, inward
+Kapton occupies `-0.080..0.000 mm` and only touches the carbon boundary,
+whereas aluminium occupies `0.000..+0.030 mm` and lies inside the 0.150 mm
+carbon-flat z interval wherever their y footprints cross. The remaining y
+intersection is 0.180 mm for a B facet and 0.430 mm for an A facet. Affected
+types are A610: 3, A611: 2, B610: 4, and B611: 5, distributed over seven disk
+layers. This reduces the Step 8c support/FPC count from 136 to 14 and removes
+all reported Kapton contacts, but does not yet constitute a zero-overlap
+geometry.
+
+The fifteenth Geant report is a different issue: an outward B601 right-FPC
+Kapton volume contains an outward B600 REC film-glue box. The source-level
+reconstruction in `logs/audit_svt_fpc_pair_overlaps_step8d.py` applies the
+same engineer-to-EPIC reflection, chirality reflection, module rotations, and
+component dimensions as the builder. It finds that this sampled warning is
+one of 14 directional intersections belonging to seven symmetric same-facing
+module pairs in the `all_6rsu` delivery. Each intersection is
+`1.500 x 19.562 x 0.060 mm`: the neighboring REC film is inside the 4 mm-wide
+right FPC in x, inside its shortened y envelope, and shares the film/FPC
+Kapton z layer. The affected source pairs are ED0 row 3 modules 0/2, ED0 row
+22 modules 0/2, ED3 row 46 modules 0/2, HD0 row 3 modules 0/2, HD0 row 22
+modules 0/2, and HD4 rows 1 and 45 modules 0/2. Geant sampled one of these
+thin assembly-contained intersections; it must not be interpreted as the only
+one. The same audit finds zero FPC/end-film intersections in `rsu_opt`.
+
+This second issue follows directly from the requested REC-side FPC placement,
+not from a tolerance or coordinate error. In each affected three-module row,
+the two outer modules have the same facing and the source spacing brings each
+right FPC over the other outer module's REC. Do not move source modules or
+silently reverse the FPC direction. Resolve the intended FPC footprint for
+these exceptional short all-six-RSU rows before accepting `all_6rsu`.
+Separately, the 14 carbon/aluminium contacts still require the planned local
+corrugation clearance. No production geometry was changed during this review.
+
+## Step 8e: return production selection to rsu_opt and isolate the residual support contact
+
+Following review of the seven `all_6rsu` FPC/REC module pairs, all six active
+`module_placements` declarations have been switched atomically back to
+`20261001_ES/rsu_opt`. The permanent delivery README records `rsu_opt` as the
+production choice. The scenario and delivery-layout validators pass, finding
+2,164 modules, one common scenario across all six detector blocks, and the
+same shared corrugation table on all ten layers. The source-level Step 8d audit
+now follows the active XML selection and finds zero bridge-FPC/end-film
+intersections in `rsu_opt`. The `all_6rsu` delivery remains installed and
+selectable for later provider follow-up; none of its source files changed.
+
+The 14 carbon/aluminium warnings belong to the preceding installed
+`all_6rsu` Geant run and are not an exact count for the newly selected source
+scenario. Their geometric cause, however, is scenario-independent because
+both deliveries share the module construction and corrugation table. Consider
+coordinates relative to an inward module center, toward its lower-y edge:
+
+- A B module spans `-16.000..+16.000 mm`. Its lower 2.5 mm epoxy strip is
+  `-16.000..-13.500 mm`, and its shortened bridge FPC begins at `-13.500 mm`.
+  The neighboring B carbon flat is centered at `-16.500 mm` and is 6.360 mm
+  wide, so its module-facing edge is `-16.500 + 6.360/2 = -13.320 mm`.
+  It therefore enters the FPC footprint by `-13.320 - (-13.500) = 0.180 mm`.
+- An A module spans `-17.500..+17.500 mm`. Its epoxy strip ends at
+  `-15.000 mm`, while the unchanged 24.5/25.78 mm FPC rectangles begin at
+  `-14.500 mm`, leaving 0.500 mm between epoxy and FPC. The neighboring A flat
+  is centered at `-18.000 mm` and is 7.860 mm wide, so its edge is
+  `-18.000 + 7.860/2 = -14.070 mm`. It covers the 0.500 mm gap and enters the
+  FPC by `-14.070 - (-14.500) = 0.430 mm`.
+
+The current inward keep-clear widths are only 20.56 mm (B) and 21.94 mm (A),
+or `+/-10.280 mm` and `+/-10.970 mm` about the module center. The carbon flats
+above lie completely outside those central y intervals, so the x-segmentation
+code does not cut them even though the FPC extends outward to -13.5/-14.5 mm.
+This explains why the central keep-clear does not remove the reported contact.
+
+In z measured from the supplied corrugation surface, positive into the
+corrugation channel, the inward bridge FPC is split as follows:
+
+- Kapton: `-0.080..0.000 mm`; it ends at the carbon boundary and has no
+  positive-volume intersection.
+- Aluminium: `0.000..+0.030 mm`.
+- Carbon flat: `0.000..+0.150 mm` locally where the y footprints cross.
+
+Thus the entire 30 um aluminium thickness is inside the carbon flat over the
+0.180/0.430 mm y sliver, while Kapton only touches at a common surface. This is
+why Step 8d removed every sampled Kapton warning but retained aluminium
+warnings. Geant's finite random surface sampling means the 14 warnings should
+be treated as observed examples, not proof that only 14 physical contacts
+exist. No support or module geometry has been changed in Step 8e; rebuild and
+the independent overlap gates remain deferred until the intended local carbon
+clearance is chosen.
+
+## Step 8f: apply the 30 um inward-module translation
+
+Every inward module is translated 0.030 mm away from
+the corrugation channel. In the module-normal convention this is a signed
+`-0.030 mm` inward-module offset. To preserve the current 0.230 mm relative
+translation between opposing inward/outward placements, the outward applied
+offset is increased from `+0.230 mm` to `+0.260 mm` along its outward normal.
+This would move the inward FPC from Kapton/aluminium intervals
+`-0.080..0.000 / 0.000..+0.030 mm` to
+`-0.110..-0.030 / -0.030..0.000 mm`, eliminating positive-volume contact with
+a carbon flat beginning at 0.000 mm.
+
+This translation has two consequences that must not be hidden. First, the
+inward external epoxy would also move from `-0.080..0.000 mm` to
+`-0.110..-0.030 mm`, leaving a 0.030 mm gap to the corrugation surface rather
+than attaching to it. Second, it cannot justify removing the placement-aware
+support gaps. Before those gaps were introduced, the conservative straight
+support produced 404 web/AncASIC, 340 flat/sensor-bias, 99
+flat/powerswitch, 45 flat/backbone, and 18 web/active-silicon sampled reports,
+among other support contacts. The inward AncASIC still reaches 0.380 mm into
+the channel after a 0.030 mm translation, and uncut oblique webs traverse that
+region. Step 7h's gaps removed all of those support/module categories.
+
+The XML exposes the two independent user controls as
+`SiEndcapTilingInwardModule_z_clearance = 0.030 mm` and
+`SiEndcapTilingOppositeFacing_z_offset = 0.230 mm`. The builder derives the
+total outward applied offset as their sum. Per-module provenance now records
+the signed value under `applied_module_normal_z_offset_mm`; the earlier
+outward-only parameter name has been removed. The selected placement remains
+`rsu_opt`, and all placement-aware support gaps remain enabled and unchanged.
+
+`logs/validate_svt_module_z_offsets_step8f.py` verifies the signed offsets,
+all relevant component intervals, zero positive-volume FPC/carbon overlap,
+preserved opposing backing-stack separation, active `rsu_opt` selection, and
+the retained support-gap code. It passes together with the updated historical
+offset validator, FPC registration, source placement transforms, and scenario
+activation. The active-package FPC/end-film audit remains zero for `rsu_opt`.
+
+Run `bash logs/check_svt_module_z_offsets_step8f.sh` inside the stable EIC
+shell to rebuild/install, export, run the deterministic ROOT overlap check,
+and inspect the translated modules visually. If those pass, run
+`bash logs/check_svt_module_z_offsets_geant_step8f.sh` for the independent
+Geant4 scan. Removing the support gaps remains a separate experiment; present
+evidence predicts that it would restore web/AncASIC and silicon overlaps.
+
+An initial invocation of the Geant4 continuation was invalid because the
+build/export script had not been run first. The installed XML still selected
+`all_6rsu` and still contained the superseded single 0.230 mm outward-offset
+constant; its first warnings exactly repeated the known all-six-RSU B601/B600
+FPC/REC pair and the old inward FPC/aluminium contact. This run must not be
+used as Step 8f evidence. The continuation script now refuses to start unless
+the Step 8f build transcript exists, the relevant sources are no newer than
+that transcript, and the installed silicon-disks XML exactly matches source.
+
+**Step 8f automated result (2026-10-15): PASS.** The valid recorded build
+installed `rsu_opt` in all six detector blocks together with
+`SiEndcapTilingInwardModule_z_clearance = 0.030 mm` and
+`SiEndcapTilingOppositeFacing_z_offset = 0.230 mm`. ROOT examined 627,954
+candidates at 0.01 mm tolerance and found zero illegal overlaps or extrusions.
+The guarded Geant4 continuation then completed normally with zero overlap
+reports. Classification confirms `reports=0`, `unique_pairs=0`, and no
+fallback-support pairs. The former inward flat/FPC-aluminium reports and the
+all-six-RSU FPC/REC report are absent. Visual acceptance remains a separate
+check unless explicitly confirmed by the user.

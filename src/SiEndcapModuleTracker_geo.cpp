@@ -415,11 +415,28 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
                    "Silicon", "SVTSensorVis", true, chain_length,
                    description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
                    rsu_count, true, true});
-    add_component({bridge_fpc_stack, "Kapton", "SVTReadoutVis", false, chain_length,
-                   baseplate_width, sensor_x_offset, 0.0, 1, false, false, false, true});
-    add_component({ancasic_stack, "Silicon", "SVTElectronicsVis", false, chain_length,
-                   baseplate_width, sensor_x_offset, 0.0, 1, false, false, false, false, false,
-                   true});
+    ComponentTemplate bridge_fpc{bridge_fpc_stack, "Kapton", "SVTReadoutVis", false,
+                                 chain_length, baseplate_width, sensor_x_offset, 0.0, 1,
+                                 false, false, false, true};
+    bridge_fpc.stacked_in_z = false;
+    add_component(bridge_fpc);
+    ComponentTemplate ancasic{ancasic_stack, "Silicon", "SVTElectronicsVis", false,
+                              chain_length, baseplate_width, sensor_x_offset, 0.0, 1,
+                              false, false, false, false, false, true};
+    ancasic.stacked_in_z = false;
+    add_component(ancasic);
+
+    // The sensor and bridge-FPC/AncASIC stacks are parallel branches on the
+    // baseplate, not one serial stack. The FPC touches the baseplate and the
+    // AncASIC is mounted on the FPC.
+    const double sensor_branch =
+        description.constant<double>("SiEndcapTilingFilm_thickness") +
+        description.constant<double>("SiEndcapTilingSensor_thickness");
+    const double electronics_branch = bridge_fpc_stack + ancasic_stack;
+    module_template.total_thickness =
+        (outward_facing ? epoxy.thickness : 0.0) +
+        description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
+        std::max(sensor_branch, electronics_branch);
     return module_template;
   };
 
@@ -1702,11 +1719,18 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
         row.disk_id, row.row_index, row.module_index, row.module_name, predicted_sensor / mm,
         source_row.z_sensor_reference / mm));
   }
-  if (module_template.outward_facing) {
-    row.applied_z_offset =
-        description.constant<double>("SiEndcapTilingOutwardModule_z_offset");
-    global_module_center += global_normal_sign * row.applied_z_offset;
-  }
+  // Move inward modules away from the channel by the requested surface
+  // clearance. Apply the same common translation to outward modules before
+  // adding their preserved opposing-face separation. Offsets are signed along
+  // each module's sensor normal.
+  const double inward_surface_clearance =
+      description.constant<double>("SiEndcapTilingInwardModule_z_clearance");
+  row.applied_z_offset =
+      module_template.outward_facing
+          ? inward_surface_clearance +
+                description.constant<double>("SiEndcapTilingOppositeFacing_z_offset")
+          : -inward_surface_clearance;
+  global_module_center += global_normal_sign * row.applied_z_offset;
   row.placed_sensor_reference = predicted_sensor + global_normal_sign * row.applied_z_offset;
   row.dz = global_module_center - global_layer_center;
   return row;
@@ -1970,8 +1994,13 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
             description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
         const double aluminum_thickness =
             description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
-        const double stack_thickness = kapton_thickness + aluminum_thickness;
-        double layer_z               = z_position - stack_thickness / 2.0;
+        const double baseplate_top_z =
+            -module_template.total_thickness / 2.0 +
+            (module_template.outward_facing
+                 ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
+                 : 0.0) +
+            description.constant<double>("SiEndcapTilingBaseplateCF_thickness");
+        double layer_z = baseplate_top_z;
 
         place_passive_box(name + "_kapton", box_x, box_y, kapton_thickness, pos_x, pos_y,
                           layer_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
@@ -1980,34 +2009,47 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
                           layer_z + aluminum_thickness / 2.0, "Aluminum", "SVTReadoutVis");
       };
 
-      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
-        const double clearance   = description.constant<double>("SiEndcapModuleEndClearance");
-        const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
-        const double available_x = side_span - 2.0 * clearance;
+      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double endcap_length,
+                                       double target_box_x) {
+        const double clearance =
+            description.constant<double>("SiEndcapBridgeFPC_LEC_REC_gap");
+        const double available_x = side_span - endcap_length - clearance;
         const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
-        const double box_center  = after_rsu ? module_edge - clearance - box_x / 2.0
-                                             : module_edge + clearance + box_x / 2.0;
-        return std::make_tuple(box_x, box_center - component.x_offset);
+        const double box_center =
+            after_rsu ? comp_x / 2.0 + endcap_length + clearance + box_x / 2.0
+                      : -comp_x / 2.0 - endcap_length - clearance - box_x / 2.0;
+        return std::make_tuple(box_x, box_center);
       };
-      auto bridge_fpc_y_center = [&](double box_y, double top_edge_offset) {
-        return y_size / 2.0 + top_edge_offset - box_y / 2.0;
+      auto bridge_fpc_y_geometry = [&](double target_box_y, double top_edge_offset) {
+        const double top_edge = y_size / 2.0 + top_edge_offset;
+        const double lower_epoxy_inner_edge =
+            -y_size / 2.0 +
+            description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
+        const double box_y =
+            std::min(target_box_y, std::max(0.0, top_edge - lower_epoxy_inner_edge));
+        return std::make_tuple(box_y, top_edge - box_y / 2.0);
       };
 
       const double lec_side_span = module_template.lec_side_span;
       const double rec_side_span = module_template.rec_side_span;
+      const double lec_length     = description.constant<double>("SiEndcapLEC_length");
+      const double rec_length     = description.constant<double>("SiEndcapREC_length");
       const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
-      const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
-      const double left_bridge_pos_y = bridge_fpc_y_center(
-          left_bridge_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
+      const double left_bridge_target_y =
+          description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const auto [left_bridge_y, left_bridge_pos_y] = bridge_fpc_y_geometry(
+          left_bridge_target_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
       const double right_bridge_x = description.constant<double>("SiEndcapRightBridgeFPC_width");
-      const double right_bridge_y = description.constant<double>("SiEndcapRightBridgeFPC_length");
-      const double right_bridge_pos_y = bridge_fpc_y_center(
-          right_bridge_y, description.constant<double>("SiEndcapRightBridgeFPC_y_offset"));
+      const double right_bridge_target_y =
+          description.constant<double>("SiEndcapRightBridgeFPC_length");
+      const auto [right_bridge_y, right_bridge_pos_y] = bridge_fpc_y_geometry(
+          right_bridge_target_y,
+          description.constant<double>("SiEndcapRightBridgeFPC_y_offset"));
       const bool lec_after_rsu = component.lec_after_rsu;
       const auto [left_bridge_box_x, left_bridge_pos_x] =
-          bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, left_bridge_x);
+          bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, lec_length, left_bridge_x);
       const auto [right_bridge_box_x, right_bridge_pos_x] =
-          bridge_fpc_x_geometry(!lec_after_rsu, rec_side_span, right_bridge_x);
+          bridge_fpc_x_geometry(!lec_after_rsu, rec_side_span, rec_length, right_bridge_x);
 
       place_bridge_fpc(_toString(component_id, "component%d_left_bridge_fpc"), left_bridge_box_x,
                        left_bridge_y, left_bridge_pos_x, left_bridge_pos_y);
@@ -2027,25 +2069,35 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
             box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
       };
 
-      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double target_box_x) {
-        const double clearance   = description.constant<double>("SiEndcapModuleEndClearance");
-        const double module_edge = after_rsu ? x_size / 2.0 : -x_size / 2.0;
-        const double available_x = side_span - 2.0 * clearance;
+      auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double endcap_length,
+                                       double target_box_x) {
+        const double clearance =
+            description.constant<double>("SiEndcapBridgeFPC_LEC_REC_gap");
+        const double available_x = side_span - endcap_length - clearance;
         const double box_x       = std::min(target_box_x, std::max(0.0, available_x));
-        const double box_center  = after_rsu ? module_edge - clearance - box_x / 2.0
-                                             : module_edge + clearance + box_x / 2.0;
-        return std::make_tuple(box_x, box_center - component.x_offset);
+        const double box_center =
+            after_rsu ? comp_x / 2.0 + endcap_length + clearance + box_x / 2.0
+                      : -comp_x / 2.0 - endcap_length - clearance - box_x / 2.0;
+        return std::make_tuple(box_x, box_center);
       };
-      auto bridge_fpc_y_center = [&](double box_y, double top_edge_offset) {
-        return y_size / 2.0 + top_edge_offset - box_y / 2.0;
+      auto bridge_fpc_y_geometry = [&](double target_box_y, double top_edge_offset) {
+        const double top_edge = y_size / 2.0 + top_edge_offset;
+        const double lower_epoxy_inner_edge =
+            -y_size / 2.0 +
+            description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
+        const double box_y =
+            std::min(target_box_y, std::max(0.0, top_edge - lower_epoxy_inner_edge));
+        return std::make_tuple(box_y, top_edge - box_y / 2.0);
       };
 
+      const double lec_length = description.constant<double>("SiEndcapLEC_length");
       const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
-      const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
-      const double left_bridge_pos_y = bridge_fpc_y_center(
-          left_bridge_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
+      const double left_bridge_target_y =
+          description.constant<double>("SiEndcapLeftBridgeFPC_length");
+      const auto [left_bridge_y, left_bridge_pos_y] = bridge_fpc_y_geometry(
+          left_bridge_target_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
       const auto [left_bridge_box_x, left_bridge_pos_x] = bridge_fpc_x_geometry(
-          component.lec_after_rsu, module_template.lec_side_span, left_bridge_x);
+          component.lec_after_rsu, module_template.lec_side_span, lec_length, left_bridge_x);
 
       const double ancasic_x  = description.constant<double>("SiEndcapAncASIC_width");
       const double ancasic_y  = description.constant<double>("SiEndcapAncASIC_length");
@@ -2061,7 +2113,16 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
 
       const double glue_thickness = description.constant<double>("SiEndcapAncASICGlue_thickness");
       const double ancasic_thickness = description.constant<double>("SiEndcapAncASIC_thickness");
-      double layer_z                 = z_position - component.thickness / 2.0;
+      const double bridge_fpc_stack =
+          description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
+          description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+      double layer_z =
+          -module_template.total_thickness / 2.0 +
+          (module_template.outward_facing
+               ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
+               : 0.0) +
+          description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
+          bridge_fpc_stack;
       place_passive_box(_toString(component_id, "component%d_ancasic_glue"), ancasic_x, ancasic_y,
                         glue_thickness, ancasic_pos_x, ancasic_pos_y,
                         layer_z + glue_thickness / 2.0, "SVT_Endcap_Glue", "SVTGlueVis");
@@ -2412,7 +2473,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                   row.z_corrugation_surface / mm);
         module_params.set<double>("source_sensor_reference_z_mm",
                                   row.z_sensor_reference / mm);
-        module_params.set<double>("applied_outward_z_offset_mm",
+        module_params.set<double>("applied_module_normal_z_offset_mm",
                                   row.applied_z_offset / mm);
         module_params.set<double>("placed_sensor_reference_z_mm",
                                   row.placed_sensor_reference / mm);

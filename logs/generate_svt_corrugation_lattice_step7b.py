@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Generate the documented 33/36 mm corrugation flat-center lattice.
+"""Generate the documented 33/36 mm corrugation facet-center lattice.
 
 The transition delivery labels every module row with an A or B baseplate
 family.  A maps to a 36 mm same-surface corrugation pitch and B maps to a
-33 mm pitch.  Consecutive rows alternate surfaces, so their within-family
-separations are 18 and 16.5 mm.  At an A/B boundary, center the join by using
-the mean separation, 17.25 mm.
+33 mm pitch.  The delivered module y coordinate is the channel center, not a
+same-surface facet center.  The facet at the same y therefore belongs to the
+opposite surface; a module's two edge glue lines land on the neighboring
+same-surface facets.  Consecutive centers are separated by 18 or 16.5 mm, and
+the centered A/B join uses their mean separation, 17.25 mm.  One boundary
+facet is added beyond each end of the module-row lattice.
 """
 
 import csv
@@ -79,12 +82,38 @@ with OUTPUT.open("w", newline="") as stream:
         if len(surface_values) != 2:
             raise ValueError(f"{disk} does not contain exactly two corrugation surfaces")
         disk_center_z = (min(surface_values) + max(surface_values)) / 2.0
+        facets = []
+
+        first_index, first_family, first_surface_z = rows[0]
+        facets.append(
+            (
+                first_index - 1,
+                first_family,
+                first_surface_z,
+                coordinates[0] + PITCH_MM[first_family] / 2.0,
+            )
+        )
+
         for (row_index, family, surface_z), row_y in zip(rows, coordinates):
+            opposite_surface_z = 2.0 * disk_center_z - surface_z
+            facets.append((row_index, family, opposite_surface_z, row_y))
+
+        last_index, last_family, last_surface_z = rows[-1]
+        facets.append(
+            (
+                last_index + 1,
+                last_family,
+                last_surface_z,
+                coordinates[-1] - PITCH_MM[last_family] / 2.0,
+            )
+        )
+
+        for facet_index, family, surface_z, facet_y in facets:
             writer.writerow(
                 {
                     "disk": disk,
-                    "row_index": row_index,
-                    "row_y_mm": f"{row_y:.3f}",
+                    "row_index": facet_index,
+                    "row_y_mm": f"{facet_y:.3f}",
                     "surface_offset_mm": f"{surface_z - disk_center_z:.3f}",
                     "family": family,
                     "pitch_mm": f"{PITCH_MM[family]:.3f}",

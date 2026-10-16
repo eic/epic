@@ -72,7 +72,14 @@
     <constant name="SiEndcapTilingKeepClearA_width"          value="21.94*mm"/>
     <constant name="SiEndcapTilingKeepClearB_width"          value="20.56*mm"/>
     <constant name="SiEndcapTilingKeepClear_depth"           value="1.00*mm"/>
-    <constant name="SiEndcapTilingOutwardModule_z_offset"    value="0.230*mm"/>
+    <comment>
+      Provisional module translations normal to the supplied corrugation surface.
+      The inward clearance moves the module away from the channel by 30 um.
+      The outward module moves by that common clearance plus the preserved
+      230 um opposing-face translation, for a total outward offset of 260 um.
+    </comment>
+    <constant name="SiEndcapTilingInwardModule_z_clearance"  value="0.030*mm"/>
+    <constant name="SiEndcapTilingOppositeFacing_z_offset"   value="0.230*mm"/>
     <constant name="SiEndcapTilingBLEC_length"               value="20*mm"/>
     <constant name="SiEndcapTilingBREC_length"               value="10*mm"/>
     <constant name="SiEndcapTiling5RSU_package_length"       value="SiEndcapTiling5RSU_count*SiEndcapRSU_length + SiEndcapTilingBLEC_length + SiEndcapTilingBREC_length"/>
@@ -121,9 +128,11 @@
     <comment>
       FPC dimensions are kept separate from LEC/REC chip-like placeholders.
       From Ernst S. Module tiling 20261001 - https://conferences.lbl.gov/event/2600/
-      Bridge FPCs are local end/readout features. Main FPC geometry is
-      row-dependent and intentionally deferred until the placement-reference
-      migration is stable.
+      Bridge FPCs sit directly on the baseplate. Their listed y lengths are
+      maxima; the builder shortens a rectangle at the lower edge when needed
+      so that it stops at the inner edge of the 2.5 mm epoxy glue line.
+      In x, each FPC starts after its adjacent LEC/REC and the configurable
+      gap below, rather than being aligned to the outer baseplate edge.
     </comment>
     <constant name="SiEndcapBridgeFPC_Kapton_thickness"      value="80*um"/>
     <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="30*um"/>
@@ -135,6 +144,8 @@
     <constant name="SiEndcapRightBridgeFPC_width"            value="4.0*mm"/>
     <comment> Signed distance from the module top y edge to the right bridge-FPC top edge. </comment>
     <constant name="SiEndcapRightBridgeFPC_y_offset"         value="-6.22*mm"/>
+    <constant name="SiEndcapBridgeFPC_LEC_REC_gap"           value="0.5*mm"/>
+    <comment> Legacy outer-edge clearance for EIC_LAS_6RSU_CORR only. </comment>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>
 
     <comment>

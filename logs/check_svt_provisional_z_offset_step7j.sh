@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Run inside ~/weic/eic-shell --version 26.09.0-stable.
-# Check the provisional 0.230 mm outward-module z translation.
+# Check the current provisional inward/outward module translations.
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 log_file="$repo_root/logs/check_svt_provisional_z_offset_step7j.txt"
 
 exec > >(tee "$log_file") 2>&1
-printf 'SVT step 7j provisional outward-z check: %s\n' "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+printf 'SVT provisional module-z check: %s\n' "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 printf 'Repository: %s\n' "$repo_root"
 cd "$repo_root"
 python3 logs/validate_svt_provisional_z_offset_step7j.py

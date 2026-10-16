@@ -40,8 +40,10 @@ def metadata(path):
 
 
 def local_z_references(outward):
-    serial_module = BASEPLATE + FILM + SENSOR + BRIDGE_FPC + ANCASIC
-    total = serial_module + (EPOXY if outward else 0)
+    sensor_branch = FILM + SENSOR
+    electronics_branch = BRIDGE_FPC + ANCASIC
+    total = BASEPLATE + max(sensor_branch, electronics_branch)
+    total += EPOXY if outward else 0
     bottom = -total / 2
     sensor_reference = bottom + (EPOXY if outward else 0) + BASEPLATE + FILM + SENSOR
     corrugation_reference = bottom if outward else bottom + BASEPLATE + EPOXY
@@ -107,7 +109,7 @@ def main():
                     assert reconstructed_x == x_origin_global
                     assert reconstructed_corrugation == z_corrugation_global
                     assert reconstructed_sensor == z_sensor_global
-                    assert total == (Decimal("0.830") if outward else Decimal("0.750"))
+                    assert total == (Decimal("0.720") if outward else Decimal("0.640"))
                     assert abs(module_center_layer) < Decimal("10")
 
                     types[row["type_id"]] += 1

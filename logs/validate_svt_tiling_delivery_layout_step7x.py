@@ -45,12 +45,22 @@ corrugation = DELIVERY / "SVT_endcap_corrugation_rows_33_36.csv"
 assert corrugation.is_file()
 
 xml = MODULES_XML.read_text()
-package_path = "compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt"
+package_prefix = "compact/tracking/silicon_disks_tiling/20261001_ES/"
 corrugation_path = (
     "compact/tracking/silicon_disks_tiling/20261001_ES/"
     "SVT_endcap_corrugation_rows_33_36.csv"
 )
-assert xml.count(f'file="{package_path}"') == 6
+active_paths = {
+    line.split('file="', 1)[1].split('"', 1)[0]
+    for line in xml.splitlines()
+    if "<module_placements" in line and 'format="tiling-directory"' in line
+}
+assert len(active_paths) == 1, active_paths
+active_path = active_paths.pop()
+assert active_path.startswith(package_prefix), active_path
+active_scenario = active_path[len(package_prefix) :]
+assert active_scenario in SCENARIOS, active_scenario
+assert xml.count(f'file="{active_path}"') == 6
 assert xml.count(f'rowwise_placement="{corrugation_path}"') == 10
 assert OLD_REFERENCE not in xml
 
@@ -63,6 +73,7 @@ for pattern in ("*.py", "*.sh"):
         assert OLD_REFERENCE not in path.read_text(), path
 
 print("PASS: versioned 20261001_ES delivery contains both complete scenarios")
-print("PASS: production XML has 6 versioned package and 10 corrugation references")
+print(f"PASS: all 6 detectors atomically select {active_scenario}")
+print("PASS: production XML has 10 shared corrugation references")
 print("PASS: permanent READMEs contain provenance and no development-log links")
 print("PASS: CMake installs only the required *_metadata.txt text files")
