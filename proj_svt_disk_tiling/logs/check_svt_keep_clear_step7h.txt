@@ -545,7 +545,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Up-to-date: /global/cfs/cdirs/m3763/pdatta/epic/install/bin/g4MaterialScan_to_csv
 set DETECTOR_PATH= /global/cfs/cdirs/m3763/pdatta/epic/install/share/epic
 Detector configuration: /global/cfs/cdirs/m3763/pdatta/epic/install/share/epic/epic_craterlake_tracking_only_disk_modules.xml
-[2026-10-07 08:14:03.614] [info] running in batch mode to export geometry 
+[2026-10-07 08:14:03.614] [info] running in batch mode to export geometry
 INFO: +++========================================================================================================================
 INFO: +++ Loading compact geometry:
 INFO: +++ /global/cfs/cdirs/m3763/pdatta/epic/install/share/epic/epic_craterlake_tracking_only_disk_modules.xml
@@ -621,37 +621,37 @@ FileLoader       INFO  $DETECTOR_CACHE -> /opt/software/linux-x86_64_v2/epic-26.
 FileLoader       INFO  link fieldmaps/MARCO_v.7.6.2.2.11_1.7T_Magnetic_Field_Map_2024_05_02_rad_coords_cm_T.BMap.txt -> hash 711f9d7abbb35742 already exists
 Compact          INFO  ++ Converted field: Successfully created field GlobalSolenoid [FieldMapB]
 Utilities        INFO  +++ setDetectorTypeFlags for detector: VertexBarrelSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:VertexBarrelSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:VertexBarrelSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: InnerSiTrackerSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:InnerSiTrackerSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:InnerSiTrackerSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: MiddleSiBarrelSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:MiddleSiBarrelSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:MiddleSiBarrelSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: OuterSiBarrelSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:OuterSiBarrelSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:OuterSiBarrelSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: MiddleSiEndcapSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:MiddleSiEndcapSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:MiddleSiEndcapSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: OuterSiEndcapSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:OuterSiEndcapSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:OuterSiEndcapSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: EndcapMPGDSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:EndcapMPGDSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:EndcapMPGDSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: InnerMPGDBarrelSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:InnerMPGDBarrelSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:InnerMPGDBarrelSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: EndcapTOFSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:EndcapTOFSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:EndcapTOFSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: BarrelTOFSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:BarrelTOFSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:BarrelTOFSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: OuterBarrelMPGDSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:OuterBarrelMPGDSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:OuterBarrelMPGDSubAssembly of type DD4hep_SubdetectorAssembly
 Utilities        INFO  +++ setDetectorTypeFlags for detector: B0TrackerSubAssembly not set.
-Compact          INFO  ++ Converted subdetector:B0TrackerSubAssembly of type DD4hep_SubdetectorAssembly 
+Compact          INFO  ++ Converted subdetector:B0TrackerSubAssembly of type DD4hep_SubdetectorAssembly
 FileLoader       INFO  $DETECTOR_CACHE -> /opt/software/linux-x86_64_v2/epic-26.09.0-pmubbcuiy3odcuulbptolbbv5gdefwl7/share/epic
 FileLoader       INFO  link calibrations/materials-map.cbor -> hash f17de4e450603c18 already exists
 Compact          INFO  ++ Converted subdetector:VertexBarrel of type epic_CylinderSVTBarrel [tracker]
 ParametersPlugin INFO  +++ Applying 2 parameters
 ParametersPlugin INFO  +++ VertexBarrel -> layer_pattern: str = VertexBarrel_layer\d
-Compact          INFO  ++ Converted subdetector:SVT_IB_Support_L2 of type epic_SupportServiceMaterial 
-Compact          INFO  ++ Converted subdetector:SVT_IB_Support_L1 of type epic_SupportServiceMaterial 
-Compact          INFO  ++ Converted subdetector:SVT_IB_Support_L0_L1 of type epic_SupportServiceMaterial 
+Compact          INFO  ++ Converted subdetector:SVT_IB_Support_L2 of type epic_SupportServiceMaterial
+Compact          INFO  ++ Converted subdetector:SVT_IB_Support_L1 of type epic_SupportServiceMaterial
+Compact          INFO  ++ Converted subdetector:SVT_IB_Support_L0_L1 of type epic_SupportServiceMaterial
 Compact          INFO  ++ Converted subdetector:SagittaSiBarrel of type epic_CurvedTrackerBarrel [tracker]
 Compact          INFO  ++ Converted subdetector:OuterSiBarrel of type epic_CurvedTrackerBarrel [tracker]
 ParametersPlugin INFO  +++ Applying 2 parameters
@@ -684,7 +684,7 @@ Info in <TGeoManager::CloseGeometry>: Building cache...
 Info in <TGeoManager::CountLevels>: max level = 6, max placements = 576
 Info in <TGeoManager::CloseGeometry>: 659676 nodes/ 3769 volume UID's in Detector Geometry
 Info in <TGeoManager::CloseGeometry>: ----------------modeler ready----------------
-Compact          INFO  ++ Converted subdetector:BeamPipe of type IP6BeamPipe 
+Compact          INFO  ++ Converted subdetector:BeamPipe of type IP6BeamPipe
 Detector         INFO  +++ Patching names of anonymous shapes....
 Geant4Kernel           OutputLevel:  2
 Geant4Kernel           UI:           UI
@@ -720,9 +720,9 @@ Geant4VolumeManager       +++ Populating Geant4 volume manager.
 Geant4VolumeManager       +++ Geant4 volume manager populated with 169780 sensitive path entries.
 Geant4UI         INFO  +++ ConstructGeometry> Install Geant4 control directory:/ddg4/ConstructGeometry/
 
- hInelastic QGSP_BERT  Thresholds: 
-    1) between BERT  and FTF/P over the interval 3 to 6 GeV. 
-    2) between FTF/P and QGS/P over the interval 12 to 25 GeV. 
+ hInelastic QGSP_BERT  Thresholds:
+    1) between BERT  and FTF/P over the interval 3 to 6 GeV.
+    2) between FTF/P and QGS/P over the interval 12 to 25 GeV.
   -- quasiElastic: 1 for QGS  and 0 for FTF
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 UI               INFO  ++ Executing pre-run statement: /geometry/test/resolution 10000
