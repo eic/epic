@@ -15,8 +15,6 @@ THETA_DEG = 45.000
 CENTER_DELTA_MM = HEIGHT_MM - THICKNESS_MM
 WEB_Y_SPAN_MM = CENTER_DELTA_MM / math.tan(math.radians(THETA_DEG))
 FLAT_WIDTH_MM = {"A": 7.86, "B": 6.36}
-KEEP_CLEAR_WIDTH_MM = {"A": 21.94, "B": 20.56}
-KEEP_CLEAR_DEPTH_MM = 1.00
 OMITTED_BEND_GAP_MM = 2.145
 
 
@@ -65,8 +63,6 @@ for disk, rows in by_disk.items():
 
 print("PASS: slide flats and 45-degree webs preserve conservative omitted-bend gaps")
 print(
-    "NOTE: keep-clear envelopes "
-    f"A={KEEP_CLEAR_WIDTH_MM['A']:.2f}x{KEEP_CLEAR_DEPTH_MM:.2f} mm and "
-    f"B={KEEP_CLEAR_WIDTH_MM['B']:.2f}x{KEEP_CLEAR_DEPTH_MM:.2f} mm are recorded, "
-    "and intersecting straight-piece x sections are omitted over inward modules"
+    "NOTE: the straight-piece approximation omits the 5 mm-radius bends; "
+    "its carbon pieces are not cut around individual modules"
 )

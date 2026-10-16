@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the Step 8f module translations and retained support clearances."""
+"""Validate the Step 8f module translations."""
 
 from decimal import Decimal
 from pathlib import Path
@@ -99,8 +99,6 @@ def main():
     assert 'description.constant<double>("SiEndcapTilingOppositeFacing_z_offset")' in cpp
     assert 'applied_module_normal_z_offset_mm' in cpp
     assert 'applied_outward_z_offset_mm' not in cpp
-    assert "keep_clears.push_back" in cpp
-    assert "place_corrugated_frame(description, layer_vol, disk, frame_config, keep_clears)" in cpp
 
     print(
         f"applied offsets along module normal: inward={inward_applied} mm, "
@@ -108,7 +106,7 @@ def main():
     )
     print(f"inward component intervals from corrugation surface: {inward}")
     print(f"outward backing intervals in +channel coordinate: {outward_backing}")
-    print("PASS: FPC and sensor end at the carbon boundary; support cuts remain enabled")
+    print("PASS: FPC and sensor end at the carbon boundary")
     print("NOTE: inward edge epoxy now ends 0.030 mm before the corrugation surface")
 
 

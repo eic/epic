@@ -189,18 +189,6 @@ struct FrameFootprint {
   double y_max{0.0};
 };
 
-// Virtual (unplaced) exclusion region for one inward-facing module.  Carbon
-// pieces whose y-z footprint enters this envelope are shortened in x over the
-// module package footprint.
-struct CorrugationKeepClear {
-  double x_min{0.0};
-  double x_max{0.0};
-  double y_min{0.0};
-  double y_max{0.0};
-  double z_min{0.0};
-  double z_max{0.0};
-};
-
 // Trim whitespace around CSV fields and free-form text values.
 string trim(string value) {
   auto not_space = [](unsigned char ch) { return !std::isspace(ch); };
@@ -929,11 +917,10 @@ string source_corrugation_disk_key(const string& layer_key) {
 // - h is the surface-to-surface peak/valley envelope.
 // - d is half the pitch between same-surface flat-strip centers.
 // - theta is the web angle with respect to the x-y plane.
-// - y0=0 keeps the central lower flat centered at y=0; it is split there so no
-//   single frame volume crosses the xz plane.
+// - A flat centered at y=0 is split into two axis-aligned boxes. A CSV-defined
+//   sloped web crossing y=0 remains one complete rotated box.
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
-                           const CorrugatedFrameConfig& config,
-                           const vector<CorrugationKeepClear>& keep_clears) {
+                           const CorrugatedFrameConfig& config) {
   if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
       config.theta <= 0.0) {
     printout(
@@ -962,12 +949,9 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
     const double y_min = y_center - y_half_span;
     const double y_max = y_center + y_half_span;
     vector<tuple<double, double, double>> segments{{y_min, y_max, local_y_half}};
-    if (y_min < 0.0 && y_max > 0.0) {
-      if (std::abs(angle) > 1.0e-12 || std::abs(y_half_span - local_y_half) > 1.0e-9 * mm) {
-        // Sloped pieces are not split because their projected y span does not map
-        // linearly to the local box axis; skip them instead of crossing y=0.
-        return;
-      }
+    const bool is_axis_aligned = std::abs(angle) <= 1.0e-12;
+    const bool has_direct_y_span = std::abs(y_half_span - local_y_half) <= 1.0e-9 * mm;
+    if (y_min < 0.0 && y_max > 0.0 && is_axis_aligned && has_direct_y_span) {
       segments = {{y_min, 0.0, (0.0 - y_min) / 2.0}, {0.0, y_max, (y_max - 0.0) / 2.0}};
     }
 
@@ -978,33 +962,6 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
       const double segment_y_center = (segment_y_min + segment_y_max) / 2.0;
       const FrameFootprint footprint{segment_y_min, segment_y_max};
       vector<pair<double, double>> intervals = contained_x_intervals(disk, footprint);
-      const double z_projection = std::abs(std::sin(angle)) * local_y_half +
-                                  std::abs(std::cos(angle)) * local_z_half;
-      const double piece_z_min = z_center - z_projection;
-      const double piece_z_max = z_center + z_projection;
-      for (const auto& keep_clear : keep_clears) {
-        const bool overlaps_y = segment_y_min < keep_clear.y_max &&
-                                segment_y_max > keep_clear.y_min;
-        const bool overlaps_z = piece_z_min < keep_clear.z_max &&
-                                piece_z_max > keep_clear.z_min;
-        if (!overlaps_y || !overlaps_z) {
-          continue;
-        }
-        vector<pair<double, double>> shortened;
-        for (const auto& [x_min, x_max] : intervals) {
-          if (keep_clear.x_max <= x_min || keep_clear.x_min >= x_max) {
-            shortened.emplace_back(x_min, x_max);
-            continue;
-          }
-          if (keep_clear.x_min > x_min) {
-            shortened.emplace_back(x_min, std::min(keep_clear.x_min, x_max));
-          }
-          if (keep_clear.x_max < x_max) {
-            shortened.emplace_back(std::max(keep_clear.x_max, x_min), x_max);
-          }
-        }
-        intervals = std::move(shortened);
-      }
       for (const auto& [x_min, x_max] : intervals) {
         const double x_half = (x_max - x_min) / 2.0;
         if (x_half <= 0.0) {
@@ -2288,37 +2245,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       disk.source_hadron_opening = metadata.opening_1;
     }
 
-    vector<CorrugationKeepClear> keep_clears;
-    if (module_format == "tiling-directory") {
-      const double global_layer_center = negative_z ? -disk.center_z : disk.center_z;
-      const double keep_depth = description.constant<double>("SiEndcapTilingKeepClear_depth");
-      for (const auto& source_row : module_rows) {
-        if (source_row.disk_key != disk.disk_key) {
-          continue;
-        }
-        auto module_template_it = module_templates.find(source_row.module_name);
-        if (module_template_it == module_templates.end() ||
-            module_template_it->second.outward_facing) {
-          continue;
-        }
-        ModuleTemplate module_template =
-            with_corrugated_handedness(description, module_template_it->second,
-                                       source_row.handedness);
-        const ModuleRow row = module_row_in_layer_coordinates(
-            description, source_row, module_template, global_layer_center);
-        const double keep_width = description.constant<double>(
-            source_row.module_name[0] == 'A' ? "SiEndcapTilingKeepClearA_width"
-                                             : "SiEndcapTilingKeepClearB_width");
-        const double local_surface = source_row.z_corrugation_surface - global_layer_center;
-        const double channel_edge =
-            local_surface - std::copysign(keep_depth, local_surface);
-        keep_clears.push_back({row.x_min, row.x_min + row.x_size,
-                               source_row.y_origin - keep_width / 2.0,
-                               source_row.y_origin + keep_width / 2.0,
-                               std::min(local_surface, channel_edge),
-                               std::max(local_surface, channel_edge)});
-      }
-    }
     string layer_name = det_name + string("_layer") + to_string(layer_id);
     Volume layer_vol(layer_name, build_disk_solid(layer_name, disk), air);
     layer_vol.setVisAttributes(description.visAttributes(disk.vis));
@@ -2371,7 +2297,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         continue;
       }
       const int placed_frame_count =
-          place_corrugated_frame(description, layer_vol, disk, frame_config, keep_clears);
+          place_corrugated_frame(description, layer_vol, disk, frame_config);
       if (placed_frame_count == 0) {
         printout(WARNING, "SiEndcapModuleTracker",
                  fmt::format("no corrugated frame pieces placed for '{}' disk '{}'", det_name,

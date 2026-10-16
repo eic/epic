@@ -2161,3 +2161,104 @@ reports. Classification confirms `reports=0`, `unique_pairs=0`, and no
 fallback-support pairs. The former inward flat/FPC-aluminium reports and the
 all-six-RSU FPC/REC report are absent. Visual acceptance remains a separate
 check unless explicitly confirmed by the user.
+
+## Step 8g: restore continuous corrugation pieces
+
+The accepted Step 8f geometry was committed as `7d37b3b53` before this
+experiment. Step 8g removes the placement-aware, module-dependent x cutouts
+introduced in Step 7h and restores each straight carbon flat/web across every
+x interval allowed by the disk boundary and physical beam-pipe openings. It
+does not change the explicit A/B corrugation rows, 6.360/7.860 mm flat widths,
+straight 45-degree web approximation, source module placements, active
+`rsu_opt` selection, or Step 8f module-normal translations. The inward and
+outward applied translations therefore remain -0.030 and +0.260 mm,
+respectively, with their 0.230 mm relative offset preserved.
+
+The unused `SiEndcapTilingKeepClearA_width`,
+`SiEndcapTilingKeepClearB_width`, and `SiEndcapTilingKeepClear_depth` XML
+controls have been removed together with the cutout implementation. Their
+20.56 mm, 21.94 mm, and 1.00 mm source dimensions remain documented in the
+Step 7h/8e audit history and the source slides; they no longer control a
+physical simulation approximation. Disk-boundary and physical-opening
+clipping remain active and are explicitly checked.
+
+This is deliberately a separate validation gate, not an assumed fix. The
+30 um translation clears the inward sensor and bridge-FPC aluminium from a
+same-surface flat, but the inward AncASIC still extends 0.380 mm into the
+channel and continuous straight webs may cross it. Earlier pre-cutout tests
+also reported support/silicon intersections. The exact 5 mm-radius bends are
+still not modeled, so both deterministic ROOT and independent Geant4 overlap
+checks are mandatory before accepting the restored support.
+
+Run `bash logs/check_svt_restored_corrugation_step8g.sh` inside the stable EIC
+shell. It validates the removal of the cutout path, the unchanged offsets and
+active scenario, the supplied corrugation lattice, source transforms, and
+epoxy/facet y registration; it then builds/installs, exports, and runs the
+deterministic ROOT overlap check. After reviewing that output and the
+visualization, run
+`bash logs/check_svt_restored_corrugation_geant_step8g.sh` for the guarded
+Geant4 continuation.
+
+**Step 8g automated result (2026-10-16): PASS.** The recorded build installed
+the continuous-support `rsu_opt` geometry after all static validators passed.
+ROOT examined 627,279 candidates at 0.01 mm tolerance and found zero illegal
+overlaps or extrusions. The guarded Geant4 continuation completed normally
+with no `G4Exception`, reported overlap, or offending volume pair. In
+particular, the earlier pre-Step-7h web/AncASIC and flat/silicon categories did
+not return after combining the corrected Step 8c facet registration with the
+Step 8f module-normal translations. The only build messages matching
+`warning` are the pre-existing CMake developer-policy warnings; they are not
+geometry findings. Visual confirmation of continuous support and sensible
+module registration remains the final acceptance gate before committing Step
+8g.
+
+**Step 8g visual result (2026-10-16): FAIL / incomplete support.** Edge-on
+inspection shows a missing corrugation web near the central row. This is not a
+source-table omission. `place_piece` explicitly returns without placing any
+sloped box whose projected y footprint crosses `y=0`; the branch emits no
+warning. It was inherited from the original corrugation scaffold, where flats
+were easy to split at the central plane but sloped pieces were skipped rather
+than split. Eight source lattices have exactly one web centered on `y=0`:
+ED4/ED3/ED2 rows 24--23, ED1 rows 23--22, ED0/HD0 rows 13--12, HD1 rows
+23--22, and HD2 rows 24--23 (listed here in increasing-y builder order).
+HD3b and HD4 instead have a flat centered on `y=0`, with neighboring webs at
+approximately `y=+/-9 mm`, so they do not trigger this particular omission.
+
+The automated zero-overlap result remains valid for the geometry that was
+built, but cannot accept a geometry with a missing physical component. There
+is no documented physical or DD4hep constraint requiring support volumes to
+avoid the x-z plane. The recommended minimal correction is to place the
+central web as one complete rotated box across `y=0`; the existing
+`contained_x_intervals` calculation already uses its full projected y
+footprint to clip x safely against the disk boundary and physical beam-pipe
+openings. Rebuild, visual review, ROOT, and Geant4 overlap checks must all be
+repeated after that correction.
+
+## Step 8h: place CSV-defined webs across the central plane
+
+The central-web omission is corrected without changing the supplied
+corrugation table or any physical dimension. `place_piece` continues to split
+an axis-aligned flat centered on `y=0` into two boxes, but it no longer drops a
+rotated web whose projected footprint crosses that plane. Such a web is now
+placed as the one complete rotated box defined by its adjacent CSV facets.
+`contained_x_intervals` still evaluates the web's full projected y footprint,
+so its x extent remains conservatively clipped against the disk boundary and
+physical beam-pipe openings.
+
+`logs/validate_svt_central_corrugation_web_step8h.py` reconstructs every web
+from the production CSV. It requires the eight central pairs on ED0--ED4 and
+HD0--HD2 to remain eligible for placement and separately verifies the central
+row-23 flats on HD3b and HD4. Run
+`bash logs/check_svt_central_corrugation_web_step8h.sh` inside the stable EIC
+shell to perform all static checks, build/install, export, ROOT overlap scan,
+and visual review. Per the user's decision, this focused correction does not
+require another expensive Geant4 overlap scan.
+
+**Step 8h result (2026-10-16): PASS.** All static and numerical validators
+passed, and the build installed the corrected geometry. The node and volume-ID
+counts increased from Step 8g's 658,021/2,114 to 658,037/2,130, consistent
+with the eight restored central webs being split into x intervals by the
+physical opening containment. ROOT examined 627,295 candidates at 0.01 mm
+tolerance and found zero illegal overlaps or extrusions. The user visually
+confirmed that the correction worked. As agreed, no additional Geant4 scan
+was run for this focused completion of the CSV-defined support.

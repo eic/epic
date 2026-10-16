@@ -69,9 +69,6 @@
     <constant name="SiEndcapTiling6RSU_count"                 value="6"/>
     <constant name="SiEndcapTilingBaseplateA_width"          value="35*mm"/>
     <constant name="SiEndcapTilingBaseplateB_width"          value="32*mm"/>
-    <constant name="SiEndcapTilingKeepClearA_width"          value="21.94*mm"/>
-    <constant name="SiEndcapTilingKeepClearB_width"          value="20.56*mm"/>
-    <constant name="SiEndcapTilingKeepClear_depth"           value="1.00*mm"/>
     <comment>
       Provisional module translations normal to the supplied corrugation surface.
       The inward clearance moves the module away from the channel by 30 um.

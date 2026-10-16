@@ -18,3 +18,9 @@ or mix catalogues, placements, metadata, or support tables between versions.
 Within a delivery, each scenario directory contains one `catalog.csv`, ten
 `*_modules.csv` placement files, and ten `*_metadata.txt` verification files.
 Coordinates and lengths are in millimetres unless a file states otherwise.
+
+The shared corrugation table supplies the explicit A/B facet centers, widths,
+and reference surfaces. The simulation uses continuous straight carbon flats
+and webs clipped only by each disk's outer boundary and physical beam-pipe
+openings. It does not make module-dependent support cutouts; the exact 5 mm
+bend-radius construction remains outside this simulation approximation.
