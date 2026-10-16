@@ -174,7 +174,6 @@
       Corrugated carbon support:
         - h is the surface-to-surface corrugation envelope
         - d is the half-pitch; same-surface flat centers are separated by 2*d
-        - module placements use compact/tracking/SVT_endcap_modules_corrugation_all.csv
         - module rows align to opposite-side flat centers and use dz to choose the disk side
     </comment>
 
@@ -244,7 +243,6 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <comment><module_placements file="compact/tracking/SVT_endcap_modules_corrugation_all.csv" format="csv"/></comment>
       <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"

@@ -110,6 +110,7 @@ install(DIRECTORY compact/
         PATTERN "*.gdml"
         PATTERN "*.csv"
         PATTERN "*_metadata.txt"
+        PATTERN "archived" EXCLUDE
     )
 
 #-----------------------------------------------------------------------------------
