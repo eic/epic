@@ -21,7 +21,9 @@ PLACEMENTS = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt"
 OUTPUT = ROOT / "compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"
 DISKS = ("ED4", "ED3", "ED2", "ED1", "ED0", "HD0", "HD1", "HD2", "HD3b", "HD4")
 PITCH_MM = {"A": 36.0, "B": 33.0}
-FLAT_WIDTH_MM = {"A": 7.86, "B": 6.36}
+# Sharp-junction simulation widths. With the 5 mm bends omitted, these widths
+# meet the 5.85 mm mid-surface web span without leaving artificial y gaps.
+FLAT_WIDTH_MM = {"A": 12.15, "B": 10.65}
 
 
 def load_rows(disk):

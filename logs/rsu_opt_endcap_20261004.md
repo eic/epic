@@ -2262,3 +2262,66 @@ physical opening containment. ROOT examined 627,295 candidates at 0.01 mm
 tolerance and found zero illegal overlaps or extrusions. The user visually
 confirmed that the correction worked. As agreed, no additional Geant4 scan
 was run for this focused completion of the CSV-defined support.
+
+## Step 8i: close the remaining flat-to-web y gaps
+
+The conservative Step 7g support retained the slide's 6.36/7.86 mm
+zero-skin straight-flat widths while omitting the 5 mm-radius bends. With a
+5.85 mm straight 45-degree web centered in the resulting 10.14 mm interval,
+that approximation left an artificial 2.145 mm empty y gap at each end of
+every web. At the user's direction, Step 8i restores the earlier no-gap
+sharp-junction simulation widths: 10.65 mm for B/33 mm rows and 12.15 mm for
+A/36 mm rows. For B/B, A/A, and centered A/B joins, the remaining distance
+between facing flat edges is then exactly 5.85 mm, equal to the web's y span.
+
+Only the derived corrugation table's `flat_width_mm` values and its generator
+and validator change. Facet centers, +/-3 mm reference surfaces, 0.15 mm
+carbon thickness, 45-degree web geometry, physical opening clipping, source
+module placements, active `rsu_opt` scenario, and the Step 8f -0.030/+0.260
+mm module-normal translations remain unchanged. The README identifies these
+as simulation widths used because the physical 5 mm-radius bends are not
+modeled; they must not be confused with the slide's source-reported straight
+portions.
+
+Run `bash logs/check_svt_closed_corrugation_y_gaps_step8i.sh` inside the stable
+EIC shell for static checks, build/install, export, ROOT overlap checking, and
+visual review. After that gate passes, run the guarded
+`bash logs/check_svt_closed_corrugation_y_gaps_geant_step8i.sh`. Unlike Step
+8h, Step 8i adds carbon throughout the disks and therefore requires the full
+Geant4 overlap check requested by the user.
+
+**Initial Step 8i export: FAIL / numerical guard (2026-10-16).** The first
+visualization attempt warned that one nominally exact join per detector left
+insufficient room for a web, then returned zero frame pieces for that disk.
+The dimensions are consistent: every interval is mathematically 5.850 mm.
+The C++ guard, however, compared `available_y_gap < web_y_span` exactly. The
+matching Python audit finds 116 of 436 joins with negative binary
+floating-point slack, with a worst deficit of only
+`6.22e-15 mm`. The first such join aborts the explicit-table build after
+partial placement, explaining the reported row numbers and missing frames.
+
+The guard now admits equality within a `1e-9 mm` dimensional tolerance while
+still rejecting any physically undersized interval. The Step 8i validator
+reproduces the C++ arithmetic order, requires every deficit to lie within that
+tolerance, and verifies that the production guard consumes it. No coordinate,
+width, material, placement, or other physical dimension changed in this
+correction. The complete Step 8i build, ROOT, visual, and Geant checks must be
+rerun; the failed export is not acceptance evidence.
+
+**Step 8i automated result (2026-10-16): PASS.** The corrected build completed
+with all static validators passing and with no `insufficient space` or
+`no corrugated frame pieces placed` warning. The installed geometry contains
+658,045 nodes and 2,138 volume IDs. ROOT examined 628,305 candidates at
+0.01 mm tolerance and found zero illegal overlaps or extrusions. The guarded
+Geant4 continuation verified that the installed XML and corrugation CSV
+matched the reviewed sources, then completed normally with no `G4Exception`,
+reported overlap, or offending volume pair. Thus the enlarged no-gap flats do
+not reintroduce the historical module/support or support/support collisions
+after the Step 8f module-normal translation. Visual confirmation of all
+flat/web joins and retained module registration remains the final acceptance
+gate before committing Step 8i.
+
+**Step 8i visual result (2026-10-16): PASS.** The user confirmed the enlarged
+flats meet the neighboring webs as intended and accepted the resulting module
+registration. Step 8i is therefore complete and ready to commit together with
+its recorded ROOT and Geant4 evidence.

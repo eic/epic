@@ -1073,7 +1073,8 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
         const double available_y_gap = right_edge - left_edge;
         const double web_y_span = explicit_y_step;
         const double web_z_span = flat_z_centers[index + 1] - flat_z_centers[index];
-        if (available_y_gap < web_y_span) {
+        const double dimension_tolerance = 1.0e-9 * mm;
+        if (available_y_gap + dimension_tolerance < web_y_span) {
           printout(WARNING, "SiEndcapModuleTracker",
                    fmt::format("skipping explicit corrugation table for disk '{}': rows {} and "
                                "{} leave insufficient space for a straight web",

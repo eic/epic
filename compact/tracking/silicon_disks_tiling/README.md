@@ -22,5 +22,7 @@ Coordinates and lengths are in millimetres unless a file states otherwise.
 The shared corrugation table supplies the explicit A/B facet centers, widths,
 and reference surfaces. The simulation uses continuous straight carbon flats
 and webs clipped only by each disk's outer boundary and physical beam-pipe
-openings. It does not make module-dependent support cutouts; the exact 5 mm
-bend-radius construction remains outside this simulation approximation.
+openings. It does not make module-dependent support cutouts. Because the exact
+5 mm-radius bends are not modeled, the simulation flat widths are enlarged to
+10.65 mm (B) and 12.15 mm (A), meeting the straight 45-degree webs without
+artificial y gaps.
