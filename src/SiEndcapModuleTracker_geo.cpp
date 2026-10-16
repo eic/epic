@@ -316,8 +316,10 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     module_template.vis    = "TrackerModuleVis";
     module_template.x_size = description.constant<double>("SiEndcapModule6RSU_package_length");
     module_template.y_size = description.constant<double>("SiEndcapModule_width_corrugated");
-    module_template.lec_side_span = description.constant<double>("SiEndcapModule6RSU_left_extension");
-    module_template.rec_side_span = description.constant<double>("SiEndcapModule6RSU_right_extension");
+    module_template.lec_side_span =
+        description.constant<double>("SiEndcapModule6RSU_left_extension");
+    module_template.rec_side_span =
+        description.constant<double>("SiEndcapModule6RSU_right_extension");
 
     const double rsu_chain_length = 6.0 * description.constant<double>("SiEndcapRSU_length");
     const double sensor_x_offset =
@@ -357,30 +359,30 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   auto build_tiling_module = [&](const string& name, int rsu_count, double baseplate_width,
                                  bool outward_facing) {
     ModuleTemplate module_template;
-    module_template.name          = name;
+    module_template.name = name;
     // Tiling modules are assemblies with no solid of their own. Their dedicated
     // visualization must expose the component daughters in geometry viewers.
-    module_template.vis           = "SVTModuleVis";
-    module_template.rsu_count     = rsu_count;
-    module_template.tiling_design = true;
+    module_template.vis = "SVTModuleVis";
+    module_template.rsu_count = rsu_count;
+    module_template.tiling_design  = true;
     module_template.outward_facing = outward_facing;
-    module_template.lec_side_span = description.constant<double>("SiEndcapTilingBLEC_length");
-    module_template.rec_side_span = description.constant<double>("SiEndcapTilingBREC_length");
-    module_template.lec_thickness = description.constant<double>("SiEndcapTilingLEC_thickness");
-    module_template.rec_thickness = description.constant<double>("SiEndcapTilingREC_thickness");
-    module_template.x_size = description.constant<double>(
+    module_template.lec_side_span  = description.constant<double>("SiEndcapTilingBLEC_length");
+    module_template.rec_side_span  = description.constant<double>("SiEndcapTilingBREC_length");
+    module_template.lec_thickness  = description.constant<double>("SiEndcapTilingLEC_thickness");
+    module_template.rec_thickness  = description.constant<double>("SiEndcapTilingREC_thickness");
+    module_template.x_size         = description.constant<double>(
         rsu_count == 5 ? "SiEndcapTiling5RSU_package_length" : "SiEndcapTiling6RSU_package_length");
     module_template.y_size = baseplate_width;
 
     const double chain_length = rsu_count * description.constant<double>("SiEndcapRSU_length");
-    const double sensor_x_offset = -module_template.x_size / 2.0 + module_template.lec_side_span +
-                                   chain_length / 2.0;
+    const double sensor_x_offset =
+        -module_template.x_size / 2.0 + module_template.lec_side_span + chain_length / 2.0;
     const double bridge_fpc_stack =
         description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
         description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
     const double ancasic_stack = description.constant<double>("SiEndcapAncASICGlue_thickness") +
                                  description.constant<double>("SiEndcapAncASIC_thickness");
-    auto add_component = [&](ComponentTemplate component) {
+    auto add_component         = [&](ComponentTemplate component) {
       module_template.total_thickness += component.thickness;
       module_template.components.push_back(component);
     };
@@ -388,19 +390,19 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     ComponentTemplate epoxy{description.constant<double>("SiEndcapTilingExternalEpoxy_thickness"),
                             "SVT_Endcap_Glue", "SVTGlueVis"};
     epoxy.rsu_external_epoxy_pattern = true;
-    epoxy.stacked_in_z = outward_facing;
+    epoxy.stacked_in_z               = outward_facing;
     add_component(epoxy);
     if (!outward_facing) {
       module_template.total_thickness -= epoxy.thickness;
     }
     add_component({description.constant<double>("SiEndcapTilingBaseplateCF_thickness"),
                    "CarbonFiber", "SVTSupportVis"});
-    add_component({description.constant<double>("SiEndcapTilingFilm_thickness"),
-                   "SVT_Endcap_Glue", "SVTGlueVis", false, chain_length,
-                   description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
-                   1, false, true, false, false, true});
-    add_component({description.constant<double>("SiEndcapTilingSensor_thickness"),
-                   "Silicon", "SVTSensorVis", true, chain_length,
+    add_component({description.constant<double>("SiEndcapTilingFilm_thickness"), "SVT_Endcap_Glue",
+                   "SVTGlueVis", false, chain_length,
+                   description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0, 1,
+                   false, true, false, false, true});
+    add_component({description.constant<double>("SiEndcapTilingSensor_thickness"), "Silicon",
+                   "SVTSensorVis", true, chain_length,
                    description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0,
                    rsu_count, true, true});
     ComponentTemplate bridge_fpc{bridge_fpc_stack, "Kapton", "SVTReadoutVis", false,
@@ -435,13 +437,12 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   module_templates.emplace("EIC_LAS_6RSU_CORR", build_corrugated_6rsu("EIC_LAS_6RSU_CORR"));
   for (const string& group : {"A6", "B5", "B6"}) {
     const int rsu_count = group[1] - '0';
-    const double width = description.constant<double>(
+    const double width  = description.constant<double>(
         group[0] == 'A' ? "SiEndcapTilingBaseplateA_width" : "SiEndcapTilingBaseplateB_width");
     for (const string& orientation : {"00", "01", "10", "11"}) {
-      const string name = group + orientation;
+      const string name         = group + orientation;
       const bool outward_facing = orientation[0] == '0';
-      module_templates.emplace(name,
-                               build_tiling_module(name, rsu_count, width, outward_facing));
+      module_templates.emplace(name, build_tiling_module(name, rsu_count, width, outward_facing));
     }
   }
   return module_templates;
@@ -461,32 +462,27 @@ double corrugated_6rsu_sensor_x_offset(Detector& description, const ModuleTempla
 
 double tiling_sensor_x_offset(Detector& description, const ModuleTemplate& module_template,
                               const string& handedness) {
-  const double chain_length = module_template.rsu_count *
-                              description.constant<double>("SiEndcapRSU_length");
-  const double end_span = handedness == "right" ? module_template.rec_side_span
-                                                  : module_template.lec_side_span;
+  const double chain_length =
+      module_template.rsu_count * description.constant<double>("SiEndcapRSU_length");
+  const double end_span =
+      handedness == "right" ? module_template.rec_side_span : module_template.lec_side_span;
   return -module_template.x_size / 2.0 + end_span + chain_length / 2.0;
 }
 
 double tiling_lec_boundary_x(Detector& description, const ModuleTemplate& module_template,
                              const string& handedness) {
-  const double chain_length = module_template.rsu_count *
-                              description.constant<double>("SiEndcapRSU_length");
-  const double sensor_x_offset =
-      tiling_sensor_x_offset(description, module_template, handedness);
-  return sensor_x_offset +
-         (handedness == "right" ? chain_length / 2.0 : -chain_length / 2.0);
+  const double chain_length =
+      module_template.rsu_count * description.constant<double>("SiEndcapRSU_length");
+  const double sensor_x_offset = tiling_sensor_x_offset(description, module_template, handedness);
+  return sensor_x_offset + (handedness == "right" ? chain_length / 2.0 : -chain_length / 2.0);
 }
 
-double tiling_sensor_reference_z(Detector& description,
-                                 const ModuleTemplate& module_template) {
+double tiling_sensor_reference_z(Detector& description, const ModuleTemplate& module_template) {
   const double bottom = -module_template.total_thickness / 2.0;
-  const double epoxy = module_template.outward_facing
-                           ? description.constant<double>(
-                                 "SiEndcapTilingExternalEpoxy_thickness")
-                           : 0.0;
-  return bottom + epoxy +
-         description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
+  const double epoxy  = module_template.outward_facing
+                            ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
+                            : 0.0;
+  return bottom + epoxy + description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
          description.constant<double>("SiEndcapTilingFilm_thickness") +
          description.constant<double>("SiEndcapTilingSensor_thickness");
 }
@@ -1341,10 +1337,9 @@ vector<ModuleRow> load_module_rows(Detector& description, const string& file_nam
 // Load one self-contained delivered tiling package. Unlike the legacy reader,
 // this path is strict: an incomplete package or malformed row aborts geometry
 // construction rather than silently dropping a supplied module.
-vector<ModuleRow> load_tiling_module_directory(
-    Detector& description, const string& directory_name,
-    const map<string, ModuleTemplate>& module_templates,
-    map<string, TilingDiskMetadata>& disk_metadata) {
+vector<ModuleRow> load_tiling_module_directory(Detector& description, const string& directory_name,
+                                               const map<string, ModuleTemplate>& module_templates,
+                                               map<string, TilingDiskMetadata>& disk_metadata) {
   namespace fs = std::filesystem;
   const fs::path directory(directory_name);
   auto fail = [&](const string& message) -> void {
@@ -1369,8 +1364,7 @@ vector<ModuleRow> load_tiling_module_directory(
     catalog_index[catalog_headers[idx]] = idx;
   }
   const array<string, 6> required_catalog_headers{
-      "type_id", "module_height_mm", "module_length_mm", "rsu_count", "facing",
-      "chirality"};
+      "type_id", "module_height_mm", "module_length_mm", "rsu_count", "facing", "chirality"};
   for (const auto& header : required_catalog_headers) {
     if (!catalog_index.count(header)) {
       fail(fmt::format("catalog.csv is missing header '{}'", header));
@@ -1385,13 +1379,13 @@ vector<ModuleRow> load_tiling_module_directory(
       continue;
     }
     const vector<string> fields = split_csv_line(line);
-    auto field = [&](const string& name) -> string {
+    auto field                  = [&](const string& name) -> string {
       const size_t idx = catalog_index.at(name);
       return idx < fields.size() ? fields[idx] : "";
     };
     try {
       const string type_id = field("type_id");
-      auto type_iter = module_templates.find(type_id);
+      auto type_iter       = module_templates.find(type_id);
       if (type_id.empty() || type_iter == module_templates.end() ||
           !type_iter->second.tiling_design) {
         fail(fmt::format("catalog.csv line {} has unsupported type '{}'", catalog_line, type_id));
@@ -1400,23 +1394,23 @@ vector<ModuleRow> load_tiling_module_directory(
         fail(fmt::format("catalog.csv line {} repeats type '{}'", catalog_line, type_id));
       }
       const ModuleTemplate& module_template = type_iter->second;
-      const double width = std::stod(field("module_height_mm")) * mm;
-      const double length = std::stod(field("module_length_mm")) * mm;
-      const int rsu_count = std::stoi(field("rsu_count"));
-      const string facing = field("facing");
-      const string chirality = field("chirality");
-      const double tolerance = 5.0e-5 * mm;
+      const double width                    = std::stod(field("module_height_mm")) * mm;
+      const double length                   = std::stod(field("module_length_mm")) * mm;
+      const int rsu_count                   = std::stoi(field("rsu_count"));
+      const string facing                   = field("facing");
+      const string chirality                = field("chirality");
+      const double tolerance                = 5.0e-5 * mm;
       if (std::abs(width - module_template.y_size) > tolerance ||
           std::abs(length - module_template.x_size) > tolerance ||
           rsu_count != module_template.rsu_count) {
-        fail(fmt::format("catalog.csv line {} dimensions disagree with XML type '{}'",
-                         catalog_line, type_id));
+        fail(fmt::format("catalog.csv line {} dimensions disagree with XML type '{}'", catalog_line,
+                         type_id));
       }
       if ((facing != "OUTWARD" && facing != "INWARD") ||
           (facing == "OUTWARD") != module_template.outward_facing ||
           (chirality != "LEFT" && chirality != "RIGHT")) {
-        fail(fmt::format("catalog.csv line {} orientation disagrees with type '{}'",
-                         catalog_line, type_id));
+        fail(fmt::format("catalog.csv line {} orientation disagrees with type '{}'", catalog_line,
+                         type_id));
       }
       catalog_handedness[type_id] = chirality == "RIGHT" ? "right" : "left";
     } catch (const std::runtime_error&) {
@@ -1441,9 +1435,9 @@ vector<ModuleRow> load_tiling_module_directory(
       {"HD3b", "OuterTrackerEndcapP_disk3"},
       {"HD4", "OuterTrackerEndcapP_disk4"},
   }};
-  const array<string, 8> required_headers{
-      "disk_id",       "row_index",       "mod_index",      "type_id",
-      "x_origin_mm",   "y_origin_mm",     "z_baseplate_mm", "z_sensor_mm"};
+  const array<string, 8> required_headers{"disk_id",        "row_index",   "mod_index",
+                                          "type_id",        "x_origin_mm", "y_origin_mm",
+                                          "z_baseplate_mm", "z_sensor_mm"};
   set<tuple<int, int, int>> source_keys;
   vector<ModuleRow> rows;
 
@@ -1467,7 +1461,7 @@ vector<ModuleRow> load_tiling_module_directory(
         fail(fmt::format("{} line {} is not key = value metadata",
                          metadata_path.filename().string(), metadata_line));
       }
-      const string key = trim(content.substr(0, separator));
+      const string key   = trim(content.substr(0, separator));
       const string value = trim(content.substr(separator + 1));
       if (key.empty() || value.empty() || !metadata.emplace(key, value).second) {
         fail(fmt::format("{} line {} has an empty or repeated key",
@@ -1509,13 +1503,13 @@ vector<ModuleRow> load_tiling_module_directory(
         fail(fmt::format("{} must contain exactly two opening primitives",
                          metadata_path.filename().string()));
       }
-      parsed_metadata.center_z = std::stod(metadata.at("z_center_mm")) * mm;
+      parsed_metadata.center_z     = std::stod(metadata.at("z_center_mm")) * mm;
       parsed_metadata.outer_radius = std::stod(metadata.at("outer_radius_mm")) * mm;
-      auto read_opening = [&](int index) {
+      auto read_opening            = [&](int index) {
         DiskBoundary::CircularOpening opening;
-        const string prefix = fmt::format("opening_primitive_{}_", index);
-        opening.center_x = std::stod(metadata.at(prefix + "cx_mm")) * mm;
-        opening.center_y = std::stod(metadata.at(prefix + "cy_mm")) * mm;
+        const string prefix   = fmt::format("opening_primitive_{}_", index);
+        opening.center_x      = std::stod(metadata.at(prefix + "cx_mm")) * mm;
+        opening.center_y      = std::stod(metadata.at(prefix + "cy_mm")) * mm;
         const double radius_a = std::stod(metadata.at(prefix + "a_mm")) * mm;
         const double radius_b = std::stod(metadata.at(prefix + "b_mm")) * mm;
         if (std::abs(radius_a - radius_b) > 1.0e-9 * mm || radius_a <= 0.0) {
@@ -1532,8 +1526,7 @@ vector<ModuleRow> load_tiling_module_directory(
       parsed_metadata.opening_0.center_x *= engineer_to_epic_x_sign;
       parsed_metadata.opening_1.center_x *= engineer_to_epic_x_sign;
       if (parsed_metadata.outer_radius <= 0.0) {
-        fail(fmt::format("{} has non-positive outer_radius_mm",
-                         metadata_path.filename().string()));
+        fail(fmt::format("{} has non-positive outer_radius_mm", metadata_path.filename().string()));
       }
     } catch (const std::runtime_error&) {
       throw;
@@ -1571,14 +1564,14 @@ vector<ModuleRow> load_tiling_module_directory(
         continue;
       }
       const vector<string> fields = split_csv_line(line);
-      auto field = [&](const string& name) -> string {
+      auto field                  = [&](const string& name) -> string {
         const size_t idx = header_index.at(name);
         return idx < fields.size() ? fields[idx] : "";
       };
       ModuleRow row;
       try {
-        row.disk_id = std::stoi(field("disk_id"));
-        row.row_index = std::stoi(field("row_index"));
+        row.disk_id      = std::stoi(field("disk_id"));
+        row.row_index    = std::stoi(field("row_index"));
         row.module_index = std::stoi(field("mod_index"));
         row.module_name = field("type_id");
         row.source_x_origin = std::stod(field("x_origin_mm")) * mm;
@@ -1587,7 +1580,7 @@ vector<ModuleRow> load_tiling_module_directory(
         // Despite its source name, z_baseplate_mm is the corrugation/facet
         // reference surface, not the center of the carbon baseplate.
         row.z_corrugation_surface = std::stod(field("z_baseplate_mm")) * mm;
-        row.z_sensor_reference = std::stod(field("z_sensor_mm")) * mm;
+        row.z_sensor_reference    = std::stod(field("z_sensor_mm")) * mm;
       } catch (const std::exception&) {
         fail(fmt::format("{} line {} is malformed", placement_path.filename().string(),
                          line_number));
@@ -1606,7 +1599,7 @@ vector<ModuleRow> load_tiling_module_directory(
                          placement_path.filename().string(), line_number, row.module_name));
       }
       const ModuleTemplate& module_template = module_templates.at(row.module_name);
-      const double source_delta = row.z_sensor_reference - row.z_corrugation_surface;
+      const double source_delta             = row.z_sensor_reference - row.z_corrugation_surface;
       const double model_delta = tiling_sensor_reference_z(description, module_template) -
                                  tiling_corrugation_reference_z(description, module_template);
       if (std::abs(std::abs(source_delta) - model_delta) > 5.0e-5 * mm) {
@@ -1629,10 +1622,9 @@ vector<ModuleRow> load_tiling_module_directory(
       row.tiling_coordinates = true;
       const double boundary_magnitude =
           std::abs(tiling_lec_boundary_x(description, module_template, row.handedness));
-      const double x_center =
-          row.x_origin - std::copysign(boundary_magnitude, row.x_origin);
-      row.x_min = x_center - row.x_size / 2.0;
-      row.y_min = row.y_origin - row.y_size / 2.0;
+      const double x_center = row.x_origin - std::copysign(boundary_magnitude, row.x_origin);
+      row.x_min             = x_center - row.x_size / 2.0;
+      row.y_min             = row.y_origin - row.y_size / 2.0;
       rows.push_back(row);
     }
   }
@@ -1672,10 +1664,10 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
       global_module_center +
       global_normal_sign * tiling_sensor_reference_z(description, module_template);
   if (std::abs(predicted_sensor - source_row.z_sensor_reference) > 5.0e-5 * mm) {
-    throw std::runtime_error(fmt::format(
-        "source ({},{},{},{}): modeled sensor z={} mm, CSV z_sensor_mm={} mm",
-        row.disk_id, row.row_index, row.module_index, row.module_name, predicted_sensor / mm,
-        source_row.z_sensor_reference / mm));
+    throw std::runtime_error(
+        fmt::format("source ({},{},{},{}): modeled sensor z={} mm, CSV z_sensor_mm={} mm",
+                    row.disk_id, row.row_index, row.module_index, row.module_name,
+                    predicted_sensor / mm, source_row.z_sensor_reference / mm));
   }
   // Move inward modules away from the channel by the requested surface
   // clearance. Apply the same common translation to outward modules before
@@ -1848,16 +1840,16 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       // The external epoxy forms two edge glue lines. It is below the
       // baseplate for outward modules, but above its edge for inward modules.
       const double glue_width = description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
-      const double y_center = y_size / 2.0 - glue_width / 2.0;
-      const double epoxy_z = component.stacked_in_z
-                                 ? z_position
-                                 : -module_template.total_thickness / 2.0 +
-                                       description.constant<double>(
-                                           "SiEndcapTilingBaseplateCF_thickness") +
-                                       component.thickness / 2.0;
+      const double y_center   = y_size / 2.0 - glue_width / 2.0;
+      const double epoxy_z =
+          component.stacked_in_z
+              ? z_position
+              : -module_template.total_thickness / 2.0 +
+                    description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
+                    component.thickness / 2.0;
       for (int edge : {-1, 1}) {
-        const string name = _toString(component_id, "component%d_external_epoxy") +
-                            (edge < 0 ? "_low" : "_high");
+        const string name =
+            _toString(component_id, "component%d_external_epoxy") + (edge < 0 ? "_low" : "_high");
         Box box_solid(x_size / 2.0, glue_width / 2.0, component.thickness / 2.0);
         Volume box_volume(name, box_solid, material);
         box_volume.setVisAttributes(description.visAttributes(component.vis));
@@ -1905,8 +1897,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         return y_size / 2.0 + top_edge_offset - box_y / 2.0;
       };
 
-      const double lec_side_span = module_template.lec_side_span;
-      const double rec_side_span = module_template.rec_side_span;
+      const double lec_side_span     = module_template.lec_side_span;
+      const double rec_side_span     = module_template.rec_side_span;
       const double left_bridge_x     = description.constant<double>("SiEndcapLeftBridgeFPC_width");
       const double left_bridge_y     = description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const double left_bridge_pos_y = bridge_fpc_y_center(
@@ -1926,8 +1918,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         // adhesive is not specified by the slide, so keep these legacy boxes
         // only in the old corrugated prototype.
         place_adhesive_box(_toString(component_id, "component%d_left_bridge_fpc_glue"),
-                           left_bridge_box_x, left_bridge_y, left_bridge_pos_x,
-                           left_bridge_pos_y);
+                           left_bridge_box_x, left_bridge_y, left_bridge_pos_x, left_bridge_pos_y);
         place_adhesive_box(_toString(component_id, "component%d_right_bridge_fpc_glue"),
                            right_bridge_box_x, right_bridge_y, right_bridge_pos_x,
                            right_bridge_pos_y);
@@ -2155,9 +2146,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     module_format = getAttrOrDefault<string>(x_module_placements, _Unicode(format), module_format);
   }
   if (module_format != "csv" && module_format != "tiling-directory") {
-    printout(WARNING, "SiEndcapModuleTracker",
-             fmt::format("unsupported module placement format '{}' for '{}'", module_format,
-                         det_name));
+    printout(
+        WARNING, "SiEndcapModuleTracker",
+        fmt::format("unsupported module placement format '{}' for '{}'", module_format, det_name));
     std::_Exit(EXIT_FAILURE);
   }
   vector<ModuleRow> module_rows;
@@ -2222,9 +2213,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       const TilingDiskMetadata& metadata = supplied_boundary->second;
       const double global_layer_center = negative_z ? -disk.center_z : disk.center_z;
       if (std::abs(global_layer_center - metadata.center_z) > 5.0e-5 * mm) {
-        throw std::runtime_error(fmt::format(
-            "disk '{}': XML center z={} mm disagrees with metadata z_center_mm={} mm",
-            disk.disk_key, global_layer_center / mm, metadata.center_z / mm));
+        throw std::runtime_error(
+            fmt::format("disk '{}': XML center z={} mm disagrees with metadata z_center_mm={} mm",
+                        disk.disk_key, global_layer_center / mm, metadata.center_z / mm));
       }
       // XML owns the constructed layer boundary. Metadata only verifies that
       // it preserves the supplied module-corner radius and the explicit 1 um
@@ -2377,9 +2368,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // The optional facing column flips the module around local y so the sensor can
       // face either +z or -z within the layer volume.
       const double rotation_z = row.tiling_coordinates ? row.rotation_z : 0.0;
-      const double rotation_y = row.tiling_coordinates
-                                    ? row.rotation_y
-                                    : (row.facing_positive_z ? 0.0 : M_PI);
+      const double rotation_y =
+          row.tiling_coordinates ? row.rotation_y : (row.facing_positive_z ? 0.0 : M_PI);
       Transform3D module_transform(RotationZYX(rotation_z, rotation_y, 0.0),
                                    Position(x_center, y_center, row.dz));
       PlacedVolume module_pv = layer_vol.placeVolume(prototype.volume, module_transform);

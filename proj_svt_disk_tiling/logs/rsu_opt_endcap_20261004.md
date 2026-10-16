@@ -2365,3 +2365,23 @@ needed because this move changed no geometry or installed inputs.
 The legacy handoff and beam-pipe audit wrappers were also pointed at their
 already archived `ES_material/` and `disk_layout/` files inside the project
 directory; the lightweight check confirms those inputs exist.
+
+## Merge remote `si_disk_hole` formatting (2026-10-16)
+
+Fetched `origin/si_disk_hole` at `abb8284ff` and merged it into local
+`si_disk_hole` at `f0cbaf784`. Their common ancestor is `2ea5e6e0b`; the
+remote contributed one pre-commit formatting change to
+`src/SiEndcapModuleTracker_geo.cpp`. Ten text conflicts arose where that
+formatting met newer local geometry changes. The resolution preserves the
+local detector-aligned coordinates, engineer-to-EPIC x conversion, XML-owned
+physical openings and radii, module offsets, FPC registration, and module
+visualization, while keeping remote formatting elsewhere.
+
+Validation command:
+`bash proj_svt_disk_tiling/logs/check_svt_remote_merge_20261016.sh`.
+The check passed: all 18,061 C++ code tokens match the pre-merge local file,
+and the engineer-to-EPIC, physical-opening, FPC, and corrugation validators
+passed. The conservative opening audit reproduced its existing 56 near
+contacts per scenario. No geometry or installed input changed; the prior
+Step 8i ROOT/Geant acceptance remains applicable. This merge did not rerun
+the expensive detector overlap checks.
