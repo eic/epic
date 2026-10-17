@@ -3,7 +3,11 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 # CMP0074: find_package() uses <PackageName>_ROOT variables
 cmake_policy(SET CMP0074 NEW)
 
+include(cmake/git_version.cmake)
+set_git_version(EPIC_VERSION)
+
 PROJECT(epic
+  VERSION ${EPIC_VERSION}
   LANGUAGES CXX
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
@@ -42,6 +46,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
+find_package(IRT2 2.1.1)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
@@ -51,6 +56,7 @@ dd4hep_configure_output(INSTALL ${CMAKE_INSTALL_PREFIX})
 dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
+
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
   USES ROOT::Core ROOT::Gdml
@@ -58,6 +64,14 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
+set(WITH_IRT1_SUPPORT TRUE CACHE STRING "Enable constant definitions used by EICrecon integration in IRT1")
+if(WITH_IRT1_SUPPORT)
+    target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT1_SUPPORT)
+endif()
+if(IRT2_FOUND)
+    target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT2_SUPPORT)
+    target_link_libraries(${a_lib_name} PRIVATE IRT2)
+endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
@@ -68,7 +82,7 @@ file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
 foreach(config_yml ${CONFIG_YMLS})
     get_filename_component(config ${config_yml} NAME_WE)
     add_custom_target(${config}.xml ALL)
-    add_custom_command(TARGET ${config}.xml
+    add_custom_command(TARGET ${config}.xml POST_BUILD
         COMMAND
             ${CMAKE_CURRENT_SOURCE_DIR}/bin/make_detector_configuration
                 --dir ${TEMPLATE_DIR}
@@ -101,21 +115,22 @@ install(DIRECTORY calibrations/
     )
 
 #-----------------------------------------------------------------------------------
+# Configure and install compact/version.xml
+#
+configure_file(templates/version.xml.in ${CMAKE_CURRENT_BINARY_DIR}/version.xml @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
+)
+
+#-----------------------------------------------------------------------------------
 # Configure and install detector setup script
 #
-execute_process(
-  COMMAND git rev-parse --abbrev-ref HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE GIT_BRANCH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
+configure_file(templates/thisepic.sh.in ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME this${PROJECT_NAME}.sh
+)
+install(FILES cmake/setup.sh
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 
 # install programs

@@ -1,0 +1,36 @@
+name: Convert to GDML
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+jobs:
+  convert-to-gdml:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/download-artifact@v8
+      with:
+        name: build-gcc-nightly-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
+          IFS=, read -a configs <<< "${{inputs.detector_configs}}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml ;
+            echo "::endgroup::" ;
+          done
+    - uses: actions/upload-artifact@v7
+      with:
+        name: gdml
+        path: "*.gdml"
+        if-no-files-found: error

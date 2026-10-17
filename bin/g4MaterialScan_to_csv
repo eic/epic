@@ -108,6 +108,7 @@ class g4MaterialScanner:
                 ]
 
         dft = pd.read_csv(StringIO('\n'.join(scans)), sep='\s+', header=None, index_col=0, names=cols)
+        print(dft)
         return dft.astype({key: np.float64 for key in cols[1:]})
 
 
@@ -152,12 +153,24 @@ if __name__ == '__main__':
             help='Eta range, in the format of \"<min>[:<max>[:<step>]]\".'
             )
     parser.add_argument(
+            '--eta-values', default=None,
+            help='a list of eta values, separated by \",\", this option overwrites --eta.'
+            )
+    parser.add_argument(
             '--phi', default='0:30:1',
             help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
             )
     parser.add_argument(
+            '--phi-values', default=None,
+            help='a list of phi values, separated by \",\", this option overwrites --phi.'
+            )
+    parser.add_argument(
             '--mat-buffer-size', type=int, default=50,
-            help='Material buffer size.'
+            help='Maximum number of materials included in the aggregated output.'
+            )
+    parser.add_argument(
+            '--raw-output', action='store_true',
+            help='Turn on to save the raw outputs from scan.'
             )
     parser.add_argument(
             '--sep', default='\t',
@@ -170,8 +183,15 @@ if __name__ == '__main__':
         exit(-1)
 
     start_point = np.array([float(v.strip()) for v in args.start_point.split(',')])
-    etas = args_array(args.eta)
-    phis = args_array(args.phi)
+    if args.eta_values is not None:
+        etas = np.array([float(xval.strip()) for xval in args.eta_values.split(',')])
+    else:
+        etas = args_array(args.eta)
+
+    if args.phi_values is not None:
+        phis = np.array([float(xval.strip()) for xval in args.phi_values.split(',')])
+    else:
+        phis = args_array(args.phi)
     # sanity check
     if not len(phis):
         print('No phi values from the input {}, aborted!'.format(args.phi))
@@ -201,6 +221,8 @@ if __name__ == '__main__':
             for vt in value_types:
                 dfa.loc[:, vt] = dfa['int_{}'.format(vt)].diff(1).fillna(dfa['int_{}'.format(vt)])
 
+            if args.raw_output:
+                dfa.to_csv('scan_raw_eta={:.3f}_phi={:.3f}.csv'.format(eta, phi), sep=args.sep, float_format='%g')
             # group by materials
             single_scan = dfa.groupby('material')[value_types].sum()
             # print(single_scan)

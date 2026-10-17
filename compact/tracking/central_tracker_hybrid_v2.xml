@@ -1047,22 +1047,22 @@ total X0 0.24% per disk layer （4 sectors per disk):
         <trd x1="GEMEndcapRingMod_x1/2" x2="GEMEndcapRingMod_x2/2" z="GEMEndcapRingMod_y/2" />
         <comment> going from back to front </comment>
         <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
-        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar90CO2" sensitive="true"/>
         <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
       </module>
       <module name="RingBotFrame" vis="TrackerSupportVis">
@@ -1161,22 +1161,22 @@ total X0 0.24% per disk layer （4 sectors per disk):
         <trd x1="GEMEndcapRingMod_x1/2" x2="GEMEndcapRingMod_x2/2" z="GEMEndcapRingMod_y/2" />
         <comment> going from back to front </comment>
         <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
-        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar90CO2" sensitive="true"/>
         <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
       </module>
       <module name="RingBotFrame" vis="TrackerSupportVis">
@@ -1195,22 +1195,22 @@ total X0 0.24% per disk layer （4 sectors per disk):
         <trd x1="GEMEndcapLargeMod_x1/2" x2="GEMEndcapLargeMod_x2/2" z="GEMEndcapLargeMod_y/2" />
         <comment> going from back to front </comment>
         <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
-        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar90CO2" sensitive="true"/>
         <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
       </module>
       <module name="LargeBotFrame" vis="TrackerSupportVis">
@@ -1309,22 +1309,22 @@ total X0 0.24% per disk layer （4 sectors per disk):
         <trd x1="GEMEndcapLargeMod_x1/2" x2="GEMEndcapLargeMod_x2/2" z="GEMEndcapLargeMod_y/2" />
         <comment> going from back to front </comment>
         <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
-        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar90CO2"/>
         <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
         <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
-        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar90CO2" sensitive="true"/>
         <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
         <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
-        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar90CO2"/>
         <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
       </module>
       <module name="LargeBotFrame" vis="TrackerSupportVis">

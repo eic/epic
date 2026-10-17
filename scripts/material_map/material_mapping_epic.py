@@ -4,12 +4,18 @@
 
 import os
 import argparse
+from pathlib import Path
 
 import acts
-from acts.examples import JsonFormat
+from material_mapping import runMaterialMapping
+
+try:
+    from acts.examples.json import JsonFormat
+except ImportError:
+    from acts.examples import JsonFormat
 
 import epic
-from material_mapping import runMaterialMapping
+
 
 if "__main__" == __name__:
 
@@ -28,24 +34,46 @@ if "__main__" == __name__:
         help="input json file to define volumes and layers used in material mapping",
     )
     p.add_argument(
-        "--matFile",
+        "--matFileBase",
         type=str,
-        default="material-map.json",
-        help="output filename for the generated material map, can be json and cbor formats",
+        default="material-map",
+        help="base name for the generated material map (without extension)",
+    )
+    p.add_argument(
+        "--matFileFormat",
+        type=str,
+        nargs="+",
+        default=["json", "root"],
+        help="output format(s) for the material map (json, cbor, root). Default: json, root",
+    )
+    p.add_argument(
+        "--inputRootFile",
+        type=str,
+        default="geant4_material_tracks.root",
+        help="input ROOT file with material tracks (typically from material_recording_epic.py)",
     )
     args = p.parse_args()
 
-    mapName = args.matFile.split('.')[0]
+    # Parse material map formats
+    mapFormats = args.matFileFormat
+    # Validate formats
+    valid_formats = {"json", "cbor", "root"}
+    for fmt in mapFormats:
+        if fmt not in valid_formats:
+            print(f'ERROR(material_mapping_epic.py): invalid format "{fmt}". Must be one of: {", ".join(valid_formats)}')
+            exit(1)
 
-    detector, trackingGeometry, decorators = epic.getDetector(
-        args.xmlFile, args.geoFile)
+    detector = epic.getDetector(args.xmlFile)
+    trackingGeometry = detector.trackingGeometry()
+    decorators = detector.contextDecorators()
+
+    materialSurfaces = trackingGeometry.extractMaterialSurfaces()
+
+    outputFileBase = os.path.join(os.getcwd(), args.matFileBase)
 
     runMaterialMapping(
-        trackingGeometry,
-        decorators,
-        outputDir = os.getcwd(),
-        inputDir  = os.getcwd(),
-        readCachedSurfaceInformation=False,
-        mapVolume= False,
-        mapName  = mapName,
+        surfaces=materialSurfaces,
+        inputFile=Path(args.inputRootFile),
+        outputFileBase=outputFileBase,
+        outputMapFormats=mapFormats,
     ).run()

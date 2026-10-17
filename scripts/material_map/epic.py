@@ -11,39 +11,32 @@ from pathlib import Path
 import acts
 import acts.examples.dd4hep
 
-from acts import (
-    Vector4,
-    MaterialMapJsonConverter
-)
-
-import json
-
 def getDetector(
     xmlFile,
-    jsonFile="",
+    matFile="",
     logLevel=acts.logging.WARNING,
 ):
     customLogLevel = acts.examples.defaultLogging(logLevel=logLevel)
-    logger = acts.logging.getLogger("epic.getDetector")
+    logger = acts.getDefaultLogger("epic.getDetector", logLevel)
 
     matDeco = None
-    if len(jsonFile)>0:
-        file = Path(jsonFile)
-        logger.info("Adding material from %s", file.absolute())
-        matDeco = acts.IMaterialDecorator.fromFile(
-            file,
-            level=customLogLevel(maxLevel=acts.logging.INFO),
-        )
+    if len(matFile) > 0:
+        file = Path(matFile)
+        if file.exists():
+            logger.info("Adding material from %s", file.absolute())
+            matDeco = acts.IMaterialDecorator.fromFile(
+                file,
+                level=customLogLevel(maxLevel=acts.logging.WARNING),
+            )
+        else:
+            logger.warning("Material map %s not found.", matFile)
 
-    dd4hepConfig = acts.examples.dd4hep.DD4hepGeometryService.Config(
+    dd4hepConfig = acts.examples.dd4hep.DD4hepDetector.Config(
         xmlFileNames=[xmlFile],
         logLevel=logLevel,
         dd4hepLogLevel=customLogLevel(),
+        materialDecorator=matDeco,
     )
-    detector = acts.examples.dd4hep.DD4hepDetector()
+    detector = acts.examples.dd4hep.DD4hepDetector(dd4hepConfig)
 
-    config = acts.MaterialMapJsonConverter.Config()
-
-    trackingGeometry, deco = detector.finalize(dd4hepConfig, matDeco)
-
-    return detector, trackingGeometry, deco
+    return detector

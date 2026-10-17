@@ -1,5 +1,6 @@
 features:
-  solenoid:
   beampipe:
+  fields:
+    marco:
   hcal:
     barrel_gdml:

@@ -7,7 +7,6 @@ import warnings
 from pathlib import Path
 import argparse
 
-import acts
 from acts.examples import (
     GaussianVertexGenerator,
     ParametricParticleGenerator,
@@ -18,12 +17,9 @@ from acts.examples import (
 
 import acts.examples.dd4hep
 import acts.examples.geant4
-import acts.examples.geant4.dd4hep
 
 import epic
 from material_recording import runMaterialRecording
-
-u = acts.UnitConstants
 
 _material_recording_executed = False
 
@@ -57,19 +53,15 @@ def main():
     )
     args = p.parse_args()
 
-    detector, trackingGeometry, decorators = epic.getDetector(
+    detector = epic.getDetector(
         args.xmlFile)
 
-    detectorConstructionFactory = (
-        acts.examples.geant4.dd4hep.DDG4DetectorConstructionFactory(detector)
-    )
-
     runMaterialRecording(
-        detectorConstructionFactory=detectorConstructionFactory,
-        tracksPerEvent=args.tracks,
-        outputDir=os.getcwd(),
-        etaRange=(args.eta_min, args.eta_max),
+        detector=detector,
         s=acts.examples.Sequencer(events=args.events, numThreads=1),
+        tracksPerEvent=args.tracks,
+        etaRange=(args.eta_min, args.eta_max),
+        outputFileBase=os.path.join(os.getcwd(), args.outputName.replace(".root", "")),
     ).run()
 
 

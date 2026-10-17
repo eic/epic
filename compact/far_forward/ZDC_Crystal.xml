@@ -29,6 +29,7 @@
         type="ZDC_Crystal"
         vis="ZDC_Crystal_Vis"
         readout="ZDCEcalHits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="ZDC_Crystal_x_pos"         y="ZDC_Crystal_y_pos"         z="ZDC_Crystal_z_pos"/>
       <rotation x="ZDC_Crystal_rotateX_angle" y="ZDC_Crystal_rotateY_angle" z="ZDC_Crystal_rotateZ_angle"/>
       <dimensions x="ZDC_Crystal_nx * (ZDC_Crystal_cell_width + ZDC_Crystal_frame_thickness) + ZDC_Crystal_frame_thickness"
@@ -42,7 +43,7 @@
                 cellx="ZDC_Crystal_cell_width" celly="ZDC_Crystal_cell_height" thickness="ZDC_Crystal_APD_socket_z"
                 material="ZDC_Polyethylene" vis="AnlTeal" />
       </module>
-      <support  material="CarbonFiber" vis="AnlLight_Gray" sizez="ZDC_Crystal_cell_length" thickness="ZDC_Crystal_frame_thickness"/>
+      <support  material="CarbonFiber" vis="AnlLightGray" sizez="ZDC_Crystal_cell_length" thickness="ZDC_Crystal_frame_thickness"/>
 
     </detector>
   </detectors>

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+export DETECTOR=@PROJECT_NAME@
+export DETECTOR_PATH=@CMAKE_INSTALL_FULL_DATADIR@/@PROJECT_NAME@
+export DETECTOR_CACHE="${DETECTOR_CACHE:-$DETECTOR_PATH}"
+export DETECTOR_CONFIG="${1:-@PROJECT_NAME@}"
+export DETECTOR_VERSION=@EPIC_VERSION_FULL@
+
+## Export detector libraries
+case "$(uname -s)" in
+    Darwin*)
+        if [ -n "$DYLD_LIBRARY_PATH" ]; then
+            export DYLD_LIBRARY_PATH="@CMAKE_INSTALL_FULL_LIBDIR@:$DYLD_LIBRARY_PATH"
+        else
+            export DYLD_LIBRARY_PATH="@CMAKE_INSTALL_FULL_LIBDIR@"
+        fi
+        ;;
+    *)
+        if [ -n "$LD_LIBRARY_PATH" ]; then
+            export LD_LIBRARY_PATH="@CMAKE_INSTALL_FULL_LIBDIR@:$LD_LIBRARY_PATH"
+        else
+            export LD_LIBRARY_PATH="@CMAKE_INSTALL_FULL_LIBDIR@"
+        fi
+        ;;
+esac

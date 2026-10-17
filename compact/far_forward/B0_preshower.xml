@@ -47,6 +47,7 @@
       readout="B0PreshowerHits"
       vis="FFPreVis"
       reflect="false">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="B0PreshowerCenter_xpos" y="0" z="B0PreshowerCenter_zpos"/>
       <rotation x="0*rad" y="B0Preshower_rotation" z="0*rad"/>
       <module name="Module1" vis="FFPreModuleVis">

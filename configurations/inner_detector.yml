@@ -1,8 +1,11 @@
 features:
   beampipe:
+  fields:
+    marco:
   tracking:
     definitions_craterlake:
     vertex_barrel:
+    vertex_barrel_support:
     silicon_barrel:
     mpgd_barrel:
     support_service_craterlake:
@@ -13,7 +16,8 @@ features:
     tof_barrel:
     tof_endcap:
   ecal:
-    barrel_interlayers:
+    forward_averaged_homogeneous:
+    bic_default:
     backward_PbWO4:
   pid:
     dirc:

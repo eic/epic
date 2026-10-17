@@ -1,0 +1,17 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2024 Sylvester Joosten -->
+<lccdd>
+
+  <info name="bic_default"
+        title="Special ePIC BIC configuration with only the first AstroPix layer (and support) enabled"
+        author="@sly2j"
+        url="https://github.com/sly2j"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <constant name="EcalBarrel_enable_staves_1" value="1"/>
+  </define>
+  <include ref="bic/bic_layer1_only.xml"/>
+</lccdd>

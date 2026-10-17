@@ -10,11 +10,9 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 
-
 namespace DD4hepDetectorHelper {
 
-template <typename T>
-T& ensureExtension(dd4hep::DetElement& elt) {
+template <typename T> T& ensureExtension(dd4hep::DetElement& elt) {
   T* ext = elt.extension<T>(false);
   if (ext == nullptr) {
     ext = new T();
@@ -39,11 +37,11 @@ inline void xmlToProtoSurfaceMaterial(const xml_comp_t& x_material,
   const auto n = std::distance(binTokens.begin(), binTokens.end());
   if (n == 2) {
     // Fill the bins
-    auto bin = binTokens.begin();
+    auto bin         = binTokens.begin();
     std::string bin0 = *(bin);
     std::string bin1 = *(++bin);
-    size_t nBins0 = x_material.attr<int>("bins0");
-    size_t nBins1 = x_material.attr<int>("bins1");
+    size_t nBins0    = x_material.attr<int>("bins0");
+    size_t nBins1    = x_material.attr<int>("bins1");
     // Add the material tags
     std::string btmSurface = baseTag + "_"s + mSurface;
     params.set<bool>(btmSurface, true);
@@ -52,4 +50,4 @@ inline void xmlToProtoSurfaceMaterial(const xml_comp_t& x_material,
   }
 }
 
-}  // namespace DD4hepDetectorHelper
+} // namespace DD4hepDetectorHelper

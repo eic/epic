@@ -45,9 +45,10 @@
       These files have only a define tags.
     </documentation>
     <include ref="${DETECTOR_PATH}/compact/fields/beamline_{{ ebeam | default("18", true) }}x{{ pbeam | default("275", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_backward/definitions.xml" />
-    <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
+    <include ref="${DETECTOR_PATH}/compact/version.xml"/>
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
 
@@ -58,6 +59,10 @@
   </includes>
   <include ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
 
+  <include ref="${DETECTOR_PATH}/compact/calibrations.xml"/>
+
+  <include ref="${DETECTOR_PATH}/compact/tracking_region.xml"/>
+
   <limits>
     <limitset name="world_limits">
     </limitset>
@@ -67,6 +72,9 @@
       <limit name="time_max" particles="*" value="0.1" unit="ns" />
       <limit name="ekin_min" particles="*" value="0.001" unit="MeV" />
       <limit name="range_min" particles="*" value="0.1" unit="mm" />
+    </limitset>
+    <limitset name="kill_limits">
+      <limit name="time_max" particles="*" value="0.0" unit="ns"/>
     </limitset>
     <limitset name="cal_limits">
       <limit name="step_length_max" particles="*" value="5.0" unit="mm"/>
