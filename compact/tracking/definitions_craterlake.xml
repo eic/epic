@@ -214,12 +214,12 @@
   <plugins>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
-      <arg value="file:calibrations/materials-map-craterlake.cbor"/>
+      <arg value="file:calibrations/materials-map.cbor"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/700fa7f92568311408137b2002b513346b66277d/material-map.cbor"/>
     </plugin>
   </plugins>
   <define>
-    <constant name="materials-map" value="calibrations/materials-map-craterlake.cbor" type="string"/>
+    <constant name="materials-map" value="calibrations/materials-map.cbor" type="string"/>
   </define>
 
 </lccdd>
