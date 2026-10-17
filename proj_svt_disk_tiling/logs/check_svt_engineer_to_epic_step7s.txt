@@ -1,0 +1,7 @@
+scenario,modules,type_swaps,source_opening_mismatches,min_source_clearance_mm,min_physical_clearance_mm,physical_rectangle_intersections
+rsu_opt,2164,2164,0,4.999950,-0.000050,0
+all_6rsu,2160,2160,0,4.999950,-0.000050,0
+PASS: complete x-convention transform is defined for all 4324 modules
+PASS: transformed source openings match the current physical-hole centers
+PASS: y, z, facing, and source identifiers remain unchanged
+NOTE: LEFT/RIGHT geometry must be swapped; flipping coordinates alone is incomplete

@@ -26,9 +26,7 @@
     <constant name="SiTrackerEndcapMod_overlap"     value="0"/>
 
     <comment> Global Si endcap variables </comment>
-    <constant name="SiTrackerEndcapMod_thickness"   value="SiTrackerEndcapCF_thickness + SiTrackerEndcapAl_thickness + SiTrackerSensor_thickness" />
     <constant name="SiTrackerEndcapMod_angle"       value="360.0*degree / SiTrackerEndcapMod_count * (1 + SiTrackerEndcapMod_overlap)" />
-    <constant name="SiTrackerEndcapLayer_thickness" value="SiTrackerEndcapMod_thickness + 2 * SiTrackerEndcapMod_dz + 1*um" />
 
     <comment> Acts envelope buffer distances </comment>
     <constant name="SiTrackerEndcap_envelope_rmin_delta" value="1*mm"/>

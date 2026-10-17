@@ -1,0 +1,74 @@
+SVT disk handoff validation; source files read-only
+PACKAGE rsu6: /global/cfs/cdirs/m3763/pdatta/epic/ES_material/rsu6
+disk count 5RSU 6RSU nominal_active_mm2
+ED4    252    0  252 606499.9779
+ED3    258    0  258 620940.4536
+ED2    259    0  259 623347.1995
+ED1    236    0  236 567992.0428
+ED0     78    0   78 187726.1836
+HD0     78    0   78 187726.1836
+HD1    236    0  236 567992.0428
+HD2    259    0  259 623347.1995
+HD3b   254    0  254 611313.4698
+HD4    250    0  250 601686.4860
+TOTAL 2160 modules; 5RSU=0, 6RSU=2160, nominal_active_mm2=5198571.239040
+VERSIONS [('2026-09-25', '5601d4b-dirty', '2026-10-01T16:46:05Z')]
+SHA256 (source files, relative to ES_material):
+700f94b292794e5fdee674a6d468c73d720e5c2ea3bfe722e9e71abbf4ede7a1  rsu6/ED0_metadata.txt
+5bfa82ffb6bf93ce88775a1ec248c198cd1e8b0559d63986efc8866040e9cdb0  rsu6/ED0_modules.csv
+0a187966276c5e50d9711a3eeea2f674eaaaec70c00524c2d693a5e6f43d0009  rsu6/ED1_metadata.txt
+f301c8b3949418f568820b28b2a72d901300b86a0b3e3c8ba50479b4ad8dfc93  rsu6/ED1_modules.csv
+e8197186d041cf05dfdd262b69001f168d2b4b2e3dc6f4ac952483de20179dfc  rsu6/ED2_metadata.txt
+18963ee35f8273e5ad4e8bef8116b28c5637c54af0a9f28b0e1cf6fb6d01dd76  rsu6/ED2_modules.csv
+c91c3351642a3b86d566a5cab01bda696442714f26ff8f6d6d8125641684db7b  rsu6/ED3_metadata.txt
+8b5112329e718ad813bda56c628866a4cde6d1532620e3d8fb3bb21dea5385b7  rsu6/ED3_modules.csv
+442191a02f4c3e568aa0cba850958fecbb9135d34a15d5ca15984a386c736e47  rsu6/ED4_metadata.txt
+998ffad1620a718b2f3fbd14139393c4330c8d8e27119824f8f8b5da03f714a9  rsu6/ED4_modules.csv
+abf0cae596b1f505d7bf739d1eccedd18aabcda67c337f10272fa7555d57165d  rsu6/HD0_metadata.txt
+3bf7adbb27fa561b88176232c722a55e045b94ac15d8b7d16040135d30821e02  rsu6/HD0_modules.csv
+6bebace9e11c881f7559fa23c5a786717fef796da170b75ca0fd696c3c5e9cb7  rsu6/HD1_metadata.txt
+b68a2d60eb1cf74b3ccfe1544482bc684d20e6dff2977c45d2c8f2a9d54c4cee  rsu6/HD1_modules.csv
+54b615926b5dbaa815bcc415dd205660f84c637574876f58542a755a577459a8  rsu6/HD2_metadata.txt
+bcd28f4938a5a9b1e514a916df9386176a9e3f440106b5caf62c714ddb5816b5  rsu6/HD2_modules.csv
+32b566abc176bf09755a1e0ca8dcc868d88c9ddddbd6fbe8f27a14d49ff4335e  rsu6/HD3b_metadata.txt
+926bb2e7e1c0b874792a1a66fc1d1ed95e941d713c3ef4086c4fbb33cc521d95  rsu6/HD3b_modules.csv
+e7d6bdc55755426c41bcfe60745b2a908ebbd099fd5ea98bbf6743175ff189e4  rsu6/HD4_metadata.txt
+ac77ebe1d0549f8cd8c59dbde8c15949beafe8ea7f96c688b348a134a29b7c3a  rsu6/HD4_modules.csv
+b250a3741a3395bbb4d7ea1587047dcad5541515e81e5896658a6b343fb8a1b8  rsu6/catalog.csv
+PACKAGE rsu_opt: /global/cfs/cdirs/m3763/pdatta/epic/ES_material/rsu_opt
+disk count 5RSU 6RSU nominal_active_mm2
+ED4    256   17  239 609307.8482
+ED3    258   18  240 613720.2157
+ED2    259   18  241 616126.9617
+ED1    236   18  218 560771.8050
+ED0     78   56   22 165263.2215
+HD0     78   56   22 165263.2215
+HD1    236   18  218 560771.8050
+HD2    259   18  241 616126.9617
+HD3b   254   28  226 600081.9887
+HD4    250   18  232 594466.2482
+TOTAL 2164 modules; 5RSU=265, 6RSU=1899, nominal_active_mm2=5101900.276956
+VERSIONS [('2026-09-25', '5601d4b-dirty', '2026-10-01T16:46:05Z')]
+SHA256 (source files, relative to ES_material):
+62480b02f3b261d663093c1eb3ba32f103f151852cc9e46d820b4e874961744e  rsu_opt/ED0_metadata.txt
+370b7b46d9cf60c9bc5d9a9397ba7bf4928dd2d8025737c7d364f9c5b6dea6b3  rsu_opt/ED0_modules.csv
+b4a8f7e6dbc55e2bd936f07e5716a957f88c8cdba2883c1f6d6f8d54377ea822  rsu_opt/ED1_metadata.txt
+5b1cb7a15021e223ff7077a2ad92c7aa0bac7c573407e20d526f04512004c840  rsu_opt/ED1_modules.csv
+6ee2be3c8868398986f140b6ea1eb4f12bf360694acefa7c8ea2d3ff35a5e230  rsu_opt/ED2_metadata.txt
+917d2201cc6c26aa42264606833c3ca21d6520abdb645ca58ef02fecbdb8fe49  rsu_opt/ED2_modules.csv
+b48183f3c84ee9a3be048fa89857a80619e486f5b6b965724c98bb69bf0b8610  rsu_opt/ED3_metadata.txt
+075c3f27212c5fcf9b5c10e3df8b968edb9eb9d21d07ca4995d1c95c5fc3a4ac  rsu_opt/ED3_modules.csv
+fa03a513804b0a835228a31c2b9817aabaabfed04fdd6ef86022304eb797e468  rsu_opt/ED4_metadata.txt
+977542f3c4bafc28a385614d9a2328e3c37cab14ace1f012912209ed84ceaba6  rsu_opt/ED4_modules.csv
+a15c2aa87f72ea37234dc4e7d9c08ccb7773a1bb451a5b3ecc7a7013bcbfd174  rsu_opt/HD0_metadata.txt
+ebf92e758324241c3d3b448fc4cb68d5703b73f59a358b518fd0d5cbc2fae6cf  rsu_opt/HD0_modules.csv
+de8af53e5a90f8876e86abd22284f061078c26646b12be225a9f2efff98c5f75  rsu_opt/HD1_metadata.txt
+c8a1f3189fcfa171a5f831346e52476ef2c078c0cda44ec2e5f2ef6469bea34d  rsu_opt/HD1_modules.csv
+e32dea23324dc91fd575e303de5d33764508a6c2111896ba30155704aa864b69  rsu_opt/HD2_metadata.txt
+e6b982ce3dd45d028d6f1d642738b2f488a9ef8248a3cde99818636bd4bae26a  rsu_opt/HD2_modules.csv
+3a6c3f45d2f7f7c2be68f74ab15c4e60d229ad1f78abd81fc2abc2c85afdebbd  rsu_opt/HD3b_metadata.txt
+c99de62d0c4b92509e328917a749185fc2d731aedeafe5eadd9c7af0788536a2  rsu_opt/HD3b_modules.csv
+34d9a1f3cea88ae9201fe89f6494610a2a1fa3e6ceb8bc3d3ccb649195a5b621  rsu_opt/HD4_metadata.txt
+a2f7522524c7f60abc7f64b3f98e6e0a6e22dee02fb911580789630264102f5a  rsu_opt/HD4_modules.csv
+9b52a0c9433229a5df0ddad040dac33e33f2069aee20fc865fde065882ed3400  rsu_opt/catalog.csv
+RESULT PASS; issues=0

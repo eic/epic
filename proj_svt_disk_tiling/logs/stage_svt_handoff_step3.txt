@@ -1,0 +1,6 @@
+SVT handoff staging, 2026-10-05T01:05:43Z
+/global/cfs/cdirs/m3763/pdatta/epic/ES_material/rsu6 -> /global/cfs/cdirs/m3763/pdatta/epic/compact/tracking/silicon_disks/all_6rsu: 21 files, byte-identical
+b250a3741a3395bbb4d7ea1587047dcad5541515e81e5896658a6b343fb8a1b8  /global/cfs/cdirs/m3763/pdatta/epic/compact/tracking/silicon_disks/all_6rsu/catalog.csv
+/global/cfs/cdirs/m3763/pdatta/epic/ES_material/rsu_opt -> /global/cfs/cdirs/m3763/pdatta/epic/compact/tracking/silicon_disks/rsu_opt: 21 files, byte-identical
+9b52a0c9433229a5df0ddad040dac33e33f2069aee20fc865fde065882ed3400  /global/cfs/cdirs/m3763/pdatta/epic/compact/tracking/silicon_disks/rsu_opt/catalog.csv
+RESULT PASS

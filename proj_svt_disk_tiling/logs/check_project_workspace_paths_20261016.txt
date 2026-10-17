@@ -1,0 +1,20 @@
+ED0: flats=26 webs=25 widths=[10.65] flat_web_gap=0.000 mm
+ED1: flats=48 webs=47 widths=[10.65] flat_web_gap=0.000 mm
+ED2: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+ED3: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+ED4: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+HD0: flats=26 webs=25 widths=[10.65] flat_web_gap=0.000 mm
+HD1: flats=48 webs=47 widths=[10.65] flat_web_gap=0.000 mm
+HD2: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+HD3b: flats=49 webs=48 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+HD4: flats=49 webs=48 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+totals: flats=446 webs=436
+floating-point audit: negative_slacks=116 minimum=-6.217e-15 mm tolerance=1.0e-09 mm
+PASS: every straight flat meets its adjacent web with zero y gap
+PASS: versioned 20261001_ES delivery contains both complete scenarios
+PASS: all 6 detectors atomically select rsu_opt
+PASS: production XML has 10 shared corrugation references
+PASS: permanent READMEs contain provenance and no development-log links
+PASS: CMake installs only the required *_metadata.txt text files
+PASS: six detectors select rsu_opt and ten layers select the shared 45-degree support
+PASS: relocated project scripts and representative validators
