@@ -219,7 +219,7 @@
     </plugin>
   </plugins>
   <define>
-    <constant name="materials-map" value="calibrations/materials-map.cbor" type="string"/>
+    <constant name="material-map" value="calibrations/materials-map.cbor" type="string"/>
   </define>
 
 </lccdd>
