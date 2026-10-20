@@ -2385,3 +2385,458 @@ passed. The conservative opening audit reproduced its existing 56 near
 contacts per scenario. No geometry or installed input changed; the prior
 Step 8i ROOT/Geant acceptance remains applicable. This merge did not rerun
 the expensive detector overlap checks.
+
+## Pre-push validation handoff (2026-10-16)
+
+The comprehensive local rerun is recorded in
+`proj_svt_disk_tiling/logs/check_svt_pre_push_20261016.sh`. Run it from the
+repository root inside the stable 26.09.0 EIC shell:
+
+```bash
+bash proj_svt_disk_tiling/logs/check_svt_pre_push_20261016.sh
+```
+
+It checks both delivered module catalogues and the active `rsu_opt` scenario,
+rebuilds and installs, verifies installed XML and corrugation input files,
+exports a visualization, and runs the established ROOT and Geant4 overlap
+checks. Each run writes a timestamped transcript and ROOT visualization inside
+`proj_svt_disk_tiling/`. Inspect the visualization and transcript before
+pushing. The full check has not been run as part of this script handoff.
+
+## ACTS material-map cache recovery (2026-10-16)
+
+The 10-event material-map smoke test failed before recording tracks because
+`material_recording_epic.py` passed `outputFileBase` to an old cached ACTS
+`runMaterialRecording` that accepted `outputDir` instead. The runner requests
+ACTS v46.8.1 but downloads each example only when it is missing; the cached
+recording, mapping, and validation examples were from an older API. The
+preceding `TGeoVoxelFinder::SortAll` envelope warning is a separate issue and
+must be reassessed after the API error is resolved.
+
+Ran `bash proj_svt_disk_tiling/logs/refresh_material_map_acts_examples_20261016.sh`.
+It fetched the 15 runner-listed examples from the official v46.8.1 tag,
+verified all three Python entry points accept `outputFileBase`, and retained
+the old examples plus `6010.diff` and `6012.diff` in
+`proj_svt_disk_tiling/tmp/retained/2026-10-16/material_map_acts_refresh/`.
+The runner's local B0 validation-plot edit was applied to the new `Mat_map.C`.
+Both retained PR patches pass `patch --dry-run` against the refreshed cache;
+their old downloads were removed from the active directory so the runner will
+fetch and apply fresh copies at the next execution. Moves are recorded in
+`proj_svt_disk_tiling/tmp/file_actions.log`.
+
+No detector source or prior material-map ROOT output changed. The EIC smoke
+test remains pending because this shell has no `DETECTOR_PATH`. Use
+`bash proj_svt_disk_tiling/logs/check_material_map_acts_refresh_20261016.sh`
+inside the locally configured EIC shell. That wrapper uses a unique output
+prefix and retains the previous plot directories before running the 10-event,
+100-particle workflow. The detailed rerun guide is
+`proj_svt_disk_tiling/logs/MATERIAL_MAP_RERUN_GUIDE.md`.
+
+## ACTS material-map smoke-test follow-up (2026-10-16)
+
+The user reran the protected 10-event, 100-particle workflow with the
+installed `epic_craterlake_material_map.xml` now including
+`silicon_disks_modules.xml`. The geantino scan, geometry export, mapping,
+and regenerated-map propagation validation completed. The second validation,
+which loads `calibrations/materials-map.cbor`, failed while constructing the
+ACTS detector: a cylinder surface rejected `{AxisPhi, AxisR}` material axes.
+The run therefore produced no validation comparison plots. The recurring
+`TGeoVoxelFinder::SortAll` warning for `envelope26` did not halt the completed
+stages; it remains a separate investigation item.
+
+The run also produced only a ROOT map, not the requested CBOR: cached
+`6010.diff`/`6012.diff` files existed but the original `patch_acts` function
+did not apply them, and repeated `--matFileFormat` options caused Python's
+`argparse` to retain only `root`. The updated runner now tests each patch's
+source state independently of the `.diff` cache, supplies `cbor root` to one
+`--matFileFormat` option, and checks both outputs exist. Its new
+`--skip-current-map-validation` option skips only the incompatible existing
+map and its plots. The protected smoke wrapper uses that option and confirms
+the installed XML selects `silicon_disks_modules.xml` before moving any prior
+plot directories. Default runner behavior still requests both validation
+paths for a future comparison after the old-map issue is resolved.
+
+Static validation: `bash -n` passed for both edited shell scripts and
+`git diff --check` passed. The existing cached ACTS patches pass forward
+dry-runs against the current examples. A new EIC smoke run is required to
+verify actual patch application, CBOR creation, regenerated-map validation,
+and plot generation; no production map is accepted yet.
+
+## ACTS patch ownership follow-up (2026-10-16)
+
+The next protected smoke run stopped before the geantino scan while applying
+PR 6010: GNU `patch` reported that it could not set the owner of its temporary
+file on the NERSC shared filesystem. Read-only checks found both PR 6010 and
+PR 6012 still unapplied; the ACTS target files retained owner `pdatta`, group
+`m3763`, and their original modification times. No new material-map outputs
+were produced by that attempt. The wrapper had already retained the previous
+`plots/` directory under
+`proj_svt_disk_tiling/tmp/retained/2026-10-16/material_map_plots_before_20261016T141621Z/`.
+
+Updated `patch_acts` to follow the NERSC workaround: copy each patch target to
+local scratch space, apply the patch there, copy the result over the existing
+shared-filesystem inode, then retain both scratch versions in the project
+`tmp/retained/` area and append an action-log entry. Cached patch-state checks
+remain idempotent. The recorded
+`check_material_map_patch_staging_20261016.sh` test successfully applied and
+reverse-checked both PR patches on local scratch copies, then retained the
+test copies in the project archive. `bash -n` and `git diff --check` also
+passed. Actual patch application to the active ACTS cache and the EIC smoke
+rerun are still pending.
+
+## ACTS material-map smoke-test result (2026-10-16)
+
+The user reran the protected workflow; transcript:
+`proj_svt_disk_tiling/logs/check_material_map_acts_refresh_20261016T142017Z.txt`.
+Both ACTS patches applied through local scratch copies and their target files
+retained owner `pdatta`, group `m3763`, and mode `660`. Geant4 recorded all
+10 events, mapping completed, and both requested map formats were written:
+`scripts/material_map/smoke_20261016T142017Z_material-map_map.cbor` (15 MB)
+and the corresponding ROOT map. The regenerated CBOR map was loaded for the
+10-event propagation validation, which completed. The plotting stage reached
+its final `::endgroup::`; regenerated validation and surface plots exist.
+
+The `--skip-current-map-validation` option intentionally omitted the existing
+calibration-map comparison, whose cylinder-axis mismatch remains unresolved.
+ROOT still printed `TGeoVoxelFinder::SortAll` wrong-bounding-box messages for
+`envelope26` during detector construction; they were nonfatal in this smoke
+test but require investigation before accepting a production map. Repeated
+`mkdir: File exists` messages arose while ROOT plotting macros revisited
+already-created output directories; the matching PDF files were written.
+The 10-event map is a workflow smoke-test product, not a physics-quality map.
+
+## `envelope26` bounding-box diagnosis (2026-10-16)
+
+Read-only source audit traced `envelope26` to the Barrel Imaging Calorimeter
+factory (`src/BarrelCalorimeterImaging_geo.cpp`), not to the SVT tiling builder.
+The material-map configuration includes `compact/ecal/bic_layer1_only.xml`.
+Its underlying `compact/ecal/bic/bic_layer1_only.xml` specifies exactly one
+`<layer repeat="1">`; there are no layers 2–6. Nevertheless, the factory
+unconditionally builds and places `sector26` and `envelope26` assemblies for
+those absent layers. The resulting empty nested assembly has no physical
+daughters from which to derive a positive-volume bounding box. ROOT's
+`TGeoVoxelFinder::SortAll` emits this exact diagnostic when a volume's
+bounding-box extent is non-positive on any axis (ROOT source:
+https://root.cern/doc/v632/TGeoVoxelFinder_8cxx_source.html). This is a source-based
+explanation; the runtime bounding-box coordinates were not separately dumped.
+
+An archived 2026-04-08 `dd_web_display` log already reports the same
+`envelope26` warning alongside inclusion of `bic_layer1_only.xml`, so it
+predates the current RSU placement and material-map work. The warning was
+nonfatal in the 10-event scan. Because the assembly represents layers absent
+from this one-layer variant, removing only that empty assembly should not
+remove intended material, but this needs a separate, narrowly scoped BIC
+builder change and geometry/material-map check before relying on it. No BIC,
+SVT, or material-map source was changed in this diagnostic step.
+
+## Production material-map run preparation (2026-10-16)
+
+Added `proj_svt_disk_tiling/logs/run_material_map_production_20261016.sh`
+for a user-run 1000-event, 5000-geantino/event map. It checks that the installed
+material-map XML includes the module builder and selects the `rsu_opt` tiling,
+records checksums of the installed geometry and input CSVs, and gives outputs a
+unique `production_<UTC timestamp>_` prefix. Existing plot directories are
+retained under `proj_svt_disk_tiling/tmp/retained/` with entries in
+`tmp/file_actions.log`. The run skips the known-broken old calibration-map
+comparison while keeping regenerated-map validation and plots. It does not
+change or delete earlier ROOT files. The `envelope26` warning remains an
+acceptance caveat. The production run has not been started.
+
+## Simulation/reconstruction runner cleanup (2026-10-16)
+
+Replaced `proj_svt_disk_tiling/simrec/run_sim.sh` with a small, explicit
+`sim|recon|both TAG [EVENTS]` interface. It sets `DETECTOR_PATH` from the local
+install, uses `epic_craterlake_material_map.xml` for both stages and the
+production `20261016T144812Z` CBOR for reconstruction, keeps the current pion
+gun and 10 mm Gaussian z smearing, writes separate logs and outputs under
+`proj_svt_disk_tiling/simout/`, and refuses to overwrite a tag's existing
+files. The previous script was retained under
+`proj_svt_disk_tiling/tmp/retained/2026-10-16/` and recorded in
+`proj_svt_disk_tiling/tmp/file_actions.log`. No simulation or reconstruction
+was launched by this edit.
+
+Follow-up: corrected `run_sim.sh`'s repository-root calculation from
+`../../..` to `../..`. The former resolved one directory above this checkout
+and incorrectly reported that the local installation was missing. The user's
+subsequent XML and output-directory selections were left unchanged. No job
+was launched during this correction.
+
+## Simple NERSC npsim submission (2026-10-16)
+
+Replaced the unrelated noise-study `simrec/submit_premium_packed.sh` with a
+single-run Slurm submitter: `./proj_svt_disk_tiling/simrec/submit_premium_packed.sh
+TAG [EVENTS]`. It submits one premium CPU job and runs `run_sim.sh sim` inside
+the 26.09.0-stable EIC Shifter image. Geometry, gun settings, and output naming
+remain defined only in `run_sim.sh`; the wrapper adds no configuration modes.
+Slurm stdout goes to `simrec/simout/slurm-svt_npsim-<jobid>.out`. The previous
+script is retained under `proj_svt_disk_tiling/tmp/retained/2026-10-16/` and
+recorded in `tmp/file_actions.log`. No job was submitted during this edit.
+
+Follow-up: set the shared output directory in both `run_sim.sh` and the Slurm
+submitter to `/pscratch/sd/p/pdatta/svt_disk_tiling/simout`. This puts npsim
+ROOT/log files and Slurm stdout together on scratch. The directory already
+exists. No job was submitted during this change.
+
+Follow-up correction: restored only `run_sim.sh`'s output directory to
+`proj_svt_disk_tiling/simrec/simout` at the user's request. The Slurm wrapper
+still sends its stdout to `/pscratch/sd/p/pdatta/svt_disk_tiling/simout`.
+No job was submitted.
+
+Follow-up (2026-10-17): Slurm rejected `submit_premium_packed.sh` with
+`Invalid qos specification`. The `m3763` account's live association lists
+`shared` but not `premium`; the script now requests `shared` for its one-task
+CPU job. The legacy filename was left unchanged. The failed submission did
+not create `sim_vm10mm_job_3` output, and no job was submitted during this fix.
+`sbatch --test-only` accepted the script's own directives; its temporary test
+job ID was not present in the queue.
+
+Follow-up (2026-10-19): all five submitted single-run Slurm jobs failed before
+npsim because Shifter could not look up `eicweb/eic_xl:26.09.0-stable`. The
+image is available from the EIC CVMFS Apptainer path instead. The wrapper now
+uses that image with `/global`, `/gpfs`, `/scratch`, and `/pscratch` bound. It
+also passes the absolute `run_sim_v10mm.sh` path as a batch argument, avoiding
+Slurm's copied-script path when locating the runner. The runner's geometry,
+vertex, and output settings were not changed. No jobs were cancelled or
+resubmitted in this correction.
+Validation: `bash -n` and `sbatch --test-only` passed, and the selected CVMFS
+image resolved npsim, the runner path, and the scratch output directory. No
+simulation event was run.
+
+## Resubmission of failed npsim jobs (2026-10-19)
+
+The 15 failed Slurm logs establish five 20,000-event jobs at each fixed
+vertex. All failed at the Shifter image lookup before npsim started and left
+no corresponding `sim_*job_*.root` or `sim_*job_*.log` files. The three runner
+scripts differ only in `--gun.position`. Their SHA-256 values at submission
+were:
+
+| Vertex | Runner | SHA-256 |
+| --- | --- | --- |
+| −10 mm | `simrec/run_sim.sh` | `4efc6162929784f9fed9b904c7b7df97152b106c9bc1bd8a280b5fe7ece9d59e` |
+| 0 mm | `simrec/run_sim_v0mm.sh` | `dcc2c74665427d515762b21798a82ea075c34006c131369d11816180a92358b3` |
+| +10 mm | `simrec/run_sim_v10mm.sh` | `596a2537f456bfcbb29115cbe05b0aae2d6748e7670c1a813455418a33a45444` |
+
+Created and ran `logs/resubmit_npsim_failed_20261019.sh` as the submission
+record. It checked for output collisions and same-tag queued jobs before any
+submission, then sent each runner's absolute path as an argument to the batch
+script. Slurm accepted all 15 replacements:
+
+| Vertex | Tags | Failed IDs → replacement IDs |
+| --- | --- | --- |
+| −10 mm | `vm10mm_job_0`–`vm10mm_job_4` | `59930767`→`59997034`, `59930768`→`59997035`, `59930771`→`59997036`, `59930774`→`59997037`, `59930776`→`59997038` |
+| 0 mm | `v0mm_job_0`–`v0mm_job_4` | `59930994`→`59997039`, `59930996`→`59997040`, `59931001`→`59997041`, `59931004`→`59997042`, `59931007`→`59997043` |
+| +10 mm | `v10mm_job_0`–`v10mm_job_4` | `59931019`→`59997044`, `59931021`→`59997045`, `59931026`→`59997046`, `59931027`→`59997047`, `59931029`→`59997048` |
+
+All 15 were pending immediately afterward. The batch script and arguments are
+copied at submission, but each runner remains a live file read when the job
+starts; do not edit these runner files until the queued jobs have started or
+finished if the submitted configurations must remain unchanged.
+
+Immediate compute-node result: all 15 replacements (`59997034`–`59997048`)
+failed before npsim because `/gpfs`, included in `APPTAINER_BINDPATH`, does not
+exist on the compute nodes. No simulation ROOT files or npsim logs were
+created. The wrapper's bind list was narrowed to `/global,/pscratch`; a
+single-job compute-node launch check will precede another bulk resubmission.
+
+Created `logs/resubmit_npsim_after_mount_fix_20261019.sh` to preserve the
+failed-ID/tag/runner mapping for the second attempt. `sbatch --test-only`
+accepted the revised wrapper. Submitted `vm10mm_job_0` first as job `59997096`;
+it passed Apptainer startup and entered npsim with the intended XML and scratch
+output paths. After that check, submitted the remaining 14 jobs:
+
+| Vertex | Tags | Final job IDs |
+| --- | --- | --- |
+| −10 mm | `vm10mm_job_0`–`vm10mm_job_4` | `59997096`, `59997188`, `59997189`, `59997190`, `59997191` |
+| 0 mm | `v0mm_job_0`–`v0mm_job_4` | `59997192`, `59997193`, `59997195`, `59997196`, `59997197` |
+| +10 mm | `v10mm_job_0`–`v10mm_job_4` | `59997198`, `59997199`, `59997200`, `59997201`, `59997202` |
+
+All 15 were running at the last check, and the pilot npsim log had progressed
+through geometry and physics initialization. Event completion and final ROOT
+integrity have not yet been verified. The runner files remain live inputs while
+jobs are running; changing them can affect jobs that have not yet invoked them.
+
+Follow-up OOM audit (2026-10-19): 14 of the 15 jobs were killed at the default
+3,810 MB allocation; the remaining `vm10mm_job_0` was still running at this
+check. Failed batch steps reached roughly 3.7–3.9 GB RSS, and no job had yet
+written a ROOT file. The wrapper now explicitly requests 16 GB per job. A
+single full-length retry will be validated before submitting the others.
+
+OOM retry setup: `sbatch --test-only` accepted the explicit 16 GB request.
+Created `logs/retry_npsim_oom_20261019.sh` as the submission record. Preserved
+the 14 failed `sim_*job_*.log` files under
+`proj_svt_disk_tiling/tmp/retained/2026-10-19/oom_npsim_logs/`; each move is
+recorded in `tmp/file_actions.log`. No failed ROOT file existed.
+
+Submitted full-length `vm10mm_job_1` as 16 GB pilot job `59999427`. It was
+running at the last check. The remaining 13 jobs were submitted with Slurm
+dependency `afterok:59999427`, which keeps them from starting unless the pilot
+finishes successfully:
+
+| Vertex | Tags | Dependent job IDs |
+| --- | --- | --- |
+| −10 mm | `vm10mm_job_2`–`vm10mm_job_4` | `59999479`, `59999480`, `59999481` |
+| 0 mm | `v0mm_job_0`–`v0mm_job_4` | `59999482`, `59999483`, `59999486`, `59999487`, `59999488` |
+| +10 mm | `v10mm_job_0`–`v10mm_job_4` | `59999490`, `59999492`, `59999494`, `59999496`, `59999499` |
+
+The original 3.81 GB `vm10mm_job_0` (`59997096`) was still running separately;
+it was not duplicated. The 16 GB pilot and all dependent jobs must be checked
+for completion and ROOT integrity later. Runner scripts remain live inputs.
+
+## Open geometry issue: A600 bridge-FPC alignment (2026-10-20)
+
+The user supplied a visualization of an A600 module and identified that its
+bridge FPCs are not aligned properly. Treat this as an unresolved shift-
+calculation issue, not an approved geometry change. Before adjusting offsets,
+compare the actual left/right FPC extents with the intended 0.5 mm gaps to
+LEC/REC, the sensor-chain and baseplate positions, and the A-versus-B width
+handling. Check both source and placed chirality, since the engineer-to-EPIC
+x reflection exchanges LEFT/RIGHT geometry. Recheck A600 and its chirality /
+facing partners visually and with a targeted component-coordinate audit after
+any fix. No geometry files were changed in this note-taking step.
+
+## Step 8j: keep negative-Y module electronics upright (2026-10-20)
+
+The negative-global-Y modules appeared upside down because their placement
+rotation maps local +y to global -Y. Rather than changing the supplied module
+origins or the established x/z and chirality transform, the builder now uses a
+separate cached prototype with only the bridge-FPC and AncASIC local-y
+positions reversed for those rows. This covers 1,087 of 2,164 `rsu_opt`
+placements and 1,085 of 2,160 `all_6rsu` placements. Silicon tiles, sensor
+IDs, baseplate, film, epoxy, and module rotations are unchanged. This resolved
+the upside-down electronics, not the separate A-module FPC-top offset.
+
+`validate_svt_upright_modules_step8j.py` passed both scenarios. The user
+accepted the exported visualization and ROOT found zero illegal overlaps or
+extrusions at 0.01 mm. The Geant4 check was intentionally deferred until
+the A-module FPC correction. Implementation commit: `596824314`. The
+`step8j_negative_y_electronics_20261020.md` note and matching check reports
+retain the detailed audit.
+
+## Step 8k: align A/B bridge-FPC tops to the RSU (2026-10-20)
+
+The first attempted correction measured FPC y offsets from the baseplate
+edge. Because A and B baseplates are 35 and 32 mm wide while both RSUs are
+19.564 mm wide, that moved the A FPCs 1.498 mm too high and spoiled the B
+alignment. That attempt was rejected. An intermediate RSU-based revision
+aligned both FPC tops, but incorrectly removed the intended 1.28 mm left-FPC
+drop; it too was rejected after visual review. These attempts were replaced
+by the final RSU-referenced calculation.
+
+For both A and B, the right FPC top is at the RSU top (+9.782 mm in module
+y), and the left FPC top is 1.28 mm below it (+8.502 mm). The 1.28 mm follows
+the 7.50 versus 6.22 mm dimensions in the supplied detail drawing. The
+AncASIC follows the left FPC. Nominal FPC lengths are unchanged; the
+existing epoxy keep-out clips only their lower edges. The x gaps to LEC/REC
+remain 0.5 mm. Legacy `EIC_LAS_6RSU_CORR` offsets are unaffected.
+
+The corrected Step 8d/8j static validators passed. The Step 8k EIC-shell
+build/export passed user visual review, and ROOT found zero illegal overlaps
+or extrusions at 0.01 mm. The dedicated Step 8k Geant check was not run;
+the later Step 8l Geant check validates the resulting full geometry.
+Implementation commit: `23a451d92`. The `step8k_fpc_top_alignment_20261020.md`
+note retains the rejected-attempt calculations and report paths. This step
+supersedes the immediately preceding open A600 alignment issue.
+
+## Step 8l: three-layer tiling RSUs (2026-10-20)
+
+Following `vertex_barrel.xml`, each tiled endcap RSU now has a 36 um
+full-area inactive-Si substrate, a 14 um active-Si layer, and a 2.5 um
+full-area Cu layer. The 50 um silicon is unchanged in total; Cu raises the
+physical RSU thickness to 52.5 um. The active layer uses one nonsensitive
+full-RSU mother volume with the twelve sensitive tiles and passive silicon
+pieces as daughters. Its DD4hep DetElement hierarchy matches the physical
+`module -> active layer -> tile` nesting. Sensitive x/y area and tile IDs are
+unchanged; the sensitive plane is now at the 14 um layer center. Inactive Si
+and Cu have distinct visualization attributes. The legacy prototype is
+unchanged.
+
+The CSV `z_sensor_mm` still references the top of the 50 um silicon, below
+Cu. The inward module-normal clearance increased from 30 to 32.5 um, making
+the inward/outward translations -0.0325/+0.2625 mm while preserving their
+0.230 mm relative offset. The inward Cu outer face reaches the carbon
+boundary without positive-volume overlap. Static validators, the EIC-shell
+build/export, and user visual review passed. ROOT reported zero illegal
+overlaps/extrusions; the completed Geant4 run reported no overlaps. The
+earlier interrupted Geant run is not counted as a pass. Implementation commit:
+`85ac3605f`. Details and exact reports remain in
+`step8l_three_layer_rsu_20261020.md`. This material change requires a new
+ACTS material map before reconstruction performance is assessed.
+
+## Step 8m: regenerate and test the ACTS material map (2026-10-20)
+
+Prepared `regenerate_svt_material_map_step8m.sh` for the installed
+`epic_craterlake_material_map.xml` geometry. It checks the Step 8l module
+constants, retains existing plot directories, uses timestamp-prefixed
+products, and skips validation against the older calibration CBOR whose
+cylinder-axis binning is incompatible with the current ACTS bindings. The
+first wrapper revision could exit silently if `python` or `root` was absent;
+its preflight now reports those missing programs explicitly.
+
+The user completed the production 1000 x 5000 geantino run. Its CBOR is
+`scripts/material_map/step8m_20261020T164956Z_material-map_map.cbor`; the
+transcript is `logs/material_map_step8m_20261020T164956Z.txt`. The runner
+completed regenerated-map validation, but the known `envelope26` bounding-box
+warning remains and should be reviewed before treating the map as final.
+The map is not a substitute for an EICrecon compatibility check.
+
+A 500-event reconstruction using that CBOR with
+`epic_craterlake_tracking_only_disk_tiles_new.xml` failed during DD4hep-to-ACTS
+conversion: a cylinder received `{AxisPhi, AxisR}` material axes, and CKF
+collections were omitted despite EICrecon processing all events. The map
+was generated from `epic_craterlake_material_map.xml`, which has a different
+detector set. A subsequent 500-event run using the matching material-map XML
+for both npsim and EICrecon reported `DD4Hep geometry converted!` and
+`ActsGeometryProvider initialization complete`; CKF factories ran. These
+observations support a geometry/map-identifier mismatch, not a demonstrated
+failure of the new RSU mother hierarchy. Neither log alone establishes a
+nonzero reconstructed-track count. The gun configuration in the mismatched
+run also produced mostly near-axial pions and needs explicit angular limits
+for an endcap acceptance study.
+
+## Step 8n: prepare an endcap material scan (2026-10-20)
+
+Prepared `run_svt_material_scan_step8n.sh` to reproduce an X0-versus-eta
+scan with `scripts/subdetector_tests/material_scan.py` against the installed
+tracking-only disk-tiles XML. Its defaults are z=0 cm, phi=20 degrees,
+-4.2 <= eta <= 4.2 with 841 bins, and 200 cm transverse stopping radius;
+optional arguments choose start-z (cm) and phi (degrees). Each run writes
+PDF, CSV, PNG, transcript, and checksums to a unique directory under
+`proj_svt_disk_tiling/matscan/`. This is a single-phi material slice, not an
+azimuthal average or ACTS material-map validation.
+
+The first run at z=0, phi=20 completed, but its six requested disk detector
+names were not top-level detectors in `material_scan.py`. The output CSV
+contained only `Others`, so its PDF is **not a valid endcap-attributed scan**.
+Its directory, `matscan/step8n_20261020T214047Z_phi20_z0cm/`, is retained as
+diagnostic evidence. The wrapper now requests the three available top-level
+SVT assemblies (`InnerSiTrackerSubAssembly`, `MiddleSiEndcapSubAssembly`,
+`OuterSiEndcapSubAssembly`) and verifies those CSV columns before reporting
+success. A fresh scan with this correction is still required; no corrected
+scan has been run yet. Assembly-level attribution is not the same as an
+individual-disk decomposition.
+
+This file remains the canonical implementation log. The separate Step 8j–8n
+notes, where present, are supporting detail rather than independent status
+records; no existing notes or scan products were deleted.
+
+### Step 8n plotting and detector-selection follow-up (2026-10-20)
+
+The user's review of the first Step 8n PDF showed no separately attributed
+trackers. Its CSV header was only `Others`: `material_scan.py` matches names
+among the top-level DD4hep children, not the nested individual disk names.
+The October 16 reference PDF/CSV uses three top-level tracker assemblies:
+`InnerSiTrackerSubAssembly`, `MiddleSiEndcapSubAssembly`, and
+`OuterSiEndcapSubAssembly`. The Step 8n wrapper now selects exactly those
+names and checks that all three columns appear in the output CSV. This
+reproduces assembly-level pages like the reference; it does not separate the
+ten individual disks within those assemblies.
+
+Visual inspection of the reference PDF also found a clipped top legend and
+almost no y-axis tick numbers on the detailed pages. The plotting script had
+fixed X0 major ticks every 10 units, far larger than the tracker page ranges.
+It now chooses y ticks from each page's actual range, explicitly shows their
+numeric labels, reserves more left margin for the y title, saves with a tight
+bounds box, and arranges the top-summary legend in two columns (two entries
+per row). Previous PDF/CSV outputs are unchanged. A corrected scan has not
+yet been run, so the final appearance and detector attribution still need
+user review in the EIC shell.

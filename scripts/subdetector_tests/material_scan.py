@@ -20,7 +20,7 @@ import numpy as np
 from io import StringIO
 from collections import OrderedDict
 from matplotlib import pyplot as plt
-from matplotlib.ticker import MultipleLocator
+from matplotlib.ticker import AutoMinorLocator, MaxNLocator, MultipleLocator
 import matplotlib.backends.backend_pdf
 
 import ROOT
@@ -291,7 +291,7 @@ if __name__ == '__main__':
     # plots
     pdf = matplotlib.backends.backend_pdf.PdfPages('material_scan_details.pdf')
     fig, ax = plt.subplots(figsize=(16, 8), dpi=160,
-                           gridspec_kw={'top': 0.9, 'bottom': 0.2, 'left': 0.08, 'right': 0.98})
+                           gridspec_kw={'top': 0.76, 'bottom': 0.18, 'left': 0.12, 'right': 0.98})
 
     # group some detectors into Others because not enough colors for them
     plot_dets = sdets
@@ -314,20 +314,22 @@ if __name__ == '__main__':
     # formatting
     ax.tick_params(which='both', direction='in', labelsize=22)
     ax.set_xlabel('$\eta$', fontsize=22)
-    ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22)
+    ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22,
+                  labelpad=12)
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
     ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-    ax.yaxis.set_major_locator(MultipleLocator(vt[2]))
-    ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
+    ax.yaxis.set_major_locator(MaxNLocator(nbins=6, min_n_ticks=4))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.tick_params(axis='y', which='major', labelleft=True)
     ax.grid(ls=':', which='both')
     ax.set_axisbelow(False)
     ax.set_xlim(args.eta_min, args.eta_max)
     ax.set_ylim(0., ax.get_ylim()[1]*1.1)
-    ax.legend(bbox_to_anchor=(0.0, 0.9, 1.0, 0.1), ncol=4, loc="upper center", fontsize=22,
+    ax.legend(bbox_to_anchor=(0.5, 1.02), ncol=2, loc="lower center", fontsize=17,
           borderpad=0.2, labelspacing=0.2, columnspacing=0.6, borderaxespad=0.05, handletextpad=0.4)
     # ax.set_yscale('log')
-    fig.savefig('material_scan.png')
-    pdf.savefig(fig)
+    fig.savefig('material_scan.png', bbox_inches='tight')
+    pdf.savefig(fig, bbox_inches='tight')
     plt.close(fig)
 
     # detailed plot for each detector
@@ -348,7 +350,7 @@ if __name__ == '__main__':
             plot_mats = mats[:len(COLORS)]
 
         fig, ax = plt.subplots(figsize=(16, 8), dpi=160,
-                           gridspec_kw={'top': 0.9, 'bottom': 0.2, 'left': 0.08, 'right': 0.98})
+                           gridspec_kw={'top': 0.88, 'bottom': 0.18, 'left': 0.12, 'right': 0.98})
         bottom = np.zeros(len(dfa))
         width = np.mean(np.diff(dfa.index))
         for col, c in zip(plot_mats, COLORS):
@@ -361,17 +363,19 @@ if __name__ == '__main__':
                   borderpad=0.3, labelspacing=0.2, columnspacing=0.8, borderaxespad=0.1, handletextpad=0.4)
         ax.tick_params(which='both', direction='in', labelsize=22)
         ax.set_xlabel('$\eta$', fontsize=22)
-        ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22)
+        ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22,
+                      labelpad=12)
         ax.set_title(det, fontsize=22)
         ax.xaxis.set_major_locator(MultipleLocator(0.5))
         ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-        ax.yaxis.set_major_locator(MultipleLocator(vt[2]))
-        ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
+        ax.yaxis.set_major_locator(MaxNLocator(nbins=6, min_n_ticks=4))
+        ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+        ax.tick_params(axis='y', which='major', labelleft=True)
         ax.grid(ls=':', which='both')
         ax.set_axisbelow(False)
         ax.set_xlim(args.eta_min, args.eta_max)
         ax.set_ylim(0., ax.get_ylim()[1]*1.1)
-        pdf.savefig(fig)
+        pdf.savefig(fig, bbox_inches='tight')
         plt.close(fig)
     # close PDF
     pdf.close()
