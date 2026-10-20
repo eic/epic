@@ -18,7 +18,7 @@ def main():
     }
 
     # Step 8f's module translations remain the sole clearance adjustment.
-    assert constants["SiEndcapTilingInwardModule_z_clearance"] == "0.030*mm"
+    assert constants["SiEndcapTilingInwardModule_z_clearance"] == "0.0325*mm"
     assert constants["SiEndcapTilingOppositeFacing_z_offset"] == "0.230*mm"
 
     # The virtual keep-clear dimensions only drove the removed ad-hoc cuts.
@@ -56,7 +56,7 @@ def main():
     assert "build_disk_solid(layer_name, disk)" in cpp
 
     print("active placement: rsu_opt")
-    print("module-normal offsets: inward=-0.030 mm, outward=+0.260 mm")
+    print("module-normal offsets: inward=-0.0325 mm, outward=+0.2625 mm")
     print("PASS: corrugation has no module-dependent x cutouts")
     print("PASS: disk-boundary and physical-opening clipping remain enabled")
 

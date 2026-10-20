@@ -23,7 +23,7 @@ outward_offset = clearance + relative_offset
 
 epoxy = 0.080
 baseplate = 0.150
-assert abs(clearance - 0.030) < 1e-12
+assert abs(clearance - 0.0325) < 1e-12
 assert abs(relative_offset - (epoxy + baseplate)) < 1e-12
 
 # Coordinate d is positive from the corrugation reference into the channel.
@@ -50,12 +50,12 @@ assert 'module_template.outward_facing' in cpp
 assert 'applied_module_normal_z_offset_mm' in cpp
 assert 'placed_sensor_reference_z_mm' in cpp
 
-print(f"inward clearance={clearance:.3f} mm away from the channel")
+print(f"inward clearance={clearance:.4f} mm away from the channel")
 print(
-    f"outward offset={outward_offset:.3f} mm = common clearance {clearance:.3f} "
+    f"outward offset={outward_offset:.4f} mm = common clearance {clearance:.4f} "
     f"+ preserved relative offset {relative_offset:.3f} mm"
 )
 print(f"inward epoxy/baseplate:  {inward_epoxy}, {inward_baseplate} mm relative to surface")
 print(f"outward epoxy/baseplate: {outward_epoxy}, {outward_baseplate} mm relative to surface")
 print("PASS: translated backing stacks touch at one boundary and do not overlap")
-print("NOTE: placed sensor references shift by -0.030 mm inward and +0.260 mm outward")
+print("NOTE: placed sensor references shift by -0.0325 mm inward and +0.2625 mm outward")

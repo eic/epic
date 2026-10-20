@@ -141,6 +141,8 @@ struct TilingDiskMetadata {
 struct ModulePrototype {
   Volume volume;
   Placements sensitives;
+  Placements active_layers;
+  vector<size_t> sensitive_active_layer_indices;
   vector<VolPlane> surfaces;
 };
 
@@ -280,7 +282,6 @@ string reflected_handedness(const string& source_handedness) {
       fmt::format("cannot reflect unsupported handedness '{}'", source_handedness));
 }
 
-// to do: add RSU structure, as well as detailed of the module.
 // Build the small set of supported tiled-disk module types.
 map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   // Workflow note:
@@ -358,6 +359,16 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
 
   auto build_tiling_module = [&](const string& name, int rsu_count, double baseplate_width,
                                  bool outward_facing) {
+    const double inactive_si =
+        description.constant<double>("SiEndcapTilingRSUInactiveSi_thickness");
+    const double active_si = description.constant<double>("SiEndcapTilingRSUActiveSi_thickness");
+    const double copper    = description.constant<double>("SiEndcapTilingRSUCu_thickness");
+    const double silicon     = description.constant<double>("SiEndcapTilingSensor_thickness");
+    if (inactive_si <= 0.0 || active_si <= 0.0 || copper <= 0.0 ||
+        std::abs(inactive_si + active_si - silicon) > 1.0e-9 * mm) {
+      throw std::runtime_error(
+          "tiling RSU silicon layers must sum to the configured sensor thickness");
+    }
     ModuleTemplate module_template;
     module_template.name = name;
     // Tiling modules are assemblies with no solid of their own. Their dedicated
@@ -432,7 +443,7 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     // baseplate, not one serial stack. The FPC touches the baseplate and the
     // AncASIC is mounted on the FPC.
     const double sensor_branch = description.constant<double>("SiEndcapTilingFilm_thickness") +
-                                 description.constant<double>("SiEndcapTilingSensor_thickness");
+                                 silicon + copper;
     const double electronics_branch = bridge_fpc_stack + ancasic_stack;
     module_template.total_thickness =
         (outward_facing ? epoxy.thickness : 0.0) +
@@ -493,6 +504,7 @@ double tiling_sensor_reference_z(Detector& description, const ModuleTemplate& mo
   const double epoxy  = module_template.outward_facing
                             ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
                             : 0.0;
+  // The CSV sensor reference is the top of the 50 um Si, below the added Cu.
   return bottom + epoxy + description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
          description.constant<double>("SiEndcapTilingFilm_thickness") +
          description.constant<double>("SiEndcapTilingSensor_thickness");
@@ -1716,14 +1728,16 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       z_position += component.thickness / 2.0;
     }
 
-    auto attach_sensitive = [&](Volume& component_volume, PlacedVolume& pv) {
+    auto attach_sensitive = [&](Volume& component_volume, PlacedVolume& pv,
+                                double center_offset_from_component) {
       pv.addPhysVolID("sensor", sensor_id);
       component_volume.setSensitiveDetector(sens);
       prototype.sensitives.push_back(pv);
 
-      const double inner_thickness = thickness_so_far + component.thickness / 2.0;
+      const double inner_thickness = thickness_so_far + component.thickness / 2.0 +
+                                     center_offset_from_component;
       const double outer_thickness =
-          module_template.total_thickness - thickness_so_far - component.thickness / 2.0;
+          module_template.total_thickness - inner_thickness;
       Vector3D u(1.0, 0.0, 0.0);
       Vector3D v(0.0, 1.0, 0.0);
       Vector3D n(0.0, 0.0, 1.0);
@@ -1735,6 +1749,20 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
     };
 
     if (component.rsu_twelve_tile_pattern) {
+      const double inactive_si =
+          module_template.tiling_design
+              ? description.constant<double>("SiEndcapTilingRSUInactiveSi_thickness")
+              : 0.0;
+      const double active_si =
+          module_template.tiling_design
+              ? description.constant<double>("SiEndcapTilingRSUActiveSi_thickness")
+              : component.thickness;
+      const double copper = module_template.tiling_design
+                                ? description.constant<double>("SiEndcapTilingRSUCu_thickness")
+                                : 0.0;
+      const double silicon_bottom_z = z_position - component.thickness / 2.0;
+      const double active_center_z  = silicon_bottom_z + inactive_si + active_si / 2.0;
+      const double copper_center_z  = z_position + component.thickness / 2.0 + copper / 2.0;
       const double rsu_pitch_x     = comp_x / x_repeat;
       const double half_rsu_x      = rsu_pitch_x / 2.0;
       const double half_rsu_y      = comp_y / 2.0;
@@ -1749,7 +1777,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
 
       auto place_box_with_thickness = [&](const string& name, double box_x, double box_y,
                                           double box_thickness, double pos_x, double pos_y,
-                                          const string& vis, bool sensitive) {
+                                          double box_z, const string& vis, bool sensitive) {
         if (box_x <= 0.0 || box_y <= 0.0) {
           return;
         }
@@ -1758,17 +1786,11 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         box_volume.setVisAttributes(description.visAttributes(vis));
         PlacedVolume pv = prototype.volume.placeVolume(
             box_volume,
-            Position(component.x_offset + pos_x, component.y_offset + pos_y, z_position));
+            Position(component.x_offset + pos_x, component.y_offset + pos_y, box_z));
         if (sensitive) {
-          attach_sensitive(box_volume, pv);
+          attach_sensitive(box_volume, pv, box_z - z_position);
         }
       };
-      auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
-                           double pos_y, const string& vis, bool sensitive) {
-        place_box_with_thickness(name, box_x, box_y, component.thickness, pos_x, pos_y, vis,
-                                 sensitive);
-      };
-
       if (component.rsu_end_electronics) {
         const double lec_length    = description.constant<double>("SiEndcapLEC_length");
         const double rec_length    = description.constant<double>("SiEndcapREC_length");
@@ -1786,15 +1808,62 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
                                                              : comp_x / 2.0 + rec_length / 2.0;
 
         place_box_with_thickness(_toString(component_id, "component%d_lec"), lec_length, lec_width,
-                                 lec_thickness, lec_x, 0.0, "SVTElectronicsVis", false);
+                                 lec_thickness, lec_x, 0.0, z_position, "SVTElectronicsVis", false);
         place_box_with_thickness(_toString(component_id, "component%d_rec"), rec_length, rec_width,
-                                 rec_thickness, rec_x, 0.0, "SVTElectronicsVis", false);
+                                 rec_thickness, rec_x, 0.0, z_position, "SVTElectronicsVis", false);
       }
 
       for (int repeat_idx = 0; repeat_idx < x_repeat; ++repeat_idx) {
         const double rsu_x_min = -comp_x / 2.0 + repeat_idx * rsu_pitch_x;
+        const double rsu_x_center = rsu_x_min + rsu_pitch_x / 2.0;
         const string base_name =
             _toString(component_id, "component%d") + _toString(repeat_idx + 1, "_rsu%d");
+        Volume active_layer_volume;
+
+        if (module_template.tiling_design) {
+          Box inactive_solid(rsu_pitch_x / 2.0, comp_y / 2.0, inactive_si / 2.0);
+          Volume inactive_volume(base_name + "_inactive_si", inactive_solid, material);
+          inactive_volume.setVisAttributes(description.visAttributes("SVTInactiveSiVis"));
+          prototype.volume.placeVolume(inactive_volume,
+                                       Position(component.x_offset + rsu_x_center, component.y_offset,
+                                                silicon_bottom_z + inactive_si / 2.0));
+
+          Box active_solid(rsu_pitch_x / 2.0, comp_y / 2.0, active_si / 2.0);
+          active_layer_volume = Volume(base_name + "_active_si", active_solid, material);
+          active_layer_volume.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+          PlacedVolume active_pv = prototype.volume.placeVolume(
+              active_layer_volume,
+              Position(component.x_offset + rsu_x_center, component.y_offset, active_center_z));
+          prototype.active_layers.push_back(active_pv);
+
+          Box copper_solid(rsu_pitch_x / 2.0, comp_y / 2.0, copper / 2.0);
+          Volume copper_volume(base_name + "_cu", copper_solid, description.material("Copper"));
+          copper_volume.setVisAttributes(description.visAttributes("SVTRSUCopperVis"));
+          prototype.volume.placeVolume(copper_volume,
+                                       Position(component.x_offset + rsu_x_center,
+                                                component.y_offset, copper_center_z));
+        }
+
+        auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
+                             double pos_y, const string& vis, bool sensitive) {
+          if (!module_template.tiling_design) {
+            place_box_with_thickness(name, box_x, box_y, active_si, pos_x, pos_y,
+                                     active_center_z, vis, sensitive);
+            return;
+          }
+          if (box_x <= 0.0 || box_y <= 0.0) {
+            return;
+          }
+          Box box_solid(box_x / 2.0, box_y / 2.0, active_si / 2.0);
+          Volume box_volume(name, box_solid, material);
+          box_volume.setVisAttributes(description.visAttributes(vis));
+          PlacedVolume pv = active_layer_volume.placeVolume(
+              box_volume, Position(pos_x - rsu_x_center, pos_y, 0.0));
+          if (sensitive) {
+            attach_sensitive(box_volume, pv, active_center_z - z_position);
+            prototype.sensitive_active_layer_indices.push_back(repeat_idx);
+          }
+        };
 
         for (int x_half = 0; x_half < 2; ++x_half) {
           const double half_x_min        = rsu_x_min + x_half * half_rsu_x;
@@ -2095,7 +2164,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       PlacedVolume pv = prototype.volume.placeVolume(
           component_volume, Position(component.x_offset, component.y_offset, z_position));
       if (component.sensitive) {
-        attach_sensitive(component_volume, pv);
+        attach_sensitive(component_volume, pv, 0.0);
       }
     }
 
@@ -2106,6 +2175,11 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
     ++component_id;
   }
 
+  if (module_template.tiling_design &&
+      (prototype.active_layers.size() != static_cast<size_t>(module_template.rsu_count) ||
+       prototype.sensitive_active_layer_indices.size() != prototype.sensitives.size())) {
+    throw std::runtime_error("incomplete tiling RSU active-layer hierarchy");
+  }
   return prototype;
 }
 
@@ -2404,10 +2478,26 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         module_params.set<double>("placed_sensor_reference_z_mm", row.placed_sensor_reference / mm);
       }
 
+      // Match the DetElement tree to module -> active RSU layer -> sensitive tile.
+      // Legacy modules have no active-layer mother and keep direct tile children.
+      vector<DetElement> active_elements;
+      active_elements.reserve(prototype.active_layers.size());
+      for (size_t idx = 0; idx < prototype.active_layers.size(); ++idx) {
+        PlacedVolume active_pv = prototype.active_layers[idx];
+        DetElement active_element(module_element, active_pv.volume().name(),
+                                  static_cast<int>(idx) + 1);
+        active_element.setPlacement(active_pv);
+        active_elements.push_back(active_element);
+      }
+
       // Reattach the cached sensitive surfaces to the concrete placed module instance.
       for (size_t idx = 0; idx < prototype.sensitives.size(); ++idx) {
         PlacedVolume sens_pv = prototype.sensitives[idx];
-        DetElement comp_elt(module_element, sens_pv.volume().name(), mod_num);
+        DetElement parent_element =
+            prototype.active_layers.empty()
+                ? module_element
+                : active_elements.at(prototype.sensitive_active_layer_indices.at(idx));
+        DetElement comp_elt(parent_element, sens_pv.volume().name(), mod_num);
         auto& comp_params =
             DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
         comp_params.set<string>("axis_definitions", "XYZ");

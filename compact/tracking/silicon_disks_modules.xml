@@ -71,11 +71,12 @@
     <constant name="SiEndcapTilingBaseplateB_width"          value="32*mm"/>
     <comment>
       Provisional module translations normal to the supplied corrugation surface.
-      The inward clearance moves the module away from the channel by 30 um.
+      The inward clearance moves the module away from the channel by 32.5 um
+      so the 2.5 um Cu above the 50 um silicon ends at the carbon boundary.
       The outward module moves by that common clearance plus the preserved
-      230 um opposing-face translation, for a total outward offset of 260 um.
+      230 um opposing-face translation, for a total outward offset of 262.5 um.
     </comment>
-    <constant name="SiEndcapTilingInwardModule_z_clearance"  value="0.030*mm"/>
+    <constant name="SiEndcapTilingInwardModule_z_clearance"  value="0.0325*mm"/>
     <constant name="SiEndcapTilingOppositeFacing_z_offset"   value="0.230*mm"/>
     <constant name="SiEndcapTilingBLEC_length"               value="20*mm"/>
     <constant name="SiEndcapTilingBREC_length"               value="10*mm"/>
@@ -89,6 +90,15 @@
       references must still be matched to the supplied CSV in a later step.
     </comment>
     <constant name="SiEndcapTilingSensor_thickness"          value="50*um"/>
+    <comment>
+      Endcap RSU layers follow vertex_barrel.xml: 36 um inactive Si,
+      14 um segmented active Si, then 2.5 um full-area Cu on the exposed side.
+      The slide's 50 um sensor and CSV z_sensor reference end at the Si top;
+      Cu is additional, giving a 52.5 um physical RSU stack.
+    </comment>
+    <constant name="SiEndcapTilingRSUInactiveSi_thickness"   value="36*um"/>
+    <constant name="SiEndcapTilingRSUActiveSi_thickness"     value="14*um"/>
+    <constant name="SiEndcapTilingRSUCu_thickness"           value="2.5*um"/>
     <constant name="SiEndcapTilingFilm_thickness"            value="60*um"/>
     <constant name="SiEndcapTilingBaseplateCF_thickness"     value="150*um"/>
     <constant name="SiEndcapTilingExternalEpoxy_thickness"   value="80*um"/>

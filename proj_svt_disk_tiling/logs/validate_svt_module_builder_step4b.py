@@ -37,6 +37,12 @@ def main():
     carbon = literal(constants, "SiEndcapTilingBaseplateCF_thickness", "um")
     film = literal(constants, "SiEndcapTilingFilm_thickness", "um")
     sensor = literal(constants, "SiEndcapTilingSensor_thickness", "um")
+    inactive_si = literal(constants, "SiEndcapTilingRSUInactiveSi_thickness", "um")
+    active_si = literal(constants, "SiEndcapTilingRSUActiveSi_thickness", "um")
+    copper = literal(constants, "SiEndcapTilingRSUCu_thickness", "um")
+    assert (inactive_si, active_si, copper) == (36, 14, Decimal("2.5"))
+    assert inactive_si + active_si == sensor
+    assert sensor + copper == Decimal("52.5")
     assert constants["SiEndcapTilingLEC_thickness"] == "SiEndcapTilingSensor_thickness"
     assert constants["SiEndcapTilingREC_thickness"] == "SiEndcapTilingSensor_thickness"
     assert epoxy + carbon + film + sensor == 340
@@ -91,7 +97,7 @@ def main():
     assert seen == {group + suffix for group in ("A6", "B5", "B6")
                     for suffix in ("00", "01", "10", "11")}
     print("Module dimensions, end clearances, and epoxy widths: PASS")
-    print("Slide stack (epoxy/carbon/film/sensor): 80/150/60/50 um")
+    print("Slide stack (epoxy/carbon/film/silicon): 80/150/60/50 um; RSU Cu: 2.5 um")
     print("Baseplate-center to sensor-center separation: 160 um (before facing transform)")
     print("Detailed sensitive area (5/6 RSU, mm^2):",
           5 * sensitive_x * sensitive_y, 6 * sensitive_x * sensitive_y)

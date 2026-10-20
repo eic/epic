@@ -37,12 +37,12 @@ def main():
     facing_offset = literal_mm(
         constants, "SiEndcapTilingOppositeFacing_z_offset"
     )
-    assert inward_clearance == Decimal("0.030")
+    assert inward_clearance == Decimal("0.0325")
     assert facing_offset == Decimal("0.230")
 
     inward_applied = -inward_clearance
     outward_applied = inward_clearance + facing_offset
-    assert outward_applied == Decimal("0.260")
+    assert outward_applied == Decimal("0.2625")
     assert outward_applied + inward_applied == facing_offset
 
     # Coordinate d is positive from the corrugation surface into the channel.
@@ -51,18 +51,21 @@ def main():
         "external_epoxy": shifted((Decimal("-0.080"), Decimal("0.000")), inward_applied),
         "film": shifted((Decimal("-0.080"), Decimal("-0.020")), inward_applied),
         "sensor": shifted((Decimal("-0.020"), Decimal("0.030")), inward_applied),
+        "copper": shifted((Decimal("0.030"), Decimal("0.0325")), inward_applied),
         "fpc_kapton": shifted((Decimal("-0.080"), Decimal("0.000")), inward_applied),
         "fpc_aluminum": shifted((Decimal("0.000"), Decimal("0.030")), inward_applied),
         "ancasic_glue": shifted((Decimal("0.030"), Decimal("0.110")), inward_applied),
         "ancasic": shifted((Decimal("0.110"), Decimal("0.410")), inward_applied),
     }
-    assert inward["fpc_kapton"] == (Decimal("-0.110"), Decimal("-0.030"))
-    assert inward["fpc_aluminum"] == (Decimal("-0.030"), Decimal("0.000"))
-    assert inward["sensor"] == (Decimal("-0.050"), Decimal("0.000"))
-    assert inward["ancasic"] == (Decimal("0.080"), Decimal("0.380"))
+    assert inward["fpc_kapton"] == (Decimal("-0.1125"), Decimal("-0.0325"))
+    assert inward["fpc_aluminum"] == (Decimal("-0.0325"), Decimal("-0.0025"))
+    assert inward["sensor"] == (Decimal("-0.0525"), Decimal("-0.0025"))
+    assert inward["copper"] == (Decimal("-0.0025"), Decimal("0.0000"))
+    assert inward["ancasic"] == (Decimal("0.0775"), Decimal("0.3775"))
     carbon_flat = (Decimal("0.000"), Decimal("0.150"))
     assert overlap(inward["fpc_kapton"], carbon_flat) < 0
-    assert overlap(inward["fpc_aluminum"], carbon_flat) == 0
+    assert overlap(inward["fpc_aluminum"], carbon_flat) < 0
+    assert overlap(inward["copper"], carbon_flat) == 0
 
     # Express the outward backing stack in the same +channel coordinate. Its
     # positive outward-normal displacement therefore appears with a minus sign.
@@ -75,10 +78,10 @@ def main():
         ),
     }
     assert outward_backing["baseplate"] == (
-        Decimal("-0.490"), Decimal("-0.340")
+        Decimal("-0.4925"), Decimal("-0.3425")
     )
     assert outward_backing["external_epoxy"] == (
-        Decimal("-0.340"), Decimal("-0.260")
+        Decimal("-0.3425"), Decimal("-0.2625")
     )
     assert inward["baseplate"][0] == outward_backing["external_epoxy"][1]
     for inward_piece in (inward["baseplate"], inward["external_epoxy"]):
@@ -106,8 +109,8 @@ def main():
     )
     print(f"inward component intervals from corrugation surface: {inward}")
     print(f"outward backing intervals in +channel coordinate: {outward_backing}")
-    print("PASS: FPC and sensor end at the carbon boundary")
-    print("NOTE: inward edge epoxy now ends 0.030 mm before the corrugation surface")
+    print("PASS: Cu ends at the carbon boundary; Si and FPC stop 2.5 um before it")
+    print("NOTE: inward edge epoxy now ends 0.0325 mm before the corrugation surface")
 
 
 if __name__ == "__main__":
