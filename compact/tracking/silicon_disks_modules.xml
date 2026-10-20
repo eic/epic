@@ -135,12 +135,20 @@
     <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="30*um"/>
     <constant name="SiEndcapLeftBridgeFPC_length"            value="24.5*mm"/>
     <constant name="SiEndcapLeftBridgeFPC_width"             value="10.0*mm"/>
-    <comment> Signed distance from the module top y edge to the left bridge-FPC top edge. </comment>
+    <comment> Legacy signed offset from the module top y edge to the left FPC top edge. </comment>
     <constant name="SiEndcapLeftBridgeFPC_y_offset"          value="-7.5*mm"/>
     <constant name="SiEndcapRightBridgeFPC_length"           value="25.78*mm"/>
     <constant name="SiEndcapRightBridgeFPC_width"            value="4.0*mm"/>
-    <comment> Signed distance from the module top y edge to the right bridge-FPC top edge. </comment>
+    <comment> Legacy signed offset from the module top y edge to the right FPC top edge. </comment>
     <constant name="SiEndcapRightBridgeFPC_y_offset"         value="-6.22*mm"/>
+    <comment>
+      Tiling-module FPC upper edges use the physical RSU upper y edge,
+      independently of the A/B baseplate width. The left FPC is 1.28 mm
+      below the right, retaining the drawing's 7.50 - 6.22 mm offset.
+      Separate offsets permit later adjustment without changing the legacy prototype.
+    </comment>
+    <constant name="SiEndcapTilingLeftBridgeFPC_RSU_top_offset"  value="-1.28*mm"/>
+    <constant name="SiEndcapTilingRightBridgeFPC_RSU_top_offset" value="0*mm"/>
     <constant name="SiEndcapBridgeFPC_LEC_REC_gap"           value="0.5*mm"/>
     <comment> Legacy outer-edge clearance for EIC_LAS_6RSU_CORR only. </comment>
     <constant name="SiEndcapModuleEndClearance"              value="0.5*mm"/>

@@ -1973,7 +1973,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         return std::make_tuple(box_x, box_center);
       };
       auto bridge_fpc_y_geometry = [&](double target_box_y, double top_edge_offset) {
-        const double top_edge = y_size / 2.0 + top_edge_offset;
+        // The tiling FPC follows the RSU edge, not the wider A/B baseplate edge.
+        const double top_edge = description.constant<double>("SiEndcapRSU_width") / 2.0 +
+                                top_edge_offset;
         const double lower_epoxy_inner_edge =
             -y_size / 2.0 + description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
         const double box_y =
@@ -1989,12 +1991,14 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const double left_bridge_target_y =
           description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const auto [left_bridge_y, left_bridge_pos_y] = bridge_fpc_y_geometry(
-          left_bridge_target_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
+          left_bridge_target_y,
+          description.constant<double>("SiEndcapTilingLeftBridgeFPC_RSU_top_offset"));
       const double right_bridge_x = description.constant<double>("SiEndcapRightBridgeFPC_width");
       const double right_bridge_target_y =
           description.constant<double>("SiEndcapRightBridgeFPC_length");
       const auto [right_bridge_y, right_bridge_pos_y] = bridge_fpc_y_geometry(
-          right_bridge_target_y, description.constant<double>("SiEndcapRightBridgeFPC_y_offset"));
+          right_bridge_target_y,
+          description.constant<double>("SiEndcapTilingRightBridgeFPC_RSU_top_offset"));
       const bool lec_after_rsu = component.lec_after_rsu;
       const auto [left_bridge_box_x, left_bridge_pos_x] =
           bridge_fpc_x_geometry(lec_after_rsu, lec_side_span, lec_length, left_bridge_x);
@@ -2032,7 +2036,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         return std::make_tuple(box_x, box_center);
       };
       auto bridge_fpc_y_geometry = [&](double target_box_y, double top_edge_offset) {
-        const double top_edge = y_size / 2.0 + top_edge_offset;
+        // Use the same RSU-referenced edge as the left FPC beneath the ASIC.
+        const double top_edge = description.constant<double>("SiEndcapRSU_width") / 2.0 +
+                                top_edge_offset;
         const double lower_epoxy_inner_edge =
             -y_size / 2.0 + description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
         const double box_y =
@@ -2045,7 +2051,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const double left_bridge_target_y =
           description.constant<double>("SiEndcapLeftBridgeFPC_length");
       const auto [left_bridge_y, left_bridge_pos_y] = bridge_fpc_y_geometry(
-          left_bridge_target_y, description.constant<double>("SiEndcapLeftBridgeFPC_y_offset"));
+          left_bridge_target_y,
+          description.constant<double>("SiEndcapTilingLeftBridgeFPC_RSU_top_offset"));
       const auto [left_bridge_box_x, left_bridge_pos_x] = bridge_fpc_x_geometry(
           component.lec_after_rsu, module_template.lec_side_span, lec_length, left_bridge_x);
 

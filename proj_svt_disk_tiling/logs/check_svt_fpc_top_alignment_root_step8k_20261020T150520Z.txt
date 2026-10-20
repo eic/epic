@@ -1,0 +1,29 @@
+INFO: +++========================================================================================================================
+INFO: +++ Loading compact geometry:
+INFO: +++ /global/cfs/cdirs/m3763/pdatta/epic/install/share/epic/epic_craterlake_tracking_only_disk_tiles_new.xml
+INFO: +++ tolerance: 0.010000, option: m
+INFO: +++========================================================================================================================
+
+Info in <TGeoManager::TGeoManager>: Geometry default, Detector Geometry created
+Info in <TGeoNavigator::BuildCache>: --- Maximum geometry depth set to 100
+Info in <TGeoManager::SetTopVolume>: Top volume is world_volume. Master volume is world_volume
+Info in <TGeoManager::CheckGeometry>: Fixing runtime shapes...
+Info in <TGeoManager::CheckGeometry>: ...Nothing to fix
+Info in <TGeoManager::CloseGeometry>: Counting nodes...
+Info in <TGeoManager::Voxelize>: Voxelizing...
+Info in <TGeoManager::CloseGeometry>: Building cache...
+Info in <TGeoManager::CountLevels>: max level = 6, max placements = 480
+Info in <TGeoManager::CloseGeometry>: 658045 nodes/ 2138 volume UID's in Detector Geometry
+Info in <TGeoManager::CloseGeometry>: ----------------modeler ready----------------
+Info in <TGeoNodeMatrix::CheckOverlaps>: Checking overlaps for world_volume and daughters within 0.01
+Info in <TGeoNodeMatrix::CheckOverlaps>: --- found 628305 candidates in 1.13902 [sec]
+Info in <TGeoNodeMatrix::CheckOverlaps>: --- filling points to be checked...
+Info in <TGeoNodeMatrix::CheckOverlaps>: --- points filled in: 0.403945 [sec]
+Info in <TGeoNodeMatrix::CheckOverlaps>: --- checking candidates with 244 threads (use ROOT::EnableImplicitMT(N) to change)...
+Info in <TGeoNodeMatrix::CheckOverlaps>: Number of illegal overlaps/extrusions : 0 found in 2.45893 [sec]
+INFO: +++========================================================================================================================
+INFO: +++ Printing overlaps of geometry:
+INFO: +++ /global/cfs/cdirs/m3763/pdatta/epic/install/share/epic/epic_craterlake_tracking_only_disk_tiles_new.xml
+INFO: +++========================================================================================================================
+
+INFO: +++ Execution finished...

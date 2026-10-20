@@ -22,8 +22,8 @@ def overlap(first, second):
     return min(first[1], second[1]) - max(first[0], second[0])
 
 
-def fpc_y_interval(module_width, target_length, top_offset, glue_width):
-    top_edge = module_width / 2 + top_offset
+def fpc_y_interval(module_width, rsu_width, target_length, top_offset, glue_width):
+    top_edge = rsu_width / 2 + top_offset
     lower_glue_inner_edge = -module_width / 2 + glue_width
     effective_length = min(target_length, top_edge - lower_glue_inner_edge)
     return (top_edge - effective_length, top_edge)
@@ -39,10 +39,13 @@ def main():
         "B": literal(constants, "SiEndcapTilingBaseplateB_width", "mm"),
     }
     glue_width = literal(constants, "SiEndcapTilingEpoxyGlueLine_width", "mm")
+    rsu_width = literal(constants, "SiEndcapRSU_width", "mm")
     left_target = literal(constants, "SiEndcapLeftBridgeFPC_length", "mm")
-    left_offset = literal(constants, "SiEndcapLeftBridgeFPC_y_offset", "mm")
+    left_offset = literal(constants, "SiEndcapTilingLeftBridgeFPC_RSU_top_offset", "mm")
     right_target = literal(constants, "SiEndcapRightBridgeFPC_length", "mm")
-    right_offset = literal(constants, "SiEndcapRightBridgeFPC_y_offset", "mm")
+    right_offset = literal(constants, "SiEndcapTilingRightBridgeFPC_RSU_top_offset", "mm")
+    assert right_offset == 0, "right FPC upper edge must match the RSU"
+    assert left_offset == Decimal("-1.28"), "left FPC must sit 1.28 mm below the RSU"
     gap = literal(constants, "SiEndcapBridgeFPC_LEC_REC_gap", "mm")
     assert gap == Decimal("0.5")
 
@@ -50,12 +53,14 @@ def main():
         lower_epoxy = (-module_width / 2, -module_width / 2 + glue_width)
         upper_epoxy = (module_width / 2 - glue_width, module_width / 2)
         intervals = {
-            "left": fpc_y_interval(module_width, left_target, left_offset, glue_width),
-            "right": fpc_y_interval(module_width, right_target, right_offset, glue_width),
+            "left": fpc_y_interval(module_width, rsu_width, left_target, left_offset, glue_width),
+            "right": fpc_y_interval(module_width, rsu_width, right_target, right_offset, glue_width),
         }
         for interval in intervals.values():
             assert overlap(interval, lower_epoxy) <= 0
             assert overlap(interval, upper_epoxy) <= 0
+        assert intervals["right"][1] == rsu_width / 2
+        assert intervals["right"][1] - intervals["left"][1] == Decimal("1.28")
         print(
             f"{family}: left_y={intervals['left']} length={intervals['left'][1] - intervals['left'][0]} mm; "
             f"right_y={intervals['right']} length={intervals['right'][1] - intervals['right'][0]} mm"
@@ -129,12 +134,19 @@ def main():
     }
 
     cpp = CPP.read_text()
+    assert cpp.count('description.constant<double>("SiEndcapRSU_width") / 2.0 +') == 2
+    assert cpp.count(
+        'description.constant<double>("SiEndcapTilingLeftBridgeFPC_RSU_top_offset")'
+    ) == 2
+    assert cpp.count(
+        'description.constant<double>("SiEndcapTilingRightBridgeFPC_RSU_top_offset")'
+    ) == 1
     assert cpp.count("SiEndcapBridgeFPC_LEC_REC_gap") == 2
     assert cpp.count("bridge_fpc.stacked_in_z = false") == 1
     assert cpp.count("ancasic.stacked_in_z = false") == 1
     assert cpp.count("lower_epoxy_inner_edge") == 4
     assert cpp.count("const double baseplate_top_z") == 1
-    print("PASS: FPCs touch the baseplate, stop at the epoxy, and follow LEC/REC by 0.5 mm")
+    print("PASS: right FPC matches the RSU top; left is 1.28 mm below; epoxy and x gaps are valid")
 
 
 if __name__ == "__main__":
