@@ -1686,10 +1686,15 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
 // Build one reusable module volume per module type and cache it. Individual placements
 // later reuse this prototype volume rather than rebuilding the stack for every CSV row.
 ModulePrototype build_module_prototype(Detector& description, SensitiveDetector& sens,
-                                       const ModuleTemplate& module_template) {
+                                       const ModuleTemplate& module_template,
+                                       bool upright_electronics_y) {
   ModulePrototype prototype;
   const double x_size = module_template.x_size;
   const double y_size = module_template.y_size;
+  // The placement rotation reverses local y for tiling rows at global y <= 0.
+  // Compensate only the asymmetric bridge-FPC/AncASIC y positions. Keep silicon
+  // tile positions and IDs in the source chirality convention.
+  const double electronics_y_sign = upright_electronics_y ? -1.0 : 1.0;
   // Opposite-facing modules may have overlapping rectangular bounding boxes
   // even when none of their material components intersect. Use an assembly so
   // Geant4 navigates and checks the actual silicon/carbon/adhesive/electronics
@@ -1931,7 +1936,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Volume box_volume(name, box_solid, description.material(material_name));
         box_volume.setVisAttributes(description.visAttributes(vis));
         prototype.volume.placeVolume(
-            box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
+            box_volume,
+            Position(component.x_offset + pos_x,
+                     electronics_y_sign * (component.y_offset + pos_y), local_z));
       };
 
       auto place_bridge_fpc = [&](const string& name, double box_x, double box_y, double pos_x,
@@ -2009,7 +2016,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Volume box_volume(name, box_solid, description.material(material_name));
         box_volume.setVisAttributes(description.visAttributes(vis));
         prototype.volume.placeVolume(
-            box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y, local_z));
+            box_volume,
+            Position(component.x_offset + pos_x,
+                     electronics_y_sign * (component.y_offset + pos_y), local_z));
       };
 
       auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double endcap_length,
@@ -2334,13 +2343,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         continue;
       }
 
+      const bool upright_electronics_y = row.tiling_coordinates && row.y_origin <= 0.0;
       string cache_key =
           row.handedness.empty() ? row.module_name : row.module_name + "_" + row.handedness;
+      if (upright_electronics_y) {
+        cache_key += "_upright_electronics_y";
+      }
       auto cache_it = module_cache.find(cache_key);
       if (cache_it == module_cache.end()) {
         cache_it =
             module_cache
-                .emplace(cache_key, build_module_prototype(description, sens, module_template))
+                .emplace(cache_key,
+                         build_module_prototype(description, sens, module_template,
+                                                upright_electronics_y))
                 .first;
       }
       ModulePrototype& prototype = cache_it->second;
