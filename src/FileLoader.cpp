@@ -8,6 +8,7 @@
 #include <XML/Utilities.h>
 
 #include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <cstdlib>
 #include <filesystem>
