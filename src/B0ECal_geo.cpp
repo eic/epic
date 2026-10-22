@@ -11,6 +11,7 @@
 #include "DDRec/Surface.h"
 #include "Math/Point2D.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 //////////////////////////////////////////////////
 // Far Forward B0 Electromagnetic Calorimeter
@@ -35,6 +36,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   int detID       = x_det.id();
   DetElement det(detName, detID);
   sens.setType("calorimeter");
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
 
   // assembly
   Assembly detVol(detName);

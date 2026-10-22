@@ -155,7 +155,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       auto comp_height = getAttrOrDefault(c, _Unicode(height), z);
 
       Material c_mat = description.material(c.materialStr());
-      string c_name  = _toString(c_id, "component%d");
+      string c_name  = getAttrOrDefault(c, _Unicode(name), _toString(c_id, "component%d"));
 
       Trapezoid comp_s1(comp_x1, comp_x2, c_thick / 2e0, c_thick / 2e0, comp_height);
       Solid comp_shape = comp_s1;

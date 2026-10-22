@@ -24,6 +24,7 @@
         type="ZDC_ImagingCal"
         vis="ZDC_PbSi_Vis"
         readout="ZDC_PbSi_Hits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC"/>
       <position x="ZDC_PbSi_x_pos"         y="ZDC_PbSi_y_pos"         z="ZDC_PbSi_z_pos"/>
       <rotation x="ZDC_PbSi_rotateX_angle" y="ZDC_PbSi_rotateY_angle" z="ZDC_PbSi_rotateZ_angle"/>
       <dimensions x="ZDC_PbSi_x" y="ZDC_PbSi_y" z="ZDC_PbSi_z"/>

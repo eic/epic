@@ -1086,6 +1086,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Assembly assembly(detName);
   PlacedVolume phv;
 
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
+
   int moduleIDx = -1;
   int moduleIDy = -1;
 
