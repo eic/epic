@@ -218,5 +218,8 @@
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/ca20ed0b8d0110a51eff1969858916a1321cd07e/material-map.cbor"/>
     </plugin>
   </plugins>
+  <define>
+    <constant name="material-map" value="calibrations/materials-map.cbor" type="string"/>
+  </define>
 
 </lccdd>
