@@ -29,6 +29,8 @@
         length="Q2eR_Length" theta="Q2eR_Theta"
         rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius">
       </pipe>
+      <!-- Split 8 owns the luminosity bore; main-chain components subtract its envelope.
+           Cuts with provably disjoint bounding boxes are omitted. -->
       <combine name="Pipe_Q2eR_to_B2BeR_combined" start_id="3" end_id="8"/>
       <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
       <pipe id="5" name="Pipe_in_B2AeR"

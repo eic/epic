@@ -19,9 +19,11 @@
 // COMBINE GROUPS (boolean ranges):
 //   - Optional ranges to resolve overlaps between individually placed pipe components
 //   - Specified in XML as <combine start_id="A" end_id="B"/> (inclusive range by id)
+//   - Split components precede main-chain components in overlap ownership
 //   - Earlier components own overlapping outer envelopes and vacuum regions
 //   - Each wall subtracts earlier outer envelopes and later vacuum primitives
 //   - Each vacuum subtracts earlier vacuum primitives; no unions are constructed
+//   - Conservative bounding-box rejection omits only provably disjoint cuts
 //   - Combines also include adjacent bend pieces if BOTH neighbors are in same range
 //   - Pipes/bends outside any combine group are placed individually
 //
@@ -45,6 +47,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMath.h"
+#include "TGeoBBox.h"
 #include <XML/Helper.h>
 #include <algorithm>
 
@@ -448,7 +451,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   }
 
   // Partition each range without unions. Cutters always remain original primitives.
-  // Main-chain components precede splits, so splits subtract every main-chain envelope.
+  // Split vacuums own junction overlaps, keeping the luminosity bore shallow.
   struct RangePiece {
     string name;
     int id;
@@ -468,6 +471,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
         }
       }
     };
+    append_straight(base_straight_count, straightNames.size());
     append_straight(0, base_straight_count);
     for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
       if (bendRangeIndices[piece_n] == static_cast<int>(range_n)) {
@@ -475,7 +479,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
                           bendOuters[piece_n], bendVacuums[piece_n], bendTransforms[piece_n]});
       }
     }
-    append_straight(base_straight_count, straightNames.size());
     if (pieces.empty()) {
       printout(WARNING, "BeamPipeChain", "Combine range '%s' (%d-%d) did not match any segments.",
                combineNames[range_n].c_str(), combineStartIds[range_n], combineEndIds[range_n]);
@@ -490,6 +493,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
     vector<Solid> cuts;
     vector<Transform3D> cut_transforms;
+    vector<string> cut_names;
     for (size_t cut_n = 0; cut_n < clipPieceIndices.size(); ++cut_n) {
       size_t piece_n = clipPieceIndices[cut_n];
       if (straightRangeIndices[piece_n] != static_cast<int>(range_n)) {
@@ -510,6 +514,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       Tube cut_tube(0.0, rOuter, halfL);
       cuts.push_back(Solid(cut_tube));
       cut_transforms.emplace_back(RotationY(theta), cut_center);
+      cut_names.push_back(straightNames[piece_n]);
     }
 
     for (size_t piece_n = 0; piece_n < pieces.size(); ++piece_n) {
@@ -517,6 +522,40 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       Transform3D inv_piece = piece.transform.Inverse();
       Solid tube            = piece.tube;
       Solid vacuum          = piece.vacuum;
+      auto subtract = [](Solid left, Solid right, const Transform3D& transform) -> Solid {
+        auto left_box = dynamic_cast<TGeoBBox*>(left.ptr());
+        auto right_box = dynamic_cast<TGeoBBox*>(right.ptr());
+        if (!left_box || !right_box) {
+          except("BeamPipeChain", "Cannot bound a subtraction operand.");
+        }
+        double low[3] = {TGeoShape::Big(), TGeoShape::Big(), TGeoShape::Big()};
+        double high[3] = {-TGeoShape::Big(), -TGeoShape::Big(), -TGeoShape::Big()};
+        for (int ix : {-1, 1}) {
+          for (int iy : {-1, 1}) {
+            for (int iz : {-1, 1}) {
+              XYZPoint corner(right_box->GetOrigin()[0] + ix * right_box->GetDX(),
+                              right_box->GetOrigin()[1] + iy * right_box->GetDY(),
+                              right_box->GetOrigin()[2] + iz * right_box->GetDZ());
+              XYZPoint point = transform * corner;
+              const double coordinates[3] = {point.x(), point.y(), point.z()};
+              for (int axis = 0; axis < 3; ++axis) {
+                low[axis] = std::min(low[axis], coordinates[axis]);
+                high[axis] = std::max(high[axis], coordinates[axis]);
+              }
+            }
+          }
+        }
+        const double half_lengths[3] = {left_box->GetDX(), left_box->GetDY(), left_box->GetDZ()};
+        // Retain touching or numerically ambiguous cuts.
+        const double margin = 1.e-7 * mm;
+        for (int axis = 0; axis < 3; ++axis) {
+          if (high[axis] < left_box->GetOrigin()[axis] - half_lengths[axis] - margin ||
+              low[axis] > left_box->GetOrigin()[axis] + half_lengths[axis] + margin) {
+            return left;
+          }
+        }
+        return SubtractionSolid(left, right, transform);
+      };
       for (size_t other_n = 0; other_n < pieces.size(); ++other_n) {
         if (other_n == piece_n) {
           continue;
@@ -524,17 +563,21 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
         const auto& other = pieces[other_n];
         Transform3D rel   = inv_piece * other.transform;
         if (other_n < piece_n) {
-          tube   = SubtractionSolid(tube, other.outer, rel);
-          vacuum = SubtractionSolid(vacuum, other.vacuum, rel);
+          tube   = subtract(tube, other.outer, rel);
+          vacuum = subtract(vacuum, other.vacuum, rel);
         } else {
-          tube = SubtractionSolid(tube, other.vacuum, rel);
+          tube = subtract(tube, other.vacuum, rel);
         }
       }
       // Distribute the former group-wide terminal cuts over every component.
       for (size_t cut_n = 0; cut_n < cuts.size(); ++cut_n) {
+        // A finite primitive already ends at its own terminal clipping plane.
+        if (piece.name == cut_names[cut_n]) {
+          continue;
+        }
         Transform3D rel_cut = inv_piece * cut_transforms[cut_n];
-        tube                = SubtractionSolid(tube, cuts[cut_n], rel_cut);
-        vacuum              = SubtractionSolid(vacuum, cuts[cut_n], rel_cut);
+        tube                = subtract(tube, cuts[cut_n], rel_cut);
+        vacuum              = subtract(vacuum, cuts[cut_n], rel_cut);
       }
       Volume v_tube("v_tube_" + piece.name, tube, m_Al);
       Volume v_vacuum("v_vacuum_" + piece.name, vacuum, m_Vacuum);
