@@ -17,10 +17,11 @@
 //   - Vacuums are tracked separately to enable boolean subtraction
 //
 // COMBINE GROUPS (boolean ranges):
-//   - Optional ranges to merge multiple consecutive pipes into unified boolean solids
+//   - Optional ranges to resolve overlaps between individually placed pipe components
 //   - Specified in XML as <combine start_id="A" end_id="B"/> (inclusive range by id)
-//   - Strategy: union all matching tube pieces in local frame, union vacuums,
-//     then subtract vacuum union from tube union to create combined pipe shell
+//   - Earlier components own overlapping outer envelopes and vacuum regions
+//   - Each wall subtracts earlier outer envelopes and later vacuum primitives
+//   - Each vacuum subtracts earlier vacuum primitives; no unions are constructed
 //   - Combines also include adjacent bend pieces if BOTH neighbors are in same range
 //   - Pipes/bends outside any combine group are placed individually
 //
@@ -36,8 +37,8 @@
 // VACUUM SUBTRACTION:
 //   - All pipe solids (straight, bend, split) have associated vacuum solids
 //   - Individual pipes: vacuum is placed separately alongside tube
-//   - Combined groups: all matching vacuum solids unioned, then subtracted from
-//     unioned tube solids to create final pipe shell with proper hollow interior
+//   - Combine groups: individual wall/vacuum components partition the same material
+//     regions as the former union construction, retaining the terminal end cuts
 //
 //==========================================================================
 
@@ -83,8 +84,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   // Optional boolean-combine groups, configured via XML:
   //   <combine name="..." start_id="..." end_id="..."/>
-  // All pieces (straight and bend) whose pipe id falls in the range can be merged
-  // into one unified pipe/vacuum boolean solid.
+  // Pieces in a range are placed separately with overlap ownership resolved by subtraction.
   vector<int> combineStartIds;
   vector<int> combineEndIds;
   vector<std::string> combineNames;
@@ -146,6 +146,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<int> straightIds;
   vector<int> straightRangeIndices;
   vector<Solid> straightTubes;
+  vector<Solid> straightOuters;
   vector<Solid> straightVacuums;
   vector<Transform3D> straightTransforms;
   vector<double> straightXCenters;
@@ -161,6 +162,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<int> bendIds;
   vector<int> bendRangeIndices;
   vector<Solid> bendTubes;
+  vector<Solid> bendOuters;
   vector<Solid> bendVacuums;
   vector<Transform3D> bendTransforms;
 
@@ -231,7 +233,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   }
 
   // Build all straight and bend pieces first, then decide later whether each piece
-  // is placed as an individual volume or absorbed into a combined boolean group.
+  // needs overlap subtraction within a combine group.
   for (uint pipeN = 0; pipeN < xCenters.size(); pipeN++) {
 
     double length  = lengths[pipeN];
@@ -255,12 +257,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
     ConeSegment s_tube(length / 2.0, rOuter2 - thickness, rOuter2, rOuter1 - thickness, rOuter1);
     ConeSegment s_vacuum(length / 2.0, 0, rOuter2 - thickness, 0, rOuter1 - thickness);
+    ConeSegment s_outer(length / 2.0, 0, rOuter2, 0, rOuter1);
 
     Transform3D straightTransform(RotationY(theta), Position(xCenter, 0, zCenter));
     straightNames.push_back(names[pipeN]);
     straightIds.push_back(ids[pipeN]);
     straightRangeIndices.push_back(find_range_index(ids[pipeN]));
     straightTubes.push_back(Solid(s_tube));
+    straightOuters.push_back(Solid(s_outer));
     straightVacuums.push_back(Solid(s_vacuum));
     straightTransforms.push_back(straightTransform);
     straightXCenters.push_back(xCenter);
@@ -280,6 +284,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
       //Create a vacuum torus to place inside the solid segment
       Torus s_bend_vac(rOuter2 + bendRadius, 0, rOuter2 - thickness, 0, abs(bendAngle));
+      Torus s_bend_outer(rOuter2 + bendRadius, 0, rOuter2, 0, abs(bendAngle));
 
       // Calculate the position and rotation to place bend at the joint
       double bendCenterX = xCenter + rOuter2 * cos(theta) - (length / 2) * sin(theta);
@@ -307,6 +312,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       bendIds.push_back(ids[pipeN]);
       bendRangeIndices.push_back(bend_range_index);
       bendTubes.push_back(Solid(s_bend_solid));
+      bendOuters.push_back(Solid(s_bend_outer));
       bendVacuums.push_back(Solid(s_bend_vac));
       bendTransforms.push_back(bendTransform);
     }
@@ -368,6 +374,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
                              branch_r1 - thickness, branch_r1);
     ConeSegment s_split_vac(branch_length_effective / 2.0, 0, branch_r2 - thickness, 0,
                             branch_r1 - thickness);
+    ConeSegment s_split_outer(branch_length_effective / 2.0, 0, branch_r2, 0, branch_r1);
     Transform3D split_transform(RotationY(branch_theta),
                                 Position(branch_center_x, 0, branch_center_z));
 
@@ -376,6 +383,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     straightIds.push_back(splitIds[split_n]);
     straightRangeIndices.push_back(find_range_index(splitIds[split_n]));
     straightTubes.push_back(Solid(s_split_tube));
+    straightOuters.push_back(Solid(s_split_outer));
     straightVacuums.push_back(Solid(s_split_vac));
     straightTransforms.push_back(split_transform);
     straightXCenters.push_back(branch_center_x);
@@ -439,76 +447,49 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     assembly.placeVolume(v_bend_vac, bendTransforms[piece_n]);
   }
 
-  // Build and place combined ranges as unified boolean solids.
-  // Strategy:
-  //  1) pick one piece as the local boolean reference frame (base_transform)
-  //  2) union all matching tube pieces in that local frame
-  //  3) union all matching vacuum pieces in that local frame
-  //  4) subtract vacuum-union from tube-union for the final pipe shell
+  // Partition each range without unions. Cutters always remain original primitives.
+  // Main-chain components precede splits, so splits subtract every main-chain envelope.
+  struct RangePiece {
+    string name;
+    int id;
+    Solid tube;
+    Solid outer;
+    Solid vacuum;
+    Transform3D transform;
+  };
   for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
-    bool has_piece          = false;
-    bool base_from_straight = false;
-    size_t base_index       = 0;
-
-    for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
-      if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
-        has_piece          = true;
-        base_from_straight = true;
-        base_index         = piece_n;
-        break;
-      }
-    }
-    if (!has_piece) {
-      for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
-        if (bendRangeIndices[piece_n] == static_cast<int>(range_n)) {
-          has_piece          = true;
-          base_from_straight = false;
-          base_index         = piece_n;
-          break;
+    vector<RangePiece> pieces;
+    auto append_straight = [&](size_t begin, size_t end) {
+      for (size_t piece_n = begin; piece_n < end; ++piece_n) {
+        if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
+          pieces.push_back({straightNames[piece_n], straightIds[piece_n],
+                            straightTubes[piece_n], straightOuters[piece_n],
+                            straightVacuums[piece_n], straightTransforms[piece_n]});
         }
       }
+    };
+    append_straight(0, base_straight_count);
+    for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
+      if (bendRangeIndices[piece_n] == static_cast<int>(range_n)) {
+        pieces.push_back({bendNames[piece_n], bendIds[piece_n], bendTubes[piece_n],
+                          bendOuters[piece_n], bendVacuums[piece_n], bendTransforms[piece_n]});
+      }
     }
-
-    if (!has_piece) {
+    append_straight(base_straight_count, straightNames.size());
+    if (pieces.empty()) {
       printout(WARNING, "BeamPipeChain", "Combine range '%s' (%d-%d) did not match any segments.",
                combineNames[range_n].c_str(), combineStartIds[range_n], combineEndIds[range_n]);
       continue;
     }
 
-    // Use first matching piece as boolean base frame.
-    const Transform3D& base_transform =
-        base_from_straight ? straightTransforms[base_index] : bendTransforms[base_index];
+    const Transform3D& base_transform = pieces.front().transform;
     Transform3D inv_base = base_transform.Inverse();
-    Solid range_tube     = base_from_straight ? straightTubes[base_index] : bendTubes[base_index];
-    Solid range_vacuum = base_from_straight ? straightVacuums[base_index] : bendVacuums[base_index];
+    Assembly range_pipe("v_pipe_combined_" + combineNames[range_n]);
+    Assembly range_vacuum("v_vacuum_combined_" + combineNames[range_n]);
+    DetElement vacuum_element(sdet, combineNames[range_n] + "_vacuum", combineStartIds[range_n]);
 
-    // Add all straight pieces in this range into the base frame.
-    for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
-      if (straightRangeIndices[piece_n] != static_cast<int>(range_n)) {
-        continue;
-      }
-      if (base_from_straight && piece_n == base_index) {
-        continue;
-      }
-      Transform3D rel = inv_base * straightTransforms[piece_n];
-      range_tube      = UnionSolid(range_tube, straightTubes[piece_n], rel);
-      range_vacuum    = UnionSolid(range_vacuum, straightVacuums[piece_n], rel);
-    }
-    // Add all bend pieces in this range into the same base frame.
-    for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
-      if (bendRangeIndices[piece_n] != static_cast<int>(range_n)) {
-        continue;
-      }
-      if (!base_from_straight && piece_n == base_index) {
-        continue;
-      }
-      Transform3D rel = inv_base * bendTransforms[piece_n];
-      range_tube      = UnionSolid(range_tube, bendTubes[piece_n], rel);
-      range_vacuum    = UnionSolid(range_vacuum, bendVacuums[piece_n], rel);
-    }
-
-    // Subtract outward-only cylinders from the explicit end-planes that should bound
-    // the combined result: the main chain terminal end and any split branch terminal ends.
+    vector<Solid> cuts;
+    vector<Transform3D> cut_transforms;
     for (size_t cut_n = 0; cut_n < clipPieceIndices.size(); ++cut_n) {
       size_t piece_n = clipPieceIndices[cut_n];
       if (straightRangeIndices[piece_n] != static_cast<int>(range_n)) {
@@ -527,22 +508,47 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       Position cut_center(end_pos.x() + halfL * axis_x, 0.0, end_pos.z() + halfL * axis_z);
 
       Tube cut_tube(0.0, rOuter, halfL);
-      Transform3D cut_transform(RotationY(theta), cut_center);
-      Transform3D rel_cut = inv_base * cut_transform;
-      range_tube          = SubtractionSolid(range_tube, cut_tube, rel_cut);
-      range_vacuum        = SubtractionSolid(range_vacuum, cut_tube, rel_cut);
+      cuts.push_back(Solid(cut_tube));
+      cut_transforms.emplace_back(RotationY(theta), cut_center);
     }
 
-    SubtractionSolid range_pipe(range_tube, range_vacuum);
+    for (size_t piece_n = 0; piece_n < pieces.size(); ++piece_n) {
+      const auto& piece = pieces[piece_n];
+      Transform3D inv_piece = piece.transform.Inverse();
+      Solid tube = piece.tube;
+      Solid vacuum = piece.vacuum;
+      for (size_t other_n = 0; other_n < pieces.size(); ++other_n) {
+        if (other_n == piece_n) {
+          continue;
+        }
+        const auto& other = pieces[other_n];
+        Transform3D rel = inv_piece * other.transform;
+        if (other_n < piece_n) {
+          tube = SubtractionSolid(tube, other.outer, rel);
+          vacuum = SubtractionSolid(vacuum, other.vacuum, rel);
+        } else {
+          tube = SubtractionSolid(tube, other.vacuum, rel);
+        }
+      }
+      // Distribute the former group-wide terminal cuts over every component.
+      for (size_t cut_n = 0; cut_n < cuts.size(); ++cut_n) {
+        Transform3D rel_cut = inv_piece * cut_transforms[cut_n];
+        tube = SubtractionSolid(tube, cuts[cut_n], rel_cut);
+        vacuum = SubtractionSolid(vacuum, cuts[cut_n], rel_cut);
+      }
+      Volume v_tube("v_tube_" + piece.name, tube, m_Al);
+      Volume v_vacuum("v_vacuum_" + piece.name, vacuum, m_Vacuum);
+      v_tube.setVisAttributes(description.visAttributes(vis_name));
+      Transform3D rel = inv_base * piece.transform;
+      range_pipe.placeVolume(v_tube, rel);
+      auto placed_vacuum = range_vacuum.placeVolume(v_vacuum, rel);
+      DetElement piece_element(vacuum_element, piece.name + "_vacuum", piece.id);
+      piece_element.setPlacement(placed_vacuum);
+    }
 
-    Volume v_combined_pipe("v_pipe_combined_" + combineNames[range_n], range_pipe, m_Al);
-    Volume v_combined_vacuum("v_vacuum_combined_" + combineNames[range_n], range_vacuum, m_Vacuum);
-    v_combined_pipe.setVisAttributes(description.visAttributes(vis_name));
+    assembly.placeVolume(range_pipe, base_transform);
+    auto placed_vacuum = assembly.placeVolume(range_vacuum, base_transform);
 
-    assembly.placeVolume(v_combined_pipe, base_transform);
-    auto placed_vacuum = assembly.placeVolume(v_combined_vacuum, base_transform);
-
-    DetElement vacuum_element(sdet, combineNames[range_n] + "_vacuum", combineStartIds[range_n]);
     vacuum_element.setPlacement(placed_vacuum);
   }
 
