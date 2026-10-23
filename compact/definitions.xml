@@ -252,9 +252,6 @@ The unused IDs below are saved for future use.
       TODO: A lot of the repeated ID's below should be pushed into a single detector
     </documentation>
     <constant name="B0Tracker_Station_1_ID"   value="150"/>
-    <constant name="B0Tracker_Station_2_ID"   value="151"/>
-    <constant name="B0Tracker_Station_3_ID"   value="152"/>
-    <constant name="B0Tracker_Station_4_ID"   value="153"/>
     <constant name="B0Preshower_Station_1_ID" value="154"/>
     <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
     <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
