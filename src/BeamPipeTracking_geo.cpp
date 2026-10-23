@@ -159,7 +159,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         disk_transform  = Transform3D(Rotation3D(), Position(0.0, 0.0, zPos));
       }
 
-      string disk_name = mother.volume().isAssembly() ? component_name + "_" + slice_name : motherName;
+      string disk_name =
+          mother.volume().isAssembly() ? component_name + "_" + slice_name : motherName;
       Volume v_start_disk("v_start_disk_" + disk_name, sensitive_solid, m_Vacuum);
       v_start_disk.setSensitiveDetector(sens);
 

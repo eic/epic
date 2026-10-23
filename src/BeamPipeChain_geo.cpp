@@ -462,9 +462,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     auto append_straight = [&](size_t begin, size_t end) {
       for (size_t piece_n = begin; piece_n < end; ++piece_n) {
         if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
-          pieces.push_back({straightNames[piece_n], straightIds[piece_n],
-                            straightTubes[piece_n], straightOuters[piece_n],
-                            straightVacuums[piece_n], straightTransforms[piece_n]});
+          pieces.push_back({straightNames[piece_n], straightIds[piece_n], straightTubes[piece_n],
+                            straightOuters[piece_n], straightVacuums[piece_n],
+                            straightTransforms[piece_n]});
         }
       }
     };
@@ -483,7 +483,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     }
 
     const Transform3D& base_transform = pieces.front().transform;
-    Transform3D inv_base = base_transform.Inverse();
+    Transform3D inv_base              = base_transform.Inverse();
     Assembly range_pipe("v_pipe_combined_" + combineNames[range_n]);
     Assembly range_vacuum("v_vacuum_combined_" + combineNames[range_n]);
     DetElement vacuum_element(sdet, combineNames[range_n] + "_vacuum", combineStartIds[range_n]);
@@ -513,18 +513,18 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     }
 
     for (size_t piece_n = 0; piece_n < pieces.size(); ++piece_n) {
-      const auto& piece = pieces[piece_n];
+      const auto& piece     = pieces[piece_n];
       Transform3D inv_piece = piece.transform.Inverse();
-      Solid tube = piece.tube;
-      Solid vacuum = piece.vacuum;
+      Solid tube            = piece.tube;
+      Solid vacuum          = piece.vacuum;
       for (size_t other_n = 0; other_n < pieces.size(); ++other_n) {
         if (other_n == piece_n) {
           continue;
         }
         const auto& other = pieces[other_n];
-        Transform3D rel = inv_piece * other.transform;
+        Transform3D rel   = inv_piece * other.transform;
         if (other_n < piece_n) {
-          tube = SubtractionSolid(tube, other.outer, rel);
+          tube   = SubtractionSolid(tube, other.outer, rel);
           vacuum = SubtractionSolid(vacuum, other.vacuum, rel);
         } else {
           tube = SubtractionSolid(tube, other.vacuum, rel);
@@ -533,8 +533,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       // Distribute the former group-wide terminal cuts over every component.
       for (size_t cut_n = 0; cut_n < cuts.size(); ++cut_n) {
         Transform3D rel_cut = inv_piece * cut_transforms[cut_n];
-        tube = SubtractionSolid(tube, cuts[cut_n], rel_cut);
-        vacuum = SubtractionSolid(vacuum, cuts[cut_n], rel_cut);
+        tube                = SubtractionSolid(tube, cuts[cut_n], rel_cut);
+        vacuum              = SubtractionSolid(vacuum, cuts[cut_n], rel_cut);
       }
       Volume v_tube("v_tube_" + piece.name, tube, m_Al);
       Volume v_vacuum("v_vacuum_" + piece.name, vacuum, m_Vacuum);
