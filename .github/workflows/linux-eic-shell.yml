@@ -730,8 +730,10 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CONFIG=${{ matrix.detector_config }}
+          # FIXME: Irt collections excluded as a workaround for https://github.com/eic/EICrecon/issues/3037
           eicrecon \
             -Pnthreads=$(getconf _NPROCESSORS_ONLN) \
+            -Ppodio:output_exclude_collections=DRICHIrtRadiatorInfo,DRICHIrtParticles,PFRICHIrtRadiatorInfo,PFRICHIrtParticles \
             -Ppodio:output_file=rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root \
             sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
     - uses: actions/upload-artifact@v7
@@ -797,8 +799,10 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CONFIG=${{ matrix.detector_config }}
+          # FIXME: Irt collections excluded as a workaround for https://github.com/eic/EICrecon/issues/3037
           eicrecon \
             -Pnthreads=$(getconf _NPROCESSORS_ONLN) \
+            -Ppodio:output_exclude_collections=DRICHIrtRadiatorInfo,DRICHIrtParticles,PFRICHIrtRadiatorInfo,PFRICHIrtParticles \
             -Ppodio:output_file=rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root \
             sim_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4hep.root
     - uses: actions/upload-artifact@v7
