@@ -1,0 +1,48 @@
+PASS: merged C++ preserves all 18061 local code tokens
+scenario,modules,mirrored_centers,chirality_swaps,source_openings
+rsu_opt,2164,2164,2164,20
+all_6rsu,2160,2160,2160,20
+PASS: 4324 module centers are reflected exactly once
+PASS: every source type has one dimension/facing-matched opposite chirality
+PASS: source-opening centers receive the same engineer-to-EPIC conversion
+PASS: physical openings are independently validated by Step 7z
+PASS: y, z, facing, source type IDs, and source files are unchanged
+scenario,modules,min_physical_clearance_mm,physical_rectangle_intersections
+rsu_opt,2164,-0.047675,56
+  conservative contacts by disk: {'ED0': 12, 'ED1': 12, 'HD0': 12, 'HD1': 12, 'HD2': 2, 'HD3b': 3, 'HD4': 3}
+  contact: disk=HD2 row=23 module=2 type=A600 clearance=-0.047675 mm
+  contact: disk=HD2 row=24 module=2 type=A600 clearance=-0.047675 mm
+  contact: disk=HD3b row=23 module=2 type=A600 clearance=-0.044955 mm
+  contact: disk=HD3b row=22 module=2 type=A600 clearance=-0.044841 mm
+  contact: disk=HD3b row=24 module=2 type=A601 clearance=-0.044841 mm
+all_6rsu,2160,-0.047675,56
+  conservative contacts by disk: {'ED0': 12, 'ED1': 12, 'HD0': 12, 'HD1': 12, 'HD2': 2, 'HD3b': 3, 'HD4': 3}
+  contact: disk=HD2 row=23 module=2 type=A600 clearance=-0.047675 mm
+  contact: disk=HD2 row=24 module=2 type=A600 clearance=-0.047675 mm
+  contact: disk=HD3b row=23 module=2 type=A600 clearance=-0.044955 mm
+  contact: disk=HD3b row=22 module=2 type=A600 clearance=-0.044841 mm
+  contact: disk=HD3b row=24 module=2 type=A601 clearance=-0.044841 mm
+PASS: all 60 physical XML x/y/r fields match the Step 7y beam-pipe audit
+PASS: every physical radius independently adds the configurable 5 mm buffer
+PASS: conservative precheck reproduces 56 expected near contacts per scenario
+REVIEW: exact-solid ROOT overlap validation is mandatory for those near contacts
+PASS: source metadata remains verification input and cannot override physical XML
+A: left_y=(Decimal('-14.5'), Decimal('10.0')) length=24.5 mm; right_y=(Decimal('-14.50'), Decimal('11.28')) length=25.78 mm
+B: left_y=(Decimal('-13.5'), Decimal('8.5')) length=22.0 mm; right_y=(Decimal('-13.50'), Decimal('9.78')) length=23.28 mm
+inward: total=640 um prototype_relative_to_corrugation_before_offset: FPC=(Decimal('-80'), Decimal('30')) um AncASIC_glue=(Decimal('30'), Decimal('110')) um AncASIC=(Decimal('110'), Decimal('410')) um
+outward: total=720 um prototype_relative_to_corrugation_before_offset: FPC=(Decimal('230'), Decimal('340')) um AncASIC_glue=(Decimal('340'), Decimal('420')) um AncASIC=(Decimal('420'), Decimal('720')) um
+PASS: FPCs touch the baseplate, stop at the epoxy, and follow LEC/REC by 0.5 mm
+ED0: flats=26 webs=25 widths=[10.65] flat_web_gap=0.000 mm
+ED1: flats=48 webs=47 widths=[10.65] flat_web_gap=0.000 mm
+ED2: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+ED3: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+ED4: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+HD0: flats=26 webs=25 widths=[10.65] flat_web_gap=0.000 mm
+HD1: flats=48 webs=47 widths=[10.65] flat_web_gap=0.000 mm
+HD2: flats=50 webs=49 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+HD3b: flats=49 webs=48 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+HD4: flats=49 webs=48 widths=[10.65, 12.15] flat_web_gap=0.000 mm
+totals: flats=446 webs=436
+floating-point audit: negative_slacks=116 minimum=-6.217e-15 mm tolerance=1.0e-09 mm
+PASS: every straight flat meets its adjacent web with zero y gap
+PASS: remote formatting merge preserved the local SVT implementation

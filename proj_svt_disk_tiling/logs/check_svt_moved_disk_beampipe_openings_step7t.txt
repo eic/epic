@@ -1,0 +1,77 @@
+Current Step-6d disk centers
+z = -250.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = 250.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = -450.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = 450.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+
+Former branch disk centers
+z = -255.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = 255.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = -550.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = 550.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+
+Current 10 mm layer faces farthest from the IP
+z = -255.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = -455.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = -655.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+upstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = -855.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=33.500 mm
+upstream_hadron: center=(21.379, 0.000) mm, radius=14.285 mm
+combined: x_min=-33.500 mm, x_max=35.664 mm
+z = -1025.000 mm
+upstream_lepton: center=(0.000, 0.000) mm, radius=33.500 mm
+upstream_hadron: center=(25.630, 0.000) mm, radius=14.285 mm
+combined: x_min=-33.500 mm, x_max=39.915 mm
+z = 255.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = 455.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(0.000, 0.000) mm, radius=31.757 mm
+combined: x_min=-31.757 mm, x_max=31.757 mm
+z = 705.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(-0.990, 0.000) mm, radius=35.038 mm
+combined: x_min=-36.028 mm, x_max=34.048 mm
+z = 955.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(-6.616, 0.000) mm, radius=40.661 mm
+combined: x_min=-47.277 mm, x_max=34.045 mm
+z = 1205.000 mm
+downstream_lepton: center=(0.000, 0.000) mm, radius=31.757 mm
+downstream_hadron: center=(-12.242, 0.000) mm, radius=46.284 mm
+combined: x_min=-58.526 mm, x_max=34.042 mm
