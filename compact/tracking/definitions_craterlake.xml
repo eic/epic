@@ -400,5 +400,8 @@
     </plugin>
 
   </plugins>
+  <define>
+    <constant name="material-map" value="calibrations/materials-map.cbor" type="string"/>
+  </define>
 
 </lccdd>
