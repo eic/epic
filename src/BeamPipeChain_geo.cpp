@@ -522,13 +522,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       Transform3D inv_piece = piece.transform.Inverse();
       Solid tube            = piece.tube;
       Solid vacuum          = piece.vacuum;
-      auto subtract = [](Solid left, Solid right, const Transform3D& transform) -> Solid {
-        auto left_box = dynamic_cast<TGeoBBox*>(left.ptr());
+      auto subtract         = [](Solid left, Solid right, const Transform3D& transform) -> Solid {
+        auto left_box  = dynamic_cast<TGeoBBox*>(left.ptr());
         auto right_box = dynamic_cast<TGeoBBox*>(right.ptr());
         if (!left_box || !right_box) {
           except("BeamPipeChain", "Cannot bound a subtraction operand.");
         }
-        double low[3] = {TGeoShape::Big(), TGeoShape::Big(), TGeoShape::Big()};
+        double low[3]  = {TGeoShape::Big(), TGeoShape::Big(), TGeoShape::Big()};
         double high[3] = {-TGeoShape::Big(), -TGeoShape::Big(), -TGeoShape::Big()};
         for (int ix : {-1, 1}) {
           for (int iy : {-1, 1}) {
@@ -536,10 +536,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
               XYZPoint corner(right_box->GetOrigin()[0] + ix * right_box->GetDX(),
                               right_box->GetOrigin()[1] + iy * right_box->GetDY(),
                               right_box->GetOrigin()[2] + iz * right_box->GetDZ());
-              XYZPoint point = transform * corner;
+              XYZPoint point              = transform * corner;
               const double coordinates[3] = {point.x(), point.y(), point.z()};
               for (int axis = 0; axis < 3; ++axis) {
-                low[axis] = std::min(low[axis], coordinates[axis]);
+                low[axis]  = std::min(low[axis], coordinates[axis]);
                 high[axis] = std::max(high[axis], coordinates[axis]);
               }
             }
