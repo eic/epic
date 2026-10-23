@@ -84,7 +84,9 @@
 
     <readout name="BackwardsBeamlineHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,pipe:8,end:2</id>
+      <!-- Ignore component when grouping fragments into a logical tracking plane.
+           Appending it preserves the existing system, pipe, and end bit offsets. -->
+      <id>system:8,pipe:8,end:2,component:8</id>
     </readout>
 
   </readouts>

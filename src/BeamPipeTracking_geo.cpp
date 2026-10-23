@@ -4,6 +4,7 @@
 //==========================================================================
 //
 // Places thin sensitive slices of vacuum along a beam pipe
+// Component bits distinguish fragments; system/pipe/end identify the full plane.
 //
 //==========================================================================
 
@@ -52,7 +53,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       slice_mothers.push_back(mother);
     }
 
-    for (const auto& slice_mother : slice_mothers) {
+    if (slice_mothers.size() > 256) {
+      except("BeamPipeTracking", "Slice '%s' exceeds the 8-bit component field capacity.",
+             slice_name.c_str());
+    }
+    for (size_t component_id = 0; component_id < slice_mothers.size(); ++component_id) {
+      const auto& slice_mother = slice_mothers[component_id];
       // Get the mother volume
       Volume mother_vol     = slice_mother.volume();
       string component_name = slice_mothers.size() > 1 ? slice_mother.name() : motherName;
@@ -168,6 +174,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       disk_placement.addPhysVolID("end", detStart);
       disk_placement.addPhysVolID("pipe", pipe_id);
       disk_placement.addPhysVolID("system", det_id);
+      disk_placement.addPhysVolID("component", component_id);
 
       DetElement slice_element(slice_mother, slice_name, pipe_id);
 
