@@ -30,11 +30,14 @@
         plane_x="Q2eR_CenterX - Q2eR_Length/2*sin(Q2eR_Theta)"
         plane_yrot="Q2eR_Theta"/>
 
+        <!-- The connector's contribution at this plane is empty after vacuum subtraction.
+             Retain the adjoining bend and luminosity-bore fragments. -->
         <slice
         pipe_id="3"
         grandmother="Pipe_Q1eR_to_B2BeR"
         mother="Pipe_Q2eR_to_B2BeR_combined_vacuum"
         name="Pipe_in_B2AeR_tracker"
+        exclude_component="Pipe_B2AeR_to_B2BeR_vacuum"
         use_cross_section="true"
         plane_z="B2AeR_CenterZ - B2AeR_Length/2*cos(B2AeR_Theta)"
         plane_x="B2AeR_CenterX - B2AeR_Length/2*sin(B2AeR_Theta)"

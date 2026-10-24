@@ -57,8 +57,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       except("BeamPipeTracking", "Slice '%s' exceeds the 8-bit component field capacity.",
              slice_name.c_str());
     }
+    string exclude_component =
+        getAttrOrDefault<string>(slice_coll, _Unicode(exclude_component), "");
+    if (!exclude_component.empty()) {
+      auto excluded = std::find_if(
+          slice_mothers.begin(), slice_mothers.end(),
+          [&](const DetElement& component) { return exclude_component == component.name(); });
+      if (excluded == slice_mothers.end() || slice_mothers.size() == 1) {
+        except("BeamPipeTracking", "Slice '%s' cannot exclude component '%s'.", slice_name.c_str(),
+               exclude_component.c_str());
+      }
+    }
     for (size_t component_id = 0; component_id < slice_mothers.size(); ++component_id) {
       const auto& slice_mother = slice_mothers[component_id];
+      if (exclude_component == slice_mother.name()) {
+        printout(DEBUG, "BeamPipeTracking", "Excluding component '%s' from slice '%s'.",
+                 exclude_component.c_str(), slice_name.c_str());
+        continue;
+      }
       // Get the mother volume
       Volume mother_vol     = slice_mother.volume();
       string component_name = slice_mothers.size() > 1 ? slice_mother.name() : motherName;
@@ -103,10 +119,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // Get maximum dimension for cutting box
         double max_dim = getAttrOrDefault<double>(slice_coll, _Unicode(max_dimension), 1.0 * m);
 
-        // Create a thin box perpendicular to the plane normal
-        Box cutting_box(max_dim, max_dim, sensitive_thickness / 2);
-
         // Assembly components far from this plane need no sensitive daughter.
+        Position box_center(0, 0, 0);
+        double box_x = max_dim, box_y = max_dim;
         if (mother.volume().isAssembly()) {
           auto bounds = dynamic_cast<TGeoBBox*>(mother_vol.solid().ptr());
           if (!bounds) {
@@ -137,8 +152,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
               min_z >= sensitive_thickness / 2 || max_z <= -sensitive_thickness / 2) {
             continue;
           }
+          // Bound the sampling surface to the component, keeping max_dimension as a limit.
+          const double margin = 1.e-6 * mm;
+          min_x               = std::max(-max_dim, min_x - margin);
+          max_x               = std::min(max_dim, max_x + margin);
+          min_y               = std::max(-max_dim, min_y - margin);
+          max_y               = std::min(max_dim, max_y + margin);
+          box_x               = (max_x - min_x) / 2;
+          box_y               = (max_y - min_y) / 2;
+          box_center          = Position((min_x + max_x) / 2, (min_y + max_y) / 2, 0);
         }
 
+        disk_transform = disk_transform * Transform3D(box_center);
+        Box cutting_box(box_x, box_y, sensitive_thickness / 2);
         // Create intersection of cutting box with mother volume (reversed order to preserve rotation)
         // Apply the inverse transform to the second operand (mother) to express it in the box frame
         sensitive_solid =
