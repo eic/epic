@@ -658,9 +658,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_height"    value="59.29*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="-10.0*cm"/>
     <constant name="HcalEndcapPInsert_yposition" value="0.0*cm"/>
-    <constant name="HcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
-    <constant name="HcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
-    <constant name="HcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 41.55 * cm"/> <!-- 41.55 cm gap between service gap, includes 28.5 cm oculus -->
@@ -722,16 +719,5 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="FluxBarrel_rmax"         value="FluxBarrel_rmin + FluxBarrel_thickness"/>
     <constant name="FluxBarrel_length"       value="FluxBarrelForward_zmax + FluxBarrelBackward_zmax"/>
     <constant name="FluxBarrel_offset"       value="(FluxBarrelForward_zmax - FluxBarrelBackward_zmax)/2.0"/>
-
-    <comment>
-      These are used by ddsim, the region where we store all secondaries
-
-      For now they are forced to be symmetric, and we cover up to the start of the backward ECAL.
-      (this means in the forward region we stop in the middle of the RICH).
-    </comment>
-
-    <constant name="tracker_region_rmax"   value="EcalBarrel_rmin"/>
-    <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
-    <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
 
   </define>
