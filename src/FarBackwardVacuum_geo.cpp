@@ -209,6 +209,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
 
   Assembly backAssembly(detName + "_assembly");
+  backAssembly.setAttributes(desc, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   backAssembly.placeVolume(wallVol);
   backAssembly.placeVolume(vacVol);
 

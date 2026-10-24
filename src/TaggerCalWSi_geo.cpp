@@ -38,7 +38,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   // Create Global Volume
   Box Tagger_Box(Width, Height, Thickness);
   Volume detVol("Tagger_Box", Tagger_Box, Vacuum);
-  detVol.setVisAttributes(desc.visAttributes(x_det.visStr()));
+  detVol.setAttributes(desc, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   // Calorimeter
   double abso_z = 8.5 * mm; // for 20 layers
