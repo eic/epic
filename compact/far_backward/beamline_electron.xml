@@ -45,8 +45,11 @@
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
       <comment> Split pipe branches from Q2eR to join with the BackwardsTaggerVacuum luminosity pipe </comment>
+      <!-- Keep the final bends/end cut in a short, separate wall section for tessellation.
+           This partitions the same aluminium; the vacuum and tracking remain unchanged. -->
       <split from_id="3" id="8" name="Pipe_Q2eR_to_TaggerVacuum"
              length="(Q2eR_EndZ - Dipole_Focus_Z)"
+             wall_end_length="2*cm"
              theta="0" rout1="LumiWin_R+Backwards_Box_Wall" rout2="LumiWin_R+Backwards_Box_Wall"
               />
     </detector>
