@@ -77,20 +77,18 @@
   </define>
 
   <materials>
+    <comment> Cu layers: material outside Cu is completely neglected. </comment>
     <material name="MMCuStrip">
       <D type="density" unit="g/cm3" value="8.96 * MMCuStrip_fraction"/>
-      <fraction n="MMCuStrip_fraction"        ref="Cu"/>
-      <fraction n="1 - MMCuStrip_fraction"    ref="N"/>
+      <fraction n="1"                         ref="Cu"/>
     </material>
     <material name="MMCuPCBGrd">
       <D type="density" unit="g/cm3" value="8.96 * MMCuPCBGrd_fraction"/>
-      <fraction n="MMCuPCBGrd_fraction"       ref="Cu"/>
-      <fraction n="1 - MMCuPCBGrd_fraction"   ref="N"/>
+      <fraction n="1"                         ref="Cu"/>
     </material>
     <material name="MMCuDriftGrd">
       <D type="density" unit="g/cm3" value="8.96 * MMCuDriftGrd_fraction"/>
-      <fraction n="MMCuDriftGrd_fraction"     ref="Cu"/>
-      <fraction n="1 - MMCuDriftGrd_fraction" ref="N"/>
+      <fraction n="1"                         ref="Cu"/>
     </material>
   </materials>
 
