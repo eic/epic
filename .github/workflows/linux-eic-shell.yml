@@ -626,7 +626,8 @@ jobs:
         run: |
           mkdir capybara-reports
           shopt -s nullglob
-          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+          set -o pipefail
+          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
           touch .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -695,7 +696,8 @@ jobs:
         run: |
           mkdir capybara-reports
           shopt -s nullglob
-          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+          set -o pipefail
+          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
           touch .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -760,7 +762,8 @@ jobs:
           mkdir new
           ln -sf ../rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root new/
           shopt -s nullglob
-          capybara bara ref/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root* new/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root
+          set -o pipefail
+          capybara bara ref/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root* new/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
           touch .rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -829,7 +832,8 @@ jobs:
           mkdir new
           ln -sf ../rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root new/
           shopt -s nullglob
-          capybara bara ref/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root* new/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root
+          set -o pipefail
+          capybara bara ref/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root* new/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}
           touch .rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
