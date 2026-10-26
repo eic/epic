@@ -26,6 +26,11 @@ namespace FileLoaderHelper {
 static constexpr const char* const kCurlCommand =
     "curl --retry 5 --location --fail {0} --output {1}";
 static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
+static constexpr const char* const kRucioCommand =
+    "tmpdir=$(mktemp -d /tmp/epic-rucio-XXXXXX) && "
+    "trap 'rm -rf \"$tmpdir\"' EXIT && "
+    "rucio download --dir \"$tmpdir\" --no-subdir '{0}' && "
+    "mv \"$tmpdir/{1}\" '{2}'";
 } // namespace FileLoaderHelper
 
 // Function to download files
@@ -148,8 +153,15 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   // if hash does not exist, we try to retrieve file from url
   if (!fs::exists(hash_path)) {
     std::string cmd;
-
-    if (url.find("root://") == 0) {
+    if (url.rfind("epic:", 0) == 0) {
+      const fs::path did_path = fs::path(url.substr(5)).relative_path();
+      if (url.rfind("epic:/", 0) != 0 || did_path.empty() || did_path.filename().empty()) {
+        printout(ERROR, "FileLoader", "invalid epic DID URL " + url);
+        std::exit(EXIT_FAILURE);
+      }
+      cmd = fmt::format(FileLoaderHelper::kRucioCommand, url, did_path.generic_string(),
+                        hash_path.string());
+    } else if (url.find("root://") == 0) {
       cmd = fmt::format(FileLoaderHelper::kXrootdCommand, url, hash_path.c_str());
     } else {
       cmd = fmt::format(FileLoaderHelper::kCurlCommand, url, hash_path.c_str());
