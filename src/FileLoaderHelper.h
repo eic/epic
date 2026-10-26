@@ -155,8 +155,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     std::string cmd;
     if (url.rfind("epic:", 0) == 0) {
       const std::string did_path = url.substr(5);
-      cmd = fmt::format(FileLoaderHelper::kRucioCommand, url, did_path,
-                        hash_path.c_str());
+      cmd = fmt::format(FileLoaderHelper::kRucioCommand, url, did_path, hash_path.c_str());
     } else if (url.find("root://") == 0) {
       cmd = fmt::format(FileLoaderHelper::kXrootdCommand, url, hash_path.c_str());
     } else {
