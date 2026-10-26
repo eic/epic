@@ -618,7 +618,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
         for (auto& wall : walls) {
           wall.solid = subtract(wall.solid, cuts[cut_n], wall.transform.Inverse() * rel_cut);
         }
-        vacuum              = subtract(vacuum, cuts[cut_n], rel_cut);
+        vacuum = subtract(vacuum, cuts[cut_n], rel_cut);
       }
       Volume v_vacuum("v_vacuum_" + piece.name, vacuum, m_Vacuum);
       Transform3D rel = inv_base * piece.transform;
