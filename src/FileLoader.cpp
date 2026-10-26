@@ -25,6 +25,7 @@ void usage(int argc, char** argv) {
          "     cache:<string>           cache location (may be read-only)                    \n"
          "     file:<string>            file location                                        \n"
          "     url:<string>             url location                                         \n"
+         "     cmd:<string>             download command with {0} for url, {1} for output    \n"
          "\tArguments given: "
       << arguments(argc, argv) << std::endl;
   std::exit(EINVAL);
