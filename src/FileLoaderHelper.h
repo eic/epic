@@ -154,13 +154,9 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   if (!fs::exists(hash_path)) {
     std::string cmd;
     if (url.rfind("epic:", 0) == 0) {
-      const fs::path did_path = fs::path(url.substr(5)).relative_path();
-      if (url.rfind("epic:/", 0) != 0 || did_path.empty() || did_path.filename().empty()) {
-        printout(ERROR, "FileLoader", "invalid epic DID URL " + url);
-        std::exit(EXIT_FAILURE);
-      }
-      cmd = fmt::format(FileLoaderHelper::kRucioCommand, url, did_path.generic_string(),
-                        hash_path.string());
+      const std::string did_path = url.substr(5);
+      cmd = fmt::format(FileLoaderHelper::kRucioCommand, url, did_path,
+                        hash_path.c_str());
     } else if (url.find("root://") == 0) {
       cmd = fmt::format(FileLoaderHelper::kXrootdCommand, url, hash_path.c_str());
     } else {
