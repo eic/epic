@@ -1,7 +1,0 @@
-scenario,modules,mirrored_centers,chirality_swaps,opening_mismatches,min_source_clearance_mm,min_physical_clearance_mm,physical_intersections
-rsu_opt,2164,2164,2164,0,4.999950,-0.000050,0
-all_6rsu,2160,2160,2160,0,4.999950,-0.000050,0
-PASS: 4324 module centers are reflected exactly once
-PASS: every source type has one dimension/facing-matched opposite chirality
-PASS: transformed source openings align with the current physical holes
-PASS: y, z, facing, source type IDs, and source files are unchanged

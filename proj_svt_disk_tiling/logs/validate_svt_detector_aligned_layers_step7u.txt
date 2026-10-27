@@ -1,8 +1,0 @@
-scenario,modules,module_position_invariants,module_orientation_invariants,source_openings
-rsu_opt,2164,2164,2164,20
-all_6rsu,2160,2160,2160,20
-PASS: 4324 module transforms preserve detector-global position and orientation
-PASS: 40 source-opening centers preserve detector-global position
-PASS: physical ED opening centers preserve detector-global position
-PASS: 426 corrugation rows preserve detector-global surface offsets
-PASS: all active inputs use tiling-directory; the disabled legacy CSV path was not migrated
