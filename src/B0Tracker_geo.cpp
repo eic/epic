@@ -102,6 +102,7 @@ TrackingUnit build_tracking_unit(Detector& description, SensitiveDetector sens,
                                  unit.z_max - x_pos.z(), u, v, n);
     }
   }
+  unit.assembly->GetShape()->ComputeBBox();
   return unit;
 }
 
