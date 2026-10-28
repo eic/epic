@@ -408,8 +408,10 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     }
     add_component({description.constant<double>("SiEndcapTilingBaseplateCF_thickness"),
                    "CarbonFiber", "SVTSupportVis"});
+    // Keep the RSU film's display separate from the external epoxy so it can
+    // be hidden for tiling inspection without changing either material volume.
     add_component({description.constant<double>("SiEndcapTilingFilm_thickness"), "SVT_Endcap_Glue",
-                   "SVTGlueVis", false, chain_length,
+                   "SVTRSUFilmVis", false, chain_length,
                    description.constant<double>("SiEndcapRSU_width"), sensor_x_offset, 0.0, 1,
                    false, true, false, false, true});
     add_component({description.constant<double>("SiEndcapTilingSensor_thickness"), "Silicon",
