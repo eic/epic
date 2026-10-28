@@ -44,6 +44,7 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
     </documentation>
+    <include ref="${DETECTOR_PATH}/compact/fields/beamline_constants.xml"/>
     <include ref="${DETECTOR_PATH}/compact/fields/beamline_{{ ebeam | default("18", true) }}x{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
