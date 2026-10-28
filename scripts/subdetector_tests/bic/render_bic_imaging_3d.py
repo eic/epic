@@ -67,14 +67,15 @@ def collect(vol, args, skip):
             name = n.GetName()
             dv = n.GetVolume()
             mat = dv.GetMaterial().GetName()
-            if skip.search(name) or skip.search(mat) or name.startswith(OUTER_PLATE):
-                continue
-            m = mats + [n.GetMatrix()]
+            # count staves before filtering so --skip does not shift rail parity
             if depth == 0 and name.startswith(LAYER):
                 stave_idx[0] = -1
             if depth == 1 and name.startswith(STAVE):
                 stave_idx[0] += 1
                 tier[0] = stave_idx[0] % 2  # even: low rail
+            if skip.search(name) or skip.search(mat) or name.startswith(OUTER_PLATE):
+                continue
+            m = mats + [n.GetMatrix()]
             o = to_master(m, [0., 0., 0.])
             if not (zlo - 3 < o[2] < zhi + 3 or depth < 1):
                 continue
