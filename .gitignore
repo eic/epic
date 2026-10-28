@@ -7,7 +7,6 @@
 */*/*.png
 */*/*.pdf
 *.root
-/compact/tracking/silicon_disks_tiling/archived/
 build/*
 */*.pyc
 **.pyc
@@ -39,9 +38,6 @@ prefix/
 lib/
 share/
 setup.sh
-
-# This project has its own local Git repository.
-/proj_svt_disk_tiling/
 
 # jekyll
 Gemfile.lock
