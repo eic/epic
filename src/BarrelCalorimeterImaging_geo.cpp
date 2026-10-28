@@ -322,13 +322,15 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           return z_plate + (j % 2 == 0 ? rail_low : rail_high) + stave_dim_z;
         };
 
-        // Arrange staves symmetrically around center of layer: the outer edges of the outermost
-        // staves are wall_gap from the inner face of the side walls at the bottom of the low tier
-        const double layer_wall_x = layer_dim_x +
-                                    (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
-                                    frame_side_dx - wall_gap;
-        double stave_pos_x = -layer_wall_x + stave_dim_x;
-        double stave_pitch = 0.;
+        // Arrange staves symmetrically around center of layer. The wall inner face is slanted, so
+        // the closest approach is the outer bottom corner of a low stave: place the outermost staves
+        // such that the perpendicular distance from that corner to the inner face is wall_gap
+        const double wall_x_low = layer_dim_x +
+                                  (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
+                                  frame_side_dx; // |x| of the inner face at the low stave bottom
+        const double layer_wall_x = wall_x_low - wall_gap / std::cos(half_dphi);
+        double stave_pos_x        = -layer_wall_x + stave_dim_x;
+        double stave_pitch        = 0.;
         if (stave_repeat == 1) {
           stave_pos_x = 0.; // a single stave is centered
         } else {
@@ -337,10 +339,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
         // Check that the staves fit: no overlap between staves, with the outer plate or the walls
         {
-          const double pos_x_outer    = -stave_pos_x; // |x| of the outermost staves
-          const double wall_clearance = layer_wall_x + wall_gap - (pos_x_outer + stave_dim_x);
-          const bool bad_pitch        = stave_repeat > 1 && stave_pitch < stave_dim_x;
-          const bool bad_tiers        = stave_repeat > 1 && stave_pitch < 2. * stave_dim_x &&
+          const double pos_x_outer = -stave_pos_x; // |x| of the outermost staves
+          // perpendicular distance from the corner of the outermost low stave to the inner face
+          const double wall_clearance =
+              (wall_x_low - (pos_x_outer + stave_dim_x)) * std::cos(half_dphi);
+          const bool bad_pitch = stave_repeat > 1 && stave_pitch < stave_dim_x;
+          const bool bad_tiers = stave_repeat > 1 && stave_pitch < 2. * stave_dim_x &&
                                  std::abs(rail_high - rail_low) < stave_thick;
           const bool bad_plate =
               std::max(rail_low, rail_high) + stave_thick > frame_height - 2. * frame_thickness;

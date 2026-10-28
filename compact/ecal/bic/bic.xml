@@ -76,13 +76,14 @@
       height is the gap between the stave bottom and the outer face of the inner carbon plate. The
       high rail leaves StaveRail_gap of clearance between its stave and the top of a low-rail stave.
       The carbon side walls (frame side_thickness) run along both slanted sides between the plates;
-      the outermost staves end StaveWall_gap from their inner face at the bottom of the low tier.
+      the outermost staves keep at least a perpendicular distance StaveWall_gap from their inner
+      face (reached at the bottom outer corner of a low-rail stave).
     </comment>
     <constant name="EcalBarrel_StaveRail_low"         value="4.0*mm"/>
     <constant name="EcalBarrel_StaveRail_gap"         value="1.0*mm"/>
     <constant name="EcalBarrel_StaveRail_high"        value="EcalBarrel_StaveRail_low + EcalBarrel_Stave_thickness + EcalBarrel_StaveRail_gap"/>
     <constant name="EcalBarrel_CarbonWallThickness"   value="1.0*mm"/>
-    <constant name="EcalBarrel_StaveWall_gap"         value="0.2*mm"/>
+    <constant name="EcalBarrel_StaveWall_gap"         value="0.5*mm"/>
     <constant name="EcalBarrel_StavesN_layer1"        value="6"/>
     <constant name="EcalBarrel_StavesN_layer2"        value="6"/>
     <constant name="EcalBarrel_StavesN_layer3"        value="6"/>
