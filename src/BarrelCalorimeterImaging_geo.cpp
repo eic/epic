@@ -257,11 +257,15 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     // Frame dimensions (also used to locate the staves); without a frame the "frame" spans the layer
     double frame_height    = layer_thickness;
     double frame_thickness = 0.;
+    double frame_side      = 0.; // thickness of the side walls, 0 for none
     if (layer_has_frame) {
       xml_comp_t x_frame = x_layer.child(_Unicode(frame));
       frame_height       = x_frame.height();
       frame_thickness    = x_frame.thickness();
+      frame_side         = getAttrOrDefault(x_frame, _Unicode(side_thickness), 0.);
     }
+    // Horizontal width of a side wall, whose faces are parallel to the sector side
+    const double frame_side_dx = frame_side / std::cos(half_dphi);
     layer_pos_z += layer_space_before;
 
     // Loop over number of repeats for this layer.
@@ -310,15 +314,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         // Staves are flat and sit on one of two rails, alternating low (even index) and high (odd)
         double rail_low  = getAttrOrDefault(x_stave, _Unicode(rail_low), 0.);
         double rail_high = getAttrOrDefault(x_stave, _Unicode(rail_high), 0.);
-
-        // Arrange staves symmetrically around center of layer
-        double stave_pos_x = -layer_dim_x + stave_dim_x;
-        double stave_pitch = 0.;
-        if (stave_repeat == 1) {
-          stave_pos_x = 0.; // a single stave is centered
-        } else {
-          stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
-        }
+        double wall_gap  = getAttrOrDefault(x_stave, _Unicode(wall_gap), 0.);
 
         // Stave bottom sits at the rail height above the outer face of the inner carbon plate
         const double z_plate = -frame_height / 2. + frame_thickness;
@@ -326,14 +322,25 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           return z_plate + (j % 2 == 0 ? rail_low : rail_high) + stave_dim_z;
         };
 
+        // Arrange staves symmetrically around center of layer: the outer edges of the outermost
+        // staves are wall_gap from the inner face of the side walls at the bottom of the low tier
+        const double layer_wall_x = layer_dim_x +
+                                    (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
+                                    frame_side_dx - wall_gap;
+        double stave_pos_x = -layer_wall_x + stave_dim_x;
+        double stave_pitch = 0.;
+        if (stave_repeat == 1) {
+          stave_pos_x = 0.; // a single stave is centered
+        } else {
+          stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
+        }
+
         // Check that the staves fit: no overlap between staves, with the outer plate or the walls
         {
-          const double pos_x_outer = -stave_pos_x; // |x| of the outermost staves
-          const double wall_clearance =
-              layer_dim_x + (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
-              (pos_x_outer + stave_dim_x);
-          const bool bad_pitch = stave_repeat > 1 && stave_pitch < stave_dim_x;
-          const bool bad_tiers = stave_repeat > 1 && stave_pitch < 2. * stave_dim_x &&
+          const double pos_x_outer    = -stave_pos_x; // |x| of the outermost staves
+          const double wall_clearance = layer_wall_x + wall_gap - (pos_x_outer + stave_dim_x);
+          const bool bad_pitch        = stave_repeat > 1 && stave_pitch < stave_dim_x;
+          const bool bad_tiers        = stave_repeat > 1 && stave_pitch < 2. * stave_dim_x &&
                                  std::abs(rail_high - rail_low) < stave_thick;
           const bool bad_plate =
               std::max(rail_low, rail_high) + stave_thick > frame_height - 2. * frame_thickness;
@@ -501,6 +508,23 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         Volume frame2_volume(frame2_name, frame2_shape, frame_material);
         layer_volume.placeVolume(frame2_volume,
                                  Position(0, 0, +frame_height / 2.0 - frame_thickness / 2.0));
+
+        // Side walls between the plates: parallelogram slabs along the trapezoid sides, with the
+        // outer face on the side and the full height between the plates
+        if (frame_side > 0.) {
+          const double wall_dz = (frame_height - 2. * frame_thickness) / 2.;
+          const double wall_x =
+              layer_dim_x + (layer_thickness / 2.) * tan_half_dphi - frame_side_dx / 2.;
+          for (int sign : {-1, 1}) {
+            // phi = 0 slants the wall towards +x with z, phi = pi towards -x
+            Trap wall_shape(wall_dz, half_dphi, sign > 0 ? 0. : M_PI, layer_trd_y1,
+                            frame_side_dx / 2., frame_side_dx / 2., 0., layer_trd_y1,
+                            frame_side_dx / 2., frame_side_dx / 2., 0.);
+            Volume wall_volume(Form("frame_side_%s%d", sign < 0 ? "left" : "right", layer_num),
+                               wall_shape, frame_material);
+            layer_volume.placeVolume(wall_volume, Position(sign * wall_x, 0, 0));
+          }
+        }
       }
 
       // Place layer into sector
