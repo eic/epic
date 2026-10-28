@@ -251,6 +251,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     bool layer_has_frame       = x_layer.hasChild(_Unicode(frame));
     double layer_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
     double layer_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
+    // Frame dimensions (also used to locate the staves); without a frame the "frame" spans the layer
+    double frame_height    = layer_thickness;
+    double frame_thickness = 0.;
+    if (layer_has_frame) {
+      xml_comp_t x_frame = x_layer.child(_Unicode(frame));
+      frame_height       = x_frame.height();
+      frame_thickness    = x_frame.thickness();
+    }
     layer_pos_z += layer_space_before;
 
     // Loop over number of repeats for this layer.
@@ -297,11 +305,15 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         double stave_dim_y = x_stave.length() / 2.0;
         double stave_dim_z = stave_thick / 2.0;
         double stave_rot_y = getAttrOrDefault(x_stave, _Unicode(angle), 0.);
-        double stave_off_z = getAttrOrDefault(x_stave, _Unicode(offset), 0.);
 
         // Arrange staves symmetrically around center of layer
         double stave_pos_x = -layer_dim_x + stave_dim_x;
-        double stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
+        double stave_pitch = 0.;
+        if (stave_repeat == 1) {
+          stave_pos_x = 0.; // a single stave is centered
+        } else {
+          stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
+        }
 
         // Make one stave
         std::string stave_name = Form("stave%d", stave_num);
@@ -409,8 +421,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
 
           // Stave placement
-          Position stave_pos(stave_pos_x, 0, layer_j % 2 == 0 ? +stave_off_z : -stave_off_z);
-          RotationY stave_rot(layer_j % 2 == 0 ? +stave_rot_y : -stave_rot_y);
+          Position stave_pos(stave_pos_x, 0, 0);
+          RotationY stave_rot(stave_rot_y);
           Transform3D stave_tr(stave_rot, stave_pos);
           PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
           stave_physvol.addPhysVolID("stave", stave_num + stave_j);
@@ -427,10 +439,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
       // Place frame if defined.
       if (layer_has_frame) {
-        xml_comp_t x_frame     = x_layer.child(_Unicode(frame));
-        double frame_height    = x_frame.height();
-        double frame_thickness = x_frame.thickness();
-        auto frame_material    = desc.material(x_frame.materialStr());
+        xml_comp_t x_frame  = x_layer.child(_Unicode(frame));
+        auto frame_material = desc.material(x_frame.materialStr());
 
         std::string frame1_name = Form("frame_inner%d", layer_num);
         double frame1_thick     = frame_thickness;
