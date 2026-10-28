@@ -64,7 +64,15 @@
     <constant name="EcalBarrel_Stave_width"           value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
     <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Calorimeter_length"/>
     <constant name="EcalBarrel_Stave_thickness"       value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonStaveThickness"/>
-    <constant name="EcalBarrel_StaveTilt_angle"       value="10*degree"/>
+    <comment>
+      Imaging staves are flat, parallel to the sector bottom, with the sensors facing inward.
+      Neighbouring staves alternate between a low and a high rail (the rails are not modelled): the
+      first stave of each layer sits on the low rail, the next on the high rail, and so on. The rail
+      height is the gap between the stave bottom and the outer face of the inner carbon plate.
+    </comment>
+    <constant name="EcalBarrel_StaveRail_low"         value="1.0*mm"/>
+    <constant name="EcalBarrel_StaveRail_high"        value="6.4*mm"/>
+    <constant name="EcalBarrel_StavesN_layer1"        value="6"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
     <constant name="EcalBarrel_FiberRadius"           value="0.5*mm"/>
@@ -166,11 +174,11 @@
       </comment>
       <layer_material surface="inner"
                       binning="binPhi,binZ"
-                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
                       bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
       <layer_material surface="outer"
                       binning="binPhi,binZ"
-                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
                       bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
       <sectors vis="EcalBarrelSectorVis"/>
@@ -197,11 +205,12 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_FrontSupportThickness">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="6"
+        <stave repeat="EcalBarrel_StavesN_layer1"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_1">

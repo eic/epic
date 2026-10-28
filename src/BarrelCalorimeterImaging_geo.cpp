@@ -21,7 +21,10 @@
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include <algorithm>
+#include <cmath>
 #include <functional>
+#include <stdexcept>
 
 #include "DD4hepDetectorHelper.h"
 
@@ -304,7 +307,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         double stave_dim_x = x_stave.width() / 2.0;
         double stave_dim_y = x_stave.length() / 2.0;
         double stave_dim_z = stave_thick / 2.0;
-        double stave_rot_y = getAttrOrDefault(x_stave, _Unicode(angle), 0.);
+        // Staves are flat and sit on one of two rails, alternating low (even index) and high (odd)
+        double rail_low  = getAttrOrDefault(x_stave, _Unicode(rail_low), 0.);
+        double rail_high = getAttrOrDefault(x_stave, _Unicode(rail_high), 0.);
 
         // Arrange staves symmetrically around center of layer
         double stave_pos_x = -layer_dim_x + stave_dim_x;
@@ -313,6 +318,33 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           stave_pos_x = 0.; // a single stave is centered
         } else {
           stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
+        }
+
+        // Stave bottom sits at the rail height above the outer face of the inner carbon plate
+        const double z_plate = -frame_height / 2. + frame_thickness;
+        auto stave_pos_z     = [&](int j) {
+          return z_plate + (j % 2 == 0 ? rail_low : rail_high) + stave_dim_z;
+        };
+
+        // Check that the staves fit: no overlap between staves, with the outer plate or the walls
+        {
+          const double pos_x_outer = -stave_pos_x; // |x| of the outermost staves
+          const double wall_clearance =
+              layer_dim_x + (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
+              (pos_x_outer + stave_dim_x);
+          const bool bad_pitch = stave_repeat > 1 && stave_pitch < stave_dim_x;
+          const bool bad_tiers = stave_repeat > 1 && stave_pitch < 2. * stave_dim_x &&
+                                 std::abs(rail_high - rail_low) < stave_thick;
+          const bool bad_plate =
+              std::max(rail_low, rail_high) + stave_thick > frame_height - 2. * frame_thickness;
+          if (bad_pitch || bad_tiers || bad_plate || wall_clearance < 0.) {
+            printout(ERROR, "BarrelCalorimeterImaging",
+                     "layer %d: %d staves do not fit: pitch %g, stave width %g, rails %g/%g, "
+                     "stave thickness %g, space between plates %g, wall clearance %g",
+                     layer_num, stave_repeat, stave_pitch, 2. * stave_dim_x, rail_low, rail_high,
+                     stave_thick, frame_height - 2. * frame_thickness, wall_clearance);
+            throw std::runtime_error("Staves do not fit in the layer.");
+          }
         }
 
         // Make one stave
@@ -421,10 +453,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
 
           // Stave placement
-          Position stave_pos(stave_pos_x, 0, 0);
-          RotationY stave_rot(stave_rot_y);
-          Transform3D stave_tr(stave_rot, stave_pos);
-          PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
+          Position stave_pos(stave_pos_x, 0, stave_pos_z(stave_j));
+          PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_pos);
           stave_physvol.addPhysVolID("stave", stave_num + stave_j);
           DetElement stave_j_element =
               (stave_j == 0) ? stave_element
