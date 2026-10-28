@@ -48,7 +48,7 @@
     <constant name="EcalBarrel_CopperThickness"       value="100*um"/>
     <constant name="EcalBarrel_KaptonThickness"       value="200*um"/>
     <constant name="EcalBarrel_EpoxyThickness"        value="100*um"/>
-    <constant name="EcalBarrel_CarbonFrameThickness"  value="2*mm"/>
+    <constant name="EcalBarrel_CarbonFrameThickness"  value="1.5*mm"/>
     <constant name="EcalBarrel_CarbonStaveThickness"  value="0.5*mm"/>
 
     <constant name="EcalBarrel_AstroPix_width"        value="2*cm"/>
@@ -68,10 +68,12 @@
       Imaging staves are flat, parallel to the sector bottom, with the sensors facing inward.
       Neighbouring staves alternate between a low and a high rail (the rails are not modelled): the
       first stave of each layer sits on the low rail, the next on the high rail, and so on. The rail
-      height is the gap between the stave bottom and the outer face of the inner carbon plate.
+      height is the gap between the stave bottom and the outer face of the inner carbon plate. The
+      high rail leaves StaveRail_gap of clearance between its stave and the top of a low-rail stave.
     </comment>
-    <constant name="EcalBarrel_StaveRail_low"         value="1.0*mm"/>
-    <constant name="EcalBarrel_StaveRail_high"        value="6.4*mm"/>
+    <constant name="EcalBarrel_StaveRail_low"         value="4.0*mm"/>
+    <constant name="EcalBarrel_StaveRail_gap"         value="1.0*mm"/>
+    <constant name="EcalBarrel_StaveRail_high"        value="EcalBarrel_StaveRail_low + EcalBarrel_Stave_thickness + EcalBarrel_StaveRail_gap"/>
     <constant name="EcalBarrel_StavesN_layer1"        value="6"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
