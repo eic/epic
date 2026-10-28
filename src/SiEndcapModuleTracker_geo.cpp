@@ -363,7 +363,7 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         description.constant<double>("SiEndcapTilingRSUInactiveSi_thickness");
     const double active_si = description.constant<double>("SiEndcapTilingRSUActiveSi_thickness");
     const double copper    = description.constant<double>("SiEndcapTilingRSUCu_thickness");
-    const double silicon     = description.constant<double>("SiEndcapTilingSensor_thickness");
+    const double silicon   = description.constant<double>("SiEndcapTilingSensor_thickness");
     if (inactive_si <= 0.0 || active_si <= 0.0 || copper <= 0.0 ||
         std::abs(inactive_si + active_si - silicon) > 1.0e-9 * mm) {
       throw std::runtime_error(
@@ -444,8 +444,8 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     // The sensor and bridge-FPC/AncASIC stacks are parallel branches on the
     // baseplate, not one serial stack. The FPC touches the baseplate and the
     // AncASIC is mounted on the FPC.
-    const double sensor_branch = description.constant<double>("SiEndcapTilingFilm_thickness") +
-                                 silicon + copper;
+    const double sensor_branch =
+        description.constant<double>("SiEndcapTilingFilm_thickness") + silicon + copper;
     const double electronics_branch = bridge_fpc_stack + ancasic_stack;
     module_template.total_thickness =
         (outward_facing ? epoxy.thickness : 0.0) +
@@ -1736,10 +1736,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       component_volume.setSensitiveDetector(sens);
       prototype.sensitives.push_back(pv);
 
-      const double inner_thickness = thickness_so_far + component.thickness / 2.0 +
-                                     center_offset_from_component;
-      const double outer_thickness =
-          module_template.total_thickness - inner_thickness;
+      const double inner_thickness =
+          thickness_so_far + component.thickness / 2.0 + center_offset_from_component;
+      const double outer_thickness = module_template.total_thickness - inner_thickness;
       Vector3D u(1.0, 0.0, 0.0);
       Vector3D v(0.0, 1.0, 0.0);
       Vector3D n(0.0, 0.0, 1.0);
@@ -1765,12 +1764,12 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const double silicon_bottom_z = z_position - component.thickness / 2.0;
       const double active_center_z  = silicon_bottom_z + inactive_si + active_si / 2.0;
       const double copper_center_z  = z_position + component.thickness / 2.0 + copper / 2.0;
-      const double rsu_pitch_x     = comp_x / x_repeat;
-      const double half_rsu_x      = rsu_pitch_x / 2.0;
-      const double half_rsu_y      = comp_y / 2.0;
-      const double bias_width      = description.constant<double>("SiEndcapRSU_bias_width");
-      const double periphery_width = description.constant<double>("SiEndcapRSU_periphery_width");
-      const double backbone_width  = description.constant<double>("SiEndcapRSU_backbone_width");
+      const double rsu_pitch_x      = comp_x / x_repeat;
+      const double half_rsu_x       = rsu_pitch_x / 2.0;
+      const double half_rsu_y       = comp_y / 2.0;
+      const double bias_width       = description.constant<double>("SiEndcapRSU_bias_width");
+      const double periphery_width  = description.constant<double>("SiEndcapRSU_periphery_width");
+      const double backbone_width   = description.constant<double>("SiEndcapRSU_backbone_width");
       const double powerswitch_width =
           description.constant<double>("SiEndcapRSU_powerswitch_width");
       const double tile_x =
@@ -1787,8 +1786,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Volume box_volume(name, box_solid, material);
         box_volume.setVisAttributes(description.visAttributes(vis));
         PlacedVolume pv = prototype.volume.placeVolume(
-            box_volume,
-            Position(component.x_offset + pos_x, component.y_offset + pos_y, box_z));
+            box_volume, Position(component.x_offset + pos_x, component.y_offset + pos_y, box_z));
         if (sensitive) {
           attach_sensitive(box_volume, pv, box_z - z_position);
         }
@@ -1816,7 +1814,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       }
 
       for (int repeat_idx = 0; repeat_idx < x_repeat; ++repeat_idx) {
-        const double rsu_x_min = -comp_x / 2.0 + repeat_idx * rsu_pitch_x;
+        const double rsu_x_min    = -comp_x / 2.0 + repeat_idx * rsu_pitch_x;
         const double rsu_x_center = rsu_x_min + rsu_pitch_x / 2.0;
         const string base_name =
             _toString(component_id, "component%d") + _toString(repeat_idx + 1, "_rsu%d");
@@ -1826,9 +1824,9 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           Box inactive_solid(rsu_pitch_x / 2.0, comp_y / 2.0, inactive_si / 2.0);
           Volume inactive_volume(base_name + "_inactive_si", inactive_solid, material);
           inactive_volume.setVisAttributes(description.visAttributes("SVTInactiveSiVis"));
-          prototype.volume.placeVolume(inactive_volume,
-                                       Position(component.x_offset + rsu_x_center, component.y_offset,
-                                                silicon_bottom_z + inactive_si / 2.0));
+          prototype.volume.placeVolume(
+              inactive_volume, Position(component.x_offset + rsu_x_center, component.y_offset,
+                                        silicon_bottom_z + inactive_si / 2.0));
 
           Box active_solid(rsu_pitch_x / 2.0, comp_y / 2.0, active_si / 2.0);
           active_layer_volume = Volume(base_name + "_active_si", active_solid, material);
@@ -1841,16 +1839,16 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
           Box copper_solid(rsu_pitch_x / 2.0, comp_y / 2.0, copper / 2.0);
           Volume copper_volume(base_name + "_cu", copper_solid, description.material("Copper"));
           copper_volume.setVisAttributes(description.visAttributes("SVTRSUCopperVis"));
-          prototype.volume.placeVolume(copper_volume,
-                                       Position(component.x_offset + rsu_x_center,
-                                                component.y_offset, copper_center_z));
+          prototype.volume.placeVolume(
+              copper_volume,
+              Position(component.x_offset + rsu_x_center, component.y_offset, copper_center_z));
         }
 
         auto place_box = [&](const string& name, double box_x, double box_y, double pos_x,
                              double pos_y, const string& vis, bool sensitive) {
           if (!module_template.tiling_design) {
-            place_box_with_thickness(name, box_x, box_y, active_si, pos_x, pos_y,
-                                     active_center_z, vis, sensitive);
+            place_box_with_thickness(name, box_x, box_y, active_si, pos_x, pos_y, active_center_z,
+                                     vis, sensitive);
             return;
           }
           if (box_x <= 0.0 || box_y <= 0.0) {
@@ -2007,9 +2005,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Volume box_volume(name, box_solid, description.material(material_name));
         box_volume.setVisAttributes(description.visAttributes(vis));
         prototype.volume.placeVolume(
-            box_volume,
-            Position(component.x_offset + pos_x,
-                     electronics_y_sign * (component.y_offset + pos_y), local_z));
+            box_volume, Position(component.x_offset + pos_x,
+                                 electronics_y_sign * (component.y_offset + pos_y), local_z));
       };
 
       auto place_bridge_fpc = [&](const string& name, double box_x, double box_y, double pos_x,
@@ -2045,8 +2042,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       };
       auto bridge_fpc_y_geometry = [&](double target_box_y, double top_edge_offset) {
         // The tiling FPC follows the RSU edge, not the wider A/B baseplate edge.
-        const double top_edge = description.constant<double>("SiEndcapRSU_width") / 2.0 +
-                                top_edge_offset;
+        const double top_edge =
+            description.constant<double>("SiEndcapRSU_width") / 2.0 + top_edge_offset;
         const double lower_epoxy_inner_edge =
             -y_size / 2.0 + description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
         const double box_y =
@@ -2091,9 +2088,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
         Volume box_volume(name, box_solid, description.material(material_name));
         box_volume.setVisAttributes(description.visAttributes(vis));
         prototype.volume.placeVolume(
-            box_volume,
-            Position(component.x_offset + pos_x,
-                     electronics_y_sign * (component.y_offset + pos_y), local_z));
+            box_volume, Position(component.x_offset + pos_x,
+                                 electronics_y_sign * (component.y_offset + pos_y), local_z));
       };
 
       auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double endcap_length,
@@ -2108,8 +2104,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       };
       auto bridge_fpc_y_geometry = [&](double target_box_y, double top_edge_offset) {
         // Use the same RSU-referenced edge as the left FPC beneath the ASIC.
-        const double top_edge = description.constant<double>("SiEndcapRSU_width") / 2.0 +
-                                top_edge_offset;
+        const double top_edge =
+            description.constant<double>("SiEndcapRSU_width") / 2.0 + top_edge_offset;
         const double lower_epoxy_inner_edge =
             -y_size / 2.0 + description.constant<double>("SiEndcapTilingEpoxyGlueLine_width");
         const double box_y =
@@ -2436,9 +2432,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       if (cache_it == module_cache.end()) {
         cache_it =
             module_cache
-                .emplace(cache_key,
-                         build_module_prototype(description, sens, module_template,
-                                                upright_electronics_y))
+                .emplace(cache_key, build_module_prototype(description, sens, module_template,
+                                                           upright_electronics_y))
                 .first;
       }
       ModulePrototype& prototype = cache_it->second;
