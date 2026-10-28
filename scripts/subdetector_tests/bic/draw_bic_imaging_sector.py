@@ -9,7 +9,7 @@
     carbon plates and walls grey, the layer trapezoid black.
 
     use case (writes <prefix>_layer<N>.png, <prefix>_all.png and <prefix>_zoom.png):
-    python scripts/subdetector_tests/draw_bic_imaging_sector.py -c epic_craterlake_bic_6layers.xml \
+    python scripts/subdetector_tests/bic/draw_bic_imaging_sector.py -c epic_craterlake_bic_6layers.xml \
         -o figures/after --label After --layers 1-6
 '''
 import argparse

@@ -9,7 +9,7 @@
     Kapton, orange Cu underneath, dark grey carbon plates and side walls.
 
     use case (layers 2 and 3 of sector26, +-3 cm along the beam, radial direction up):
-    python scripts/subdetector_tests/render_bic_imaging_3d.py -c epic_craterlake_bic_6layers.xml \
+    python scripts/subdetector_tests/bic/render_bic_imaging_3d.py -c epic_craterlake_bic_6layers.xml \
         -o render3d_layers2-3.png --sector sector26 --y-range -3 3 --view 24 62 --z-range 86.7 92.65 \
         --title 'BIC imaging layers 2 (bottom) and 3 (top), radial direction up; outer carbon plates and ScFi/Pb hidden'
 '''
