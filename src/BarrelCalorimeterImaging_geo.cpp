@@ -497,9 +497,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         std::string frame2_name = Form("frame_outer%d", layer_num);
         double frame2_thick     = frame_thickness;
         double frame2_trd_x1 =
-            layer_dim_x + (layer_thickness / 2 - frame_height / 2) * tan_half_dphi;
+            layer_dim_x + (layer_thickness / 2 + frame_height / 2 - frame2_thick) * tan_half_dphi;
         double frame2_trd_x2 =
-            layer_dim_x + (layer_thickness / 2 - frame_height / 2 + frame2_thick) * tan_half_dphi;
+            layer_dim_x + (layer_thickness / 2 + frame_height / 2) * tan_half_dphi;
         double frame2_trd_y1 = layer_trd_y1;
         double frame2_trd_y2 = frame2_trd_y1;
         double frame2_trd_z  = frame2_thick / 2.;
