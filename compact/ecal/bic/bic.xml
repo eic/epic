@@ -53,7 +53,7 @@
     <constant name="EcalBarrel_CopperThickness"       value="100*um"/>
     <constant name="EcalBarrel_KaptonThickness"       value="200*um"/>
     <constant name="EcalBarrel_EpoxyThickness"        value="100*um"/>
-    <constant name="EcalBarrel_CarbonFrameThickness"  value="2*mm"/>
+    <constant name="EcalBarrel_CarbonFrameThickness"  value="1.5*mm"/>
     <constant name="EcalBarrel_CarbonStaveThickness"  value="0.5*mm"/>
 
     <constant name="EcalBarrel_AstroPix_width"        value="2*cm"/>
@@ -69,7 +69,27 @@
     <constant name="EcalBarrel_Stave_width"           value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
     <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Calorimeter_length"/>
     <constant name="EcalBarrel_Stave_thickness"       value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonStaveThickness"/>
-    <constant name="EcalBarrel_StaveTilt_angle"       value="10*degree"/>
+    <comment>
+      Imaging staves are flat, parallel to the sector bottom, with the sensors facing inward.
+      Neighbouring staves alternate between a low and a high rail (the rails are not modelled): the
+      first stave of each layer sits on the low rail, the next on the high rail, and so on. The rail
+      height is the gap between the stave bottom and the outer face of the inner carbon plate. The
+      high rail leaves StaveRail_gap of clearance between its stave and the top of a low-rail stave.
+      The carbon side walls (frame side_thickness) run along both slanted sides between the plates;
+      the outermost staves keep at least a perpendicular distance StaveWall_gap from their inner
+      face (reached at the bottom outer corner of a low-rail stave).
+    </comment>
+    <constant name="EcalBarrel_StaveRail_low"         value="4.0*mm"/>
+    <constant name="EcalBarrel_StaveRail_gap"         value="1.0*mm"/>
+    <constant name="EcalBarrel_StaveRail_high"        value="EcalBarrel_StaveRail_low + EcalBarrel_Stave_thickness + EcalBarrel_StaveRail_gap"/>
+    <constant name="EcalBarrel_CarbonWallThickness"   value="1.0*mm"/>
+    <constant name="EcalBarrel_StaveWall_gap"         value="0.5*mm"/>
+    <constant name="EcalBarrel_StavesN_layer1"        value="6"/>
+    <constant name="EcalBarrel_StavesN_layer2"        value="6"/>
+    <constant name="EcalBarrel_StavesN_layer3"        value="6"/>
+    <constant name="EcalBarrel_StavesN_layer4"        value="7"/>
+    <constant name="EcalBarrel_StavesN_layer5"        value="7"/>
+    <constant name="EcalBarrel_StavesN_layer6"        value="7"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
     <constant name="EcalBarrel_FiberRadius"           value="0.5*mm"/>
@@ -172,11 +192,11 @@
       </comment>
       <layer_material surface="inner"
                       binning="binPhi,binZ"
-                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
                       bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
       <layer_material surface="outer"
                       binning="binPhi,binZ"
-                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
                       bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
       <sectors vis="EcalBarrelSectorVis"/>
@@ -202,12 +222,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_FrontSupportThickness">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="6"
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="EcalBarrel_StavesN_layer1"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
+               wall_gap="EcalBarrel_StaveWall_gap"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_1">
@@ -221,12 +243,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="6"
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="EcalBarrel_StavesN_layer2"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
+               wall_gap="EcalBarrel_StaveWall_gap"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_2">
@@ -240,12 +264,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="6"
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="EcalBarrel_StavesN_layer3"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="-EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
+               wall_gap="EcalBarrel_StaveWall_gap"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_3">
@@ -259,12 +285,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="6"
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="EcalBarrel_StavesN_layer4"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="-EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
+               wall_gap="EcalBarrel_StaveWall_gap"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_4">
@@ -278,12 +306,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="7"
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="EcalBarrel_StavesN_layer5"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="-EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
+               wall_gap="EcalBarrel_StaveWall_gap"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_5">
@@ -298,12 +328,14 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_between="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="7"
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="EcalBarrel_StavesN_layer6"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
-               angle="EcalBarrel_StaveTilt_angle"
+               rail_low="EcalBarrel_StaveRail_low"
+               rail_high="EcalBarrel_StaveRail_high"
+               wall_gap="EcalBarrel_StaveWall_gap"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_6">
