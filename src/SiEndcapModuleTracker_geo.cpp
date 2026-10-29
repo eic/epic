@@ -459,11 +459,12 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
   module_templates.emplace("EIC_LAS_6RSU", build("EIC_LAS_6RSU", 130.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_5RSU", build("EIC_LAS_5RSU", 105.0 * mm, 30.0 * mm));
   module_templates.emplace("EIC_LAS_6RSU_CORR", build_corrugated_6rsu("EIC_LAS_6RSU_CORR"));
-  for (const string& group : {"A6", "B5", "B6"}) {
+  // Construct string values explicitly from the literals before combining module names.
+  for (const string group : {"A6", "B5", "B6"}) {
     const int rsu_count = group[1] - '0';
     const double width  = description.constant<double>(
         group[0] == 'A' ? "SiEndcapTilingBaseplateA_width" : "SiEndcapTilingBaseplateB_width");
-    for (const string& orientation : {"00", "01", "10", "11"}) {
+    for (const string orientation : {"00", "01", "10", "11"}) {
       const string name         = group + orientation;
       const bool outward_facing = orientation[0] == '0';
       module_templates.emplace(name, build_tiling_module(name, rsu_count, width, outward_facing));
