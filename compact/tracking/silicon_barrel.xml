@@ -331,20 +331,20 @@
         <position x="0" y="SiBarrel1_Passive3_Position" z="SiBarrelUpperCurveAxis2" />
    </module_component>
 
-        <module_component name="Carbon_Composite.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/Carbon_Composite_ASCII.gdml" />
+        <module_component name="Carbon_Composite.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/Carbon_Composite_ASCII.gdml" />
 
-       <module_component name="FPC_Mockup_L3_L3_Full001_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
-        <module_component name="FPC_Mockup_L3_L3_Full_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_L004_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L004_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_L005_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L005_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_L006_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L006_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_L3_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L3_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_L3_End001_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L3_End001_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_L3_End_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" />
-        <module_component name="MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" />
-        <module_component name="MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" />
+       <module_component name="FPC_Mockup_L3_L3_Full001_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
+        <module_component name="FPC_Mockup_L3_L3_Full_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_L004_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L004_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_L005_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L005_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_L006_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L006_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_L3_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L3_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_L3_End001_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L3_End001_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L3_End_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml" />
+        <module_component name="MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml" />
+        <module_component name="MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml" />
 
 
       </module>
@@ -835,29 +835,29 @@
         </module_component>
 
 
-      <module_component name="FPC_Mockup_L3_Bottom002_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml" />
-        <module_component name="FPC_Mockup_L3_Bottom003_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml" />
-        <module_component name="FPC_Mockup_L3_Top002_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/FPC_Mockup_L3_Top002_ASCII.gdml" />
-        <module_component name="FPC_Mockup_L3_Top003_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/FPC_Mockup_L3_Top003_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_End_Varient002_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_End_Varient003_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" />
-        <module_component name="K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" />
-        <module_component name="MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
-        <module_component name="MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
-        <module_component name="Carbon_Composite_L4_ASCII.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="CAD/L4/Carbon_Composite_L4_ASCII.gdml" />
+      <module_component name="FPC_Mockup_L3_Bottom002_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml" />
+        <module_component name="FPC_Mockup_L3_Bottom003_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml" />
+        <module_component name="FPC_Mockup_L3_Top002_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/FPC_Mockup_L3_Top002_ASCII.gdml" />
+        <module_component name="FPC_Mockup_L3_Top003_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/FPC_Mockup_L3_Top003_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_End_Varient002_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_End_Varient003_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml" />
+        <module_component name="K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml" />
+        <module_component name="MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml" />
+        <module_component name="MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml" />
+        <module_component name="Carbon_Composite_L4_ASCII.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/Carbon_Composite_L4_ASCII.gdml" />
       </module>
       <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
