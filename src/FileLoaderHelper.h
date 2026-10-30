@@ -29,10 +29,10 @@ static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
 static constexpr const char* const kRucioCommand =
     "tmpdir=$(mktemp -d ./epic-rucio-XXXXXX) && "
     "trap 'rm -rf \"$tmpdir\"' EXIT && "
-     // Awkward work around for calling rucio download under gprofng. An upstream PR fixing issue https://github.com/python/cpython/issues/149509
+    // Awkward work around for calling rucio download under gprofng. An upstream PR fixing issue https://github.com/python/cpython/issues/149509
     "printf '%s\\n' 'import subprocess' 'subprocess._USE_POSIX_SPAWN = False' "
     "> \"$tmpdir/sitecustomize.py\" && "
-    "export PYTHONPATH=\"$tmpdir/${{PYTHONPATH:+:$PYTHONPATH}}\" && " 
+    "export PYTHONPATH=\"$tmpdir/${{PYTHONPATH:+:$PYTHONPATH}}\" && "
     "rucio download --dir \"$tmpdir\" --no-subdir '{0}' && "
     "mv \"$tmpdir/{1}\" '{2}'";
 } // namespace FileLoaderHelper
