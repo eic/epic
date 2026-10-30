@@ -27,7 +27,7 @@ static constexpr const char* const kCurlCommand =
     "curl --retry 5 --location --fail {0} --output {1}";
 static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
 static constexpr const char* const kRucioCommand =
-    "tmpdir=$(mktemp -d /tmp/epic-rucio-XXXXXX) && "
+    "tmpdir=$(mktemp -d ./epic-rucio-XXXXXX) && "
     "trap 'rm -rf \"$tmpdir\"' EXIT && "
     "rucio download --dir \"$tmpdir\" --no-subdir '{0}' && "
     "mv \"$tmpdir/{1}\" '{2}'";
