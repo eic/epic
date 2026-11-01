@@ -1,69 +1,48 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Whitney Armstrong, Alex Jentsch -->
+<!-- Copyright (C) 2022 - 2026 Whitney Armstrong, Alex Jentsch, Tom Bleher, Igor Korover -->
 
 <lccdd>
   <define>
     <comment>
       ### B0 Tracker Parameters
     </comment>
-
     <comment>
-      - The detector length based on the 0.2*m step size and 4 layers.
-      - I start from the downstream side of the B0 magnet and an arbitrary offset
-        which puts the downstream of the detector 10cm from the end of the magnet.
+      Four AC-LGAD stations inside the B0 magnet, on the ion axis. Each is a support
+      plate with sensor staves on both faces. The station global z positions come
+      from a preliminary optimization.
     </comment>
-    <constant name="B0Tracker_length"      value="81.0*cm"/>
-    <constant name="B0Tracker_zoffset"     value="5.0*cm"/>
-    <constant name="B0TrackerCenter_zpos"  value="6.3*m"/>
-    <constant name="B0TrackerCenter_xpos"  value="-0.16000052*m" />
-    <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
-    <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
-    <comment>
-      average of station 2 and 3 x postions below...
-    </comment>
-    <constant name="B0TrackerSlope_x" value="0.0249974*m" />
-    <constant name="B0Tracker_nlayers"   value="4"/>
-    <constant name="B0Tracker_dz"        value="B0Tracker_length/(B0Tracker_nlayers-1)"/>
-    <constant name="B0TrackerLayer1_zstart" value="-B0Tracker_length/2.0"/>
-    <constant name="B0TrackerLayer2_zstart" value="-B0Tracker_length/2.0+B0Tracker_dz"/>
-    <constant name="B0TrackerLayer3_zstart" value="-B0Tracker_length/2.0+2*B0Tracker_dz"/>
-    <constant name="B0TrackerLayer4_zstart" value="-B0Tracker_length/2.0+3*B0Tracker_dz"/>
-
-    <comment>
-      This angle is the angle subtended in phi for each trap segment.
-    </comment>
-    <constant name="B0TrackerLayer_nModules"          value="36"/>
-    <constant name="B0TrackerLayerSmallMod_nModules"  value="B0TrackerLayer_nModules/6"/>
-    <constant name="B0TrackerModOpeningAngle"         value="360.0*degree/B0TrackerLayer_nModules"/>
-    <constant name="B0TrackerLayerBigMod_nModules"    value="B0TrackerLayer_nModules - B0TrackerLayerSmallMod_nModules"/>
-    <constant name="B0TrackerLayerBigMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 + 0.5)*B0TrackerModOpeningAngle + Pi"/>
-    <constant name="B0TrackerLayerSmallMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 - 0.5)*B0TrackerModOpeningAngle + Pi"/>
-
-    <constant name="B0TrackerMod1Inner_z"      value="1.0*cm" />
-    <constant name="B0TrackerMod1Inner_r"      value="3.5*cm" />
-    <constant name="B0TrackerMod1Outer_r"      value="15.0*cm"/>
-    <constant name="B0TrackerMod1_x1"          value="2.0*B0TrackerMod1Inner_r*sin(B0TrackerModOpeningAngle/2.0)"/>
-    <constant name="B0TrackerMod1_x2"          value="2.0*B0TrackerMod1Outer_r*sin(B0TrackerModOpeningAngle/2.0)"/>
-    <constant name="B0TrackerMod1_y"           value="B0TrackerMod1Outer_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
-
-    <constant name="B0TrackerMod1SmallOuter_r" value="8.5*cm"/>
-    <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
-    <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
-
-    <constant name="B0TrackerMod2SmallOuter_r" value="9.5*cm"/>
-    <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
-    <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
-
-    <constant name="B0TrackerMod3SmallOuter_r" value="10.0*cm"/>
-    <constant name="B0TrackerMod3Small_x2"     value="2.0*B0TrackerMod3SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
-    <constant name="B0TrackerMod3Small_y"      value="B0TrackerMod3SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
-
-    <constant name="B0TrackerMod4SmallOuter_r" value="10.5*cm"/>
-    <constant name="B0TrackerMod4Small_x2"     value="2.0*B0TrackerMod4SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
-    <constant name="B0TrackerMod4Small_y"      value="B0TrackerMod4SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
-
+    <constant name="B0TrackerStation1_zpos" value="5850.0*mm"/>
+    <constant name="B0TrackerStation2_zpos" value="6272.2*mm"/>
+    <constant name="B0TrackerStation3_zpos" value="6601.0*mm"/>
+    <constant name="B0TrackerStation4_zpos" value="6880.0*mm"/>
+    <constant name="B0TrackerPCBThickness" value="1.0*mm"/>
+    <constant name="B0TrackerCoolingSheetThickness" value="0.5*mm"/>
+    <constant name="B0TrackerSensorThickness" value="0.05*mm"/>
+    <constant name="B0TrackerASICThickness" value="0.3*mm"/>
+    <constant name="B0TrackerPCBWidth" value="25.4*mm"/>
+    <constant name="B0TrackerPCBLength" value="46.0*mm"/>
+    <constant name="B0TrackerSensorWidth" value="16.0*mm"/>
+    <constant name="B0TrackerSensorLength" value="16.0*mm"/>
+    <constant name="B0TrackerSensorOverlap" value="1.0*mm"/>
+    <constant name="B0TrackerASICWidth" value="B0TrackerSensorWidth"/>
+    <constant name="B0TrackerASICLength" value="B0TrackerSensorLength"/>
+    <!-- Sensors, each on its ASIC, alternate between the two PCB faces -->
+    <constant name="B0TrackerASIC_zpos" value="B0TrackerPCBThickness/2 + B0TrackerASICThickness/2"/>
+    <constant name="B0TrackerSensor_zpos" value="B0TrackerPCBThickness/2 + B0TrackerASICThickness + B0TrackerSensorThickness/2"/>
+    <constant name="B0TrackerSensor1_ypos" value="-(B0TrackerPCBLength - B0TrackerSensorLength)/2"/>
+    <constant name="B0TrackerSensorPitch" value="B0TrackerSensorLength - B0TrackerSensorOverlap"/>
+    <constant name="B0TrackerSupportSkinThickness" value="1.0*mm"/>
+    <constant name="B0TrackerSupportAirThickness" value="2.0*mm"/>
+    <!-- Beam hole of the support plates: beam-pipe radius plus a radial clearance (pipe outer
+         diameter from the CAD, 63.5 mm and 76.2 mm at station 4). The staves next to the hole
+         touch it -->
+    <constant name="B0TrackerPipeClearance" value="5.0*mm"/>
+    <constant name="B0TrackerHoleRadius" value="63.5*mm/2 + B0TrackerPipeClearance"/>
+    <constant name="B0TrackerHoleRadiusSt4" value="76.2*mm/2 + B0TrackerPipeClearance"/>
+    <!-- ACTS material binning of every B0 layer -->
+    <constant name="B0TrackerLayerMaterialPhiBins" value="30"/>
+    <constant name="B0TrackerLayerMaterialRBins" value="20"/>
   </define>
-
   <detectors>
     <detector
       id="B0TrackerCompanion_ID"
@@ -82,105 +61,470 @@
       readout="B0TrackerHits"
       vis="FFTrackerVis">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <position x="B0TrackerCenter_xpos" y="0" z="B0TrackerCenter_zpos"/>
-      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
-      <module name="Module1" vis="TrackerModuleVis"> <!-- AnlProcess_Blue-->
-        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1_x2/2.0" z="B0TrackerMod1_y/2"/>
-        <comment> Back-to-front </comment>
-        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
-        <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
+      <!-- At the IP, rotated onto the ion axis. With z=0, ACTS treats B0 as the positive
+           endcap paired with the empty companion above -->
+      <position x="0*mm" y="0*mm" z="0*mm"/>
+      <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm" zmin_tolerance="1*mm" zmax_tolerance="1*mm"/>
+      <layer_material surface="inner" binning="binPhi,binR" bins0="B0TrackerLayerMaterialPhiBins" bins1="B0TrackerLayerMaterialRBins"/>
+      <layer_material surface="outer" binning="binPhi,binR" bins0="B0TrackerLayerMaterialPhiBins" bins1="B0TrackerLayerMaterialRBins"/>
+      <!-- One stave, placed at every module position; its frame is centered on the PCB -->
+      <module name="TrackingUnit" vis="FFTrackerModuleVis">
+        <module_component name="PCB" material="Fr4" vis="FFTrackerSupportVis">
+          <box x="B0TrackerPCBWidth" y="B0TrackerPCBLength" z="B0TrackerPCBThickness"/>
+          <position x="0*mm" y="0*mm" z="0*mm"/>
+        </module_component>
+        <module_component name="AlSheetOuter" material="Aluminum" vis="FFTrackerShieldingVis">
+          <box x="B0TrackerPCBWidth" y="B0TrackerPCBLength" z="B0TrackerCoolingSheetThickness"/>
+          <position x="0*mm" y="0*mm" z="B0TrackerSensor_zpos + B0TrackerSensorThickness/2 + B0TrackerCoolingSheetThickness/2"/>
+        </module_component>
+        <module_component name="ASIC1" material="Silicon" vis="FFTrackerServiceVis">
+          <box x="B0TrackerASICWidth" y="B0TrackerASICLength" z="B0TrackerASICThickness"/>
+          <position x="0*mm" y="B0TrackerSensor1_ypos" z="-B0TrackerASIC_zpos"/>
+        </module_component>
+        <module_component name="ASIC2" material="Silicon" vis="FFTrackerServiceVis">
+          <box x="B0TrackerASICWidth" y="B0TrackerASICLength" z="B0TrackerASICThickness"/>
+          <position x="0*mm" y="B0TrackerSensor1_ypos + B0TrackerSensorPitch" z="B0TrackerASIC_zpos"/>
+        </module_component>
+        <module_component name="ASIC3" material="Silicon" vis="FFTrackerServiceVis">
+          <box x="B0TrackerASICWidth" y="B0TrackerASICLength" z="B0TrackerASICThickness"/>
+          <position x="0*mm" y="B0TrackerSensor1_ypos + 2*B0TrackerSensorPitch" z="-B0TrackerASIC_zpos"/>
+        </module_component>
+        <module_component name="Sensor1" material="Silicon" vis="FFTrackerSurfaceVis" sensitive="true">
+          <box x="B0TrackerSensorWidth" y="B0TrackerSensorLength" z="B0TrackerSensorThickness"/>
+          <position x="0*mm" y="B0TrackerSensor1_ypos" z="-B0TrackerSensor_zpos"/>
+        </module_component>
+        <module_component name="Sensor2" material="Silicon" vis="FFTrackerSurfaceVis" sensitive="true">
+          <box x="B0TrackerSensorWidth" y="B0TrackerSensorLength" z="B0TrackerSensorThickness"/>
+          <position x="0*mm" y="B0TrackerSensor1_ypos + B0TrackerSensorPitch" z="B0TrackerSensor_zpos"/>
+        </module_component>
+        <module_component name="Sensor3" material="Silicon" vis="FFTrackerSurfaceVis" sensitive="true">
+          <box x="B0TrackerSensorWidth" y="B0TrackerSensorLength" z="B0TrackerSensorThickness"/>
+          <position x="0*mm" y="B0TrackerSensor1_ypos + 2*B0TrackerSensorPitch" z="-B0TrackerSensor_zpos"/>
+        </module_component>
       </module>
-      <module name="SmallModule1" vis="FFTrackerModuleVis">
-        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1Small_x2/2.0" z="B0TrackerMod1Small_y/2"/>
-        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
-        <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
-      </module>
-      <module name="SmallModule2" vis="FFTrackerModuleVis">
-        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod2Small_x2/2.0" z="B0TrackerMod2Small_y/2"/>
-        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
-        <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
-      </module>
-      <module name="SmallModule3" vis="FFTrackerModuleVis">
-        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod3Small_x2/2.0" z="B0TrackerMod3Small_y/2"/>
-        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
-        <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
-      </module>
-      <module name="SmallModule4" vis="FFTrackerModuleVis">
-        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod4Small_x2/2.0" z="B0TrackerMod4Small_y/2"/>
-        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
-        <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
-      </module>
-      <layer id="1">
-        <envelope  vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
-                   zmin_tolerance="1*mm" zmax_tolerance="1*mm" length="1.0*cm"
-                   zstart="B0TrackerLayer1_zstart" />
-        <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerBigMod_nModules" dz="0 * mm" module="Module1" />
-        <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod1Small_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule1" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-      </layer>
-      <layer id="2" >
-        <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
-                  zmin_tolerance="1*mm" zmax_tolerance="1*mm" length="1.0*cm"
-                  zstart="B0TrackerLayer2_zstart" />
-        <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerBigMod_nModules" dz="0 * mm" module="Module1" />
-        <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod2Small_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule2" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-      </layer>
-      <layer id="3" >
-        <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
-                  zmin_tolerance="1*mm" zmax_tolerance="1*mm" length="1.0*cm"
-                  zstart="B0TrackerLayer3_zstart" />
-        <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerBigMod_nModules" dz="0 * mm" module="Module1" />
-        <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod3Small_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule3" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-      </layer>
-      <layer id="4" >
-        <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
-                  zmin_tolerance="1*mm" zmax_tolerance="1*mm" length="1.0*cm"
-                  zstart="B0TrackerLayer4_zstart" />
-        <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerBigMod_nModules" dz="0 * mm" module="Module1" />
-        <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
-          r="B0TrackerMod1Inner_r+B0TrackerMod4Small_y/2.0" zstart="0.0*mm"
-          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule4" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
-      </layer>
+      <!-- Al/air/Al support stack, upstream to downstream, extruded along each plate outline -->
+      <support_stack vis="FFTrackerSupportVis">
+        <slice name="skin_upstream" material="Aluminum" thickness="B0TrackerSupportSkinThickness"/>
+        <slice name="air" material="Air" thickness="B0TrackerSupportAirThickness"/>
+        <slice name="skin_downstream" material="Aluminum" thickness="B0TrackerSupportSkinThickness"/>
+      </support_stack>
+      <!-- Plate outlines from the CAD model, with two changes: the beam hole and the straight
+           edges of its slot follow B0TrackerHoleRadius, and the outer arc of plate 4 is widened
+           from R = 268 to 274 mm (about x = 140 mm) to leave room for its outermost column -->
+      <support_plate name="B0SupportPlate1">
+        <point x="0*mm" y="B0TrackerHoleRadius"/>
+        <point x="-B0TrackerHoleRadius*sin(15*deg)" y="B0TrackerHoleRadius*cos(15*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(30*deg)" y="B0TrackerHoleRadius*cos(30*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(45*deg)" y="B0TrackerHoleRadius*cos(45*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(60*deg)" y="B0TrackerHoleRadius*cos(60*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(75*deg)" y="B0TrackerHoleRadius*cos(75*deg)"/>
+        <point x="-B0TrackerHoleRadius" y="0*mm"/>
+        <point x="-B0TrackerHoleRadius*sin(105*deg)" y="B0TrackerHoleRadius*cos(105*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(120*deg)" y="B0TrackerHoleRadius*cos(120*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(135*deg)" y="B0TrackerHoleRadius*cos(135*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(150*deg)" y="B0TrackerHoleRadius*cos(150*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(165*deg)" y="B0TrackerHoleRadius*cos(165*deg)"/>
+        <point x="0*mm" y="-B0TrackerHoleRadius"/>
+        <point x="47.528*mm" y="-B0TrackerHoleRadius"/>
+        <point x="53.033*mm" y="-48.024*mm"/>
+        <point x="61.223*mm" y="-59.849*mm"/>
+        <point x="71.104*mm" y="-70.301*mm"/>
+        <point x="82.450*mm" y="-79.142*mm"/>
+        <point x="95.000*mm" y="-86.168*mm"/>
+        <point x="95.000*mm" y="-161.500*mm"/>
+        <point x="-85.000*mm" y="-161.500*mm"/>
+        <point x="-100.517*mm" y="-137.327*mm"/>
+        <point x="-113.447*mm" y="-111.678*mm"/>
+        <point x="-123.651*mm" y="-84.827*mm"/>
+        <point x="-131.018*mm" y="-57.063*mm"/>
+        <point x="-135.471*mm" y="-28.686*mm"/>
+        <point x="-136.961*mm" y="0.000*mm"/>
+        <point x="-135.471*mm" y="28.686*mm"/>
+        <point x="-131.018*mm" y="57.063*mm"/>
+        <point x="-123.651*mm" y="84.826*mm"/>
+        <point x="-113.447*mm" y="111.678*mm"/>
+        <point x="-100.517*mm" y="137.327*mm"/>
+        <point x="-85.000*mm" y="161.500*mm"/>
+        <point x="95.000*mm" y="161.500*mm"/>
+        <point x="95.000*mm" y="86.168*mm"/>
+        <point x="82.450*mm" y="79.142*mm"/>
+        <point x="71.104*mm" y="70.301*mm"/>
+        <point x="61.223*mm" y="59.849*mm"/>
+        <point x="53.033*mm" y="48.024*mm"/>
+        <point x="47.528*mm" y="B0TrackerHoleRadius"/>
+      </support_plate>
+      <support_plate name="B0SupportPlate2">
+        <point x="0*mm" y="B0TrackerHoleRadius"/>
+        <point x="-B0TrackerHoleRadius*sin(15*deg)" y="B0TrackerHoleRadius*cos(15*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(30*deg)" y="B0TrackerHoleRadius*cos(30*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(45*deg)" y="B0TrackerHoleRadius*cos(45*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(60*deg)" y="B0TrackerHoleRadius*cos(60*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(75*deg)" y="B0TrackerHoleRadius*cos(75*deg)"/>
+        <point x="-B0TrackerHoleRadius" y="0*mm"/>
+        <point x="-B0TrackerHoleRadius*sin(105*deg)" y="B0TrackerHoleRadius*cos(105*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(120*deg)" y="B0TrackerHoleRadius*cos(120*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(135*deg)" y="B0TrackerHoleRadius*cos(135*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(150*deg)" y="B0TrackerHoleRadius*cos(150*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(165*deg)" y="B0TrackerHoleRadius*cos(165*deg)"/>
+        <point x="0*mm" y="-B0TrackerHoleRadius"/>
+        <point x="47.216*mm" y="-B0TrackerHoleRadius"/>
+        <point x="52.707*mm" y="-48.217*mm"/>
+        <point x="60.917*mm" y="-60.223*mm"/>
+        <point x="70.864*mm" y="-70.835*mm"/>
+        <point x="82.315*mm" y="-79.804*mm"/>
+        <point x="95.000*mm" y="-86.919*mm"/>
+        <point x="95.000*mm" y="-161.500*mm"/>
+        <point x="-80.911*mm" y="-161.500*mm"/>
+        <point x="-96.573*mm" y="-137.541*mm"/>
+        <point x="-109.645*mm" y="-112.077*mm"/>
+        <point x="-119.987*mm" y="-85.387*mm"/>
+        <point x="-127.484*mm" y="-57.762*mm"/>
+        <point x="-132.054*mm" y="-29.506*mm"/>
+        <point x="-133.648*mm" y="-0.927*mm"/>
+        <point x="-132.248*mm" y="27.663*mm"/>
+        <point x="-127.869*mm" y="55.949*mm"/>
+        <point x="-120.559*mm" y="83.624*mm"/>
+        <point x="-110.399*mm" y="110.384*mm"/>
+        <point x="-97.499*mm" y="135.935*mm"/>
+        <point x="-82.000*mm" y="160.000*mm"/>
+        <point x="95.000*mm" y="160.000*mm"/>
+        <point x="95.000*mm" y="85.419*mm"/>
+        <point x="82.583*mm" y="78.482*mm"/>
+        <point x="71.342*mm" y="69.769*mm"/>
+        <point x="61.527*mm" y="59.475*mm"/>
+        <point x="53.359*mm" y="47.832*mm"/>
+        <point x="47.843*mm" y="B0TrackerHoleRadius"/>
+      </support_plate>
+      <support_plate name="B0SupportPlate3">
+        <point x="0*mm" y="B0TrackerHoleRadius"/>
+        <point x="-B0TrackerHoleRadius*sin(15*deg)" y="B0TrackerHoleRadius*cos(15*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(30*deg)" y="B0TrackerHoleRadius*cos(30*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(45*deg)" y="B0TrackerHoleRadius*cos(45*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(60*deg)" y="B0TrackerHoleRadius*cos(60*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(75*deg)" y="B0TrackerHoleRadius*cos(75*deg)"/>
+        <point x="-B0TrackerHoleRadius" y="0*mm"/>
+        <point x="-B0TrackerHoleRadius*sin(105*deg)" y="B0TrackerHoleRadius*cos(105*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(120*deg)" y="B0TrackerHoleRadius*cos(120*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(135*deg)" y="B0TrackerHoleRadius*cos(135*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(150*deg)" y="B0TrackerHoleRadius*cos(150*deg)"/>
+        <point x="-B0TrackerHoleRadius*sin(165*deg)" y="B0TrackerHoleRadius*cos(165*deg)"/>
+        <point x="0*mm" y="-B0TrackerHoleRadius"/>
+        <point x="47.527*mm" y="-B0TrackerHoleRadius"/>
+        <point x="53.032*mm" y="-48.024*mm"/>
+        <point x="61.222*mm" y="-59.849*mm"/>
+        <point x="71.103*mm" y="-70.301*mm"/>
+        <point x="82.449*mm" y="-79.142*mm"/>
+        <point x="95.000*mm" y="-86.168*mm"/>
+        <point x="95.000*mm" y="-161.500*mm"/>
+        <point x="-78.902*mm" y="-161.500*mm"/>
+        <point x="-94.673*mm" y="-137.581*mm"/>
+        <point x="-107.842*mm" y="-112.137*mm"/>
+        <point x="-118.261*mm" y="-85.448*mm"/>
+        <point x="-125.816*mm" y="-57.812*mm"/>
+        <point x="-130.422*mm" y="-29.535*mm"/>
+        <point x="-132.028*mm" y="-0.930*mm"/>
+        <point x="-130.617*mm" y="27.686*mm"/>
+        <point x="-126.205*mm" y="55.994*mm"/>
+        <point x="-118.839*mm" y="83.681*mm"/>
+        <point x="-108.602*mm" y="110.440*mm"/>
+        <point x="-95.608*mm" y="135.974*mm"/>
+        <point x="-80.000*mm" y="160.000*mm"/>
+        <point x="95.000*mm" y="160.000*mm"/>
+        <point x="95.000*mm" y="86.169*mm"/>
+        <point x="82.449*mm" y="79.142*mm"/>
+        <point x="71.103*mm" y="70.301*mm"/>
+        <point x="61.222*mm" y="59.849*mm"/>
+        <point x="53.032*mm" y="48.024*mm"/>
+        <point x="47.527*mm" y="B0TrackerHoleRadius"/>
+      </support_plate>
+      <support_plate name="B0SupportPlate4">
+        <point x="0*mm" y="B0TrackerHoleRadiusSt4"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(15*deg)" y="B0TrackerHoleRadiusSt4*cos(15*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(30*deg)" y="B0TrackerHoleRadiusSt4*cos(30*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(45*deg)" y="B0TrackerHoleRadiusSt4*cos(45*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(60*deg)" y="B0TrackerHoleRadiusSt4*cos(60*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(75*deg)" y="B0TrackerHoleRadiusSt4*cos(75*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4" y="0*mm"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(105*deg)" y="B0TrackerHoleRadiusSt4*cos(105*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(120*deg)" y="B0TrackerHoleRadiusSt4*cos(120*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(135*deg)" y="B0TrackerHoleRadiusSt4*cos(135*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(150*deg)" y="B0TrackerHoleRadiusSt4*cos(150*deg)"/>
+        <point x="-B0TrackerHoleRadiusSt4*sin(165*deg)" y="B0TrackerHoleRadiusSt4*cos(165*deg)"/>
+        <point x="0*mm" y="-B0TrackerHoleRadiusSt4"/>
+        <point x="50.507*mm" y="-B0TrackerHoleRadiusSt4"/>
+        <point x="57.797*mm" y="-55.361*mm"/>
+        <point x="68.368*mm" y="-67.715*mm"/>
+        <point x="80.891*mm" y="-78.085*mm"/>
+        <point x="95.000*mm" y="-86.168*mm"/>
+        <point x="95.000*mm" y="-161.500*mm"/>
+        <point x="-81.345*mm" y="-161.500*mm"/>
+        <point x="-95.075*mm" y="-140.768*mm"/>
+        <point x="-108.789*mm" y="-114.805*mm"/>
+        <point x="-119.645*mm" y="-87.524*mm"/>
+        <point x="-127.520*mm" y="-59.239*mm"/>
+        <point x="-132.323*mm" y="-30.272*mm"/>
+        <point x="-133.997*mm" y="-0.958*mm"/>
+        <point x="-132.528*mm" y="28.367*mm"/>
+        <point x="-127.928*mm" y="57.366*mm"/>
+        <point x="-120.250*mm" y="85.706*mm"/>
+        <point x="-109.586*mm" y="113.063*mm"/>
+        <point x="-96.054*mm" y="139.120*mm"/>
+        <point x="-82.432*mm" y="160.000*mm"/>
+        <point x="95.000*mm" y="160.000*mm"/>
+        <point x="95.000*mm" y="86.169*mm"/>
+        <point x="80.891*mm" y="78.086*mm"/>
+        <point x="68.368*mm" y="67.715*mm"/>
+        <point x="57.797*mm" y="55.361*mm"/>
+        <point x="50.506*mm" y="B0TrackerHoleRadiusSt4"/>
+      </support_plate>
+      <!-- Each <face> is one ACTS layer: "front" faces the IP (upstream, odd layer id), "back"
+           is downstream (even). Columns alternate between the faces every 15 mm, so the
+           sensors of neighboring columns overlap by 1 mm; staves stacked in a column meet
+           sensor to sensor. Module ids follow the <module> order, so reordering changes the
+           cellIDs -->
+      <module_layout name="B0ModuleLayout_St1">
+        <face side="front">
+          <module x="-109.450*mm" y="0.000*mm"/>
+          <module x="-79.450*mm" y="69.000*mm"/>
+          <module x="-79.450*mm" y="23.000*mm"/>
+          <module x="-79.450*mm" y="-23.000*mm"/>
+          <module x="-79.450*mm" y="-69.000*mm"/>
+          <module x="-49.450*mm" y="69.000*mm"/>
+          <module x="-49.450*mm" y="23.000*mm"/>
+          <module x="-49.450*mm" y="-23.000*mm"/>
+          <module x="-49.450*mm" y="-69.000*mm"/>
+          <module x="-19.450*mm" y="105.125*mm"/>
+          <module x="-19.450*mm" y="59.125*mm"/>
+          <module x="-19.450*mm" y="-59.125*mm"/>
+          <module x="-19.450*mm" y="-105.125*mm"/>
+          <module x="10.550*mm" y="105.750*mm"/>
+          <module x="10.550*mm" y="59.750*mm"/>
+          <module x="10.550*mm" y="-59.750*mm"/>
+          <module x="10.550*mm" y="-105.750*mm"/>
+          <module x="40.550*mm" y="117.338*mm"/>
+          <module x="40.550*mm" y="71.338*mm"/>
+          <module x="40.550*mm" y="-71.338*mm"/>
+          <module x="40.550*mm" y="-117.338*mm"/>
+        </face>
+        <face side="back">
+          <module x="-94.450*mm" y="46.000*mm"/>
+          <module x="-94.450*mm" y="0.000*mm"/>
+          <module x="-94.450*mm" y="-46.000*mm"/>
+          <module x="-64.450*mm" y="69.000*mm"/>
+          <module x="-64.450*mm" y="23.000*mm"/>
+          <module x="-64.450*mm" y="-23.000*mm"/>
+          <module x="-64.450*mm" y="-69.000*mm"/>
+          <module x="-34.450*mm" y="98.623*mm"/>
+          <module x="-34.450*mm" y="52.623*mm"/>
+          <module x="-34.450*mm" y="-52.623*mm"/>
+          <module x="-34.450*mm" y="-98.623*mm"/>
+          <module x="-4.450*mm" y="105.750*mm"/>
+          <module x="-4.450*mm" y="59.750*mm"/>
+          <module x="-4.450*mm" y="-59.750*mm"/>
+          <module x="-4.450*mm" y="-105.750*mm"/>
+          <module x="25.550*mm" y="105.750*mm"/>
+          <module x="25.550*mm" y="59.750*mm"/>
+          <module x="25.550*mm" y="-59.750*mm"/>
+          <module x="25.550*mm" y="-105.750*mm"/>
+          <module x="55.550*mm" y="136.283*mm"/>
+          <module x="55.550*mm" y="90.283*mm"/>
+          <module x="55.550*mm" y="-90.283*mm"/>
+          <module x="55.550*mm" y="-136.283*mm"/>
+        </face>
+      </module_layout>
+      <module_layout name="B0ModuleLayout_St2">
+        <face side="front">
+          <module x="-109.450*mm" y="0.000*mm"/>
+          <module x="-79.450*mm" y="69.000*mm"/>
+          <module x="-79.450*mm" y="23.000*mm"/>
+          <module x="-79.450*mm" y="-23.000*mm"/>
+          <module x="-79.450*mm" y="-69.000*mm"/>
+          <module x="-49.450*mm" y="69.000*mm"/>
+          <module x="-49.450*mm" y="23.000*mm"/>
+          <module x="-49.450*mm" y="-23.000*mm"/>
+          <module x="-49.450*mm" y="-69.000*mm"/>
+          <module x="-19.450*mm" y="105.125*mm"/>
+          <module x="-19.450*mm" y="59.125*mm"/>
+          <module x="-19.450*mm" y="-59.125*mm"/>
+          <module x="-19.450*mm" y="-105.125*mm"/>
+          <module x="10.550*mm" y="105.750*mm"/>
+          <module x="10.550*mm" y="59.750*mm"/>
+          <module x="10.550*mm" y="-59.750*mm"/>
+          <module x="10.550*mm" y="-105.750*mm"/>
+          <module x="40.550*mm" y="116.614*mm"/>
+          <module x="40.550*mm" y="70.614*mm"/>
+          <module x="40.550*mm" y="-70.614*mm"/>
+          <module x="40.550*mm" y="-116.614*mm"/>
+        </face>
+        <face side="back">
+          <module x="-94.450*mm" y="46.000*mm"/>
+          <module x="-94.450*mm" y="0.000*mm"/>
+          <module x="-94.450*mm" y="-46.000*mm"/>
+          <module x="-64.450*mm" y="69.000*mm"/>
+          <module x="-64.450*mm" y="23.000*mm"/>
+          <module x="-64.450*mm" y="-23.000*mm"/>
+          <module x="-64.450*mm" y="-69.000*mm"/>
+          <module x="-34.450*mm" y="98.623*mm"/>
+          <module x="-34.450*mm" y="52.623*mm"/>
+          <module x="-34.450*mm" y="-52.623*mm"/>
+          <module x="-34.450*mm" y="-98.623*mm"/>
+          <module x="-4.450*mm" y="105.750*mm"/>
+          <module x="-4.450*mm" y="59.750*mm"/>
+          <module x="-4.450*mm" y="-59.750*mm"/>
+          <module x="-4.450*mm" y="-105.750*mm"/>
+          <module x="25.550*mm" y="105.750*mm"/>
+          <module x="25.550*mm" y="59.750*mm"/>
+          <module x="25.550*mm" y="-59.750*mm"/>
+          <module x="25.550*mm" y="-105.750*mm"/>
+          <module x="55.550*mm" y="135.527*mm"/>
+          <module x="55.550*mm" y="89.527*mm"/>
+          <module x="55.550*mm" y="-89.527*mm"/>
+          <module x="55.550*mm" y="-135.527*mm"/>
+        </face>
+      </module_layout>
+      <module_layout name="B0ModuleLayout_St3">
+        <face side="front">
+          <module x="-109.450*mm" y="0.000*mm"/>
+          <module x="-79.450*mm" y="69.000*mm"/>
+          <module x="-79.450*mm" y="23.000*mm"/>
+          <module x="-79.450*mm" y="-23.000*mm"/>
+          <module x="-79.450*mm" y="-69.000*mm"/>
+          <module x="-49.450*mm" y="69.000*mm"/>
+          <module x="-49.450*mm" y="23.000*mm"/>
+          <module x="-49.450*mm" y="-23.000*mm"/>
+          <module x="-49.450*mm" y="-69.000*mm"/>
+          <module x="-19.450*mm" y="105.125*mm"/>
+          <module x="-19.450*mm" y="59.125*mm"/>
+          <module x="-19.450*mm" y="-59.125*mm"/>
+          <module x="-19.450*mm" y="-105.125*mm"/>
+          <module x="10.550*mm" y="105.750*mm"/>
+          <module x="10.550*mm" y="59.750*mm"/>
+          <module x="10.550*mm" y="-59.750*mm"/>
+          <module x="10.550*mm" y="-105.750*mm"/>
+          <module x="40.550*mm" y="105.750*mm"/>
+          <module x="40.550*mm" y="59.750*mm"/>
+          <module x="40.550*mm" y="-59.750*mm"/>
+          <module x="40.550*mm" y="-105.750*mm"/>
+        </face>
+        <face side="back">
+          <module x="-94.450*mm" y="46.000*mm"/>
+          <module x="-94.450*mm" y="0.000*mm"/>
+          <module x="-94.450*mm" y="-46.000*mm"/>
+          <module x="-64.450*mm" y="69.000*mm"/>
+          <module x="-64.450*mm" y="23.000*mm"/>
+          <module x="-64.450*mm" y="-23.000*mm"/>
+          <module x="-64.450*mm" y="-69.000*mm"/>
+          <module x="-34.450*mm" y="98.623*mm"/>
+          <module x="-34.450*mm" y="52.623*mm"/>
+          <module x="-34.450*mm" y="-52.623*mm"/>
+          <module x="-34.450*mm" y="-98.623*mm"/>
+          <module x="-4.450*mm" y="105.750*mm"/>
+          <module x="-4.450*mm" y="59.750*mm"/>
+          <module x="-4.450*mm" y="-59.750*mm"/>
+          <module x="-4.450*mm" y="-105.750*mm"/>
+          <module x="25.550*mm" y="105.750*mm"/>
+          <module x="25.550*mm" y="59.750*mm"/>
+          <module x="25.550*mm" y="-59.750*mm"/>
+          <module x="25.550*mm" y="-105.750*mm"/>
+          <module x="55.550*mm" y="69.000*mm"/>
+          <module x="55.550*mm" y="23.000*mm"/>
+          <module x="55.550*mm" y="-23.000*mm"/>
+          <module x="55.550*mm" y="-69.000*mm"/>
+        </face>
+      </module_layout>
+      <module_layout name="B0ModuleLayout_St4">
+        <face side="front">
+          <module x="-100.800*mm" y="46.000*mm"/>
+          <module x="-100.800*mm" y="0.000*mm"/>
+          <module x="-100.800*mm" y="-46.000*mm"/>
+          <module x="-70.800*mm" y="69.000*mm"/>
+          <module x="-70.800*mm" y="23.000*mm"/>
+          <module x="-70.800*mm" y="-23.000*mm"/>
+          <module x="-70.800*mm" y="-69.000*mm"/>
+          <module x="-40.800*mm" y="101.681*mm"/>
+          <module x="-40.800*mm" y="55.681*mm"/>
+          <module x="-40.800*mm" y="-55.681*mm"/>
+          <module x="-40.800*mm" y="-101.681*mm"/>
+          <module x="-10.800*mm" y="112.100*mm"/>
+          <module x="-10.800*mm" y="66.100*mm"/>
+          <module x="-10.800*mm" y="-66.100*mm"/>
+          <module x="-10.800*mm" y="-112.100*mm"/>
+          <module x="19.200*mm" y="112.100*mm"/>
+          <module x="19.200*mm" y="66.100*mm"/>
+          <module x="19.200*mm" y="-66.100*mm"/>
+          <module x="19.200*mm" y="-112.100*mm"/>
+          <module x="49.200*mm" y="112.100*mm"/>
+          <module x="49.200*mm" y="66.100*mm"/>
+          <module x="49.200*mm" y="-66.100*mm"/>
+          <module x="49.200*mm" y="-112.100*mm"/>
+        </face>
+        <face side="back">
+          <module x="-115.800*mm" y="0.000*mm"/>
+          <module x="-85.800*mm" y="69.000*mm"/>
+          <module x="-85.800*mm" y="23.000*mm"/>
+          <module x="-85.800*mm" y="-23.000*mm"/>
+          <module x="-85.800*mm" y="-69.000*mm"/>
+          <module x="-55.800*mm" y="69.000*mm"/>
+          <module x="-55.800*mm" y="23.000*mm"/>
+          <module x="-55.800*mm" y="-23.000*mm"/>
+          <module x="-55.800*mm" y="-69.000*mm"/>
+          <module x="-25.800*mm" y="110.061*mm"/>
+          <module x="-25.800*mm" y="64.061*mm"/>
+          <module x="-25.800*mm" y="-64.061*mm"/>
+          <module x="-25.800*mm" y="-110.061*mm"/>
+          <module x="4.200*mm" y="112.100*mm"/>
+          <module x="4.200*mm" y="66.100*mm"/>
+          <module x="4.200*mm" y="-66.100*mm"/>
+          <module x="4.200*mm" y="-112.100*mm"/>
+          <module x="34.200*mm" y="112.100*mm"/>
+          <module x="34.200*mm" y="66.100*mm"/>
+          <module x="34.200*mm" y="-66.100*mm"/>
+          <module x="34.200*mm" y="-112.100*mm"/>
+          <module x="64.200*mm" y="69.000*mm"/>
+          <module x="64.200*mm" y="23.000*mm"/>
+          <module x="64.200*mm" y="-23.000*mm"/>
+          <module x="64.200*mm" y="-69.000*mm"/>
+        </face>
+      </module_layout>
+      <!-- Positions are along the ion axis, so zpos/cos(ionCrossingAngle) puts each station
+           at global z = zpos. cellID layer = 2*(id-1) + (1 front | 2 back) -->
+      <station id="1">
+        <position x="0*mm" y="0*mm" z="B0TrackerStation1_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate1"/>
+        <layout ref="B0ModuleLayout_St1"/>
+      </station>
+      <station id="2">
+        <position x="0*mm" y="0*mm" z="B0TrackerStation2_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate2"/>
+        <layout ref="B0ModuleLayout_St2"/>
+      </station>
+      <station id="3">
+        <position x="0*mm" y="0*mm" z="B0TrackerStation3_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate3"/>
+        <layout ref="B0ModuleLayout_St3"/>
+      </station>
+      <station id="4">
+        <position x="0*mm" y="0*mm" z="B0TrackerStation4_zpos/cos(ionCrossingAngle)"/>
+        <support ref="B0SupportPlate4"/>
+        <layout ref="B0ModuleLayout_St4"/>
+      </station>
     </detector>
-
   </detectors>
-
   <readouts>
     <readout name="B0TrackerHits">
       <comment>
-        20um resolution = 75um "pixels", but this is "effective", since we assume charge sharing in the real-life 500um AC-LGADs - this may need to addressed differently in simulations later via digitization
+        Effective 70 um cells (~20 um resolution) stand in for charge sharing in the
+        500 um AC-LGAD pixels until a dedicated digitization exists
       </comment>
-      <segmentation type="CartesianGridXZ" grid_size_x="0.070*mm" grid_size_z="0.070*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+      <segmentation type="CartesianGridXY" grid_size_x="0.070*mm" grid_size_y="0.070*mm"/>
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
     </readout>
   </readouts>
-
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="B0Tracker"/>
-      <argument value="layer_pattern: str=B0Tracker_layer\d"/>
+      <argument value="layer_pattern: str=B0Tracker_station\d+_(front|back)_P"/>
     </plugin>
   </plugins>
-
 </lccdd>
