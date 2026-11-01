@@ -1042,6 +1042,9 @@ jobs:
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v5
       with:
+        # Re-runs keep the earlier attempt's artifact, and deploy-pages refuses
+        # to deploy when several artifacts share a name, so name it per attempt.
+        name: github-pages-${{ github.run_attempt }}
         path: _site/
         retention-days: 7
     - name: Populate capybara summary
@@ -1094,6 +1097,8 @@ jobs:
       id: deployment
       continue-on-error: true
       uses: actions/deploy-pages@v5
+      with:
+        artifact_name: github-pages-${{ github.run_attempt }}
     - name: Find capybara comment
       if: ${{ github.event_name == 'pull_request' }}
       id: find_comment
@@ -1107,6 +1112,11 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: capybara_${{ github.event.pull_request.number }}.md
+    - name: Flag failed deployment in capybara comment
+      if: ${{ github.event_name == 'pull_request' && steps.deployment.outcome != 'success' }}
+      run: |
+        echo "> [!WARNING]" >> capybara_${{ github.event.pull_request.number }}.md
+        echo "> GitHub Pages deployment failed in [this run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}); the links above may return 404." >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create or update capybara comment
       if: ${{ github.event_name == 'pull_request' }}
       uses: peter-evans/create-or-update-comment@v5
