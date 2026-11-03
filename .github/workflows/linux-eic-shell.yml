@@ -603,7 +603,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          ${{ matrix.sim || 'npsim' }} --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
+          ${{ matrix.sim || 'npsim' }} --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputConfig.useRNTuple true --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
     - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
@@ -665,7 +665,7 @@ jobs:
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
           url=root://dtn2304.jlab.org:8443//jlab-osdf-ro/eic/EPIC/volatile/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
           gprofng collect app -o sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er \
-          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --random.enableEventSeed --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --random.enableEventSeed --outputConfig.useRNTuple true --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
           gprofng display text -ctree sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er > sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
     - name: Upload ROOT output
       uses: actions/upload-artifact@v7
@@ -735,6 +735,7 @@ jobs:
           # FIXME: Irt collections excluded as a workaround for https://github.com/eic/EICrecon/issues/3037
           eicrecon \
             -Pnthreads=$(getconf _NPROCESSORS_ONLN) \
+            -Ppodio:output_backend=rntuple \
             -Ppodio:output_exclude_collections=DRICHIrtRadiatorInfo,DRICHIrtParticles,PFRICHIrtRadiatorInfo,PFRICHIrtParticles \
             -Ppodio:output_file=rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root \
             sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
@@ -805,6 +806,7 @@ jobs:
           # FIXME: Irt collections excluded as a workaround for https://github.com/eic/EICrecon/issues/3037
           eicrecon \
             -Pnthreads=$(getconf _NPROCESSORS_ONLN) \
+            -Ppodio:output_backend=rntuple \
             -Ppodio:output_exclude_collections=DRICHIrtRadiatorInfo,DRICHIrtParticles,PFRICHIrtRadiatorInfo,PFRICHIrtParticles \
             -Ppodio:output_file=rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root \
             sim_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4hep.root
@@ -1042,6 +1044,9 @@ jobs:
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v5
       with:
+        # Re-runs keep the earlier attempt's artifact, and deploy-pages refuses
+        # to deploy when several artifacts share a name, so name it per attempt.
+        name: github-pages-${{ github.run_attempt }}
         path: _site/
         retention-days: 7
     - name: Populate capybara summary
@@ -1094,6 +1099,8 @@ jobs:
       id: deployment
       continue-on-error: true
       uses: actions/deploy-pages@v5
+      with:
+        artifact_name: github-pages-${{ github.run_attempt }}
     - name: Find capybara comment
       if: ${{ github.event_name == 'pull_request' }}
       id: find_comment
@@ -1107,6 +1114,11 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: capybara_${{ github.event.pull_request.number }}.md
+    - name: Flag failed deployment in capybara comment
+      if: ${{ github.event_name == 'pull_request' && steps.deployment.outcome != 'success' }}
+      run: |
+        echo "> [!WARNING]" >> capybara_${{ github.event.pull_request.number }}.md
+        echo "> GitHub Pages deployment failed in [this run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}); the links above may return 404." >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create or update capybara comment
       if: ${{ github.event_name == 'pull_request' }}
       uses: peter-evans/create-or-update-comment@v5
