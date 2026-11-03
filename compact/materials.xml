@@ -252,6 +252,7 @@
     <composite n="2" ref="N"/>
     <composite n="5" ref="O"/>
   </material>
+  <!-- https://cds.cern.ch/record/2867557/files/2306.03699.pdf -->
   <material name="K9">
     <D value="200" unit="kg/m3"/>
     <fraction n="1" ref="C"/>
