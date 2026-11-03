@@ -243,7 +243,7 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       } else { // not a curved component
 
         // New code that constructs component from GDML files. Import the GDML file from the "file" attribute of the module_component
-        std::string gdml_file  = getAttrOrDefault<std::string>(x_comp, _Unicode(file), " ");
+        std::string gdml_file = getAttrOrDefault<std::string>(x_comp, _Unicode(file), " ");
 
         Volume c_vol(c_nam);
         c_vol = parser->GDMLReadFile(gdml_file.c_str());
