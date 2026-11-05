@@ -133,7 +133,7 @@
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="QuartzOptical"
-          limits="dirc_bar_limits"
+          limits="DIRCLimits"
           vis="DIRCBar"
         />
 
