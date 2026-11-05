@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v46.8.1"
+ACTS_VERSION="v47.7.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -62,8 +62,6 @@ function patch_acts() {
     patch -p1 --forward --input="$file" || git apply --whitespace=nowarn "$file"
   fi
 }
-patch_acts https://github.com/acts-project/acts/pull/6010.diff  # geo_id encoding
-patch_acts https://github.com/acts-project/acts/pull/6012.diff  # cbor support
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
