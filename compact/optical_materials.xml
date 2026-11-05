@@ -1178,6 +1178,12 @@
     <opticalsurface finish="polished" model="glisur" name="DIRC_MirrorOpticalSurface" type="dielectric_metal" value="0">
       <property name="REFLECTIVITY" ref="REFLECTIVITY_DIRC_mirror"/>
     </opticalsurface>
+    <!-- Bar lateral surface: UNIFIED model with ground finish.
+         sigma_alpha (micro-facet roughness angle, rad) is set in DIRC_geo.cpp
+         via TGeoOpticalSurface::SetSigmaAlpha(), as DD4hep compact XML does not
+         yet support the sigma_alpha attribute for the unified model.
+         A value of 0.02 rad is typical for polished quartz in hpDIRC simulations. -->
+    <opticalsurface finish="ground" model="unified" name="DIRC_BarOpticalSurface" type="dielectric_dielectric" value="1.0"/>
 
     <!-- BEGIN dRICH and pfRICH optical surface properties
       - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
