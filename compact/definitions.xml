@@ -252,9 +252,6 @@ The unused IDs below are saved for future use.
       TODO: A lot of the repeated ID's below should be pushed into a single detector
     </documentation>
     <constant name="B0Tracker_Station_1_ID"   value="150"/>
-    <constant name="B0Tracker_Station_2_ID"   value="151"/>
-    <constant name="B0Tracker_Station_3_ID"   value="152"/>
-    <constant name="B0Tracker_Station_4_ID"   value="153"/>
     <constant name="B0Preshower_Station_1_ID" value="154"/>
     <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
     <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
@@ -658,9 +655,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_height"    value="59.29*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="-10.0*cm"/>
     <constant name="HcalEndcapPInsert_yposition" value="0.0*cm"/>
-    <constant name="HcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
-    <constant name="HcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
-    <constant name="HcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 41.55 * cm"/> <!-- 41.55 cm gap between service gap, includes 28.5 cm oculus -->

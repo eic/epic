@@ -174,12 +174,21 @@ jobs:
           export DETECTOR_CONFIG=epic_craterlake_material_map
           ./run_material_map_validation.sh
           popd
+    - name: Check that both ROOT and CBOR material maps were produced
+      run: |
+        for ext in root cbor; do
+          f="scripts/material_map/material-map_map.${ext}"
+          if [ ! -s "${f}" ]; then
+            echo "::error::Missing or empty material map file: ${f}"
+            exit 1
+          fi
+          echo "Found ${f} ($(stat -c%s "${f}") bytes)"
+        done
     - uses: actions/upload-artifact@v7
       with:
         name: material_map
         path: |
-          scripts/material_map/*.json
-          scripts/material_map/material-map.cbor
+          scripts/material_map/material-map_map.*
           scripts/material_map/plots/
           scripts/material_map/Surfaces/
           scripts/material_map/Validation/
@@ -208,6 +217,14 @@ jobs:
     with:
       # NOTE: This list of detector configurations must be kept in sync with the configurations linked in README.md.
       detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
+
+  convert-to-dot:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/convert-to-dot.yml
+    with:
+      detector_configs: ${{needs.list-detector-configs.outputs.configs_csv}}
 
   dump-constants:
     runs-on: ubuntu-latest
@@ -586,7 +603,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          ${{ matrix.sim || 'npsim' }} --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
+          ${{ matrix.sim || 'npsim' }} --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --random.enableEventSeed --gun.particle "${{ matrix.particle }}${{ matrix.charge }}" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputConfig.useRNTuple true --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING ${{ matrix.extra_args }}
     - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
@@ -594,12 +611,12 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v21
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
-        workflow_conclusion: ""
+        workflow_conclusion: "completed"
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
@@ -609,7 +626,8 @@ jobs:
         run: |
           mkdir capybara-reports
           shopt -s nullglob
-          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+          set -o pipefail
+          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
           touch .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -645,9 +663,9 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CACHE=/opt/detector/epic-main/share/epic
-          url=root://dtn-eic.jlab.org//volatile/eic/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
+          url=root://dtn2304.jlab.org:8443//jlab-osdf-ro/eic/EPIC/volatile/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
           gprofng collect app -o sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er \
-          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --random.enableEventSeed --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --random.enableEventSeed --outputConfig.useRNTuple true --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
           gprofng display text -ctree sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er > sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
     - name: Upload ROOT output
       uses: actions/upload-artifact@v7
@@ -663,12 +681,12 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v21
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
-        workflow_conclusion: ""
+        workflow_conclusion: "completed"
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
@@ -678,7 +696,8 @@ jobs:
         run: |
           mkdir capybara-reports
           shopt -s nullglob
-          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+          set -o pipefail
+          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
           touch .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -713,7 +732,11 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CONFIG=${{ matrix.detector_config }}
+          # FIXME: Irt collections excluded as a workaround for https://github.com/eic/EICrecon/issues/3037
           eicrecon \
+            -Pnthreads=$(getconf _NPROCESSORS_ONLN) \
+            -Ppodio:output_backend=rntuple \
+            -Ppodio:output_exclude_collections=DRICHIrtRadiatorInfo,DRICHIrtParticles,PFRICHIrtRadiatorInfo,PFRICHIrtParticles \
             -Ppodio:output_file=rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root \
             sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
     - uses: actions/upload-artifact@v7
@@ -723,12 +746,12 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v21
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
         name: rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root
-        workflow_conclusion: ""
+        workflow_conclusion: "completed"
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
@@ -740,7 +763,8 @@ jobs:
           mkdir new
           ln -sf ../rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root new/
           shopt -s nullglob
-          capybara bara ref/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root* new/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root
+          set -o pipefail
+          capybara bara ref/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root* new/rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4eic.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
           touch .rec_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -779,7 +803,11 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export DETECTOR_CONFIG=${{ matrix.detector_config }}
+          # FIXME: Irt collections excluded as a workaround for https://github.com/eic/EICrecon/issues/3037
           eicrecon \
+            -Pnthreads=$(getconf _NPROCESSORS_ONLN) \
+            -Ppodio:output_backend=rntuple \
+            -Ppodio:output_exclude_collections=DRICHIrtRadiatorInfo,DRICHIrtParticles,PFRICHIrtRadiatorInfo,PFRICHIrtParticles \
             -Ppodio:output_file=rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root \
             sim_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4hep.root
     - uses: actions/upload-artifact@v7
@@ -789,12 +817,12 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v21
+      uses: dawidd6/action-download-artifact@v27
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
         name: rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root
-        workflow_conclusion: ""
+        workflow_conclusion: "completed"
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
@@ -806,7 +834,8 @@ jobs:
           mkdir new
           ln -sf ../rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root new/
           shopt -s nullglob
-          capybara bara ref/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root* new/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root
+          set -o pipefail
+          capybara bara ref/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root* new/rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4eic.root 2>&1 | tee capybara-reports/capybara.log
           mv capybara-reports rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}
           touch .rec_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v7
@@ -837,6 +866,7 @@ jobs:
     needs:
       - list-open-prs
       - merge-npsim-capybara
+      - validate-material-map
     strategy:
       matrix: ${{ fromJSON(needs.list-open-prs.outputs.json) }}
       fail-fast: false
@@ -844,7 +874,7 @@ jobs:
     steps:
       - name: Download capybara artifact (other PRs)
         id: download_capybara
-        uses: dawidd6/action-download-artifact@v21
+        uses: dawidd6/action-download-artifact@v27
         if: github.event.pull_request.number != matrix.pr
         with:
           commit: ${{ matrix.head_sha }}
@@ -859,6 +889,35 @@ jobs:
         with:
           name: capybara-report
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
+      - name: Download material_map artifact (other PRs)
+        id: download_material_map
+        uses: dawidd6/action-download-artifact@v27
+        if: github.event.pull_request.number != matrix.pr
+        with:
+          commit: ${{ matrix.head_sha }}
+          path: publishing_docs/pr/${{ matrix.pr }}/material-map/
+          name: material_map
+          workflow: ".github/workflows/linux-eic-shell.yml"
+          workflow_conclusion: "completed"
+          if_no_artifact_found: ignore
+      - name: Download material_map artifact (this PR)
+        uses: actions/download-artifact@v8
+        if: github.event.pull_request.number == matrix.pr
+        with:
+          name: material_map
+          path: publishing_docs/pr/${{ matrix.pr }}/material-map/
+      - name: Generate material-map validation index
+        if: github.event.pull_request.number == matrix.pr || steps.download_material_map.outputs.found_artifact == 'true'
+        run: |
+          VALDIR="publishing_docs/pr/${{ matrix.pr }}/material-map/Validation"
+          if [ -d "$VALDIR" ]; then
+            echo '<html><body><h1>Material map validation plots</h1><ul>' > "$VALDIR/index.html"
+            find "$VALDIR" -name '*.pdf' | sort | while read f; do
+              rel="${f#$VALDIR/}"
+              echo "<li><a href=\"$rel\">$rel</a></li>"
+            done >> "$VALDIR/index.html"
+            echo '</ul></body></html>' >> "$VALDIR/index.html"
+          fi
       - uses: actions/upload-artifact@v7
         with:
           name: github-pages-staging-pr-${{ matrix.pr }}
@@ -869,13 +928,14 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - merge-npsim-capybara
+      - validate-material-map
     steps:
       # Note:
       # - If we run this on a non-main branch, we download from main with action-download-artifact.
       # - If we run this on the main branch, we have to download from this pipeline with download-artifact.
       - name: Download capybara artifact (in PR)
         id: download_capybara
-        uses: dawidd6/action-download-artifact@v21
+        uses: dawidd6/action-download-artifact@v27
         if: github.ref_name != 'main'
         with:
           branch: main
@@ -890,12 +950,46 @@ jobs:
         with:
           name: capybara-report
           path: publishing_docs/capybara/
+      - name: Download material_map artifact (in PR)
+        id: download_material_map
+        uses: dawidd6/action-download-artifact@v27
+        if: github.ref_name != 'main'
+        with:
+          branch: main
+          path: publishing_docs/material-map/
+          name: material_map
+          workflow: ".github/workflows/linux-eic-shell.yml"
+          workflow_conclusion: "completed"
+          if_no_artifact_found: ignore
+      - name: Download material_map artifact (on main)
+        uses: actions/download-artifact@v8
+        if: github.ref_name == 'main'
+        with:
+          name: material_map
+          path: publishing_docs/material-map/
       - name: Populate capybara summary (on main)
         if: github.ref_name == 'main' || steps.download_capybara.outputs.found_artifact == 'true'
         run: |
          echo "### Capybara summary for main" >> publishing_docs/capybara/index.md
          find publishing_docs/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
            "- [%f](https://eic.github.io/epic/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
+      - name: Generate material-map validation index
+        if: github.ref_name == 'main' || steps.download_material_map.outputs.found_artifact == 'true'
+        run: |
+          VALDIR="publishing_docs/material-map/Validation"
+          if [ -d "$VALDIR" ]; then
+            echo '<html><body><h1>Material map validation plots</h1><ul>' > "$VALDIR/index.html"
+            find "$VALDIR" -name '*.pdf' | sort | while read f; do
+              rel="${f#$VALDIR/}"
+              echo "<li><a href=\"$rel\">$rel</a></li>"
+            done >> "$VALDIR/index.html"
+            echo '</ul></body></html>' >> "$VALDIR/index.html"
+          fi
+      - name: Populate material-map summary (on main)
+        if: github.ref_name == 'main' || steps.download_material_map.outputs.found_artifact == 'true'
+        run: |
+          echo "### Material map validation for main" >> publishing_docs/material-map/index.md
+          echo "- [Validation plots](https://eic.github.io/epic/material-map/Validation/index.html)" >> publishing_docs/material-map/index.md
       - name: Create capybara step summary (this PR)
         if: github.ref_name == 'main'
         run: |
@@ -914,6 +1008,7 @@ jobs:
     needs:
     - convert-to-gdml
     - convert-to-tgeo
+    - convert-to-dot
     - merge-constants
     - merge-parameter-table
     - merge-dawn-view
@@ -949,15 +1044,29 @@ jobs:
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v5
       with:
+        # Re-runs keep the earlier attempt's artifact, and deploy-pages refuses
+        # to deploy when several artifacts share a name, so name it per attempt.
+        name: github-pages-${{ github.run_attempt }}
         path: _site/
         retention-days: 7
     - name: Populate capybara summary
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         echo "### Capybara summary for PR ${{ github.event.pull_request.number }}" >> capybara_${{ github.event.pull_request.number }}.md
-        [ -d _site/pr/${{ github.event.pull_request.number }}/capybara/ ] && \
-          find _site/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-            "- [%f](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md || true
+        CAPY_DIR="_site/pr/${{ github.event.pull_request.number }}/capybara"
+        if [ -d "$CAPY_DIR" ]; then
+          while IFS= read -r dir; do
+            name=$(basename "$dir")
+            line="- [${name}](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/capybara/${name}/index.html)"
+            count=$(grep -cE "p(_KS)? = " "${dir}/capybara.log" 2>/dev/null) || count=0
+            line="${line} (Δ: ${count})"
+            echo "$line"
+          done < <(find "$CAPY_DIR" -mindepth 1 -maxdepth 1 -type d | sort) >> capybara_${{ github.event.pull_request.number }}.md
+        fi
+        if [ -d _site/pr/${{ github.event.pull_request.number }}/material-map/Validation/ ]; then
+          echo "### Material map validation" >> capybara_${{ github.event.pull_request.number }}.md
+          echo "- [Validation plots](https://eic.github.io/epic/pr/${{ github.event.pull_request.number }}/material-map/Validation/index.html)" >> capybara_${{ github.event.pull_request.number }}.md
+        fi
         echo "<sup><sub>Last updated $(TZ=America/New_York date -Iminutes) ${{github.event.pull_request.head.sha}}</sub></sup>" >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create capybara step summary
       if: ${{ github.event_name == 'pull_request' }}
@@ -990,6 +1099,8 @@ jobs:
       id: deployment
       continue-on-error: true
       uses: actions/deploy-pages@v5
+      with:
+        artifact_name: github-pages-${{ github.run_attempt }}
     - name: Find capybara comment
       if: ${{ github.event_name == 'pull_request' }}
       id: find_comment
@@ -1003,6 +1114,11 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: capybara_${{ github.event.pull_request.number }}.md
+    - name: Flag failed deployment in capybara comment
+      if: ${{ github.event_name == 'pull_request' && steps.deployment.outcome != 'success' }}
+      run: |
+        echo "> [!WARNING]" >> capybara_${{ github.event.pull_request.number }}.md
+        echo "> GitHub Pages deployment failed in [this run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}); the links above may return 404." >> capybara_${{ github.event.pull_request.number }}.md
     - name: Create or update capybara comment
       if: ${{ github.event_name == 'pull_request' }}
       uses: peter-evans/create-or-update-comment@v5

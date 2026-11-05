@@ -67,4 +67,7 @@
     <constant name="offset_intermediate_2_RP_section" value ="0.0*cm"/>
     <constant name="offset_outer_RP_section" value ="0.0*cm"/>
 
+    <constant name="offset_OMD_x" value="0.0"/>
+
+
   </define>
