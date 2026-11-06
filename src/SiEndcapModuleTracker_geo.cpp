@@ -16,6 +16,7 @@
 #include <exception>
 #include <filesystem>
 #include <fstream>
+#include <limits>
 #include <map>
 #include <set>
 #include <sstream>
@@ -161,6 +162,9 @@ struct CorrugatedFrameConfig {
   double half_pitch{15.8 * mm};
   double y0{0.0};
   double z_center_offset{0.0};
+  // Mid-surface radius of the rounded flat/web bends; 0 keeps sharp junctions.
+  // Only used by the explicit-flat table (flat_width_mm schema).
+  double bend_radius{0.0};
   string rowwise_placement;
 };
 
@@ -728,6 +732,7 @@ bool parse_corrugated_frame(xml_comp_t x_frame, CorrugatedFrameConfig& config) {
   config.y0         = getAttrOrDefault(x_frame, _Unicode(y0), config.y0);
   config.z_center_offset =
       getAttrOrDefault(x_frame, _Unicode(z_center_offset), config.z_center_offset);
+  config.bend_radius = getAttrOrDefault(x_frame, _Unicode(bend_radius), config.bend_radius);
   config.rowwise_placement =
       getAttrOrDefault<string>(x_frame, _Unicode(rowwise_placement), config.rowwise_placement);
   return true;
@@ -938,7 +943,8 @@ string source_corrugation_disk_key(const string& layer_key) {
 int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskBoundary& disk,
                            const CorrugatedFrameConfig& config) {
   if (config.thickness <= 0.0 || config.height <= config.thickness || config.half_pitch <= 0.0 ||
-      config.theta <= 0.0) {
+      config.theta <= 0.0 || config.bend_radius < 0.0 ||
+      (config.bend_radius > 0.0 && config.bend_radius <= config.thickness / 2.0)) {
     printout(
         WARNING, "SiEndcapModuleTracker",
         fmt::format("skipping corrugated frame for disk '{}': invalid dimensions", disk.disk_key));
@@ -995,6 +1001,63 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
                                           Position(x_center, segment_y_center, z_center)));
         ++placed_count;
       }
+    }
+  };
+
+  // Place one rounded bend: a cylindrical carbon shell sector with radii
+  // R -/+ thickness/2 and its axis along x through (y_center, z_center).
+  // The arc spans psi_start .. psi_start + psi_delta, with psi measured in the
+  // y-z plane from +y toward +z. Like place_piece, it is clipped in x so that
+  // its full y footprint stays inside the disk boundary and beam-pipe openings.
+  auto place_bend = [&](const string& kind, double y_center, double z_center, double radius,
+                        double psi_start, double psi_delta) {
+    const double r_inner = radius - config.thickness / 2.0;
+    const double r_outer = radius + config.thickness / 2.0;
+    const double psi_low = std::min(psi_start, psi_start + psi_delta);
+    const double psi_high = std::max(psi_start, psi_start + psi_delta);
+
+    // y extent of the sector: arc end points on both radii, plus the
+    // outermost points (psi = 0 or pi) when the arc passes through them.
+    double y_min = std::numeric_limits<double>::max();
+    double y_max = std::numeric_limits<double>::lowest();
+    for (double psi : {psi_low, psi_high}) {
+      for (double r : {r_inner, r_outer}) {
+        y_min = std::min(y_min, y_center + r * std::cos(psi));
+        y_max = std::max(y_max, y_center + r * std::cos(psi));
+      }
+    }
+    for (int k = -2; k <= 2; ++k) {
+      const double psi_extreme = k * M_PI;
+      if (psi_extreme > psi_low && psi_extreme < psi_high) {
+        y_min = std::min(y_min, y_center + r_outer * std::cos(psi_extreme));
+        y_max = std::max(y_max, y_center + r_outer * std::cos(psi_extreme));
+      }
+    }
+
+    // RotationZYX(0, pi/2, 0) is a +90 deg rotation about y: the tube's local z
+    // axis becomes global x and local (x, y) becomes global (-z, y). A local
+    // tube angle phi therefore points along psi = phi - 90 deg.
+    double phi_start = std::fmod(psi_low + M_PI / 2.0, 2.0 * M_PI);
+    if (phi_start < 0.0) {
+      phi_start += 2.0 * M_PI;
+    }
+    const double phi_end = phi_start + (psi_high - psi_low);
+
+    const FrameFootprint footprint{y_min, y_max};
+    for (const auto& [x_min, x_max] : contained_x_intervals(disk, footprint)) {
+      const double x_half = (x_max - x_min) / 2.0;
+      if (x_half <= 0.0) {
+        continue;
+      }
+      const double x_center = (x_min + x_max) / 2.0;
+      const string volume_name =
+          fmt::format("{}_{}_{}_{}", disk.disk_key, config.name, kind, frame_index++);
+      Tube bend_solid(r_inner, r_outer, x_half, phi_start, phi_end);
+      Volume bend_vol(volume_name, bend_solid, frame_material);
+      bend_vol.setVisAttributes(description.visAttributes(config.vis));
+      layer_vol.placeVolume(bend_vol, Transform3D(RotationZYX(0.0, M_PI / 2.0, 0.0),
+                                                  Position(x_center, y_center, z_center)));
+      ++placed_count;
     }
   };
 
@@ -1074,19 +1137,32 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
         flat_z_centers.push_back(flat_z);
       }
 
-      for (size_t index = 0; index < flats.size(); ++index) {
-        place_piece(fmt::format("flat{}", flats[index].row_index), config.y0 + flats[index].row_y,
-                    flat_widths[index] / 2.0, flat_z_centers[index], flat_widths[index] / 2.0,
-                    config.thickness / 2.0, 0.0);
-      }
+      // Optional rounded bends (Step 8q). flat_width_mm is the sharp-corner
+      // width measured to the apex where the flat and web mid-surface lines
+      // meet. A bend is a mid-surface arc of radius R tangent to the flat and the
+      // web, so both pieces lose the tangent length T = R*tan(|alpha|/2) at that
+      // apex, where alpha is the web angle relative to the flat. R = 0 keeps the
+      // sharp-junction geometry unchanged.
+      struct WebJoin {
+        double left_edge{0.0};      // apex y on the lower-y flat
+        double right_edge{0.0};     // apex y on the upper-y flat
+        double web_angle{0.0};      // signed, + when the web rises in z toward +y
+        double web_length{0.0};     // apex-to-apex mid-surface length
+        double tangent_length{0.0}; // T; zero without bends
+      };
+      const double dimension_tolerance = 1.0e-9 * mm;
+      const double web_y_span          = explicit_y_step;
+      vector<WebJoin> joins;
+      vector<double> trim_low(flats.size(), 0.0);  // flat length removed at its lower-y end
+      vector<double> trim_high(flats.size(), 0.0); // flat length removed at its upper-y end
 
+      // First pass: check every join before placing anything.
       for (size_t index = 0; index + 1 < flats.size(); ++index) {
-        const double left_edge  = config.y0 + flats[index].row_y + flat_widths[index] / 2.0;
-        const double right_edge = config.y0 + flats[index + 1].row_y - flat_widths[index + 1] / 2.0;
-        const double available_y_gap     = right_edge - left_edge;
-        const double web_y_span          = explicit_y_step;
-        const double web_z_span          = flat_z_centers[index + 1] - flat_z_centers[index];
-        const double dimension_tolerance = 1.0e-9 * mm;
+        WebJoin join;
+        join.left_edge  = config.y0 + flats[index].row_y + flat_widths[index] / 2.0;
+        join.right_edge = config.y0 + flats[index + 1].row_y - flat_widths[index + 1] / 2.0;
+        const double available_y_gap = join.right_edge - join.left_edge;
+        const double web_z_span      = flat_z_centers[index + 1] - flat_z_centers[index];
         if (available_y_gap + dimension_tolerance < web_y_span) {
           printout(WARNING, "SiEndcapModuleTracker",
                    fmt::format("skipping explicit corrugation table for disk '{}': rows {} and "
@@ -1094,19 +1170,87 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
                                disk.disk_key, flats[index].row_index, flats[index + 1].row_index));
           return 0;
         }
+        // A bend is tangent to both pieces only if the web starts exactly at the flat edges.
+        if (config.bend_radius > 0.0 && available_y_gap - web_y_span > dimension_tolerance) {
+          printout(WARNING, "SiEndcapModuleTracker",
+                   fmt::format("skipping explicit corrugation table for disk '{}': rows {} and "
+                               "{} leave a y gap the web does not close, so bends cannot be "
+                               "tangent to both pieces",
+                               disk.disk_key, flats[index].row_index, flats[index + 1].row_index));
+          return 0;
+        }
 
-        const double web_angle        = std::atan2(web_z_span, web_y_span);
-        const double web_length       = std::hypot(web_y_span, web_z_span);
-        const double web_y_projection = std::abs(std::cos(web_angle)) * web_length / 2.0 +
-                                        std::abs(std::sin(web_angle)) * config.thickness / 2.0;
-        place_piece(fmt::format("web{}_{}", flats[index].row_index, flats[index + 1].row_index),
-                    (left_edge + right_edge) / 2.0, web_y_projection,
-                    (flat_z_centers[index] + flat_z_centers[index + 1]) / 2.0, web_length / 2.0,
-                    config.thickness / 2.0, web_angle);
+        join.web_angle      = std::atan2(web_z_span, web_y_span);
+        join.web_length     = std::hypot(web_y_span, web_z_span);
+        join.tangent_length = config.bend_radius * std::tan(std::abs(join.web_angle) / 2.0);
+        if (join.web_length - 2.0 * join.tangent_length <= dimension_tolerance) {
+          printout(WARNING, "SiEndcapModuleTracker",
+                   fmt::format("skipping explicit corrugation table for disk '{}': bend radius "
+                               "leaves no straight web between rows {} and {}",
+                               disk.disk_key, flats[index].row_index, flats[index + 1].row_index));
+          return 0;
+        }
+        trim_high[index]    = join.tangent_length;
+        trim_low[index + 1] = join.tangent_length;
+        joins.push_back(join);
+      }
+
+      for (size_t index = 0; index < flats.size(); ++index) {
+        const double straight_width = flat_widths[index] - trim_low[index] - trim_high[index];
+        if (straight_width <= dimension_tolerance) {
+          printout(WARNING, "SiEndcapModuleTracker",
+                   fmt::format("skipping explicit corrugation table for disk '{}': bend radius "
+                               "leaves no straight flat at CSV line {}",
+                               disk.disk_key, flats[index].csv_line));
+          return 0;
+        }
+      }
+
+      // Second pass: straight flats, then each straight web with its two bends.
+      for (size_t index = 0; index < flats.size(); ++index) {
+        const double straight_width = flat_widths[index] - trim_low[index] - trim_high[index];
+        const double straight_y =
+            config.y0 + flats[index].row_y + (trim_low[index] - trim_high[index]) / 2.0;
+        place_piece(fmt::format("flat{}", flats[index].row_index), straight_y,
+                    straight_width / 2.0, flat_z_centers[index], straight_width / 2.0,
+                    config.thickness / 2.0, 0.0);
+      }
+
+      for (size_t index = 0; index < joins.size(); ++index) {
+        const WebJoin& join            = joins[index];
+        const double straight_length   = join.web_length - 2.0 * join.tangent_length;
+        const double web_y_projection  = std::abs(std::cos(join.web_angle)) * straight_length / 2.0 +
+                                        std::abs(std::sin(join.web_angle)) * config.thickness / 2.0;
+        const string join_tag =
+            fmt::format("{}_{}", flats[index].row_index, flats[index + 1].row_index);
+        place_piece("web" + join_tag, (join.left_edge + join.right_edge) / 2.0, web_y_projection,
+                    (flat_z_centers[index] + flat_z_centers[index + 1]) / 2.0,
+                    straight_length / 2.0, config.thickness / 2.0, join.web_angle);
+
+        if (join.tangent_length <= 0.0) {
+          continue; // no bends requested, or a same-surface join with a flat "web"
+        }
+        // Arc angles psi are measured in the y-z plane from +y toward +z.
+        // Bend at the lower-y flat: centre on the web side of that flat, arc
+        // starting straight above/below the centre and turning by web_angle.
+        const double web_sign = join.web_angle > 0.0 ? 1.0 : -1.0;
+        place_bend("bend" + join_tag + "_low", join.left_edge - join.tangent_length,
+                   flat_z_centers[index] + web_sign * config.bend_radius, config.bend_radius,
+                   -web_sign * M_PI / 2.0, join.web_angle);
+        // Bend at the upper-y flat: mirror construction on the other side of the web.
+        place_bend("bend" + join_tag + "_high", join.right_edge + join.tangent_length,
+                   flat_z_centers[index + 1] - web_sign * config.bend_radius, config.bend_radius,
+                   web_sign * M_PI / 2.0, join.web_angle);
       }
       return placed_count;
     }
 
+    if (config.bend_radius > 0.0) {
+      printout(WARNING, "SiEndcapModuleTracker",
+               fmt::format("disk '{}': bend_radius is only applied to explicit-flat corrugation "
+                           "tables; legacy row/uniform pieces keep sharp junctions",
+                           disk.disk_key));
+    }
     const auto rows = load_corrugation_rows(resolved_rows, disk.disk_key);
     if (!rows.empty()) {
       for (const auto& row : rows) {
@@ -1126,6 +1270,11 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
                          config.rowwise_placement, disk.disk_key));
   }
 
+  if (config.bend_radius > 0.0 && config.rowwise_placement.empty()) {
+    printout(WARNING, "SiEndcapModuleTracker",
+             fmt::format("disk '{}': bend_radius is ignored by the uniform corrugation fallback",
+                         disk.disk_key));
+  }
   const int n_min =
       static_cast<int>(std::floor((-disk.rmax - config.y0) / (2.0 * config.half_pitch))) - 2;
   const int n_max =

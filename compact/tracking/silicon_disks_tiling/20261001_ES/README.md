@@ -35,9 +35,13 @@ documented reconstruction from the delivery's A/B row families: B rows use the
 centers. The facet at the same y is on the opposite corrugation surface, while
 the module's two 2.5 mm edge-glue lines attach to the neighboring same-surface
 facets. The table includes one boundary facet beyond each end of the module-row
-lattice. It was not supplied as an authoritative corrugation table. The
-simulation uses straight carbon flats/webs with explicit inward-module cutouts
-rather than exact 5 mm-radius bends.
+lattice. It was not supplied as an authoritative corrugation table. Its
+`flat_width_mm` values (10.65 mm B, 12.15 mm A) are sharp-corner widths measured
+to the apex where the flat and 45-degree web mid-surface lines meet. The
+builder rounds each flat/web junction with a 5 mm mid-surface-radius bend
+(`SiEndcapCorrugation_bend_radius`), trimming `R*tan(22.5 deg) = 2.071 mm` from
+each joined flat and web end. This gives 6.508/8.008 mm straight flats; the
+slide's 6.36/7.86 mm values use the same radius on a zero-thickness profile.
 
 The current geometry applies two clearly named provisional normal translations:
 inward modules move 0.030 mm away from the corrugation channel, and the
