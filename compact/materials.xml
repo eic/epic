@@ -411,6 +411,19 @@
     <composite n="8" ref="H"/>
     <composite n="2" ref="O"/>
   </material>
+  <material name="StainlessSteel316">
+    <D type="density" value="8.0" unit="g / cm3"/>
+    <!-- https://asm.matweb.com/search/specificmaterial.asp?bassnum=mq316a -->
+    <fraction n="0.00080" ref="C"/>
+    <fraction n="0.18000" ref="Cr"/>
+    <fraction n="0.61845" ref="Fe"/>
+    <fraction n="0.02000" ref="Mn"/>
+    <fraction n="0.03000" ref="Mo"/>
+    <fraction n="0.14000" ref="Ni"/>
+    <fraction n="0.00045" ref="P"/>
+    <fraction n="0.00030" ref="S"/>
+    <fraction n="0.01000" ref="Si"/>
+  </material>
   <material name="StainlessSteelP506">
     <!-- Same density as the 304 grade steel is assumed -->
     <D type="density" value="7.9" unit="g / cm3"/>
@@ -566,5 +579,30 @@
     <fraction n="0.010" ref="Mn"/>
     <fraction n="0.002" ref="P"/>
     <fraction n="0.005" ref="S"/>
+  </material>
+  <material name="Brass_C36000">
+    <D type="density" unit="g/cm3" value="8.49"/>
+    <fraction n="0.6150" ref="Cu"/>
+    <fraction n="0.3550" ref="Zn"/>
+    <fraction n="0.0300" ref="Pb"/>
+  </material>
+  <material name="TZM">
+    <D type="density" unit="g/cm3" value="10.16"/>
+    <fraction n="0.9940" ref="Mo"/>
+    <fraction n="0.0050" ref="Ti"/>
+    <fraction n="0.0010" ref="Zr"/>
+  </material>
+  <material name="GlidCop_AL15">
+    <D type="density" unit="g/cm3" value="8.89"/>
+    <fraction n="0.9985" ref="Cu"/>
+    <fraction n="0.0008" ref="Al"/>
+    <fraction n="0.0007" ref="O"/>
+  </material>
+  <material name="WC_10Co">
+    <D type="density" unit="g/cm3" value="15.0"/>
+    <!-- https://www.mdpi.com/1996-1944/16/10/3696#B1-materials-16-03696 -->
+    <fraction n="0.84483" ref="W"/>
+    <fraction n="0.05517" ref="C"/>
+    <fraction n="0.10000" ref="Co"/>
   </material>
 </materials>

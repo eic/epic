@@ -89,7 +89,8 @@
     <detector
 	name="Pipe_cen_to_neg"
 	type="ElectronBeamPipeChain"
-	shielding="3*mm">
+	shielding_thickness="3*mm"
+	shielding_material="Pb">
     </detector>
 
     <!-- Beam pipe going from Q1eR to B2BeR -->

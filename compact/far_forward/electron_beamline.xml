@@ -49,7 +49,8 @@
     <detector
 	name="Pipe_cen_to_pos"
 	type="ElectronBeamPipeChain"
-	shielding="3*mm">
+	shielding_thickness="3*mm"
+	shielding_material="Pb">
     </detector>
 
     <!--detector

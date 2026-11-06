@@ -99,6 +99,7 @@ void BuildSectionSolid(	Detector& det,
 			double rx_min, double ry_min,
 			double s_start, double s_stop,
 			double shielding_thickness,
+			string shielding_material,
 			Assembly& assembly)
 {
 	double halfLength = std::abs(s_start - s_stop) / 2.0;
@@ -164,7 +165,7 @@ void BuildSectionSolid(	Detector& det,
 		Volume shielding_vol(
 			name + "_shielding",
 			shielding_solid,
-			det.material("TungstenDens23"));
+			det.material(shielding_material));
 		shielding_vol.setVisAttributes(det.visAttributes("AnlGreen"));
 		assembly.placeVolume(shielding_vol, Position(0,0,zpos));
 	}
@@ -448,7 +449,7 @@ TGeoTessellated* CreatePolygonFilledTube3(
 	return tess;
 }
 
-void BuildTapper1(Detector& det, double shielding_thickness, Assembly& assembly) 
+void BuildTapper1(Detector& det, double shielding_thickness, string shielding_material, Assembly& assembly) 
 {
 	// --- vacuum ---
 	TGeoTessellated* rawShape_vacuum = CreatePolygonFilledTube3(
@@ -506,7 +507,7 @@ void BuildTapper1(Detector& det, double shielding_thickness, Assembly& assembly)
 			shielding_thickness);
 		Solid tapper1_shielding_solid(rawShape_shielding);
 
-		Volume tapper1_shielding_vol("tapper1_shielding", tapper1_shielding_solid, det.material("TungstenDens23"));
+		Volume tapper1_shielding_vol("tapper1_shielding", tapper1_shielding_solid, det.material(shielding_material));
 		tapper1_shielding_vol.setVisAttributes(det.visAttributes("AnlGreen"));
 		assembly.placeVolume(tapper1_shielding_vol, Position(0,0,0));
 	}
@@ -514,7 +515,7 @@ void BuildTapper1(Detector& det, double shielding_thickness, Assembly& assembly)
 	return;
 }
 
-void BuildTapper0(Detector& det, double shielding_thickness, Assembly& assembly) 
+void BuildTapper0(Detector& det, double shielding_thickness, string shielding_material, Assembly& assembly) 
 {
 	// --- vacuum ---
 	TGeoTessellated* rawShape_vacuum = CreatePolygonFilledTube2(
@@ -566,7 +567,7 @@ void BuildTapper0(Detector& det, double shielding_thickness, Assembly& assembly)
 			shielding_thickness);
 		Solid tapper0_shielding_solid(rawShape_shielding);
 
-		Volume tapper0_shielding_vol("tapper0_shielding", tapper0_shielding_solid, det.material("TungstenDens23"));
+		Volume tapper0_shielding_vol("tapper0_shielding", tapper0_shielding_solid, det.material(shielding_material));
 		tapper0_shielding_vol.setVisAttributes(det.visAttributes("AnlGreen"));
 		assembly.placeVolume(tapper0_shielding_vol, Position(0,0,0));
 	}
@@ -581,6 +582,7 @@ void BuildPolyconeSection(
 	const double* dia,
 	std::size_t num,
 	double shielding_thickness,
+	string shielding_material,
 	Assembly& assembly)
 {
 	std::vector<double> r_min(num), r_max(num), z_vec(num);
@@ -627,7 +629,7 @@ void BuildPolyconeSection(
 			r_max[i] = r_min[i] + shielding_thickness;
 		}
 		Solid shielding_solid = Polycone(0, 2*M_PI, r_min, r_max, z_vec);
-		Volume shielding_vol(name + "_shielding", shielding_solid, det.material("TungstenDens23"));
+		Volume shielding_vol(name + "_shielding", shielding_solid, det.material(shielding_material));
 		shielding_vol.setVisAttributes(det.visAttributes("AnlGreen"));
 		assembly.placeVolume(shielding_vol, Position(0,0,0));
 	}
@@ -642,41 +644,42 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	string det_name = x_det.nameStr();
 	DetElement sdet(det_name, x_det.id());
 	Assembly assembly(det_name + "_assembly");
-	double shielding_thickness = getAttrOrDefault<double>(x_det, _Unicode(shielding), 0);
+	double shielding_thickness = getAttrOrDefault<double>(x_det, _Unicode(shielding_thickness), 0);
+	string shielding_material = getAttrOrDefault<string>(x_det, _Unicode(shielding_material), "TungstenDens23");
 
 	if(det_name == "Pipe_cen_to_pos") // forward side
 	{
 		//- post_d1ef
-		BuildSectionSolid(det,"post_d1ef",rx_post_d1ef_min,ry_post_d1ef_min,s_post_d1ef_start,s_post_d1ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"post_d1ef",rx_post_d1ef_min,ry_post_d1ef_min,s_post_d1ef_start,s_post_d1ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- tapper0
-		BuildTapper0(det,shielding_thickness,assembly);
+		BuildTapper0(det,shielding_thickness,shielding_material,assembly);
 
 		//- pre_q1ef
-		BuildSectionSolid(det,"pre_q1ef",rx_pre_q1ef_min,ry_pre_q1ef_min,s_pre_q1ef_start,s_pre_q1ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"pre_q1ef",rx_pre_q1ef_min,ry_pre_q1ef_min,s_pre_q1ef_start,s_pre_q1ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- q1ef
-		BuildSectionSolid(det,"q1ef",rx_q1ef_min,ry_q1ef_min,s_q1ef_start,s_q1ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"q1ef",rx_q1ef_min,ry_q1ef_min,s_q1ef_start,s_q1ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- post_q1ef
-		BuildSectionSolid(det,"post_q1ef",rx_post_q1ef_min,ry_post_q1ef_min,s_post_q1ef_start,s_post_q1ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"post_q1ef",rx_post_q1ef_min,ry_post_q1ef_min,s_post_q1ef_start,s_post_q1ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- pre_q0ef
-		BuildSectionSolid(det,"pre_q0ef",r_pre_q0ef_min,r_pre_q0ef_min,s_pre_q0ef_start,s_pre_q0ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"pre_q0ef",r_pre_q0ef_min,r_pre_q0ef_min,s_pre_q0ef_start,s_pre_q0ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- q0ef
-		BuildSectionSolid(det,"q0ef",r_q0ef_min,r_q0ef_min,s_q0ef_start,s_q0ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"q0ef",r_q0ef_min,r_q0ef_min,s_q0ef_start,s_q0ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- post_q0ef
-		BuildSectionSolid(det,"post_q0ef",r_post_q0ef_min,r_post_q0ef_min,s_post_q0ef_start,s_post_q0ef_stop,shielding_thickness,assembly);
+		BuildSectionSolid(det,"post_q0ef",r_post_q0ef_min,r_post_q0ef_min,s_post_q0ef_start,s_post_q0ef_stop,shielding_thickness,shielding_material,assembly);
 
 		//- tapper1
-		BuildTapper1(det,shielding_thickness,assembly);
+		BuildTapper1(det,shielding_thickness,shielding_material,assembly);
 	}
 	else if(det_name == "Pipe_cen_to_neg") // rear side
 	{
 		//- pre_q1er_post_q2er
-		BuildPolyconeSection(det,"pre_q1er_post_q2er",s_bwd,d_bwd_min,n_bwd,shielding_thickness,assembly);
+		BuildPolyconeSection(det,"pre_q1er_post_q2er",s_bwd,d_bwd_min,n_bwd,shielding_thickness,shielding_material,assembly);
 	}
 
 	// Final placement
