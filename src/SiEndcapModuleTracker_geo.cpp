@@ -1011,9 +1011,9 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   // its full y footprint stays inside the disk boundary and beam-pipe openings.
   auto place_bend = [&](const string& kind, double y_center, double z_center, double radius,
                         double psi_start, double psi_delta) {
-    const double r_inner = radius - config.thickness / 2.0;
-    const double r_outer = radius + config.thickness / 2.0;
-    const double psi_low = std::min(psi_start, psi_start + psi_delta);
+    const double r_inner  = radius - config.thickness / 2.0;
+    const double r_outer  = radius + config.thickness / 2.0;
+    const double psi_low  = std::min(psi_start, psi_start + psi_delta);
     const double psi_high = std::max(psi_start, psi_start + psi_delta);
 
     // y extent of the sector: arc end points on both radii, plus the
@@ -1211,15 +1211,14 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
         const double straight_width = flat_widths[index] - trim_low[index] - trim_high[index];
         const double straight_y =
             config.y0 + flats[index].row_y + (trim_low[index] - trim_high[index]) / 2.0;
-        place_piece(fmt::format("flat{}", flats[index].row_index), straight_y,
-                    straight_width / 2.0, flat_z_centers[index], straight_width / 2.0,
-                    config.thickness / 2.0, 0.0);
+        place_piece(fmt::format("flat{}", flats[index].row_index), straight_y, straight_width / 2.0,
+                    flat_z_centers[index], straight_width / 2.0, config.thickness / 2.0, 0.0);
       }
 
       for (size_t index = 0; index < joins.size(); ++index) {
-        const WebJoin& join            = joins[index];
-        const double straight_length   = join.web_length - 2.0 * join.tangent_length;
-        const double web_y_projection  = std::abs(std::cos(join.web_angle)) * straight_length / 2.0 +
+        const WebJoin& join           = joins[index];
+        const double straight_length  = join.web_length - 2.0 * join.tangent_length;
+        const double web_y_projection = std::abs(std::cos(join.web_angle)) * straight_length / 2.0 +
                                         std::abs(std::sin(join.web_angle)) * config.thickness / 2.0;
         const string join_tag =
             fmt::format("{}_{}", flats[index].row_index, flats[index + 1].row_index);
