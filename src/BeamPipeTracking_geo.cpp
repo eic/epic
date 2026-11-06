@@ -28,8 +28,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name + "_assembly");
-
-  // Loop over each requested slice from the geometry description
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   for (xml_coll_t slice_coll(x_det, _Unicode(slice)); slice_coll; slice_coll++) { // pipes
 
     string grandmotherName = slice_coll.attr<string>(_Unicode(grandmother));

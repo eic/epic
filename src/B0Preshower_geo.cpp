@@ -38,7 +38,7 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
   map<string, Placements> sensitives;
   PlacedVolume pv;
 
-  assembly.setVisAttributes(description.invisible());
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sens.setType("tracker");
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
