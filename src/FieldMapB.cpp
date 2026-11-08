@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2023 Wouter Deconinck, Dhevan Gangadharan, Aranya Giri
+// Copyright (C) 2023 - 2026 Wouter Deconinck, Dhevan Gangadharan, Aranya Giri
 
 #include <DD4hep/DetFactoryHelper.h>
 #include <DD4hep/FieldTypes.h>
@@ -233,8 +233,6 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
     const float r = sqrt(p.x() * p.x() + p.y() * p.y());
     const float z = p.z();
 
-    // lookup indices and interpolation weights must be local:
-    // this object is shared between Geant4 worker threads
     int ir, iz;
     float dr, dz;
     if (!GetIndices(r, z, &ir, &iz, &dr, &dz)) {
@@ -267,8 +265,6 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
     field[2] += B.z();
   } else { // BxByBz
 
-    // lookup indices and interpolation weights must be local:
-    // this object is shared between Geant4 worker threads
     int ix, iy, iz;
     float dx, dy, dz;
     if (!GetIndices(p.x(), p.y(), p.z(), &ix, &iy, &iz, &dx, &dy, &dz)) {
