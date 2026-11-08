@@ -731,6 +731,8 @@ jobs:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Run EICrecon
+      # JANA timeouts are disabled in JANA_OPTIONS; bound hangs here instead
+      timeout-minutes: 60
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -800,6 +802,8 @@ jobs:
         name: sim_dis_${{ matrix.beam }}_minQ2=${{ matrix.minq2 }}_${{ matrix.detector_config }}.edm4hep.root
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Run EICrecon
+      # JANA timeouts are disabled in JANA_OPTIONS; bound hangs here instead
+      timeout-minutes: 60
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
