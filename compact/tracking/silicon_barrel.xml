@@ -4,8 +4,8 @@
 <lccdd>
   <define>
     <comment>
-         This version is for the hybrid_OB version, in which the curved surface of the is modelled by a series of flat strips, with separate modules on
-         the top and bottom of the stave.  The passive materal is modelled as tessellated solids imported from .gdml files.
+         This version builds the silicon layers with a structure of LAS, HalfRSU, and curved segments. 
+         The passive materal is modelled as tessellated solids imported from .gdml files.
     </comment>
 
     <constant name="SiBarrelSensorCu_thickness"         value="2.5*um" />
@@ -83,11 +83,367 @@
     <constant name="SiBarrelLayer2_rmin" value="SiBarrelStave2_rc -  SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
+
+    <constant name="HalfRSUwidth" value="19.564*mm" />
+    <constant name="RSUcurvatureRadius" value="90.125*mm" />
+    <constant name="RSUhalfAngle" value="HalfRSUwidth / RSUcurvatureRadius" />
+    <constant name="RSUaxis" value="-RSUcurvatureRadius + SiBarrelSiliconHeightFromStaveCentre1"/>
+    <constant name="LEClength" value="4.5*mm" />
+    <constant name="REClength" value="1.5*mm" />
+    <constant name="TileWidth" value="9.324*mm" />
+    <constant name="TileLength" value="3.56*mm" />
+    <constant name="LeftGap" value="0.09*mm" />
+    <constant name="RightGap" value="0.02*mm" />
+    <constant name="InterTileGap" value="0.02*mm" />
+    <constant name="CentralTileGap" value="0.11*mm" />
+    <constant name="CentralTileSpacing" value="0.12*mm" />
+    <constant name="SideTileSpacing" value="0.398*mm" />
+    <constant name="RSUlength" value="LeftGap + 6*TileLength + 4*InterTileGap + CentralTileGap + RightGap" /> <!-- 21.666mm -->
+    <constant name="LASlength_6RSU" value="LEClength + 6*RSUlength + REClength" />
+    <constant name="LASlength_5RSU" value="LEClength + 5*RSUlength + REClength" />
+
+
     </define>
       <detectors>
         <documentation level="5">
           ### Actual detectors
         </documentation>
+        
+           <HalfRSU name="HalfRepeatedSensorUnit"         
+        sensor_stack="true"
+        sensor_cu_thickness="SiBarrelSensorCu_thickness"
+        sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
+        
+         <rsu_component name="CurvedLeftEnd"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments + 1"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle"
+             phi1="0.0"
+             length="LeftGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="LeftGap/2 - RSUlength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="CurvedRightEnd"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments + 1"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle"
+             phi1="0.0"
+             length="RightGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RightGap/2 + RSUlength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="TopSpace"
+             material="Silicon"
+             sensitive="false"
+             nsegments="1"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle"
+             phi1="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             length="RSUlength - LeftGap - RightGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="RSUlength/2 - (RSUlength - LeftGap - RightGap)/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="MiddleSpace"
+             material="Silicon"
+             sensitive="false"
+             nsegments="1"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth + CentralTileSpacing) / RSUcurvatureRadius"
+             length="RSUlength - LeftGap - RightGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="RSUlength/2 - (RSUlength - LeftGap - RightGap)/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="BottonSpace"
+             material="Silicon"
+             sensitive="false"
+             nsegments="1"
+             radius="RSUcurvatureRadius"
+             phi0="-SideTileSpacing / RSUcurvatureRadius"
+             phi1="0.0"
+             length="RSUlength - LeftGap - RightGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="RSUlength/2 - (RSUlength - LeftGap - RightGap)/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap1"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + TileLength) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap2"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 2*TileLength + InterTileGap) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap3"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="CentralTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 3*TileLength + 2*InterTileGap) + CentralTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap4"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 4*TileLength + 2*InterTileGap + CentralTileGap) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap5"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 5*TileLength + 3*InterTileGap + CentralTileGap) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap1a"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + TileLength) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap2a"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 2*TileLength + InterTileGap) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap3a"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="CentralTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 3*TileLength + 2*InterTileGap) + CentralTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap4a"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 4*TileLength + 2*InterTileGap + CentralTileGap) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+       <rsu_component name="Gap5a"
+             material="Silicon"
+             sensitive="false"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="InterTileGap"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + (LeftGap + 5*TileLength + 3*InterTileGap + CentralTileGap) + InterTileGap/2" z="0.0" />
+        </rsu_component>
+   
+         <rsu_component name="Tile1"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile2"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + TileLength + InterTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile3"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 2*TileLength + 2*InterTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile4"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 3*TileLength + 2*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile5"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 4*TileLength + 3*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile6"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-RSUhalfAngle + SideTileSpacing / RSUcurvatureRadius"
+             phi1="-RSUhalfAngle + (SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 5*TileLength + 4*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+            <rsu_component name="Tile1a"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile2a"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + TileLength + InterTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile3a"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 2*TileLength + 2*InterTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile4a"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 3*TileLength + 2*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile5a"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 4*TileLength + 3*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+         <rsu_component name="Tile6a"
+             material="Silicon"
+             sensitive="true"
+             nsegments="SiBarrelSiliconCurveNoSegments/2"
+             radius="RSUcurvatureRadius"
+             phi0="-(SideTileSpacing + TileWidth) / RSUcurvatureRadius"
+             phi1="-SideTileSpacing  / RSUcurvatureRadius"
+             length="TileLength"
+             thickness="SiBarrelSensorMod_thickness"
+             vis="TrackerLayerVis">
+        <position x="0" y="-RSUlength/2 + LeftGap + 5*TileLength + 4*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
+        </rsu_component>
+        
+        </HalfRSU> 
+
+        
        <detector
       id="TrackerBarrel_0_ID"
       name="SagittaSiBarrel"
@@ -99,240 +455,114 @@
         rmin="SiBarrelLayer1_rmin"
         rmax="SiBarrelLayer1_rmax"
         length="SiBarrelLayer1_length" />
+        
+        
+      <LAS name="LAS_6RSU"
+        sensor_stack="true"
+        sensor_cu_thickness="SiBarrelSensorCu_thickness"
+        sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
+      <comment> 6-RSU LAS for L3 </comment>
+      <LAS_component name="CurvedLeftEndcap"
+        material="Silicon" 
+        sensitive="false"
+        nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
+        radius="RSUcurvatureRadius"
+        phi0="-RSUhalfAngle"
+        phi1="RSUhalfAngle"
+        length= "LEClength"
+        thickness="SiBarrelSensorMod_thickness"
+        vis="TrackerLayerVis">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength/2" z="RSUaxis" />   
+      </LAS_component>
+      
+      <LAS_component name="TopHalfRSU0" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU0" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+      <LAS_component name="TopHalfRSU1" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU1" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+      <LAS_component name="TopHalfRSU2" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 2*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU2" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  2*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+      <LAS_component name="TopHalfRSU3" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 3*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU3" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  3*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+      
+      <LAS_component name="TopHalfRSU4" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 4*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU4" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  4*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+      
+      <LAS_component name="TopHalfRSU5" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 5*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU5" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  5*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+     <LAS_component name="CurvedRightEndcap"
+        material="Silicon" 
+        sensitive="false"
+        nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
+        radius="RSUcurvatureRadius"
+        phi0="-RSUhalfAngle"
+        phi1="RSUhalfAngle"
+        length= "REClength"
+        thickness="SiBarrelSensorMod_thickness"
+        vis="TrackerLayerVis">
+        <position x="0" y="LASlength_6RSU/2 - REClength/2" z="RSUaxis" />   
+      </LAS_component>
+      
+      </LAS> 
+
+        
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis"
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
         sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
-        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness"
-        sensor_support_depth="SiBarrel1_SupportDepth">
-
-         <module_component name="CurvedEnd0"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrel1_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Passive0_Position" z="SiBarrelLowerCurveAxis1" />
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
+        
+        <module_component name="LAS_0" ref="LAS_6RSU">
+          <position x="0" y="SiBarrel1_Module0_Position" z= "0"/>
+  	  <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
-
-         <module_component name="CurvedEnd2"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrel1_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Passive2_Position" z="SiBarrelLowerCurveAxis1" />
+        <module_component name="LAS_1" ref="LAS_6RSU">
+          <position x="0" y="SiBarrel1_Module1_Position" z= "0"/>
         </module_component>
-
-         <module_component name="CurvedSi0C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module0_Position" z="SiBarrelLowerCurveAxis1" />
+        <module_component name="LAS_2" ref="LAS_6RSU">
+          <position x="0" y="SiBarrel1_Module2_Position" z= "0"/>
+  	  <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
-
-        <module_component name="CurvedSi2C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module2_Position" z="SiBarrelLowerCurveAxis1" />
+        <module_component name="LAS_3" ref="LAS_6RSU">
+          <position x="0" y="SiBarrel1_Module3_Position" z= "0"/>
         </module_component>
-
-        <module_component name="CurvedSi0R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel1_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1"
-             phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module0_Position" z="SiBarrelLowerCurveAxis1" />
-        </module_component>
-
-         <module_component name="CurvedSi0L"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel1_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module0_Position" z="SiBarrelLowerCurveAxis1" />
-        </module_component>
-
-        <module_component name="CurvedSi2R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel1_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle1"
-             phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module2_Position" z="SiBarrelLowerCurveAxis1" />
-        </module_component>
-
-        <module_component name="CurvedSi2L"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel1_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module2_Position" z="SiBarrelLowerCurveAxis1" />
-        </module_component>
-
-                <module_component name="CurvedSi1R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel1_LongThickness"
-             outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle1"
-             phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
-        </module_component>
-
-        <module_component name="CurvedSi1L"
-          material="Silicon"
-          sensitive="true"
-             innerthickness="SiBarrel1_LongThickness"
-             outerthickness="SiBarrel_ShortThickness"
-          nsegments="SiBarrelSiliconCurveNoSegments"
-          radius="SiBarrelSiliconCurveRadius"
-          phi0="SiBarrelSiliconGapHalfAngle"
-          phi1="SiBarrelSiliconCurveHalfAngle1"
-          length="SiBarrelSingleModule1_length"
-          thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
-        </module_component>
-
-        <module_component name="CurvedSi3R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel1_LongThickness"
-             outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle1"
-             phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module3_Position" z="SiBarrelUpperCurveAxis1" />
-        </module_component>
-
-        <module_component name="CurvedSi3L"
-          material="Silicon"
-          sensitive="true"
-          innerthickness="SiBarrel1_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-          nsegments="SiBarrelSiliconCurveNoSegments"
-          radius="SiBarrelSiliconCurveRadius"
-          phi0="SiBarrelSiliconGapHalfAngle"
-          phi1="SiBarrelSiliconCurveHalfAngle1"
-          length="SiBarrelSingleModule1_length "
-          thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel1_Module3_Position " z="SiBarrelUpperCurveAxis1" />
-        </module_component>
-
-        <module_component name="CurvedSi1C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
-             phi1="+SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-             <position x="0" y="SiBarrel1_Module1_Position" z="SiBarrelUpperCurveAxis1" />
-        </module_component>
-
-         <module_component name="CurvedSi3C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
-             phi1="+SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule1_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Module3_Position" z="SiBarrelUpperCurveAxis1" />
-        </module_component>
-
-         <module_component name="CurvedEnd1"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle1"
-             phi1="SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrel1_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Passive1_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-         <module_component name="CurvedEnd3"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle1"
-             phi1="SiBarrelSiliconCurveHalfAngle1"
-             length="SiBarrel1_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel1_Passive3_Position" z="SiBarrelUpperCurveAxis2" />
-   </module_component>
 
         <module_component name="Carbon_Composite.gdml" matching_name="Carbon" material="CarbonFiber" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/Carbon_Composite_ASCII.gdml" />
-
        <module_component name="FPC_Mockup_L3_L3_Full001_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml" />
         <module_component name="FPC_Mockup_L3_L3_Full_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml" />
         <module_component name="K9_Split_CrossBrace_L004_ASCII.gdml" matching_name="K9" material="K9" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L3/K9_Split_CrossBrace_L004_ASCII.gdml" />
@@ -378,462 +608,116 @@
         rmin="SiBarrelLayer2_rmin"
         rmax="SiBarrelLayer2_rmax"
         length="SiBarrelLayer2_length" />
+        
+        <LAS name="LAS_5RSU"
+        sensor_stack="true"
+        sensor_cu_thickness="SiBarrelSensorCu_thickness"
+        sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
+      <comment> 5-RSU LAS for L4 </comment>
+      <LAS_component name="CurvedLeftEndcap"
+        material="Silicon" 
+        sensitive="false"
+        nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
+        radius="RSUcurvatureRadius"
+        phi0="-RSUhalfAngle"
+        phi1="RSUhalfAngle"
+        length= "LEClength"
+        thickness="SiBarrelSensorMod_thickness"
+        vis="TrackerLayerVis">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength/2" z="RSUaxis" />   
+      </LAS_component>
+      
+      <LAS_component name="TopHalfRSU0" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU0" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+      <LAS_component name="TopHalfRSU1" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU1" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+      <LAS_component name="TopHalfRSU2" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + 2*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU2" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  2*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+      <LAS_component name="TopHalfRSU3" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + 3*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU3" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  3*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+      
+      <LAS_component name="TopHalfRSU4" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + 4*RSUlength + RSUlength/2" z="RSUaxis" />   
+      </LAS_component>
+      <LAS_component name="BottomHalfRSU4" ref="HalfRepeatedSensorUnit">
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  4*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
+      </LAS_component>
+
+     <LAS_component name="CurvedRightEndcap"
+        material="Silicon" 
+        sensitive="false"
+        nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
+        radius="RSUcurvatureRadius"
+        phi0="-RSUhalfAngle"
+        phi1="RSUhalfAngle"
+        length= "REClength"
+        thickness="SiBarrelSensorMod_thickness"
+        vis="TrackerLayerVis">
+        <position x="0" y="LASlength_5RSU/2 - REClength/2" z="RSUaxis" />   
+      </LAS_component>
+      
+      </LAS> 
+        
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis"
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
         sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
-        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness"
-        sensor_support_depth="SiBarrel2_SupportDepth">
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
 
-         <module_component name="CurvedEnd0"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive0_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_0" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module0_Position" z= "0"/>
+  	  <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
-
-         <module_component name="CurvedEnd2"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive2_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_1" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module1_Position" z= "0"/>
         </module_component>
-
-         <module_component name="CurvedEnd4"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive4_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_2" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module2_Position" z= "0"/>
+  	  <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
-
-         <module_component name="CurvedEnd6"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive6_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_3" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module3_Position" z= "0"/>
         </module_component>
-
-         <module_component name="CurvedSi0C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Module0_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_4" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module4_Position" z= "0"/>
+  	  <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
-
-        <module_component name="CurvedSi2C"
-            material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module2_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_5" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module5_Position" z= "0"/>
         </module_component>
-
-        <module_component name="CurvedSi4C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module4_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_6" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module6_Position" z= "0"/>
+  	  <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
-
-         <module_component name="CurvedSi6C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconGapHalfAngle"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module6_Position" z="SiBarrelLowerCurveAxis2" />
+        <module_component name="LAS_7" ref="LAS_5RSU">
+          <position x="0" y="SiBarrel2_Module7_Position" z= "0"/>
         </module_component>
-
-        <module_component name="CurvedSi0R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module0_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi0L"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module0_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi2R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module2_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi2L"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module2_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi4R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module4_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi4L"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module4_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi6R"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree - SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree - SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module6_Position" z="SiBarrelLowerCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi6L"
-             material="Silicon"
-             sensitive="true"
-             innerthickness="SiBarrel_ShortThickness"
-             outerthickness="SiBarrel2_LongThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="180*degree + SiBarrelSiliconCurveHalfAngle2"
-             phi1="180*degree + SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module6_Position" z="SiBarrelLowerCurveAxis2" />
-       </module_component>
-
-        <module_component name="CurvedSi1R"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module1_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi1L"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module1_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi3R"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module3_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi3L"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module3_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi5R"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module5_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi5L"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module5_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi7R"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="-SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module7_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi7L"
-             material="Silicon"
-             sensitive="true"
-          innerthickness="SiBarrel2_LongThickness"
-          outerthickness="SiBarrel_ShortThickness"
-             nsegments="SiBarrelSiliconCurveNoSegments"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-            vis="TrackerLayerVis">
-          <position x="0" y="SiBarrel2_Module7_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-        <module_component name="CurvedSi1C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module1_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-    <module_component name="CurvedSi3C"
-           material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module3_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-    <module_component name="CurvedSi5C"
-           material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module5_Position" z="SiBarrelUpperCurveAxis2" />
-    </module_component>
-
-    <module_component name="CurvedSi7C"
-             material="Silicon"
-             sensitive="false"
-             nsegments="1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconGapHalfAngle"
-             phi1="SiBarrelSiliconGapHalfAngle"
-             length="SiBarrelSingleModule2_length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-       <position x="0" y="SiBarrel2_Module7_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-         <module_component name="CurvedEnd1"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive1_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-         <module_component name="CurvedEnd3"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive3_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-         <module_component name="CurvedEnd5"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive5_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
-         <module_component name="CurvedEnd7"
-             material="Silicon"
-             sensitive="false"
-             nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
-             radius="SiBarrelSiliconCurveRadius"
-             phi0="-SiBarrelSiliconCurveHalfAngle2"
-             phi1="SiBarrelSiliconCurveHalfAngle2"
-             length="SiBarrel2_PassiveSi_Length"
-             thickness="SiBarrelSensorMod_thickness"
-             vis="TrackerLayerVis">
-        <position x="0" y="SiBarrel2_Passive7_Position" z="SiBarrelUpperCurveAxis2" />
-        </module_component>
-
 
       <module_component name="FPC_Mockup_L3_Bottom002_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml" />
         <module_component name="FPC_Mockup_L3_Bottom003_ASCII.gdml" matching_name="FPC" material="Kapton" sensitive="false" vis="TrackerLayerVis" file="gdml/SVTOB/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml" />
@@ -896,7 +780,7 @@
   <readouts>
     <readout name="SiBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
-      <id>system:8,layer:4,module:7,sensor:7,x:32:-12,y:-20</id>
+      <id>system:8,layer:4,module:7,las:3,halfrsu:4,sensor:6,x:32:-12,y:-20</id>
     </readout>
   </readouts>
 </lccdd>

@@ -60,6 +60,303 @@ using namespace dd4hep::detail;
  *
  * @author Whitney Armstrong
  */
+  struct SensorStackConfig {
+    bool enabled = false;
+    double copper = 0.0;
+    double activeSi = 0.0;
+    double inactiveSi = 0.0;
+
+    double totalThickness() const {
+        return copper + activeSi + inactiveSi;
+    }
+};
+
+struct SensitiveSegment {
+    PlacedVolume placement;
+    VolPlane surface;
+    std::string name;
+};
+
+struct SensitivePath {
+    std::vector<PlacedVolume> placements;
+    VolPlane surface;
+    std::string name;
+    string halfName;
+};
+
+struct BuiltAssembly {
+    Assembly volume;
+    std::vector<SensitivePath> sensitivePaths;
+};
+
+struct HalfRSUInstance {
+    std::string name;
+    PlacedVolume placement;
+    std::vector<SensitivePath> sensitivePaths;
+};
+
+struct LASInstance {
+    std::string name;
+    PlacedVolume placement;
+    std::vector<SensitivePath> sensitivePaths;
+};
+
+Transform3D getXMLTransform(xml_comp_t x_comp)
+{
+    xml_comp_t x_pos = x_comp.position(false);
+    xml_comp_t x_rot = x_comp.rotation(false);
+    Position pos(
+        x_pos ? x_pos.x(0) : 0.0,
+        x_pos ? x_pos.y(0) : 0.0,
+        x_pos ? x_pos.z(0) : 0.0
+    );
+    RotationZYX rot(
+        x_rot ? x_rot.z(0) : 0.0,
+        x_rot ? x_rot.y(0) : 0.0,
+        x_rot ? x_rot.x(0) : 0.0
+    );
+    return Transform3D(rot, pos);
+}
+
+
+void attachSensorSurface( DetElement& sensorDE,  const VolPlane& surface) {
+    auto& params =  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensorDE);
+    params.set<std::string>("axis_definitions", "XYZ");
+    volSurfaceList(sensorDE)->push_back(surface);
+}
+
+
+void attachLASDetElements( DetElement& moduleDE, const LASInstance& instance, int lasID) {
+    // LAS is a daughter of the stave.
+    DetElement lasDE( moduleDE, instance.name,  lasID );
+    lasDE.setPlacement(instance.placement);
+
+    // Each sensitive path is relative to the LAS.
+    // Paths of length 2:
+    //   [HalfRSU placement, sensitive segment placement]
+    //
+    // Paths of length 1:
+    //   [direct sensitive segment placement]
+
+    std::map<std::string, DetElement> halfElements;
+    int halfID = 1;
+    int directSensorID = 1;
+    for (const auto& path : instance.sensitivePaths) {
+        if (path.placements.size() == 1) {
+            // Direct sensitive component inside LAS.
+            DetElement sensorDE(lasDE,  "de_" + path.name,  directSensorID++  );
+            sensorDE.setPlacement( path.placements[0]);
+            attachSensorSurface( sensorDE, path.surface);
+        } else if (path.placements.size() == 2) {
+            PlacedVolume halfPV = path.placements[0];
+            PlacedVolume sensorPV = path.placements[1];
+            // Identify this HalfRSU instance by its physical placement within the LAS.
+            const std::string& halfName = path.halfName;
+            auto it = halfElements.find(halfName);
+            if (it == halfElements.end()) {
+                DetElement halfDE( lasDE,  halfName,  halfID++  );
+                halfDE.setPlacement(halfPV);
+                it = halfElements.emplace( halfName, halfDE).first;
+            }
+            DetElement& halfDE = it->second;
+            DetElement sensorDE( halfDE, "de_" + path.name,  static_cast<int>( halfDE.children().size() + 1) );
+            sensorDE.setPlacement(sensorPV);
+            attachSensorSurface( sensorDE, path.surface);
+        } else {
+            throw std::runtime_error(
+                "Unexpected LAS sensitive path depth");
+        }
+    }
+}
+
+
+
+void placeCurvedComponent(
+    Detector& description,
+    SensitiveDetector& sens,
+    Volume& parent,
+    xml_comp_t x_comp,
+    const SensorStackConfig& stack,
+    int& sensor_number,
+    std::vector<PlacedVolume>& sensitive_placements,
+    std::vector<VolPlane>& volplane_surface)
+{
+    const bool isSensitive = x_comp.isSensitive();
+    const bool buildStack = stack.enabled && isSensitive;
+
+    std::vector<std::string> layerNames;
+    std::vector<std::string> layerMaterials;
+    std::vector<double> layerThicknesses;
+    std::vector<double> layerOffsets;
+    std::vector<bool> layerSensitive;
+
+    if (buildStack) {
+        if (std::abs(x_comp.thickness() - stack.totalThickness()) > 1e-9 * mm) {  throw std::runtime_error("Curved component thickness differs from sensor stack"); }
+        layerNames = {"InactiveSi", "ActiveSi", "Copper"};
+        layerMaterials = {"Silicon", "Silicon", "Copper"};
+        layerThicknesses = { stack.inactiveSi, stack.activeSi, stack.copper };
+        layerOffsets = {stack.inactiveSi / 2 - stack.totalThickness() / 2,  stack.inactiveSi + stack.activeSi / 2 - stack.totalThickness() / 2,  stack.totalThickness() / 2 - stack.copper / 2};
+        layerSensitive = {false, true, false};
+    } else {
+        layerNames = {"Component"};
+        layerMaterials = {x_comp.materialStr()};
+        layerThicknesses = {x_comp.thickness()};
+        layerOffsets = {0.0};
+        layerSensitive = {isSensitive};
+    }
+
+    const int nseg = x_comp.nsegments();
+    if (nseg <= 0)
+        throw std::runtime_error("Invalid number of curved segments");
+
+    const double phi0 = x_comp.phi0();
+    const double dphi = (x_comp.phi1() - phi0) / nseg;
+
+    xml_comp_t x_pos = x_comp.position(false);
+    xml_comp_t x_rot = x_comp.rotation(false);
+
+    const Position offset(
+        x_pos ? x_pos.x(0) : 0.0,
+        x_pos ? x_pos.y(0) : 0.0,
+        x_pos ? x_pos.z(0) : 0.0
+    );
+
+    const double rx = x_rot ? x_rot.x(0) : 0.0;
+    const double ry = x_rot ? x_rot.y(0) : 0.0;
+    const double rz = x_rot ? x_rot.z(0) : 0.0;
+
+    for (size_t layer = 0; layer < layerNames.size(); ++layer) {
+        const double radius = x_comp.radius() + layerOffsets[layer];
+        const double thickness = layerThicknesses[layer];
+
+        if (radius <= 0)
+            throw std::runtime_error("Invalid curvature radius");
+
+        for (int i = 0; i < nseg; ++i) {
+            const double phiA = phi0 + i * dphi;
+            const double phiB = phiA + dphi;
+            const double phiMid = (phiA + phiB) / 2;
+            const double xA = radius * std::sin(phiA);
+            const double xB = radius * std::sin(phiB);
+            const double zA = radius * std::cos(phiA);
+            const double zB = radius * std::cos(phiB);
+            const double width = std::hypot(xB - xA, zB - zA);
+            const double midX = (xA + xB) / 2;
+            const double midZ = (zA + zB) / 2;
+
+            Box segmentShape( width / 2 * (radius - thickness / 2) / radius,  x_comp.length() / 2, thickness / 2 );
+            const std::string name = x_comp.nameStr() + "_" + layerNames[layer] + "_" + std::to_string(i);
+            Volume segment( name, segmentShape, description.material(layerMaterials[layer]) );
+            segment.setRegion(description, x_comp.regionStr());
+            segment.setLimitSet(description, x_comp.limitsStr());
+            segment.setVisAttributes(description, x_comp.visStr());
+
+            const Position position( midX + offset.x(),  offset.y(),  midZ + offset.z() );
+            const RotationZYX rotation( rz, ry + phiMid, rx);
+            PlacedVolume pv = parent.placeVolume(segment, Transform3D(rotation, position) );
+
+            if (layerSensitive[layer]) {
+                pv.addPhysVolID("sensor", sensor_number++);
+                segment.setSensitiveDetector(sens);
+		sensitive_placements.push_back(pv);
+                const double inner = getAttrOrDefault<double>(x_comp, _Unicode(innerthickness), 0.5 * mm);
+                const double outer = getAttrOrDefault<double>(x_comp, _Unicode(outerthickness), 0.5 * mm);
+                SurfaceType type(SurfaceType::Sensitive);
+                VolPlane surface(
+                    segment, type, inner, outer,
+                    Vector3D(-1, 0, 0),
+                    Vector3D(0, -1, 0),
+                    Vector3D(0, 0, 1)
+                );
+		volplane_surface.push_back(surface);
+            }
+        }
+    }
+}
+
+
+BuiltAssembly buildHalfRSU(
+    Detector& description,
+    SensitiveDetector& sens,
+    xml_comp_t x_half,
+    const SensorStackConfig& stack,
+    int& sensor_number) {
+
+    Assembly half(x_half.nameStr());
+    std::vector<PlacedVolume> placements;
+    std::vector<VolPlane> surfaces;
+    for (xml_coll_t ci(x_half, _Unicode(rsu_component)); ci; ++ci) {
+        xml_comp_t x_comp = ci;
+        placeCurvedComponent(description, sens, half, x_comp, stack, sensor_number, placements, surfaces );
+    }
+     if (placements.size() != surfaces.size()) { throw std::runtime_error( "HalfRSU sensitive placements/surfaces mismatch");  }
+
+    std::vector<SensitivePath> paths;
+    for (size_t i = 0; i < placements.size(); ++i) {
+        paths.push_back({ {placements[i]},   surfaces[i],  placements[i].volume().name(), "" });
+    }
+    return {half, paths};
+}
+
+ 
+BuiltAssembly buildLAS(
+    Detector& description,
+    SensitiveDetector& sens,
+    xml_comp_t x_las,
+    const std::map<std::string, BuiltAssembly>& halfRSUs) {
+
+    Assembly las(x_las.nameStr());
+    std::vector<SensitivePath> paths;
+
+    SensorStackConfig stack;
+    stack.enabled = getAttrOrDefault<bool>( x_las, _Unicode(sensor_stack), false);
+    stack.copper = getAttrOrDefault<double>( x_las, _Unicode(sensor_cu_thickness), 0.0);
+    stack.activeSi = getAttrOrDefault<double>( x_las, _Unicode(sensor_active_si_thickness), 0.0);
+    stack.inactiveSi = getAttrOrDefault<double>( x_las, _Unicode(sensor_inactive_si_thickness), 0.0);
+
+    int halfIndex = 0;
+    int sensor_number = 1;
+
+    for (xml_coll_t ci(x_las, _Unicode(LAS_component));  ci; ++ci) {
+        xml_comp_t x_comp = ci;
+        const std::string ref = getAttrOrDefault<std::string>( x_comp, _Unicode(ref), "");
+        if (!ref.empty()) {
+            auto it = halfRSUs.find(ref);
+            if (it == halfRSUs.end()) {
+                throw std::runtime_error(
+                    "Unknown HalfRSU reference: " + ref);
+            }
+            const BuiltAssembly& half = it->second;
+            PlacedVolume halfPV = las.placeVolume( half.volume,  getXMLTransform(x_comp) );
+            halfPV.addPhysVolID("halfrsu", halfIndex);
+            for (const auto& halfPath : half.sensitivePaths) {
+	    // Initialise all members, including VolPlane.
+    		SensitivePath path{  halfPath.placements, halfPath.surface, x_comp.nameStr() + "_" + halfPath.name, x_comp.nameStr() };
+            // Prepend the placement of this HalfRSU within the LAS.
+    		path.placements.insert(path.placements.begin(), halfPV  );
+                paths.push_back(std::move(path));
+            }
+            ++halfIndex;
+        } else {
+            // Curved component belonging directly to LAS
+            std::vector<PlacedVolume> placements;
+            std::vector<VolPlane> surfaces;
+            placeCurvedComponent( description, sens, las, x_comp, stack, sensor_number, placements, surfaces );
+            if (placements.size() != surfaces.size()) {
+                throw std::runtime_error(
+                    "LAS sensitive placement/surface mismatch");
+            }
+            for (size_t i = 0; i < placements.size(); ++i) {
+                paths.push_back({ {placements[i]},  surfaces[i],  placements[i].volume().name(), ""  });
+            }
+        }
+    }
+    return {las, paths};
+}
+
+ 
+ 
+
 static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
                                             SensitiveDetector sens) {
   typedef vector<PlacedVolume> Placements;
@@ -73,6 +370,9 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
   map<string, Placements> sensitives;
   map<string, std::vector<VolPlane>> volplane_surfaces;
   map<string, std::array<double, 2>> module_thicknesses;
+   map<std::string, std::vector<SensitivePath>> nested_sensitives;
+  map<std::string, std::vector<HalfRSUInstance>> halfRSU_instances; // maybe obsolete
+  map<std::string, std::vector<LASInstance>> las_instances;
 
   PlacedVolume pv;
 
@@ -86,13 +386,38 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
     DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
                                                     "boundary_material");
   }
-
-  // dd4hep::xml::Dimension dimensions(x_det.dimensions());
-  // Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
-  // Volume assembly(det_name,topVolumeShape,air);
   Assembly assembly(det_name);
-
   sens.setType("tracker");
+
+  // Read HalfRSU definitions from XML
+  std::map<std::string, BuiltAssembly> halfRSUs;
+  for (xml_coll_t hi(x_det.parent(), _Unicode(HalfRSU)); hi; ++hi) {
+      xml_comp_t x_half = hi;
+      const std::string halfName = x_half.nameStr();
+      SensorStackConfig stack;
+      stack.enabled = getAttrOrDefault<bool>( x_half, _Unicode(sensor_stack), false);
+      stack.copper = getAttrOrDefault<double>(x_half, _Unicode(sensor_cu_thickness), 0.0);
+      stack.activeSi = getAttrOrDefault<double>( x_half, _Unicode(sensor_active_si_thickness), 0.0);
+      stack.inactiveSi = getAttrOrDefault<double>( x_half, _Unicode(sensor_inactive_si_thickness), 0.0);
+      if (stack.enabled &&  (stack.copper <= 0 ||  stack.activeSi <= 0 ||  stack.inactiveSi <= 0)) {
+          throw std::runtime_error(  "Invalid sensor stack thicknesses in HalfRSU " +  halfName);
+      }
+      int sensor_number = 1;
+      BuiltAssembly half = buildHalfRSU( description, sens, x_half, stack, sensor_number );
+      halfRSUs.emplace(halfName, std::move(half));
+  }
+
+  // Construct LAS
+  std::map<std::string, BuiltAssembly> lasAssemblies;
+  for (xml_coll_t li(x_det, _Unicode(LAS)); li; ++li) { 
+      xml_comp_t x_las = li;
+      const std::string lasName = x_las.nameStr();
+      BuiltAssembly las = buildLAS( description, sens, x_las, halfRSUs );
+      auto inserted = lasAssemblies.emplace(lasName, std::move(las));
+      if (!inserted.second) {
+          throw std::runtime_error( "Duplicate LAS definition: " + lasName);
+      } 
+  }
 
   TGDMLParse* parser = new TGDMLParse();
 
@@ -114,12 +439,17 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
         getAttrOrDefault<double>(x_mod, _Unicode(sensor_active_si_thickness), 0.0);
     const double inactive_si_thickness =
         getAttrOrDefault<double>(x_mod, _Unicode(sensor_inactive_si_thickness), 0.0);
-    const double sensor_thickness = copper_thickness + active_si_thickness + inactive_si_thickness;
 
     if (sensor_stack &&
         (copper_thickness <= 0 || active_si_thickness <= 0 || inactive_si_thickness <= 0)) {
       throw runtime_error("CurvedTrackerBarrel: sensor stack thicknesses must be positive");
     }
+
+    SensorStackConfig stack;
+    stack.enabled = sensor_stack;
+    stack.copper = copper_thickness;
+    stack.activeSi = active_si_thickness;
+    stack.inactiveSi = inactive_si_thickness;
 
     int ncomponents   = 0;
     int sensor_number = 1;
@@ -135,110 +465,28 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       xml_comp_t x_rot   = x_comp.rotation(false);
       const string c_nam = _toString(ncomponents, "component%d");
 
-      if (x_comp.nameStr().find("Curved") != std::string::npos) {
-        const bool build_sensor_stack =
-            sensor_stack && x_comp.nameStr().find("CurvedSi") != std::string::npos;
-        vector<string> layer_names       = {"Sensor"};
-        vector<string> layer_materials   = {x_comp.materialStr()};
-        vector<double> layer_thicknesses = {x_comp.thickness()};
-        vector<double> layer_offsets     = {0.0};
-        vector<bool> layer_sensitivities = {x_comp.isSensitive()};
+	// Place LAS
+      const std::string ref = getAttrOrDefault<std::string>( x_comp, _Unicode(ref), "");
+      if (!ref.empty()) {
+	 auto it = lasAssemblies.find(ref);
+         if (it == lasAssemblies.end()) {  
+             throw std::runtime_error( "Unknown LAS reference: " + ref);
+         }
+         const BuiltAssembly& las = it->second;
+         const int lasIndex = static_cast<int>(las_instances[m_nam].size());
+         PlacedVolume lasPV = m_vol.placeVolume( las.volume, getXMLTransform(x_comp)  );
+         lasPV.addPhysVolID("las", lasIndex);
+         LASInstance instance;
+         instance.name = x_comp.nameStr();
+         instance.placement = lasPV;
+         instance.sensitivePaths = las.sensitivePaths;  // Paths are relative to the LAS assembly.
+         las_instances[m_nam].push_back(std::move(instance)  );
+	
+      } else  if (x_comp.nameStr().find("Curved") != std::string::npos) {
 
-        if (build_sensor_stack) {
-          if (fabs(x_comp.thickness() - sensor_thickness) > 1e-9 * mm) {
-            throw runtime_error("CurvedTrackerBarrel: component and sensor-stack thickness differ");
-          }
-          layer_names       = {"InactiveSi", "ActiveSi", "Copper"};
-          layer_materials   = {"Silicon", "Silicon", "Copper"};
-          layer_thicknesses = {inactive_si_thickness, active_si_thickness, copper_thickness};
-          // Increasing curvature radius is away from the stave support for both sensor surfaces.
-          layer_offsets       = {inactive_si_thickness / 2.0 - sensor_thickness / 2.0,
-                                 inactive_si_thickness + active_si_thickness / 2.0 -
-                                     sensor_thickness / 2.0,
-                                 sensor_thickness / 2.0 - copper_thickness / 2.0};
-          layer_sensitivities = {false, x_comp.isSensitive(), false};
-        }
-
-        for (size_t layer = 0; layer < layer_names.size(); ++layer) {
-          double c_rmin = x_comp.radius() + layer_offsets[layer]; // radius of curvature in cm
-          double c_phi0 =
-              x_comp.phi0(); // start and stop angle of segment in rad - zero is centre of stave
-          double c_phi1 = x_comp.phi1();
-          double c_Nseg =
-              x_comp.nsegments(); //  number of flat segments used to approximate cylinder
-          double dphi = (c_phi1 - c_phi0) / (double)c_Nseg;
-          vector<double> Xp, Zp;
-          double phiP = c_phi0;
-
-          for (int i = 0; i < c_Nseg + 1; ++i) {
-            Xp.push_back(c_rmin * sin(phiP));
-            Zp.push_back(c_rmin * cos(phiP));
-            phiP += dphi;
-          }
-          phiP = c_phi0 + dphi / 2;
-          for (int i = 0; i < c_Nseg; ++i) {
-            double segwidth = sqrt((Xp[i + 1] - Xp[i]) * (Xp[i + 1] - Xp[i]) +
-                                   (Zp[i + 1] - Zp[i]) * (Zp[i + 1] - Zp[i]));
-            double midX     = 0.5 * (Xp[i] + Xp[i + 1]);
-            double midZ     = 0.5 * (Zp[i] + Zp[i + 1]);
-            Box seg_box((segwidth / 2) * ((c_rmin - layer_thicknesses[layer] / 2) / c_rmin),
-                        x_comp.length() / 2, layer_thicknesses[layer] / 2);
-            string seg_nam = c_nam;
-            if (build_sensor_stack)
-              seg_nam += "_" + layer_names[layer];
-            seg_nam += "." + _toString(i);
-            Volume seg_vol(seg_nam, seg_box, description.material(layer_materials[layer]));
-
-            if (x_pos && x_rot) {
-              Position c_pos(midX + x_pos.x(0), x_pos.y(0), midZ + x_pos.z(0));
-              RotationZYX c_rot(x_rot.z(0), phiP + x_rot.y(0), x_rot.x(0));
-              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
-            } else if (x_rot) {
-              Position c_pos(midX, 0, midZ);
-              pv = m_vol.placeVolume(
-                  seg_vol,
-                  Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0) + phiP, x_rot.x(0)), c_pos));
-            } else if (x_pos) {
-              RotationZYX c_rot(0, phiP, 0);
-              Position c_pos(midX + x_pos.x(0), x_pos.y(0), x_pos.z(0) + midZ);
-              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
-            } else {
-              RotationZYX c_rot(0, phiP, 0);
-              Position c_pos(midX, 0, midZ);
-              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
-            }
-            phiP += dphi;
-            seg_vol.setRegion(description, x_comp.regionStr());
-            seg_vol.setLimitSet(description, x_comp.limitsStr());
-            seg_vol.setVisAttributes(description, x_comp.visStr());
-            if (layer_sensitivities[layer]) {
-              pv.addPhysVolID("sensor", sensor_number++);
-              seg_vol.setSensitiveDetector(sens);
-              sensitives[m_nam].push_back(pv);
-              //        module_thicknesses[m_nam] = {x_comp.innerthickness(),x_comp.outerthickness()};
-
-              // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-              Vector3D u(-1., 0., 0.);
-              Vector3D v(0., -1., 0.);
-              Vector3D n(0., 0., 1.);
-              //    Vector3D o( 0. , 0. , 0. ) ;
-
-              // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-              // depending on wether the support is above or below the sensor
-              double inner_thickness =
-                  getAttrOrDefault<double>(x_comp, _Unicode(innerthickness), 0.5 * mm);
-              double outer_thickness =
-                  getAttrOrDefault<double>(x_comp, _Unicode(outerthickness), 0.5 * mm);
-              SurfaceType type(SurfaceType::Sensitive);
-
-              VolPlane surf(seg_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-              volplane_surfaces[m_nam].push_back(surf);
-
-              //--------------------------------------------
-            }
-          }
-        }
-        // thickness of curved layer is height of curve
+		cout << "place curved component  " << getAttrOrDefault<std::string>(x_comp, _Unicode(name), " ") << endl;
+       		placeCurvedComponent( description, sens, m_vol, x_comp, stack, sensor_number, sensitives[m_nam], volplane_surfaces[m_nam]);
+          
 
       } else { // not a curved component
 
@@ -247,6 +495,8 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
 
         Volume c_vol(c_nam);
         c_vol = parser->GDMLReadFile(gdml_file.c_str());
+
+
 
         //check the validity of the volume
         if (!c_vol.isValid()) {
@@ -288,6 +538,8 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       }
     }
   }
+
+
   delete parser;
 
   // now build the layers
@@ -356,6 +608,30 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
         pv = lay_vol.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
         mod_elt.setPlacement(pv);
+        
+        int lasID = 1;
+	for (const auto& instance : las_instances[m_nam]) {
+	    attachLASDetElements( mod_elt,  instance,  lasID++  );
+  	}
+        
+    	int halfID = 1;
+	for (const auto& instance : halfRSU_instances[m_nam]) {
+		DetElement halfDE(mod_elt, instance.name,  halfID++);
+    		halfDE.setPlacement(instance.placement);
+	        int segmentID = 1;
+    		for (const auto& path : instance.sensitivePaths) {
+			if (path.placements.size() != 1) {
+            			throw std::runtime_error( "Expected direct sensitive segment inside HalfRSU");
+        		}
+			PlacedVolume sensPV = path.placements.front();
+			DetElement sensorDE( halfDE,  "de_" + path.name,   segmentID++ );
+			sensorDE.setPlacement(sensPV);
+			auto& params2 =  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensorDE);
+			params2.set<std::string>("axis_definitions", "XYZ");
+			volSurfaceList(sensorDE)->push_back(path.surface);
+    		}
+	}    
+    
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
           DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
