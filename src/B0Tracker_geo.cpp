@@ -152,6 +152,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
 
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name);
+  assembly.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   Volume mother_vol  = description.pickMotherVolume(sdet);
   xml::Component pos = x_det.position();
