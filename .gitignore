@@ -47,3 +47,6 @@ vendor/
 .jekyll-metadata
 .sass-cache/
 _site/
+
+install
+build
