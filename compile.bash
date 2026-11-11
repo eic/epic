@@ -2,6 +2,7 @@
 
 ### Compilation
 # To configure, build, and install the geometry (to the `install` directory), use the following commands:
+# rm -rf build install 
 cmake -B build -S . -DCMAKE_INSTALL_PREFIX=install
 cmake --build build -j20
 cmake --install build

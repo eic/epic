@@ -11,7 +11,7 @@
     <detector
       name="LumiConverter"
       type="LumiWindow"
-      material="BerylliumOxide"
+      material="Aluminum"
       vis="AnlBlue">
       <dimensions x="LumiConverter_DXY/2" y="LumiConverter_DXY/2" z="LumiConverter_DZ/2" />
       <position   x="LumiConverter_X" y="LumiConverter_Y" z="LumiConverter_Z" />

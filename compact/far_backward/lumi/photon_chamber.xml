@@ -19,7 +19,7 @@
       pipeMaterial="StainlessSteelSAE304"
       entrCapMaterial="Aluminum"
       exitCapMaterial="Beryllium"
-      convMaterial="Aluminum"
+      convMaterial="BerylliumOxide"
       fillMaterial="Vacuum"
       vis="AnlLightGray">
       <position z1="LumiChamber_Z1" z2="LumiChamber_Z2" z_conv="LumiConverter_Z"/>
