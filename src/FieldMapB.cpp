@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2023 Wouter Deconinck, Dhevan Gangadharan, Aranya Giri
+// Copyright (C) 2023 - 2026 Wouter Deconinck, Dhevan Gangadharan, Aranya Giri
 
 #include <DD4hep/DetFactoryHelper.h>
 #include <DD4hep/FieldTypes.h>
@@ -7,6 +7,7 @@
 #include <XML/Utilities.h>
 
 #include <cstdlib>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -42,9 +43,9 @@ public:
             const std::string& coord_type_str = "BrBz");
   void Configure(std::vector<xml_comp_t> dimensions);
   void LoadMap(const std::string& map_file, float scale);
-  bool GetIndices(float R, float Z, int* idxR, int* idxZ, float* deltaR, float* deltaZ);
+  bool GetIndices(float R, float Z, int* idxR, int* idxZ, float* deltaR, float* deltaZ) const;
   bool GetIndices(float X, float Y, float Z, int* idxX, int* idxY, int* idxZ, float* deltaX,
-                  float* deltaY, float* deltaZ);
+                  float* deltaY, float* deltaZ) const;
   void SetCoordTranslation(const Transform3D& tr) {
     coordTranslate     = tr;
     coordTranslate_inv = tr.Inverse();
@@ -63,8 +64,6 @@ private:
   std::optional<Transform3D> fieldRot{std::nullopt}; // field rotation
   std::optional<Transform3D> fieldRot_inv{std::nullopt};
   std::vector<float> steps, mins, maxs;                    // B map cell info
-  int ir, ix, iy, iz;                                      // lookup indices
-  float dr, dx, dy, dz;                                    // deltas for interpolation
   std::vector<std::vector<std::array<float, 2>>> Bvals_RZ; // B map values:  {R}, {Z}, {Br,Bz}
   std::vector<std::vector<std::vector<std::array<float, 3>>>>
       Bvals_XYZ; // B map values: {X}, {Y}, {Z}, {Bx,By,Bz}
@@ -129,7 +128,8 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions) {
 }
 
 // get RZ cell indices corresponding to point of interest
-bool FieldMapB::GetIndices(float R, float Z, int* idxR, int* idxZ, float* deltaR, float* deltaZ) {
+bool FieldMapB::GetIndices(float R, float Z, int* idxR, int* idxZ, float* deltaR,
+                           float* deltaZ) const {
   // boundary check
   if (R > maxs[0] || R < mins[0] || Z > maxs[1] || Z < mins[1]) {
     return false;
@@ -147,7 +147,7 @@ bool FieldMapB::GetIndices(float R, float Z, int* idxR, int* idxZ, float* deltaR
 
 // get XYZ cell indices corresponding to point of interest
 bool FieldMapB::GetIndices(float X, float Y, float Z, int* idxX, int* idxY, int* idxZ,
-                           float* deltaX, float* deltaY, float* deltaZ) {
+                           float* deltaX, float* deltaY, float* deltaZ) const {
   // boundary check
   if (X > maxs[0] || X < mins[0] || Y > maxs[1] || Y < mins[1] || Z > maxs[2] || Z < mins[2]) {
     return false;
@@ -187,6 +187,8 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale) {
       Bcomp.resize(2);
       iss >> coord[0] >> coord[1] >> Bcomp[0] >> Bcomp[1];
 
+      int ir, iz;
+      float dr, dz;
       if (!GetIndices(coord[0], coord[1], &ir, &iz, &dr, &dz)) {
         printout(WARNING, "FieldMapB", "coordinates out of range, skipped it.");
       } else { // scale field
@@ -197,6 +199,8 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale) {
       Bcomp.resize(3);
       iss >> coord[0] >> coord[1] >> coord[2] >> Bcomp[0] >> Bcomp[1] >> Bcomp[2];
 
+      int ix, iy, iz;
+      float dx, dy, dz;
       if (!GetIndices(coord[0], coord[1], coord[2], &ix, &iy, &iz, &dx, &dy, &dz)) {
         printout(WARNING, "FieldMap", "coordinates out of range, skipped it.");
       } else { // scale and rotate B field vector
@@ -213,6 +217,12 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale) {
 
 // get field components
 void FieldMapB::fieldComponents(const double* pos, double* field) {
+  if (std::isnan(pos[0]) || std::isnan(pos[1]) || std::isnan(pos[2])) {
+    printout(ERROR, "FieldMapB", "fieldComponents called for pos = (%f, %f, %f)", pos[0], pos[1],
+             pos[2]);
+    std::_Exit(EXIT_FAILURE);
+  }
+
   // coordinate conversion
   auto p = coordTranslate_inv.has_value()
                ? coordTranslate_inv.value() * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2])
@@ -223,6 +233,8 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
     const float r = sqrt(p.x() * p.x() + p.y() * p.y());
     const float z = p.z();
 
+    int ir, iz;
+    float dr, dz;
     if (!GetIndices(r, z, &ir, &iz, &dr, &dz)) {
       // out of range
       return;
@@ -253,6 +265,8 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
     field[2] += B.z();
   } else { // BxByBz
 
+    int ix, iy, iz;
+    float dx, dy, dz;
     if (!GetIndices(p.x(), p.y(), p.z(), &ix, &iy, &iz, &dx, &dy, &dz)) {
       return; // out of range
     }
