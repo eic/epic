@@ -1,7 +1,8 @@
 # SVT disk tiling deliveries
 
 This directory holds immutable, versioned SVT endcap tiling deliveries. The
-active delivery is `20261001_ES/`.
+active delivery is `20261110_ES/` (since Step 11b, 2026-11-11; `20261001_ES/` is
+kept for reproducibility).
 
 From Ernst S. Module tiling 20261001 -
 https://conferences.lbl.gov/event/2600/

@@ -70,14 +70,19 @@
     <constant name="SiEndcapTilingBaseplateA_width"          value="35*mm"/>
     <constant name="SiEndcapTilingBaseplateB_width"          value="32*mm"/>
     <comment>
-      Provisional module translations normal to the supplied corrugation surface.
-      The inward clearance moves the module away from the channel by 32.5 um
-      so the 2.5 um Cu above the 50 um silicon ends at the carbon boundary.
-      The outward module moves by that common clearance plus the preserved
-      230 um opposing-face translation, for a total outward offset of 262.5 um.
+      Optional module translations normal to the supplied corrugation surface
+      (inward: away from the channel; outward: inward clearance + opposing-face
+      offset). Both are zero from the 20261110 delivery on (Step 11b):
+        - the 20261110 CSVs already place OUTWARD modules 0.230 mm further from
+          the carbon (z_baseplate_mm - facet_z_mm = +0.230 mm along the module
+          normal). The 20261001 delivery needs OppositeFacing_z_offset = 0.230*mm.
+        - the inward clearance (previously 32.5 um) only kept the inward
+          bridge-FPC aluminium out of the neighbouring carbon flat; that
+          aluminium now sits on the back of the baseplate (see FPC note below).
+      With both zero the delivered placements are used exactly as supplied.
     </comment>
-    <constant name="SiEndcapTilingInwardModule_z_clearance"  value="0.0325*mm"/>
-    <constant name="SiEndcapTilingOppositeFacing_z_offset"   value="0.230*mm"/>
+    <constant name="SiEndcapTilingInwardModule_z_clearance"  value="0.0*mm"/>
+    <constant name="SiEndcapTilingOppositeFacing_z_offset"   value="0.0*mm"/>
     <constant name="SiEndcapTilingBLEC_length"               value="20*mm"/>
     <constant name="SiEndcapTilingBREC_length"               value="10*mm"/>
     <constant name="SiEndcapTiling5RSU_package_length"       value="SiEndcapTiling5RSU_count*SiEndcapRSU_length + SiEndcapTilingBLEC_length + SiEndcapTilingBREC_length"/>
@@ -91,12 +96,15 @@
     </comment>
     <constant name="SiEndcapTilingSensor_thickness"          value="50*um"/>
     <comment>
-      Endcap RSU layers follow vertex_barrel.xml: 36 um inactive Si,
-      14 um segmented active Si, then 2.5 um full-area Cu on the exposed side.
-      The slide's 50 um sensor and CSV z_sensor reference end at the Si top;
-      Cu is additional, giving a 52.5 um physical RSU stack.
+      Endcap RSU layers follow vertex_barrel.xml: inactive Si, 14 um segmented
+      active Si, then 2.5 um full-area Cu on the exposed side.
+      Step 11b (2026-11-11): the inactive Si is reduced from 36 um to 33.5 um so
+      that inactive Si + active Si + Cu = 50 um = SiEndcapTilingSensor_thickness
+      (the slide's sensor thickness). The CSV z_sensor_mm is therefore the plane
+      touched by the outer face of the Cu layer. Before Step 11b the Cu was added
+      on top of 50 um of silicon (52.5 um stack).
     </comment>
-    <constant name="SiEndcapTilingRSUInactiveSi_thickness"   value="36*um"/>
+    <constant name="SiEndcapTilingRSUInactiveSi_thickness"   value="33.5*um"/>
     <constant name="SiEndcapTilingRSUActiveSi_thickness"     value="14*um"/>
     <constant name="SiEndcapTilingRSUCu_thickness"           value="2.5*um"/>
     <constant name="SiEndcapTilingFilm_thickness"            value="60*um"/>
@@ -140,6 +148,15 @@
       so that it stops at the inner edge of the 2.5 mm epoxy glue line.
       In x, each FPC starts after its adjacent LEC/REC and the configurable
       gap below, rather than being aligned to the outer baseplate edge.
+      Step 11b (2026-11-11), INWARD modules only: the 80 um Kapton stays on the
+      sensor side of the baseplate, but the 30 um aluminium is placed on the
+      back (outer) side of the baseplate, under the same x-y footprint. On the
+      sensor side the 110 um FPC is thicker than the 80 um epoxy glue line, so
+      its last 30 um would sit inside the neighbouring corrugation flat. The
+      provider (Ernst S.) suggested this split as a surrogate for the FPC
+      routing to the outer surface; it keeps the FPC material (x/X0) unchanged.
+      The AncASIC sits on the Kapton for inward modules. Outward modules keep
+      Kapton + aluminium on the front side (no conflict there).
     </comment>
     <constant name="SiEndcapBridgeFPC_Kapton_thickness"      value="80*um"/>
     <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="30*um"/>
@@ -233,7 +250,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
+      <module_placements file="compact/tracking/silicon_disks_tiling/20261110_ES/rsu_opt" format="tiling-directory"/>
       <comment>
         Module geometry comes from the plugin. This detector uses the
         corrugation-aware placement CSV so modules sit on both sides of the frame.
@@ -269,7 +286,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
+      <module_placements file="compact/tracking/silicon_disks_tiling/20261110_ES/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="InnerTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="InnerTrackerEndcap_active_rmin"
@@ -364,7 +381,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
+      <module_placements file="compact/tracking/silicon_disks_tiling/20261110_ES/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="MiddleTrackerEndcapP_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -396,7 +413,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
+      <module_placements file="compact/tracking/silicon_disks_tiling/20261110_ES/rsu_opt" format="tiling-directory"/>
       <layer id="1" name="MiddleTrackerEndcapN_disk1">
         <envelope vis="TrackerLayerVis"
           rmin="MiddleTrackerEndcap_active_rmin"
@@ -428,7 +445,7 @@
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
+      <module_placements file="compact/tracking/silicon_disks_tiling/20261110_ES/rsu_opt" format="tiling-directory"/>
       <layer id="2" name="OuterTrackerEndcapP_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"
@@ -504,7 +521,7 @@
       vis="TrackerVis"
       reflect="true">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <module_placements file="compact/tracking/silicon_disks_tiling/20261001_ES/rsu_opt" format="tiling-directory"/>
+      <module_placements file="compact/tracking/silicon_disks_tiling/20261110_ES/rsu_opt" format="tiling-directory"/>
       <layer id="2" name="OuterTrackerEndcapN_disk2">
         <envelope vis="TrackerLayerVis"
           rmin="OuterTrackerEndcap_active_rmin"

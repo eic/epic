@@ -72,6 +72,10 @@ struct ModuleTemplate {
   double rec_thickness{0.0};
   bool tiling_design{false};
   bool outward_facing{true};
+  // Tiling modules only: distance from the bottom of the module stack to the
+  // bottom of the carbon baseplate. Outward: the external epoxy layer. Inward:
+  // the bridge-FPC aluminium moved to the back of the baseplate (Step 11b).
+  double baseplate_bottom_offset{0.0};
 };
 
 // One placement row loaded from the CSV file.
@@ -368,10 +372,12 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     const double active_si = description.constant<double>("SiEndcapTilingRSUActiveSi_thickness");
     const double copper    = description.constant<double>("SiEndcapTilingRSUCu_thickness");
     const double silicon   = description.constant<double>("SiEndcapTilingSensor_thickness");
+    // Step 11b: inactive Si + active Si + Cu make up the 50 um sensor, so the
+    // CSV z_sensor_mm plane is the outer face of the Cu layer.
     if (inactive_si <= 0.0 || active_si <= 0.0 || copper <= 0.0 ||
-        std::abs(inactive_si + active_si - silicon) > 1.0e-9 * mm) {
+        std::abs(inactive_si + active_si + copper - silicon) > 1.0e-9 * mm) {
       throw std::runtime_error(
-          "tiling RSU silicon layers must sum to the configured sensor thickness");
+          "tiling RSU inactive Si + active Si + Cu must sum to the configured sensor thickness");
     }
     ModuleTemplate module_template;
     module_template.name = name;
@@ -392,9 +398,12 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     const double chain_length = rsu_count * description.constant<double>("SiEndcapRSU_length");
     const double sensor_x_offset =
         -module_template.x_size / 2.0 + module_template.lec_side_span + chain_length / 2.0;
-    const double bridge_fpc_stack =
-        description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
-        description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+    // Step 11b: inward modules keep the FPC Kapton on the sensor side of the
+    // baseplate and carry the FPC aluminium on the back of the baseplate.
+    const double fpc_kapton   = description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
+    const double fpc_aluminum = description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+    const double bridge_fpc_stack = fpc_kapton + fpc_aluminum;
+    const double front_fpc_stack  = outward_facing ? bridge_fpc_stack : fpc_kapton;
     const double ancasic_stack = description.constant<double>("SiEndcapAncASICGlue_thickness") +
                                  description.constant<double>("SiEndcapAncASIC_thickness");
     auto add_component         = [&](ComponentTemplate component) {
@@ -449,10 +458,11 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     // baseplate, not one serial stack. The FPC touches the baseplate and the
     // AncASIC is mounted on the FPC.
     const double sensor_branch =
-        description.constant<double>("SiEndcapTilingFilm_thickness") + silicon + copper;
-    const double electronics_branch = bridge_fpc_stack + ancasic_stack;
+        description.constant<double>("SiEndcapTilingFilm_thickness") + silicon;
+    const double electronics_branch = front_fpc_stack + ancasic_stack;
+    module_template.baseplate_bottom_offset = outward_facing ? epoxy.thickness : fpc_aluminum;
     module_template.total_thickness =
-        (outward_facing ? epoxy.thickness : 0.0) +
+        module_template.baseplate_bottom_offset +
         description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
         std::max(sensor_branch, electronics_branch);
     return module_template;
@@ -506,24 +516,30 @@ double tiling_lec_boundary_x(Detector& description, const ModuleTemplate& module
   return sensor_x_offset + (handedness == "right" ? chain_length / 2.0 : -chain_length / 2.0);
 }
 
+// Local z of the bottom face of the carbon baseplate in a tiling module.
+double tiling_baseplate_bottom_z(const ModuleTemplate& module_template) {
+  return -module_template.total_thickness / 2.0 + module_template.baseplate_bottom_offset;
+}
+
 double tiling_sensor_reference_z(Detector& description, const ModuleTemplate& module_template) {
-  const double bottom = -module_template.total_thickness / 2.0;
-  const double epoxy  = module_template.outward_facing
-                            ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
-                            : 0.0;
-  // The CSV sensor reference is the top of the 50 um Si, below the added Cu.
-  return bottom + epoxy + description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
+  // The CSV sensor reference is the outer face of the 50 um sensor
+  // (inactive Si + active Si + Cu; Step 11b).
+  return tiling_baseplate_bottom_z(module_template) +
+         description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
          description.constant<double>("SiEndcapTilingFilm_thickness") +
          description.constant<double>("SiEndcapTilingSensor_thickness");
 }
 
 double tiling_corrugation_reference_z(Detector& description,
                                       const ModuleTemplate& module_template) {
-  const double bottom = -module_template.total_thickness / 2.0;
+  const double baseplate_bottom = tiling_baseplate_bottom_z(module_template);
   if (module_template.outward_facing) {
-    return bottom;
+    // Outward: the external epoxy below the baseplate touches the carbon.
+    return baseplate_bottom -
+           description.constant<double>("SiEndcapTilingExternalEpoxy_thickness");
   }
-  return bottom + description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
+  // Inward: the epoxy edge lines on the sensor side of the baseplate touch the carbon.
+  return baseplate_bottom + description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
          description.constant<double>("SiEndcapTilingExternalEpoxy_thickness");
 }
 
@@ -927,6 +943,7 @@ string source_corrugation_disk_key(const string& layer_key) {
       {"OuterTrackerEndcapN_disk2", "ED2"},  {"MiddleTrackerEndcapN_disk1", "ED1"},
       {"InnerTrackerEndcapN_disk1", "ED0"},  {"InnerTrackerEndcapP_disk1", "HD0"},
       {"MiddleTrackerEndcapP_disk1", "HD1"}, {"OuterTrackerEndcapP_disk2", "HD2"},
+      // HD3b is the key in the reconstructed 20261001 corrugation table.
       {"OuterTrackerEndcapP_disk3", "HD3b"}, {"OuterTrackerEndcapP_disk4", "HD4"},
   };
   auto source_key = source_key_by_layer.find(layer_key);
@@ -1570,11 +1587,15 @@ vector<ModuleRow> load_tiling_module_directory(Detector& description, const stri
       }
       if ((facing != "OUTWARD" && facing != "INWARD") ||
           (facing == "OUTWARD") != module_template.outward_facing ||
-          (chirality != "LEFT" && chirality != "RIGHT")) {
+          (chirality != "LEFT" && chirality != "RIGHT" && chirality != "NEGATIVE" &&
+           chirality != "POSITIVE")) {
         fail(fmt::format("catalog.csv line {} orientation disagrees with type '{}'", catalog_line,
                          type_id));
       }
-      catalog_handedness[type_id] = chirality == "RIGHT" ? "right" : "left";
+      // The 20261110 catalogue renames RIGHT -> NEGATIVE and LEFT -> POSITIVE
+      // for the same type IDs (checked type by type in Step 11c).
+      catalog_handedness[type_id] =
+          (chirality == "RIGHT" || chirality == "NEGATIVE") ? "right" : "left";
     } catch (const std::runtime_error&) {
       throw;
     } catch (const std::exception&) {
@@ -1594,9 +1615,18 @@ vector<ModuleRow> load_tiling_module_directory(Detector& description, const stri
       {"HD0", "InnerTrackerEndcapP_disk1"},
       {"HD1", "MiddleTrackerEndcapP_disk1"},
       {"HD2", "OuterTrackerEndcapP_disk2"},
-      {"HD3b", "OuterTrackerEndcapP_disk3"},
+      {"HD3", "OuterTrackerEndcapP_disk3"},
       {"HD4", "OuterTrackerEndcapP_disk4"},
   }};
+  // Disk 8 is HD3_* from the 20261110 delivery on and HD3b_* in 20261001.
+  auto source_file_key = [&](size_t disk_id) {
+    const string key = disk_files[disk_id].first;
+    if (key == "HD3" && !fs::exists(directory / "HD3_modules.csv") &&
+        fs::exists(directory / "HD3b_modules.csv")) {
+      return string("HD3b");
+    }
+    return key;
+  };
   const array<string, 8> required_headers{"disk_id",        "row_index",   "mod_index",
                                           "type_id",        "x_origin_mm", "y_origin_mm",
                                           "z_baseplate_mm", "z_sensor_mm"};
@@ -1604,7 +1634,7 @@ vector<ModuleRow> load_tiling_module_directory(Detector& description, const stri
   vector<ModuleRow> rows;
 
   for (size_t disk_id = 0; disk_id < disk_files.size(); ++disk_id) {
-    const fs::path metadata_path = directory / (disk_files[disk_id].first + "_metadata.txt");
+    const fs::path metadata_path = directory / (source_file_key(disk_id) + "_metadata.txt");
     std::ifstream metadata_input(metadata_path);
     if (!metadata_input.is_open()) {
       fail(fmt::format("missing {}", metadata_path.filename().string()));
@@ -1700,7 +1730,7 @@ vector<ModuleRow> load_tiling_module_directory(Detector& description, const stri
       fail(fmt::format("metadata repeats disk key '{}'", disk_files[disk_id].second));
     }
 
-    const fs::path placement_path = directory / (disk_files[disk_id].first + "_modules.csv");
+    const fs::path placement_path = directory / (source_file_key(disk_id) + "_modules.csv");
     std::ifstream input(placement_path);
     if (!input.is_open()) {
       fail(fmt::format("missing {}", placement_path.filename().string()));
@@ -1866,8 +1896,14 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
   prototype.volume = Assembly(module_template.name);
   prototype.volume.setVisAttributes(description.visAttributes(module_template.vis));
 
-  double z_position       = -module_template.total_thickness / 2.0;
-  double thickness_so_far = 0.0;
+  // Inward tiling modules start the serial stack at the baseplate, above the
+  // back-side FPC aluminium; outward modules start with the external epoxy.
+  const double stack_start_offset =
+      module_template.tiling_design && !module_template.outward_facing
+          ? module_template.baseplate_bottom_offset
+          : 0.0;
+  double z_position       = -module_template.total_thickness / 2.0 + stack_start_offset;
+  double thickness_so_far = stack_start_offset;
   int component_id        = 0;
   int sensor_id           = 1;
   for (const auto& component : module_template.components) {
@@ -1913,7 +1949,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
                                 : 0.0;
       const double silicon_bottom_z = z_position - component.thickness / 2.0;
       const double active_center_z  = silicon_bottom_z + inactive_si + active_si / 2.0;
-      const double copper_center_z  = z_position + component.thickness / 2.0 + copper / 2.0;
+      // Cu is the outermost 2.5 um of the 50 um sensor (Step 11b).
+      const double copper_center_z  = z_position + component.thickness / 2.0 - copper / 2.0;
       const double rsu_pitch_x      = comp_x / x_repeat;
       const double half_rsu_x       = rsu_pitch_x / 2.0;
       const double half_rsu_y       = comp_y / 2.0;
@@ -2065,7 +2102,7 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const double epoxy_z =
           component.stacked_in_z
               ? z_position
-              : -module_template.total_thickness / 2.0 +
+              : tiling_baseplate_bottom_z(module_template) +
                     description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
                     component.thickness / 2.0;
       for (int edge : {-1, 1}) {
@@ -2165,19 +2202,22 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
             description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
         const double aluminum_thickness =
             description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+        const double baseplate_bottom_z = tiling_baseplate_bottom_z(module_template);
         const double baseplate_top_z =
-            -module_template.total_thickness / 2.0 +
-            (module_template.outward_facing
-                 ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
-                 : 0.0) +
-            description.constant<double>("SiEndcapTilingBaseplateCF_thickness");
-        double layer_z = baseplate_top_z;
+            baseplate_bottom_z + description.constant<double>("SiEndcapTilingBaseplateCF_thickness");
 
         place_passive_box(name + "_kapton", box_x, box_y, kapton_thickness, pos_x, pos_y,
-                          layer_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
-        layer_z += kapton_thickness;
+                          baseplate_top_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
+        // Step 11b: the inward 110 um FPC would reach 30 um into the
+        // neighbouring corrugation flat. As a surrogate for the FPC routing to
+        // the outer surface, inward modules carry the 30 um Al on the back of
+        // the baseplate; outward modules keep Kapton + Al on the front.
+        const double aluminum_center_z =
+            module_template.outward_facing
+                ? baseplate_top_z + kapton_thickness + aluminum_thickness / 2.0
+                : baseplate_bottom_z - aluminum_thickness / 2.0;
         place_passive_box(name + "_aluminum", box_x, box_y, aluminum_thickness, pos_x, pos_y,
-                          layer_z + aluminum_thickness / 2.0, "Aluminum", "SVTReadoutVis");
+                          aluminum_center_z, "Aluminum", "SVTReadoutVis");
       };
 
       auto bridge_fpc_x_geometry = [&](bool after_rsu, double side_span, double endcap_length,
@@ -2287,15 +2327,16 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
 
       const double glue_thickness = description.constant<double>("SiEndcapAncASICGlue_thickness");
       const double ancasic_thickness = description.constant<double>("SiEndcapAncASIC_thickness");
-      const double bridge_fpc_stack =
+      // The AncASIC sits on the front-side FPC: Kapton + Al outward, Kapton
+      // only inward (its Al is on the back of the baseplate, Step 11b).
+      const double front_fpc_stack =
           description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
-          description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
-      double layer_z = -module_template.total_thickness / 2.0 +
-                       (module_template.outward_facing
-                            ? description.constant<double>("SiEndcapTilingExternalEpoxy_thickness")
-                            : 0.0) +
+          (module_template.outward_facing
+               ? description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness")
+               : 0.0);
+      double layer_z = tiling_baseplate_bottom_z(module_template) +
                        description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
-                       bridge_fpc_stack;
+                       front_fpc_stack;
       place_passive_box(_toString(component_id, "component%d_ancasic_glue"), ancasic_x, ancasic_y,
                         glue_thickness, ancasic_pos_x, ancasic_pos_y,
                         layer_z + glue_thickness / 2.0, "SVT_Endcap_Glue", "SVTGlueVis");
