@@ -148,15 +148,16 @@
       so that it stops at the inner edge of the 2.5 mm epoxy glue line.
       In x, each FPC starts after its adjacent LEC/REC and the configurable
       gap below, rather than being aligned to the outer baseplate edge.
-      Step 11b (2026-11-11), INWARD modules only: the 80 um Kapton stays on the
-      sensor side of the baseplate, but the 30 um aluminium is placed on the
-      back (outer) side of the baseplate, under the same x-y footprint. On the
-      sensor side the 110 um FPC is thicker than the 80 um epoxy glue line, so
-      its last 30 um would sit inside the neighbouring corrugation flat. The
-      provider (Ernst S.) suggested this split as a surrogate for the FPC
-      routing to the outer surface; it keeps the FPC material (x/X0) unchanged.
-      The AncASIC sits on the Kapton for inward modules. Outward modules keep
-      Kapton + aluminium on the front side (no conflict there).
+      FPC split (Step 11b inward, Step 12 all modules): the 80 um Kapton stays
+      on the sensor side of the baseplate and the 30 um aluminium is placed on
+      the back (outer) side of the baseplate, under the same x-y footprint, for
+      EVERY tiling module. Reason: on an inward module the 110 um FPC is thicker
+      than the 80 um epoxy glue line, so its last 30 um would sit inside the
+      neighbouring corrugation flat. The provider (Ernst S.) suggested this split
+      as a surrogate for the FPC routing to the outer surface; it keeps the FPC
+      material (x/X0) unchanged. Outward modules use the same split for
+      consistency; there the Al lies within the 80 um external-epoxy layer,
+      between its two edge lines. The AncASIC sits on the Kapton.
     </comment>
     <constant name="SiEndcapBridgeFPC_Kapton_thickness"      value="80*um"/>
     <constant name="SiEndcapBridgeFPC_Aluminum_thickness"    value="30*um"/>
@@ -212,6 +213,19 @@
     <comment> Global Si endcap variables </comment>
     <!-- <constant name="SiTrackerEndcapMod_thickness"   value="SiEndcapModuleFlatSheetCF_thickness + SiEndcapModuleGlue_thickness + SiTrackerSensor_thickness" /> -->
 
+    <comment>
+      Corrugation rows (Step 12): each corrugated frame reads the delivered
+      &lt;disk&gt;_rows.csv from the same tiling directory as module_placements
+      (row_y = module channel center, facet_z = module mounting plane; the
+      carbon flat at row_y lies on the opposite surface). The provider gives no
+      flat widths. Assumption: every 45 deg web is centered halfway between
+      adjacent row centers, so flats absorb the irregular A-region spacing; on
+      the regular 33/36 mm lattice this equals the earlier 10.65/12.15 mm
+      sharp-corner widths. One boundary flat is added beyond each end row
+      (+-half_pitch). A frame attribute rowwise_placement="..." selects a legacy
+      table instead (needed to rebuild the 20261001 delivery, e.g.
+      20261001_ES/SVT_endcap_corrugation_rows_33_36.csv).
+    </comment>
     <comment>
       Corrugated carbon support:
         - h is the surface-to-surface corrugation envelope
@@ -272,8 +286,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -304,8 +317,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -399,8 +411,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -431,8 +442,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="180" bins1="100"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="180" bins1="100"/>
       </layer>
@@ -463,8 +473,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -485,8 +494,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -507,8 +515,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
       </layer>
@@ -539,8 +546,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -561,8 +567,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
       </layer>
@@ -583,8 +588,7 @@
           thickness="SiEndcapCorrugationCF_thickness" h="SiEndcapCorrugation_h"
           theta="SiEndcapCorrugation_theta" d="SiEndcapCorrugation_d"
           y0="0*mm" z_center_offset="0*mm" vis="TrackerSupportVis"
-          bend_radius="SiEndcapCorrugation_bend_radius"
-          rowwise_placement="compact/tracking/silicon_disks_tiling/20261001_ES/SVT_endcap_corrugation_rows_33_36.csv"/>
+          bend_radius="SiEndcapCorrugation_bend_radius"/>
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
       </layer>

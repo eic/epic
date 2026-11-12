@@ -169,7 +169,12 @@ struct CorrugatedFrameConfig {
   // Mid-surface radius of the rounded flat/web bends; 0 keeps sharp junctions.
   // Only used by the explicit-flat table (flat_width_mm schema).
   double bend_radius{0.0};
+  // Legacy reconstructed support table (20261001); optional.
   string rowwise_placement;
+  // Delivered per-disk <disk>_rows.csv from the selected tiling directory
+  // (20261110 on). Set by the detector builder when rowwise_placement is absent.
+  string delivered_rows_file;
+  double delivered_rows_center_z{0.0}; // global disk center z from <disk>_metadata.txt
 };
 
 // One positive-y corrugation cell. The builder mirrors nonzero rows to negative y.
@@ -190,6 +195,8 @@ struct CorrugationFlat {
   double surface_offset{0.0};
   double pitch{0.0};
   double flat_width{0.0};
+  // Delivered rows only: adjacent-row half pitch, used for the boundary flats.
+  double half_pitch{0.0};
   int csv_line{0};
 };
 
@@ -398,12 +405,12 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     const double chain_length = rsu_count * description.constant<double>("SiEndcapRSU_length");
     const double sensor_x_offset =
         -module_template.x_size / 2.0 + module_template.lec_side_span + chain_length / 2.0;
-    // Step 11b: inward modules keep the FPC Kapton on the sensor side of the
-    // baseplate and carry the FPC aluminium on the back of the baseplate.
+    // Step 11b/12: every tiling module keeps the FPC Kapton on the sensor side
+    // of the baseplate and carries the FPC aluminium on the back of the baseplate.
     const double fpc_kapton   = description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
     const double fpc_aluminum = description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
     const double bridge_fpc_stack = fpc_kapton + fpc_aluminum;
-    const double front_fpc_stack  = outward_facing ? bridge_fpc_stack : fpc_kapton;
+    const double front_fpc_stack  = fpc_kapton;
     const double ancasic_stack = description.constant<double>("SiEndcapAncASICGlue_thickness") +
                                  description.constant<double>("SiEndcapAncASIC_thickness");
     auto add_component         = [&](ComponentTemplate component) {
@@ -460,7 +467,10 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
     const double sensor_branch =
         description.constant<double>("SiEndcapTilingFilm_thickness") + silicon;
     const double electronics_branch = front_fpc_stack + ancasic_stack;
-    module_template.baseplate_bottom_offset = outward_facing ? epoxy.thickness : fpc_aluminum;
+    // Outward: the back-side Al lies inside the external-epoxy layer, between the
+    // two epoxy edge lines (the FPC stops at the inner edge of the lower line).
+    module_template.baseplate_bottom_offset =
+        outward_facing ? std::max(epoxy.thickness, fpc_aluminum) : fpc_aluminum;
     module_template.total_thickness =
         module_template.baseplate_bottom_offset +
         description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
@@ -934,6 +944,97 @@ vector<CorrugationFlat> load_corrugation_flats(const string& file_name, const st
   return flats;
 }
 
+// Load a delivered <disk>_rows.csv (20261110 schema: disk_id,row_index,row_type,
+// x_outer_mm,row_y_mm,facet_z_mm,half_pitch_mm). Each row is a module channel:
+// facet_z is the plane the module mounts on, i.e. the surface carrying the two
+// neighbouring flats. The carbon flat AT row_y is therefore on the opposite
+// surface: surface_offset = center_z - facet_z (+-h/2 about the disk center).
+// One boundary flat is added beyond each end row (row_y +- half_pitch, opposite
+// surface to the end row's flat) so the end rows' edge glue lines have carbon
+// to land on; pieces outside the disk are removed by the frame clipping.
+// row_type (BLOCKED/UNBLOCKED) is not needed: openings are cut geometrically.
+vector<CorrugationFlat> load_delivered_corrugation_flats(const string& file_name, double center_z,
+                                                         double envelope_height) {
+  auto fail = [&](const string& message) {
+    throw std::runtime_error(fmt::format("corrugation rows '{}': {}", file_name, message));
+  };
+  std::ifstream input(file_name);
+  if (!input) {
+    fail("cannot open file");
+  }
+  map<string, size_t> header_index;
+  vector<CorrugationFlat> flats;
+  string line;
+  int line_number = 0;
+  while (std::getline(input, line)) {
+    ++line_number;
+    if (trim(line).empty()) {
+      continue;
+    }
+    const vector<string> fields = split_csv_line(line);
+    if (header_index.empty()) {
+      for (size_t idx = 0; idx < fields.size(); ++idx) {
+        header_index[trim(fields[idx])] = idx;
+      }
+      for (const string header : {"row_index", "row_y_mm", "facet_z_mm", "half_pitch_mm"}) {
+        if (!header_index.count(header)) {
+          fail(fmt::format("missing header '{}'", header));
+        }
+      }
+      continue;
+    }
+    auto field = [&](const string& key) -> string {
+      const size_t idx = header_index.at(key);
+      return idx < fields.size() ? fields[idx] : "";
+    };
+    CorrugationFlat flat;
+    try {
+      flat.csv_line       = line_number;
+      flat.row_index      = std::stoi(field("row_index"));
+      flat.row_y          = std::stod(field("row_y_mm")) * mm;
+      flat.surface_offset = center_z - std::stod(field("facet_z_mm")) * mm;
+      flat.half_pitch     = std::stod(field("half_pitch_mm")) * mm;
+    } catch (const std::exception&) {
+      fail(fmt::format("line {} is malformed", line_number));
+    }
+    if (std::abs(std::abs(flat.surface_offset) - envelope_height / 2.0) > 1.0e-4 * mm) {
+      fail(fmt::format("line {}: |center_z - facet_z| = {} mm, expected h/2 = {} mm", line_number,
+                       std::abs(flat.surface_offset) / mm, envelope_height / (2.0 * mm)));
+    }
+    if (flat.half_pitch <= 0.0) {
+      fail(fmt::format("line {}: non-positive half_pitch_mm", line_number));
+    }
+    flats.push_back(flat);
+  }
+  if (flats.size() < 2) {
+    fail("needs at least two rows");
+  }
+  std::sort(flats.begin(), flats.end(), [](const CorrugationFlat& lhs, const CorrugationFlat& rhs) {
+    return lhs.row_y < rhs.row_y;
+  });
+  for (size_t index = 0; index + 1 < flats.size(); ++index) {
+    if (flats[index + 1].row_y - flats[index].row_y <= 1.0e-6 * mm ||
+        flats[index + 1].surface_offset * flats[index].surface_offset > 0.0) {
+      fail(fmt::format("rows {} and {} are not distinct alternating-surface rows",
+                       flats[index].row_index, flats[index + 1].row_index));
+    }
+  }
+  // Boundary flats beyond the lowest-y and highest-y rows.
+  CorrugationFlat low_boundary = flats.front();
+  low_boundary.row_index       = -1000 - flats.front().row_index;
+  low_boundary.row_y           = flats.front().row_y - flats.front().half_pitch;
+  low_boundary.surface_offset  = -flats.front().surface_offset;
+  low_boundary.csv_line        = 0;
+  CorrugationFlat high_boundary = flats.back();
+  high_boundary.row_index       = -1000 - flats.back().row_index;
+  high_boundary.row_y           = flats.back().row_y + flats.back().half_pitch;
+  high_boundary.surface_offset  = -flats.back().surface_offset;
+  high_boundary.csv_line        = 0;
+  flats.insert(flats.begin(), low_boundary);
+  flats.push_back(high_boundary);
+  return flats;
+}
+
 // Convert the XML layer key used by DiskBoundary back to the short source key
 // used by the delivered placement/metadata files and the reconstructed support
 // table. Keep this mapping identical to load_tiling_module_directory().
@@ -971,7 +1072,8 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   const double y_step       = config.height / std::tan(config.theta);
   const double flat_length  = config.half_pitch - y_step;
   const double center_delta = config.height - config.thickness;
-  if (config.rowwise_placement.empty() && (flat_length <= 0.0 || center_delta <= 0.0)) {
+  if (config.rowwise_placement.empty() && config.delivered_rows_file.empty() &&
+      (flat_length <= 0.0 || center_delta <= 0.0)) {
     printout(WARNING, "SiEndcapModuleTracker",
              fmt::format("skipping corrugated frame for disk '{}': flat length is non-positive",
                          disk.disk_key));
@@ -1123,24 +1225,55 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
                 web_y_half, web_z_half, -web_angle);
   };
 
-  if (!config.rowwise_placement.empty()) {
-    const string resolved_rows = resolve_input_file(config.rowwise_placement);
+  const bool use_delivered_rows = !config.delivered_rows_file.empty();
+  if (use_delivered_rows || !config.rowwise_placement.empty()) {
     const auto flats =
-        load_corrugation_flats(resolved_rows, source_corrugation_disk_key(disk.disk_key));
+        use_delivered_rows
+            ? load_delivered_corrugation_flats(config.delivered_rows_file,
+                                               config.delivered_rows_center_z, config.height)
+            : load_corrugation_flats(resolve_input_file(config.rowwise_placement),
+                                     source_corrugation_disk_key(disk.disk_key));
     if (!flats.empty()) {
-      vector<double> flat_widths;
+      // Each flat spans [row_y - half_low, row_y + half_high] to the sharp
+      // flat/web apexes. Legacy table: symmetric, flat_width/2 on both sides.
+      vector<double> half_low;
+      vector<double> half_high;
       vector<double> flat_z_centers;
-      flat_widths.reserve(flats.size());
+      half_low.reserve(flats.size());
+      half_high.reserve(flats.size());
       flat_z_centers.reserve(flats.size());
 
       // The CSV offsets are the outer faces of the full h envelope.  Carbon
       // extends toward the channel, leaving h-thickness between mid-surfaces.
       const double explicit_y_step = center_delta / std::tan(config.theta);
 
-      for (const auto& flat : flats) {
-        const double flat_width           = flat.flat_width;
+      // Delivered rows (20261110 on) give channel centers with irregular
+      // spacing in the A region, but no flat widths. Assumption (Step 12, not
+      // stated by the provider): every web keeps the 45 deg angle and is
+      // centered halfway between adjacent row centers, so the flat on row i
+      // reaches (spacing - web y span)/2 toward each neighbour. On the regular
+      // 33/36 mm lattice this reproduces the 10.65/12.15 mm sharp-corner widths
+      // and the 17.25 mm A/B transition of the 20261001 reconstruction.
+      for (size_t index = 0; index < flats.size(); ++index) {
+        if (!use_delivered_rows) {
+          half_low.push_back(flats[index].flat_width / 2.0);
+          half_high.push_back(flats[index].flat_width / 2.0);
+          continue;
+        }
+        const double spacing_low  = index > 0 ? flats[index].row_y - flats[index - 1].row_y
+                                              : flats[index + 1].row_y - flats[index].row_y;
+        const double spacing_high = index + 1 < flats.size()
+                                        ? flats[index + 1].row_y - flats[index].row_y
+                                        : flats[index].row_y - flats[index - 1].row_y;
+        half_low.push_back((spacing_low - explicit_y_step) / 2.0);
+        half_high.push_back((spacing_high - explicit_y_step) / 2.0);
+      }
+
+      for (size_t index = 0; index < flats.size(); ++index) {
+        const auto& flat                  = flats[index];
         const double local_surface_offset = flat.surface_offset;
-        if (flat_width <= 0.0 || std::abs(local_surface_offset) <= config.thickness / 2.0) {
+        if (half_low[index] <= 0.0 || half_high[index] <= 0.0 ||
+            std::abs(local_surface_offset) <= config.thickness / 2.0) {
           printout(WARNING, "SiEndcapModuleTracker",
                    fmt::format("skipping explicit corrugation table for disk '{}': invalid flat "
                                "at CSV line {}",
@@ -1150,7 +1283,6 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
         const double surface_sign = local_surface_offset > 0.0 ? 1.0 : -1.0;
         const double flat_z =
             config.z_center_offset + local_surface_offset - surface_sign * config.thickness / 2.0;
-        flat_widths.push_back(flat_width);
         flat_z_centers.push_back(flat_z);
       }
 
@@ -1176,8 +1308,8 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
       // First pass: check every join before placing anything.
       for (size_t index = 0; index + 1 < flats.size(); ++index) {
         WebJoin join;
-        join.left_edge  = config.y0 + flats[index].row_y + flat_widths[index] / 2.0;
-        join.right_edge = config.y0 + flats[index + 1].row_y - flat_widths[index + 1] / 2.0;
+        join.left_edge  = config.y0 + flats[index].row_y + half_high[index];
+        join.right_edge = config.y0 + flats[index + 1].row_y - half_low[index + 1];
         const double available_y_gap = join.right_edge - join.left_edge;
         const double web_z_span      = flat_z_centers[index + 1] - flat_z_centers[index];
         if (available_y_gap + dimension_tolerance < web_y_span) {
@@ -1213,7 +1345,8 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
       }
 
       for (size_t index = 0; index < flats.size(); ++index) {
-        const double straight_width = flat_widths[index] - trim_low[index] - trim_high[index];
+        const double straight_width =
+            half_low[index] + half_high[index] - trim_low[index] - trim_high[index];
         if (straight_width <= dimension_tolerance) {
           printout(WARNING, "SiEndcapModuleTracker",
                    fmt::format("skipping explicit corrugation table for disk '{}': bend radius "
@@ -1225,9 +1358,12 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
 
       // Second pass: straight flats, then each straight web with its two bends.
       for (size_t index = 0; index < flats.size(); ++index) {
-        const double straight_width = flat_widths[index] - trim_low[index] - trim_high[index];
-        const double straight_y =
-            config.y0 + flats[index].row_y + (trim_low[index] - trim_high[index]) / 2.0;
+        const double straight_width =
+            half_low[index] + half_high[index] - trim_low[index] - trim_high[index];
+        // Center of [row_y - half_low + trim_low, row_y + half_high - trim_high].
+        const double straight_y = config.y0 + flats[index].row_y +
+                                  (half_high[index] - half_low[index]) / 2.0 +
+                                  (trim_low[index] - trim_high[index]) / 2.0;
         place_piece(fmt::format("flat{}", flats[index].row_index), straight_y,
                     straight_width / 2.0, flat_z_centers[index], straight_width / 2.0,
                     config.thickness / 2.0, 0.0);
@@ -1268,7 +1404,10 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
                            "tables; legacy row/uniform pieces keep sharp junctions",
                            disk.disk_key));
     }
-    const auto rows = load_corrugation_rows(resolved_rows, disk.disk_key);
+    // Legacy whole-cell schema (only reached with rowwise_placement; delivered
+    // rows always return above or throw).
+    const auto rows =
+        load_corrugation_rows(resolve_input_file(config.rowwise_placement), disk.disk_key);
     if (!rows.empty()) {
       for (const auto& row : rows) {
         const string row_tag = fmt::format("row{}", row.csv_line);
@@ -2210,12 +2349,10 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
                           baseplate_top_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
         // Step 11b: the inward 110 um FPC would reach 30 um into the
         // neighbouring corrugation flat. As a surrogate for the FPC routing to
-        // the outer surface, inward modules carry the 30 um Al on the back of
-        // the baseplate; outward modules keep Kapton + Al on the front.
-        const double aluminum_center_z =
-            module_template.outward_facing
-                ? baseplate_top_z + kapton_thickness + aluminum_thickness / 2.0
-                : baseplate_bottom_z - aluminum_thickness / 2.0;
+        // the outer surface, the 30 um Al is carried on the back of the
+        // baseplate. Step 12 applies the same split to outward modules for
+        // consistency (there it sits between the two external-epoxy lines).
+        const double aluminum_center_z = baseplate_bottom_z - aluminum_thickness / 2.0;
         place_passive_box(name + "_aluminum", box_x, box_y, aluminum_thickness, pos_x, pos_y,
                           aluminum_center_z, "Aluminum", "SVTReadoutVis");
       };
@@ -2327,13 +2464,10 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
 
       const double glue_thickness = description.constant<double>("SiEndcapAncASICGlue_thickness");
       const double ancasic_thickness = description.constant<double>("SiEndcapAncASIC_thickness");
-      // The AncASIC sits on the front-side FPC: Kapton + Al outward, Kapton
-      // only inward (its Al is on the back of the baseplate, Step 11b).
+      // The AncASIC sits on the front-side FPC Kapton (the FPC Al is on the
+      // back of the baseplate for every tiling module, Steps 11b/12).
       const double front_fpc_stack =
-          description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness") +
-          (module_template.outward_facing
-               ? description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness")
-               : 0.0);
+          description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
       double layer_z = tiling_baseplate_bottom_z(module_template) +
                        description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
                        front_fpc_stack;
@@ -2423,8 +2557,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
   vector<ModuleRow> module_rows;
   map<string, TilingDiskMetadata> tiling_disk_metadata;
+  string resolved_tiling_directory; // set for format="tiling-directory"
   if (!module_file.empty()) {
     const string resolved_input = resolve_input_file(module_file);
+    if (module_format == "tiling-directory") {
+      resolved_tiling_directory = resolved_input;
+    }
     module_rows = module_format == "tiling-directory"
                       ? load_tiling_module_directory(description, resolved_input, module_templates,
                                                      tiling_disk_metadata)
@@ -2557,6 +2695,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       CorrugatedFrameConfig frame_config;
       if (!parse_corrugated_frame(x_frame, frame_config)) {
         continue;
+      }
+      // Without a legacy rowwise_placement table, a tiling-directory delivery
+      // must supply <disk>_rows.csv next to its <disk>_modules.csv (20261110 on).
+      if (frame_config.rowwise_placement.empty() && !resolved_tiling_directory.empty()) {
+        namespace fs           = std::filesystem;
+        const string short_key = source_corrugation_disk_key(disk.disk_key);
+        fs::path rows_path     = fs::path(resolved_tiling_directory) / (short_key + "_rows.csv");
+        if (short_key == "HD3b" && !fs::exists(rows_path)) {
+          rows_path = fs::path(resolved_tiling_directory) / "HD3_rows.csv";
+        }
+        auto metadata = tiling_disk_metadata.find(disk.disk_key);
+        if (!fs::exists(rows_path) || metadata == tiling_disk_metadata.end()) {
+          throw std::runtime_error(fmt::format(
+              "corrugated frame for '{}' disk '{}': no rowwise_placement and no delivered '{}'",
+              det_name, disk.disk_key, rows_path.string()));
+        }
+        frame_config.delivered_rows_file     = rows_path.string();
+        frame_config.delivered_rows_center_z = metadata->second.center_z;
       }
       const int placed_frame_count =
           place_corrugated_frame(description, layer_vol, disk, frame_config);

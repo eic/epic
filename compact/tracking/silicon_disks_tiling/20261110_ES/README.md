@@ -32,4 +32,7 @@ Differences from `20261001_ES/` (handled by the loader since Step 11b, 2026-11-1
   facet_z_mm,half_pitch_mm`; `row_type` BLOCKED/UNBLOCKED, half pitch 16.5/18 mm)
   is the delivered per-row corrugation table, intended to replace the
   reconstructed `20261001_ES/SVT_endcap_corrugation_rows_33_36.csv`.
-  NOT yet used: the corrugation is still built from that 20261001 table.
+  Used since Step 12: each corrugated frame reads `<disk>_rows.csv` from the
+  selected scenario directory (no external table). Flat edges are not
+  delivered; each 45 deg web is centered halfway between adjacent row centers
+  (assumption, see the XML note), plus one boundary flat beyond each end row.
