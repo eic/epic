@@ -173,12 +173,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double xoffset      = getAttrOrDefault<double>(envelope, _Unicode(xoffset), 0);
     bool zstack         = getAttrOrDefault<bool>(envelope, _Unicode(zstack), false);
 
-    // envelope thickness is the max layer thickness to accomodate all layers
-    double envelope_length = 0;
-    for (xml_coll_t llayout(x_layer, _Unicode(layout)); llayout; ++llayout) {
-      xml_comp_t x_layout = llayout;
-      string m_nam        = x_layout.moduleStr();
-      envelope_length     = std::max(envelope_length, mod_thickness[m_nam]);
+    // envelope thickness: use explicit thickness attribute if present, otherwise
+    // compute as the max module thickness across all layouts in this layer
+    double envelope_length = getAttrOrDefault<double>(envelope, _Unicode(thickness), 0.0);
+    if (envelope_length == 0.0) {
+      for (xml_coll_t llayout(x_layer, _Unicode(layout)); llayout; ++llayout) {
+        xml_comp_t x_layout = llayout;
+        string m_nam        = x_layout.moduleStr();
+        envelope_length     = std::max(envelope_length, mod_thickness[m_nam]);
+      }
     }
 
     double zstart = 0;
@@ -227,7 +230,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       float ycoord = envelope.rmax() -
                      module_y / 2.; // y-center-coord of the top sensor. Start from the top row
-      int iy = 0;
+      int iy       = 0;
 
       for (xml_coll_t lrow(x_layout, _Unicode(row)); lrow; ++lrow) {
         xml_comp_t x_row = lrow;

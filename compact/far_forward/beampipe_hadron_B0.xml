@@ -15,9 +15,10 @@
       <rotation x="0*rad" y="0*rad" z="0*rad" />
     </detector>
 
+    <!-- B0Window builds Tube(0, r, z), where z is the half-length: pass half of the full window thickness -->
     <detector id="B0Window_ID" name="B0Window" type="B0Window" material="StainlessSteelP506" vis="AnlLightGray">
-      <dimensions r="B0PF_InnerRadius" z="B0Win_thickness" x="3.0*Q0EF_InnerRadius" y="Beampipe_rmax" />
-      <position   x="B0PF_XPosition" y="0" z="B0PF_CenterPosition-B0PF_Length/2.0+B0Win_thickness" />
+      <dimensions r="B0PF_InnerRadius" z="B0Win_thickness/2" x="3.0*Q0EF_InnerRadius" y="Beampipe_rmax" />
+      <position   x="B0PF_XPosition" y="0" z="B0PF_CenterPosition-B0PF_Length/2.0+B0Win_thickness/2" />
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
     </detector>
   </detectors>

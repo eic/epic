@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022,2023 Dmitry Romanov, Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Nilanga Wickramaarachchi -->
+<!-- Copyright (C) 2022 - 2026 Dmitry Romanov, Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Nilanga Wickramaarachchi, Bill Llope -->
 
 <lccdd>
 
@@ -21,11 +21,19 @@
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
     The width of each DIRC module is derived from DIRCPrism_width
 
+    Dual Readout System (Simplified):
+      - DIRCHits readout includes MCP surface and quartz bars as sensitive detectors
+      - Use "surface" field (1 bit) to distinguish:
+        * surface=0: MCP photon detection surface (negative z face of prism)
+        * surface=1: Quartz bar charged particles (many hits per track with step limit)
+      - Bar step limit (0.5mm) provides continuous position sampling along track
+      - To enable per-step hits, run npsim with CollectSingleDeposits=True
+
   </comment>
 
   <define>
     <!-- Prism -->
-    <constant name="DIRCPrism_width"        value="350*mm"/>
+    <constant name="DIRCPrism_width"        value="351.350*mm"/>
     <constant name="DIRCPrism_length"       value="300*mm"/>
     <constant name="DIRCPrism_short_edge"   value="50*mm"/>
     <constant name="DIRCPrism_angle"        value="32*deg"/>
@@ -49,7 +57,7 @@
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
     <constant name="DIRCLens_shift"         value="0 * mm" comment="Shift of optical axis compared to bar center"/>
-    <constant name="DIRCLens_width"         value="DIRCPrism_width / DIRCBar_count_y"/>
+    <constant name="DIRCLens_width"         value="35.0 * mm"/>
 
     <!-- MCP -->
     <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
@@ -58,32 +66,37 @@
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
-    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCBarbox_space_z - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBarAssm_length"     value="456.0100 * cm" comment="Length of bars+glue assembly"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
-    <constant name="DIRCBar_height"         value="17 * mm"/>
-    <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
-    <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
-    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - DIRCBar_count_z * DIRCGlue_thickness)/DIRCBar_count_z"/>
-    <constant name="DIRCBar_center"         value="(DIRC_rmin + DIRC_rmax)/2" comment="Radial position of center of bar"/>
+    <constant name="DIRCBar_height"         value="17.25 * mm"/>
+    <constant name="DIRCBar_width"          value="35.0 * mm"/>
+    <constant name="DIRCGlue_thickness"     value="0.025 * mm"/>
+    <constant name="DIRCBar_length"         value="114.00 * cm"/>
+    <constant name="DIRCBar_center"         value="76.5875 * cm" comment="Radial position of center of bar"/>
 
     <!-- Rail -->
     <constant name="DIRCRail_rmin"          value="InnerDetectorBarrelSupportCylinder_rmax"/>
     <constant name="DIRCRail_rmax"          value="EcalBarrel_rmin"/>
     <constant name="DIRCRail_width"         value="2 * (DIRCRail_rmax - DIRCRail_rmin) * sin(360*degree / DIRCBox_count / 2)"/>
+    <constant name="DIRCRail_vol_R"         value="77.05 * cm" comment="DIRC support rail radius does not move with barplane"/>
   </define>
 
   <materials>
   </materials>
 
   <limits>
+    <limitset name="dirc_bar_limits">
+      <limit name="step_length_max" particles="*" value="0.5" unit="mm"/>
+    </limitset>
   </limits>
 
   <regions>
+    <region name="DIRCRegion"/>
   </regions>
 
   <display>
     <vis name="DIRCTube"   ref="AnlTeal" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
-    <vis name="DIRCBox"    ref="AnlLight_Gray" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCBox"    ref="AnlLightGray" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens1"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens2"  ref="AnlProcess_Blue" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens3"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
@@ -95,7 +108,7 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCHits" vis="DIRCTube" region="DIRCRegion">
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
@@ -118,6 +131,7 @@
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="QuartzOptical"
+          limits="dirc_bar_limits"
           vis="DIRCBar"
         />
 
@@ -171,16 +185,35 @@
         <rail rmin="DIRCRail_rmin" rmax="DIRCRail_rmax" width="2*mm"
               length="DIRCBar_count_z * DIRCBar_length"
               material="Aluminum">
-          <position x="(DIRCRail_rmax + DIRCRail_rmin) / 2.0 - DIRCBar_center" y="0" z="0"/>
+          <position x="(DIRCRail_rmax + DIRCRail_rmin) / 2.0 - DIRCRail_vol_R" y="0" z="0"/>
         </rail>
       </support>
     </detector>
   </detectors>
 
   <readouts>
-    <readout name="DIRCBarHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*mm" grid_size_y="3.0*mm" />
-      <id>system:8,module:8,section:8,bar:8,x:32:-16,y:-16</id>
+    <comment>
+      DIRCHits: Combined readout for MCP surface and quartz bars.
+      - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3mm grid)
+      - surface=1: Bar charged particle hits (requires tracker action, no optical filter, 0.5mm grid)
+
+      npsim configuration (VolumeDispatchAction in eic/npsim):
+        mcp_vol: Geant4OpticalTrackerAction + opticalphoton filter
+        bar_vol: Geant4TrackerWeightedAction + EnergyDepositMinimumCut filter (eDep>0 only)
+        Both sub-actions share the DIRCHits collection; use surface ID to distinguish.
+
+      ID structure: system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16 (51 bits)
+    </comment>
+    <readout name="DIRCHits">
+      <segmentation type="MultiSegmentation" key="surface">
+        <segmentation name="mcp" type="CartesianGridXY" key_value="0"
+          grid_size_x="3.0*mm" grid_size_y="3.0*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+        <segmentation name="bar" type="CartesianGridXY" key_value="1"
+          grid_size_x="0.5*mm" grid_size_y="0.5*mm"
+          offset_x="0.0*mm" offset_y="0.0*mm" />
+      </segmentation>
+      <id>system:8,module:4,surface:1,section:2,bar:4,x:-16,y:-16</id>
     </readout>
   </readouts>
 

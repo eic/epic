@@ -1,0 +1,407 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2026 Whitney Armstrong, Tuna Tasali, Sam Henry, Shujie Li
+
+/** \addtogroup Trackers Trackers
+ * \brief Type: **BarrelTrackerWithFrame**.
+ * \author W. Armstrong
+ *
+ * \ingroup trackers
+ *
+ * @{
+ */
+#include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
+#include "DD4hep/Shapes.h"
+#include "DDRec/DetectorData.h"
+#include "DDRec/Surface.h"
+#include "XML/Layering.h"
+#include "XML/Utilities.h"
+#include <array>
+#include "DD4hepDetectorHelper.h"
+#include "TGDMLParse.h"
+
+/*
+This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels, and import
+passive components from GDML files.
+
+A curved component (identified by the word "Curved" in the name) is a segment of a cylinder. This is constructed by a series of flat segments
+The number of segments is set in the xml file, together with the radius, anglular range, length, thickness, and the inner and outer thicknesses
+used to set the sensitive surface. This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface
+where the axis is displaced from the beam line. Therefore the curved surface is modelled as a series of flat segments.
+Unlike in BarrelTrackerWithFrame, the position of components (related to the centre of the stave) must now be given in the xml files.
+
+Passive components are modelled as a tessellated solid, imported from a .gdml file, with the filename given in the xml file.
+
+8 September 2026. Sam Henry
+*/
+
+using namespace std;
+using namespace dd4hep;
+using namespace dd4hep::rec;
+using namespace dd4hep::detail;
+
+/** Barrel Tracker with space frame.
+ *
+ * - Optional "support" tag within the detector element.
+ *
+ * The shapes are created using createShape which can be one of many basic geomtries.
+ * See the examples Check_shape_*.xml in
+ * [dd4hep's examples/ClientTests/compact](https://github.com/AIDASoft/DD4hep/tree/master/examples/ClientTests/compact)
+ * directory.
+ *
+ *
+ * - Optional "frame" tag within the module element.
+ *
+ * \ingroup trackers
+ *
+ * \code
+ * \endcode
+ *
+ *
+ * @author Whitney Armstrong
+ */
+static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
+                                            SensitiveDetector sens) {
+  typedef vector<PlacedVolume> Placements;
+  xml_det_t x_det = e;
+  Material air    = description.air();
+  int det_id      = x_det.id();
+  string det_name = x_det.nameStr();
+  DetElement sdet(det_name, det_id);
+
+  map<string, Volume> volumes;
+  map<string, Placements> sensitives;
+  map<string, std::vector<VolPlane>> volplane_surfaces;
+  map<string, std::array<double, 2>> module_thicknesses;
+
+  PlacedVolume pv;
+
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                                    "boundary_material");
+  }
+
+  // dd4hep::xml::Dimension dimensions(x_det.dimensions());
+  // Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
+  // Volume assembly(det_name,topVolumeShape,air);
+  Assembly assembly(det_name);
+
+  sens.setType("tracker");
+
+  TGDMLParse* parser = new TGDMLParse();
+
+  // loop over the modules
+  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
+    xml_comp_t x_mod = mi;
+    string m_nam     = x_mod.nameStr();
+
+    if (volumes.find(m_nam) != volumes.end()) {
+      printout(ERROR, "BarrelTrackerWithFrame",
+               string((string("Module with named ") + m_nam + string(" already exists."))).c_str());
+      throw runtime_error("Logics error in building modules.");
+    }
+
+    const bool sensor_stack = getAttrOrDefault<bool>(x_mod, _Unicode(sensor_stack), false);
+    const double copper_thickness =
+        getAttrOrDefault<double>(x_mod, _Unicode(sensor_cu_thickness), 0.0);
+    const double active_si_thickness =
+        getAttrOrDefault<double>(x_mod, _Unicode(sensor_active_si_thickness), 0.0);
+    const double inactive_si_thickness =
+        getAttrOrDefault<double>(x_mod, _Unicode(sensor_inactive_si_thickness), 0.0);
+    const double sensor_thickness = copper_thickness + active_si_thickness + inactive_si_thickness;
+
+    if (sensor_stack &&
+        (copper_thickness <= 0 || active_si_thickness <= 0 || inactive_si_thickness <= 0)) {
+      throw runtime_error("CurvedTrackerBarrel: sensor stack thicknesses must be positive");
+    }
+
+    int ncomponents   = 0;
+    int sensor_number = 1;
+
+    // the module assembly volume
+    Assembly m_vol(m_nam);
+    volumes[m_nam] = m_vol;
+    m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
+
+    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
+      xml_comp_t x_comp  = mci;
+      xml_comp_t x_pos   = x_comp.position(false);
+      xml_comp_t x_rot   = x_comp.rotation(false);
+      const string c_nam = _toString(ncomponents, "component%d");
+
+      if (x_comp.nameStr().find("Curved") != std::string::npos) {
+        const bool build_sensor_stack =
+            sensor_stack && x_comp.nameStr().find("CurvedSi") != std::string::npos;
+        vector<string> layer_names       = {"Sensor"};
+        vector<string> layer_materials   = {x_comp.materialStr()};
+        vector<double> layer_thicknesses = {x_comp.thickness()};
+        vector<double> layer_offsets     = {0.0};
+        vector<bool> layer_sensitivities = {x_comp.isSensitive()};
+
+        if (build_sensor_stack) {
+          if (fabs(x_comp.thickness() - sensor_thickness) > 1e-9 * mm) {
+            throw runtime_error("CurvedTrackerBarrel: component and sensor-stack thickness differ");
+          }
+          layer_names       = {"InactiveSi", "ActiveSi", "Copper"};
+          layer_materials   = {"Silicon", "Silicon", "Copper"};
+          layer_thicknesses = {inactive_si_thickness, active_si_thickness, copper_thickness};
+          // Increasing curvature radius is away from the stave support for both sensor surfaces.
+          layer_offsets       = {inactive_si_thickness / 2.0 - sensor_thickness / 2.0,
+                                 inactive_si_thickness + active_si_thickness / 2.0 -
+                                     sensor_thickness / 2.0,
+                                 sensor_thickness / 2.0 - copper_thickness / 2.0};
+          layer_sensitivities = {false, x_comp.isSensitive(), false};
+        }
+
+        for (size_t layer = 0; layer < layer_names.size(); ++layer) {
+          double c_rmin = x_comp.radius() + layer_offsets[layer]; // radius of curvature in cm
+          double c_phi0 =
+              x_comp.phi0(); // start and stop angle of segment in rad - zero is centre of stave
+          double c_phi1 = x_comp.phi1();
+          double c_Nseg =
+              x_comp.nsegments(); //  number of flat segments used to approximate cylinder
+          double dphi = (c_phi1 - c_phi0) / (double)c_Nseg;
+          vector<double> Xp, Zp;
+          double phiP = c_phi0;
+
+          for (int i = 0; i < c_Nseg + 1; ++i) {
+            Xp.push_back(c_rmin * sin(phiP));
+            Zp.push_back(c_rmin * cos(phiP));
+            phiP += dphi;
+          }
+          phiP = c_phi0 + dphi / 2;
+          for (int i = 0; i < c_Nseg; ++i) {
+            double segwidth = sqrt((Xp[i + 1] - Xp[i]) * (Xp[i + 1] - Xp[i]) +
+                                   (Zp[i + 1] - Zp[i]) * (Zp[i + 1] - Zp[i]));
+            double midX     = 0.5 * (Xp[i] + Xp[i + 1]);
+            double midZ     = 0.5 * (Zp[i] + Zp[i + 1]);
+            Box seg_box((segwidth / 2) * ((c_rmin - layer_thicknesses[layer] / 2) / c_rmin),
+                        x_comp.length() / 2, layer_thicknesses[layer] / 2);
+            string seg_nam = c_nam;
+            if (build_sensor_stack)
+              seg_nam += "_" + layer_names[layer];
+            seg_nam += "." + _toString(i);
+            Volume seg_vol(seg_nam, seg_box, description.material(layer_materials[layer]));
+
+            if (x_pos && x_rot) {
+              Position c_pos(midX + x_pos.x(0), x_pos.y(0), midZ + x_pos.z(0));
+              RotationZYX c_rot(x_rot.z(0), phiP + x_rot.y(0), x_rot.x(0));
+              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+            } else if (x_rot) {
+              Position c_pos(midX, 0, midZ);
+              pv = m_vol.placeVolume(
+                  seg_vol,
+                  Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0) + phiP, x_rot.x(0)), c_pos));
+            } else if (x_pos) {
+              RotationZYX c_rot(0, phiP, 0);
+              Position c_pos(midX + x_pos.x(0), x_pos.y(0), x_pos.z(0) + midZ);
+              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+            } else {
+              RotationZYX c_rot(0, phiP, 0);
+              Position c_pos(midX, 0, midZ);
+              pv = m_vol.placeVolume(seg_vol, Transform3D(c_rot, c_pos));
+            }
+            phiP += dphi;
+            seg_vol.setRegion(description, x_comp.regionStr());
+            seg_vol.setLimitSet(description, x_comp.limitsStr());
+            seg_vol.setVisAttributes(description, x_comp.visStr());
+            if (layer_sensitivities[layer]) {
+              pv.addPhysVolID("sensor", sensor_number++);
+              seg_vol.setSensitiveDetector(sens);
+              sensitives[m_nam].push_back(pv);
+              //        module_thicknesses[m_nam] = {x_comp.innerthickness(),x_comp.outerthickness()};
+
+              // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+              Vector3D u(-1., 0., 0.);
+              Vector3D v(0., -1., 0.);
+              Vector3D n(0., 0., 1.);
+              //    Vector3D o( 0. , 0. , 0. ) ;
+
+              // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+              // depending on wether the support is above or below the sensor
+              double inner_thickness =
+                  getAttrOrDefault<double>(x_comp, _Unicode(innerthickness), 0.5 * mm);
+              double outer_thickness =
+                  getAttrOrDefault<double>(x_comp, _Unicode(outerthickness), 0.5 * mm);
+              SurfaceType type(SurfaceType::Sensitive);
+
+              VolPlane surf(seg_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+              volplane_surfaces[m_nam].push_back(surf);
+
+              //--------------------------------------------
+            }
+          }
+        }
+        // thickness of curved layer is height of curve
+
+      } else { // not a curved component
+
+        // New code that constructs component from GDML files. Import the GDML file from the "file" attribute of the module_component
+        std::string gdml_file = getAttrOrDefault<std::string>(x_comp, _Unicode(file), " ");
+
+        Volume c_vol(c_nam);
+        c_vol = parser->GDMLReadFile(gdml_file.c_str());
+
+        //check the validity of the volume
+        if (!c_vol.isValid()) {
+          printout(WARNING, "BarrelTrackerOuter", "%s", gdml_file.c_str());
+          printout(WARNING, "BarrelTrackerOuter", "c_vol invalid, GDML parser failed!");
+          std::_Exit(EXIT_FAILURE);
+        }
+        c_vol.import();
+        c_vol.setMaterial(description.material(x_comp.materialStr()));
+        //risky bit, might quickly fill up memory if too many solids are imported
+        TessellatedSolid c_sol(c_vol.solid());
+        //note: c_sol gets casted automatically to parent class TGeoTessellated by the copy constructor. IDK why?
+        c_sol->CloseShape(true, true, true); //otherwise you get an infinite bounding box
+        c_sol->CheckClosure(
+            true, true); //fix any flipped orientation in facets, the second 'true' is for verbose
+        c_vol.setSolid(c_sol);
+
+        c_vol.setRegion(description, x_comp.regionStr());
+        c_vol.setLimitSet(description, x_comp.limitsStr());
+        c_vol.setVisAttributes(description, x_comp.visStr());
+
+        //place the volume
+        if (x_pos && x_rot) {
+          Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0));
+          RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0) + M_PI / 2);
+          pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
+        } else if (x_rot) {
+          Position c_pos(0, 0, 0);
+          pv = m_vol.placeVolume(
+              c_vol,
+              Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0) + M_PI / 2), c_pos));
+        } else if (x_pos) {
+          pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0)));
+        } else {
+          RotationZYX c_rot(0, 0, +M_PI / 2);
+          pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, Position(0, 0, 0)));
+        }
+        c_vol.setVisAttributes(description, x_comp.visStr());
+      }
+    }
+  }
+  delete parser;
+
+  // now build the layers
+  for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
+    xml_comp_t x_layer  = li;
+    xml_comp_t x_barrel = x_layer.child(_U(barrel_envelope));
+    xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
+    xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
+    int lay_id          = x_layer.id();
+    string m_nam        = x_layer.moduleStr();
+    string lay_nam      = det_name + _toString(x_layer.id(), "_layer%d");
+    Tube lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
+    Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
+    Position lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
+    lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
+
+    double phi0     = x_layout.phi0();     // Starting phi of first module.
+    double phi_tilt = x_layout.phi_tilt(); // Phi tilt of a module.
+    double rc       = x_layout.rc();       // Radius of the module center.
+    int nphi        = x_layout.nphi();     // Number of modfules in phi.
+    double rphi_dr  = x_layout.dr();       // The delta radius of every other module.
+    double phi_incr = (M_PI * 2) / nphi;   // Phi increment for one module.
+    double phic     = phi0;                // Phi of the module center.
+    double z0       = z_layout.z0();       // Z position of first module in phi.
+    double nz       = z_layout.nz();       // Number of modules to place in z.
+    double z_dr     = z_layout.dr();       // Radial displacement parameter, of every other module.
+
+    Volume module_env = volumes[m_nam];
+    DetElement lay_elt(sdet, lay_nam, lay_id);
+    Placements& sensVols = sensitives[m_nam];
+
+    // the local coordinate systems of modules in dd4hep and acts differ
+    // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
+    auto& layerParams =
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
+
+    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
+      xml_comp_t x_layer_material = lmat;
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
+                                                      "layer_material");
+    }
+
+    // Z increment for module placement along Z axis.
+    // Adjust for z0 at center of module rather than
+    // the end of cylindrical envelope.
+    double z_incr = nz > 1 ? (2.0 * z0) / (nz - 1) : 0.0;
+    // Starting z for module placement along Z axis.
+    double module_z = -z0;
+    int module      = 1;
+
+    // Loop over the number of modules in phi.
+    for (int ii = 0; ii < nphi; ii++) {
+      double dx = z_dr * std::cos(phic + phi_tilt); // Delta x of module position.
+      double dy = z_dr * std::sin(phic + phi_tilt); // Delta y of module position.
+      double x  = rc * std::cos(phic);              // Basic x module position.
+      double y  = rc * std::sin(phic);              // Basic y module position.
+
+      // Loop over the number of modules in z.
+      for (int j = 0; j < nz; j++) {
+        string module_name = _toString(module, "module%d");
+        DetElement mod_elt(lay_elt, module_name, module);
+
+        Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
+                       Position(x, y, module_z));
+
+        pv = lay_vol.placeVolume(module_env, tr);
+        pv.addPhysVolID("module", module);
+        mod_elt.setPlacement(pv);
+        for (size_t ic = 0; ic < sensVols.size(); ++ic) {
+          PlacedVolume sens_pv = sensVols[ic];
+          DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
+          comp_de.setPlacement(sens_pv);
+
+          auto& comp_de_params =
+              DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
+          comp_de_params.set<string>("axis_definitions", "XYZ");
+          // comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
+          //                       xml_det_t(xmleles[m_nam]).visStr());
+          //
+
+          volSurfaceList(comp_de)->push_back(volplane_surfaces[m_nam][ic]);
+        }
+
+        /// Increase counters etc.
+        module++;
+        // Adjust the x and y coordinates of the module.
+        x += dx;
+        y += dy;
+        // Flip sign of x and y adjustments.
+        dx *= -1;
+        dy *= -1;
+        // Add z increment to get next z placement pos.
+        module_z += z_incr;
+      }
+      phic += phi_incr; // Increment the phi placement of module.
+      rc += rphi_dr;    // Increment the center radius according to dr parameter.
+      rphi_dr *= -1;    // Flip sign of dr parameter.
+      module_z = -z0;   // Reset the Z placement parameter for module.
+    }
+    // Create the PhysicalVolume for the layer.
+    pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
+    pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
+    lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
+                          x_layer.visStr());
+    lay_elt.setPlacement(pv);
+  }
+  sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  assembly.setVisAttributes(description.invisible());
+  pv = description.pickMotherVolume(sdet).placeVolume(assembly);
+  pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
+  sdet.setPlacement(pv);
+  return sdet;
+}
+
+//@}
+// clang-format off
+DECLARE_DETELEMENT(epic_CurvedTrackerBarrel,   create_BarrelTrackerWithCurves)

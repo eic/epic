@@ -2,6 +2,7 @@
 // Copyright (C) 2022 Whitney Armstrong
 
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 #include <map>
 
 using namespace std;
@@ -25,6 +26,9 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
   Assembly assembly(det_name);
   xml::Component pos = x_det.position();
   xml::Component rot = x_det.rotation();
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
 
   // Material  air  = description.material("Air");
   //  Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
@@ -151,6 +155,7 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
     }
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
+    layer_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
       xml_comp_t x_ring    = ri;
@@ -177,10 +182,12 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
                                                         Position(x, y, zstart + dz)));
           pv.addPhysVolID("barrel", 1).addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
           module.setPlacement(pv);
+          module.setTypeFlag(sdet.typeFlag());
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
+            comp_elt.setTypeFlag(sdet.typeFlag());
           }
         } else {
           pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
@@ -188,10 +195,12 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
           pv.addPhysVolID("barrel", 2).addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
           DetElement r_module(layer_element, m_base + "_neg", det_id);
           r_module.setPlacement(pv);
+          r_module.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
+            comp_elt.setTypeFlag(sdet.typeFlag());
           }
         }
         dz = -dz;

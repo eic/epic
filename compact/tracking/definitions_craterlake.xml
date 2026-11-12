@@ -26,14 +26,14 @@
 
     <constant name="TrackerEndcapDisk_rmax"         value="43*cm"/>
 
-    <comment> Main parameters for the outer MPGD barrel layer </comment>
-    <constant name="MPGDOuterBarrelModule_rmin"      value="735*mm"/>
-    <constant name="MPGDOuterBarrelModule_zmin1"     value="1795*mm"/>
-    <constant name="MPGDOuterBarrelModule_zmin2"     value="1845*mm"/>
+    <comment> Main parameters for the Outer MPGD barrel layer </comment>
+    <constant name="MPGDOuterBarrelModule_rmin"      value="730*mm"/>
+    <constant name="MPGDOuterBarrelModule_zmin1"     value="1925*mm"/> <comment> negative z </comment>
+    <constant name="MPGDOuterBarrelModule_zmin2"     value="1675*mm"/> <comment> positive z </comment>
 
-    <comment> Inner MPGD unsegmented barrel </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="550*mm"/>
-    <constant name="InnerMPGDBarrel_rmax"            value="605*mm"/>
+    <comment> Main parameters for the Inner MPGD barrel layer </comment>
+    <constant name="InnerMPGDBarrel_rmin"            value="555*mm"/>
+    <constant name="InnerMPGDBarrel_rmax"            value="615*mm"/>
     <constant name="InnerMPGDBarrel_dz"              value="0"/>
     <constant name="InnerMPGDBarrel_zmin"            value="1025*mm"/> <comment> negative z </comment>
     <constant name="InnerMPGDBarrel_zmax"            value="1450*mm"/> <comment> positive z </comment>
@@ -56,6 +56,7 @@
     <constant name="ForwardTOFRegion_maxR"        value="60.5*cm" />
     <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"        value="2.0*cm" />
+    <constant name="ForwardTOF_gap"               value="1*mm" />
     <constant name="ForwardTOF_length"            value="min(ForwardTOFRegion_length, 2.*cm)"/>
     <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 
@@ -72,7 +73,7 @@
     <comment> Assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
 
-    <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
+    <constant name="InnerTrackerEndcapP_zmin"        value="25.5*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
     <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
@@ -81,11 +82,11 @@
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerEndcapDisk_rmax * .98" />
-    <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
-    <constant name="TrackerEndcapPDisk3_rmin"        value="40.58*mm + Beampipe_bakeout_buffer + 7.85*mm" />
+    <constant name="TrackerEndcapPDisk3_zmin"        value="95.0*cm" />
+    <constant name="TrackerEndcapPDisk3_rmin"        value="39.29*mm + Beampipe_bakeout_buffer + 6.63*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapDisk_rmax * .98" />
-    <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
-    <constant name="TrackerEndcapPDisk4_rmin"        value="49.12*mm + Beampipe_bakeout_buffer + 16.02*mm" />
+    <constant name="TrackerEndcapPDisk4_zmin"        value="120.0*cm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="45.72*mm + Beampipe_bakeout_buffer + 12.70*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapDisk_rmax * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)</comment>
@@ -106,19 +107,21 @@
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
 
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
-    <constant name="ForwardMPGD_zmin"             value="1500.0*mm"/>
+    <constant name="ForwardMPGD_zmin"             value="1285.0*mm"/>
     <constant name="ForwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="81.24*mm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="81.24*mm"/>
-    <constant name="ForwardMPGDMod1_rmax"         value="400*mm" />
-    <constant name="ForwardMPGDMod2_rmax"         value="400*mm" />
+    <constant name="ForwardMPGDMod1_rmin"         value="70.0*mm" />
+    <constant name="ForwardMPGDMod2_rmin"         value="70.0*mm"/>
+    <comment> rmax = active area radius </comment>
+    <constant name="ForwardMPGDMod1_rmax"         value="420*mm" />
+    <constant name="ForwardMPGDMod2_rmax"         value="420*mm" />
 
     <constant name="BackwardMPGD_zmin"             value="1075.0*mm"/>
     <constant name="BackwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="BackwardMPGDMod1_rmin"         value="70.0*mm" />
-    <constant name="BackwardMPGDMod2_rmin"         value="70.0*mm" />
-    <constant name="BackwardMPGDMod1_rmax"         value="400.0*mm" />
-    <constant name="BackwardMPGDMod2_rmax"         value="400.0*mm" />
+    <constant name="BackwardMPGDMod1_rmin"         value="50.0*mm" />
+    <constant name="BackwardMPGDMod2_rmin"         value="50.0*mm" />
+    <comment> rmax = active area radius </comment>
+    <constant name="BackwardMPGDMod1_rmax"         value="420.0*mm" />
+    <constant name="BackwardMPGDMod2_rmax"         value="420.0*mm" />
 
   </define>
   <comment> See compact/definitions.xml for reserved detector id
@@ -138,13 +141,13 @@
       <composite name="InnerTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_1_ID"
-      name="MiddleSiBarrelrSubAssembly"
+      name="MiddleSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="SagittaSiBarrel"/>
     </detector>
       <detector id="TrackerSubAssembly_1_ID"
-      name="OuterSiBarrelrSubAssembly"
+      name="OuterSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterSiBarrel"/>
@@ -206,14 +209,199 @@
 
   <documentation>
       ### Material map for ACTS
-      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/127
+      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/153
   </documentation>
   <plugins>
     <plugin name="epic_FileLoader">
-      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f892256ac21a4ff1151acca260f8913b/material-map.cbor"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/32d16dc940393e40829d18845429094deb0e34d5/material-map.cbor"/>
     </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/FPC_Mockup_L3_L3_Full_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/Carbon_Composite_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/Carbon_Composite_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/FPC_Mockup_L3_L3_Full001_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_L004_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_L004_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_L005_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_L005_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_L006_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_L006_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_L3_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_L3_ASCII.gdml"/>
+    </plugin>
+   <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_L3_End001_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_L3_End001_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_L3_End_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_L3_End_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_Sensor_4-077_ASCII.gdml"/>
+    </plugin>
+        <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/K9_Split_CrossBrace_Sensor_4-078_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/MirrorK9_Split_CrossBrace1_L3_End_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L3/MirrorK9_Split_CrossBrace2_L3_End_ASCII.gdml"/>
+    </plugin>
+
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/Carbon_Composite_L4_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/Carbon_Composite_L4_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/FPC_Mockup_L3_Bottom002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/FPC_Mockup_L3_Bottom003_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/FPC_Mockup_L3_Top002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/FPC_Mockup_L3_Top002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/FPC_Mockup_L3_Top003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/FPC_Mockup_L3_Top003_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant012_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant013_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant014_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant015_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant016_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant017_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant018_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant019_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant020_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant021_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant022_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_C-Channel_Variant023_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_Sensor_4-007_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/K9_Split_CrossBrace_Sensor_4-008_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/MirrorK9_Split_CrossBrace_End_Varient002_ASCII.gdml"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+       <arg value="file:gdml/SVTOB/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/bd4ddc7435f19bc1704a7da6674174ed5f1ed61c/SVTOB_gdml/L4/MirrorK9_Split_CrossBrace_End_Varient003_ASCII.gdml"/>
+    </plugin>
+
   </plugins>
+  <define>
+    <constant name="material-map" value="calibrations/materials-map.cbor" type="string"/>
+  </define>
 
 </lccdd>

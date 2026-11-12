@@ -7,7 +7,6 @@ import warnings
 from pathlib import Path
 import argparse
 
-import acts
 from acts.examples import (
     GaussianVertexGenerator,
     ParametricParticleGenerator,
@@ -21,8 +20,6 @@ import acts.examples.geant4
 
 import epic
 from material_recording import runMaterialRecording
-
-u = acts.UnitConstants
 
 _material_recording_executed = False
 
@@ -61,10 +58,10 @@ def main():
 
     runMaterialRecording(
         detector=detector,
-        tracksPerEvent=args.tracks,
-        outputDir=os.getcwd(),
-        etaRange=(args.eta_min, args.eta_max),
         s=acts.examples.Sequencer(events=args.events, numThreads=1),
+        tracksPerEvent=args.tracks,
+        etaRange=(args.eta_min, args.eta_max),
+        outputFileBase=os.path.join(os.getcwd(), args.outputName.replace(".root", "")),
     ).run()
 
 
