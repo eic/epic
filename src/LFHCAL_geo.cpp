@@ -28,6 +28,8 @@ struct moduleParamsStrct {
       , mod_BWThick(0.)
       , mod_width(0.)
       , mod_height(0.)
+  	  , mod_arrX(1.)
+  	  , mod_arrY(1.)
       , mod_notchDepth(0.)
       , mod_notchHeight(0.)
       , mod_foilThick(0.)
@@ -39,7 +41,7 @@ struct moduleParamsStrct {
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
-                    double FWThick, double BWThick, double width, double height, double notchDepth,
+                    double FWThick, double BWThick, double width, double height, int arrX, int arrY, double notchDepth,
                     double notchHeight, double foilThick, double pcbLegth, double pcbThick,
                     double pcbWidth, double pcbOffset, std::string visStr, std::string regStr,
                     std::string limStr) {
@@ -52,6 +54,8 @@ struct moduleParamsStrct {
     mod_BWThick     = BWThick;
     mod_width       = width;
     mod_height      = height;
+    mod_arrX       = arrX;
+    mod_arrY      = arrY;
     mod_notchDepth  = notchDepth;
     mod_notchHeight = notchHeight;
     mod_foilThick   = foilThick;
@@ -72,6 +76,8 @@ struct moduleParamsStrct {
   double mod_BWThick     = 0.;
   double mod_width       = 0.;
   double mod_height      = 0.;
+  int mod_arrX			= 0;
+  int mod_arrY			= 0;
   double mod_notchDepth  = 0.;
   double mod_notchHeight = 0.;
   double mod_foilThick   = 0.;
@@ -465,6 +471,227 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
   return modScintAssembly;
 }
 
+
+//************************************************************************************************************
+//************************** create scintillator plate with separations for 2M *******************************
+//************************************************************************************************************
+Assembly createScintillatorPlateTwoM(Detector& desc, std::string basename,
+                                      //                                         int modID,
+                                      int layerID, double h_mod, double w_mod, double t_mod_tp,
+                                      double t_mod_sp, double t_slice, double w_notch,
+                                      double t_foil, Material slice_mat, int roLayer,
+                                      std::string region, std::string limit, std::string vis,
+                                      SensitiveDetector sens, bool renderComp) {
+  // Tower placement in 2M module
+  //--------------------------------
+  //|              ||              |
+  //|      0       ||      1       |
+  //|              ||              |
+  //--------------------------------
+  Assembly modScintAssembly(basename);
+
+  double w_plate = w_mod - w_notch - 2 * t_mod_sp - 2 * t_foil;
+  double h_plate = h_mod - 2 * t_mod_tp - 2 * t_foil;
+  double w_tow   = (w_plate - 2 * t_foil) / 2;
+  double h_tow   = (h_plate - 2 * t_foil);
+
+  // placement volumes
+  PlacedVolume pvm;
+
+  // foil separations
+  // Internal foil separator for 2x1 arrangement
+  const std::vector<double> xCoordTi = {
+      -t_foil,
+       t_foil,
+       t_foil,
+      -t_foil
+  };
+
+  const std::vector<double> yCoordTi = {
+      -h_plate / 2.,
+      -h_plate / 2.,
+       h_plate / 2.,
+       h_plate / 2.
+  };
+
+  const std::vector<double> zStepTi      = {-t_slice / 2, t_slice / 2};
+  const std::vector<double> zStepXTi     = {0., 0.};
+  const std::vector<double> zStepYTi     = {0., 0.};
+  const std::vector<double> zStepScaleTi = {1., 1.};
+
+  ExtrudedPolygon foilgrid =
+      ExtrudedPolygon(xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
+  Box foil_t((w_plate + 2 * t_foil) / 2., t_foil / 2., t_slice / 2.);
+  Box foil_s(t_foil / 2., h_plate / 2., t_slice / 2.);
+  Volume foilgrid_vol(basename + "_ESRFoil_" + _toString(layerID, "_layer_%d"), foilgrid,
+                      slice_mat);
+  Volume foil_t_vol(basename + "_ESRFoilT_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_b_vol(basename + "_ESRFoilB_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_l_vol(basename + "_ESRFoilL_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  Volume foil_r_vol(basename + "_ESRFoilR_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  // Setting slice attributes
+  if (renderComp) {
+    foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_t_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_b_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_l_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_r_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+  } else {
+    foilgrid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_t_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_b_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_l_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_r_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+  }
+  pvm = modScintAssembly.placeVolume(foilgrid_vol, Position(0, 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow/2.0, 0));
+  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow/2.0), 0));
+  pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(1.5 * t_foil + w_tow), 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_r_vol, Position((1.5 * t_foil + w_tow), 0, 0));
+
+  // 2M module placement of scintillator for tower
+  double rotZ[2] = {0, 0};
+  double rotY[2] = {0, 0};
+  double rotX[2] = {0, 0};
+  double posX[2] = {(w_tow * 0.5 + t_foil), -(w_tow * 0.5 + t_foil)};
+  double posY[2] = {0, 0};
+  double posZ[2] = {0, 0};
+  int towerx     = 0;
+  int towery     = 0;
+  // loop over all towers within same module
+
+  for (int i = 0; i < 2; i++) {
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    Volume modScintTowerAss =
+        createScintillatorTower(desc, basename + _toString(i, "_tower_%d"), w_tow, h_tow, t_slice,
+                                slice_mat, region, limit, vis, sens, renderComp);
+    pvm = modScintAssembly.placeVolume(
+        modScintTowerAss,
+        Transform3D(RotationZYX(rotZ[i], rotY[i], rotX[i]), Position(posX[i], posY[i], posZ[i])));
+    towerx = i % 2;
+    towery = 0;
+    if (i > 1)
+      towery = 1;
+    pvm.addPhysVolID("towerx", towerx)
+        .addPhysVolID("towery", towery)
+        .addPhysVolID("layerz", layerID)
+        .addPhysVolID("passive", 0)
+        .addPhysVolID("rlayerz", roLayer);
+  }
+  return modScintAssembly;
+}
+
+
+
+//************************************************************************************************************
+//************************** create scintillator plate with separations for 1M *******************************
+//************************************************************************************************************
+Assembly createScintillatorPlateOneM(Detector& desc, std::string basename,
+                                      //                                         int modID,
+                                      int layerID, double h_mod, double w_mod, double t_mod_tp,
+                                      double t_mod_sp, double t_slice, double w_notch,
+                                      double t_foil, Material slice_mat, int roLayer,
+                                      std::string region, std::string limit, std::string vis,
+                                      SensitiveDetector sens, bool renderComp) {
+  // Tower placement in 1M module
+  //-----------------
+  //|              ||
+  //|      0       ||
+  //|              ||
+  //-----------------
+  Assembly modScintAssembly(basename);
+
+  double w_plate = w_mod - w_notch - 2 * t_mod_sp - 2 * t_foil;
+  double h_plate = h_mod - 2 * t_mod_tp - 2 * t_foil;
+  double w_tow   = (w_plate - 2 * t_foil);
+  double h_tow   = (h_plate - 2 * t_foil);
+
+  // placement volumes
+  PlacedVolume pvm;
+
+  // foil separations
+  // Internal foil separator for 2x1 arrangement
+  const std::vector<double> xCoordTi = {
+      -t_foil,
+       t_foil,
+       t_foil,
+      -t_foil
+  };
+
+  const std::vector<double> yCoordTi = {
+      -h_plate / 2.,
+      -h_plate / 2.,
+       h_plate / 2.,
+       h_plate / 2.
+  };
+
+  const std::vector<double> zStepTi      = {-t_slice / 2, t_slice / 2};
+  const std::vector<double> zStepXTi     = {0., 0.};
+  const std::vector<double> zStepYTi     = {0., 0.};
+  const std::vector<double> zStepScaleTi = {1., 1.};
+
+  //ExtrudedPolygon foilgrid =
+  //    ExtrudedPolygon(xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
+  Box foil_t((w_plate + 2 * t_foil) / 2., t_foil / 2., t_slice / 2.);
+  Box foil_s(t_foil / 2., h_plate / 2., t_slice / 2.);
+  //Volume foilgrid_vol(basename + "_ESRFoil_" + _toString(layerID, "_layer_%d"), foilgrid,
+  //                    slice_mat);
+  Volume foil_t_vol(basename + "_ESRFoilT_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_b_vol(basename + "_ESRFoilB_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_l_vol(basename + "_ESRFoilL_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  Volume foil_r_vol(basename + "_ESRFoilR_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  // Setting slice attributes
+  if (renderComp) {
+    //foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_t_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_b_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_l_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_r_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+  } else {
+    //foilgrid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_t_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_b_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_l_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_r_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+  }
+  //pvm = modScintAssembly.placeVolume(foilgrid_vol, Position(0, 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow/2.0, 0));
+  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow/2.0), 0));
+  pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(0.5 * t_foil + w_tow/2.0), 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_r_vol, Position((0.5 * t_foil + w_tow/2.0), 0, 0));
+
+  // 1M module placement of scintillator for tower
+  double rotZ[1] = {0};
+  double rotY[1] = {0};
+  double rotX[1] = {0};
+  double posX[1] = {0};
+  double posY[1] = {0};
+  double posZ[1] = {0};
+  int towerx     = 0;
+  int towery     = 0;
+  // loop over all towers within same module
+
+  for (int i = 0; i < 1; i++) {
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    Volume modScintTowerAss =
+        createScintillatorTower(desc, basename + _toString(i, "_tower_%d"), w_tow, h_tow, t_slice,
+                                slice_mat, region, limit, vis, sens, renderComp);
+    pvm = modScintAssembly.placeVolume(
+        modScintTowerAss,
+        Transform3D(RotationZYX(rotZ[i], rotY[i], rotX[i]), Position(posX[i], posY[i], posZ[i])));
+    towerx = i % 2;
+    towery = 0;
+    if (i > 1)
+      towery = 1;
+    pvm.addPhysVolID("towerx", towerx)
+        .addPhysVolID("towery", towery)
+        .addPhysVolID("layerz", layerID)
+        .addPhysVolID("passive", 0)
+        .addPhysVolID("rlayerz", roLayer);
+  }
+  return modScintAssembly;
+}
+
 //************************************************************************************************************
 //************************** create 8M module assembly  ******************************************************
 //************************************************************************************************************
@@ -642,7 +869,17 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       // scintillator
       //*************************************************
     } else {
-      Assembly modScintAssembly = createScintillatorPlateEightM(
+      Assembly modScintAssembly;
+	  	  if(mod_params.mod_arrX == 4 && mod_params.mod_arrY == 2)
+	  		  modScintAssembly = createScintillatorPlateEightM(
+          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
+          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
+          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
+          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
+          renderComp);
+	  	  if(mod_params.mod_arrX == 2 && mod_params.mod_arrY == 1)
+	  		  modScintAssembly = createScintillatorPlateTwoM(
           desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
           layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
           mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
@@ -906,7 +1143,17 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       // scintillator
       //*************************************************
     } else {
-      Assembly modScintAssembly = createScintillatorPlateFourM(
+      Assembly modScintAssembly;
+      	  if(mod_params.mod_arrX == 2 && mod_params.mod_arrY == 2)
+      		  modScintAssembly = createScintillatorPlateFourM(
+          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
+          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
+          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
+          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
+          renderComp);
+      	  if(mod_params.mod_arrX == 1 && mod_params.mod_arrY == 1)
+      		  modScintAssembly = createScintillatorPlateOneM(
           desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
           layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
           mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
@@ -1040,6 +1287,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(thicknessBackWall), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(width), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(arrayX), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(arrayY), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(notchDepth), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(notchHeight), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
@@ -1062,6 +1311,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(fourMmod_dim, _Unicode(thicknessBackWall), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(width), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(arrayX), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(arrayY), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(notchDepth), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(notchHeight), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(foilThick), 0.),

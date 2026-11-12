@@ -49,14 +49,14 @@
     <!--<constant name="HcalEndcapN_Mod_PCBLength"            value="125* cm"/>-->
 
 
-    <constant name="HcalEndcapN_EightM_xArr"              value="4" />
-    <constant name="HcalEndcapN_EightM_yArr"              value="2" />
+    <constant name="HcalEndcapN_EightM_xArr"              value="2" />
+    <constant name="HcalEndcapN_EightM_yArr"              value="1" />
     <constant name="HcalEndcapN_EightM_OuterWidth"        value="20.188* cm"/>
     <constant name="HcalEndcapN_EightM_OuterHeight"       value="10.1* cm"/>
     <constant name="HcalEndcapN_EightM_BackInnerWidth"    value="15.0* cm"/>
     <constant name="HcalEndcapN_EightM_BackInnerHeight"   value="7.0* cm"/>
-    <constant name="HcalEndcapN_FourM_xArr"               value="2" />
-    <constant name="HcalEndcapN_FourM_yArr"               value="2" />
+    <constant name="HcalEndcapN_FourM_xArr"               value="1" />
+    <constant name="HcalEndcapN_FourM_yArr"               value="1" />
     <constant name="HcalEndcapN_FourM_OuterWidth"         value="10.094* cm"/>
     <constant name="HcalEndcapN_FourM_OuterHeight"        value="10.1* cm"/>
     <constant name="HcalEndcapN_FourM_BackInnerWidth"     value="7.0* cm"/>
@@ -71,7 +71,7 @@
     <vis name="HcalEndcapN_4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
     <vis name="HcalEndcapN_8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
     <vis name="HcalEndcapN_LayerScintVis"     ref="AnlOrange" showDaughters="false" visible="true"/>
-    <vis name="HcalEndcapN_LayerSteelVis"     ref="AnlLight_Gray"        showDaughters="false" visible="true"/>
+    <vis name="HcalEndcapN_LayerSteelVis"     ref="AnlLightGray"        showDaughters="false" visible="true"/>
     <vis name="HcalEndcapN_LayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
     <vis name="HcalEndcapN_LayerKaptonVis"    ref="AnlGold"       showDaughters="false" visible="true"/>
     <vis name="HcalEndcapN_LayerFoilVis"      ref="AnlGray"       showDaughters="false" visible="true"/>
