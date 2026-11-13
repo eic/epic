@@ -407,13 +407,14 @@ map<string, ModuleTemplate> builtin_module_templates(Detector& description) {
         -module_template.x_size / 2.0 + module_template.lec_side_span + chain_length / 2.0;
     // Step 11b/12: every tiling module keeps the FPC Kapton on the sensor side
     // of the baseplate and carries the FPC aluminium on the back of the baseplate.
-    const double fpc_kapton   = description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
-    const double fpc_aluminum = description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
+    const double fpc_kapton = description.constant<double>("SiEndcapBridgeFPC_Kapton_thickness");
+    const double fpc_aluminum =
+        description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
     const double bridge_fpc_stack = fpc_kapton + fpc_aluminum;
     const double front_fpc_stack  = fpc_kapton;
-    const double ancasic_stack = description.constant<double>("SiEndcapAncASICGlue_thickness") +
-                                 description.constant<double>("SiEndcapAncASIC_thickness");
-    auto add_component         = [&](ComponentTemplate component) {
+    const double ancasic_stack    = description.constant<double>("SiEndcapAncASICGlue_thickness") +
+                                    description.constant<double>("SiEndcapAncASIC_thickness");
+    auto add_component            = [&](ComponentTemplate component) {
       module_template.total_thickness += component.thickness;
       module_template.components.push_back(component);
     };
@@ -545,8 +546,7 @@ double tiling_corrugation_reference_z(Detector& description,
   const double baseplate_bottom = tiling_baseplate_bottom_z(module_template);
   if (module_template.outward_facing) {
     // Outward: the external epoxy below the baseplate touches the carbon.
-    return baseplate_bottom -
-           description.constant<double>("SiEndcapTilingExternalEpoxy_thickness");
+    return baseplate_bottom - description.constant<double>("SiEndcapTilingExternalEpoxy_thickness");
   }
   // Inward: the epoxy edge lines on the sensor side of the baseplate touch the carbon.
   return baseplate_bottom + description.constant<double>("SiEndcapTilingBaseplateCF_thickness") +
@@ -1020,11 +1020,11 @@ vector<CorrugationFlat> load_delivered_corrugation_flats(const string& file_name
     }
   }
   // Boundary flats beyond the lowest-y and highest-y rows.
-  CorrugationFlat low_boundary = flats.front();
-  low_boundary.row_index       = -1000 - flats.front().row_index;
-  low_boundary.row_y           = flats.front().row_y - flats.front().half_pitch;
-  low_boundary.surface_offset  = -flats.front().surface_offset;
-  low_boundary.csv_line        = 0;
+  CorrugationFlat low_boundary  = flats.front();
+  low_boundary.row_index        = -1000 - flats.front().row_index;
+  low_boundary.row_y            = flats.front().row_y - flats.front().half_pitch;
+  low_boundary.surface_offset   = -flats.front().surface_offset;
+  low_boundary.csv_line         = 0;
   CorrugationFlat high_boundary = flats.back();
   high_boundary.row_index       = -1000 - flats.back().row_index;
   high_boundary.row_y           = flats.back().row_y + flats.back().half_pitch;
@@ -1040,12 +1040,17 @@ vector<CorrugationFlat> load_delivered_corrugation_flats(const string& file_name
 // table. Keep this mapping identical to load_tiling_module_directory().
 string source_corrugation_disk_key(const string& layer_key) {
   static const map<string, string> source_key_by_layer{
-      {"OuterTrackerEndcapN_disk4", "ED4"},  {"OuterTrackerEndcapN_disk3", "ED3"},
-      {"OuterTrackerEndcapN_disk2", "ED2"},  {"MiddleTrackerEndcapN_disk1", "ED1"},
-      {"InnerTrackerEndcapN_disk1", "ED0"},  {"InnerTrackerEndcapP_disk1", "HD0"},
-      {"MiddleTrackerEndcapP_disk1", "HD1"}, {"OuterTrackerEndcapP_disk2", "HD2"},
+      {"OuterTrackerEndcapN_disk4", "ED4"},
+      {"OuterTrackerEndcapN_disk3", "ED3"},
+      {"OuterTrackerEndcapN_disk2", "ED2"},
+      {"MiddleTrackerEndcapN_disk1", "ED1"},
+      {"InnerTrackerEndcapN_disk1", "ED0"},
+      {"InnerTrackerEndcapP_disk1", "HD0"},
+      {"MiddleTrackerEndcapP_disk1", "HD1"},
+      {"OuterTrackerEndcapP_disk2", "HD2"},
       // HD3b is the key in the reconstructed 20261001 corrugation table.
-      {"OuterTrackerEndcapP_disk3", "HD3b"}, {"OuterTrackerEndcapP_disk4", "HD4"},
+      {"OuterTrackerEndcapP_disk3", "HD3b"},
+      {"OuterTrackerEndcapP_disk4", "HD4"},
   };
   auto source_key = source_key_by_layer.find(layer_key);
   return source_key == source_key_by_layer.end() ? layer_key : source_key->second;
@@ -1130,9 +1135,9 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
   // its full y footprint stays inside the disk boundary and beam-pipe openings.
   auto place_bend = [&](const string& kind, double y_center, double z_center, double radius,
                         double psi_start, double psi_delta) {
-    const double r_inner = radius - config.thickness / 2.0;
-    const double r_outer = radius + config.thickness / 2.0;
-    const double psi_low = std::min(psi_start, psi_start + psi_delta);
+    const double r_inner  = radius - config.thickness / 2.0;
+    const double r_outer  = radius + config.thickness / 2.0;
+    const double psi_low  = std::min(psi_start, psi_start + psi_delta);
     const double psi_high = std::max(psi_start, psi_start + psi_delta);
 
     // y extent of the sector: arc end points on both radii, plus the
@@ -1309,8 +1314,8 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
       // First pass: check every join before placing anything.
       for (size_t index = 0; index + 1 < flats.size(); ++index) {
         WebJoin join;
-        join.left_edge  = config.y0 + flats[index].row_y + half_high[index];
-        join.right_edge = config.y0 + flats[index + 1].row_y - half_low[index + 1];
+        join.left_edge               = config.y0 + flats[index].row_y + half_high[index];
+        join.right_edge              = config.y0 + flats[index + 1].row_y - half_low[index + 1];
         const double available_y_gap = join.right_edge - join.left_edge;
         const double web_z_span      = flat_z_centers[index + 1] - flat_z_centers[index];
         if (available_y_gap + dimension_tolerance < web_y_span) {
@@ -1365,15 +1370,14 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
         const double straight_y = config.y0 + flats[index].row_y +
                                   (half_high[index] - half_low[index]) / 2.0 +
                                   (trim_low[index] - trim_high[index]) / 2.0;
-        place_piece(fmt::format("flat{}", flats[index].row_index), straight_y,
-                    straight_width / 2.0, flat_z_centers[index], straight_width / 2.0,
-                    config.thickness / 2.0, 0.0);
+        place_piece(fmt::format("flat{}", flats[index].row_index), straight_y, straight_width / 2.0,
+                    flat_z_centers[index], straight_width / 2.0, config.thickness / 2.0, 0.0);
       }
 
       for (size_t index = 0; index < joins.size(); ++index) {
-        const WebJoin& join            = joins[index];
-        const double straight_length   = join.web_length - 2.0 * join.tangent_length;
-        const double web_y_projection  = std::abs(std::cos(join.web_angle)) * straight_length / 2.0 +
+        const WebJoin& join           = joins[index];
+        const double straight_length  = join.web_length - 2.0 * join.tangent_length;
+        const double web_y_projection = std::abs(std::cos(join.web_angle)) * straight_length / 2.0 +
                                         std::abs(std::sin(join.web_angle)) * config.thickness / 2.0;
         const string join_tag =
             fmt::format("{}_{}", flats[index].row_index, flats[index + 1].row_index);
@@ -2041,14 +2045,13 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
 
   // Inward tiling modules start the serial stack at the baseplate, above the
   // back-side FPC aluminium; outward modules start with the external epoxy.
-  const double stack_start_offset =
-      module_template.tiling_design && !module_template.outward_facing
-          ? module_template.baseplate_bottom_offset
-          : 0.0;
-  double z_position       = -module_template.total_thickness / 2.0 + stack_start_offset;
-  double thickness_so_far = stack_start_offset;
-  int component_id        = 0;
-  int sensor_id           = 1;
+  const double stack_start_offset = module_template.tiling_design && !module_template.outward_facing
+                                        ? module_template.baseplate_bottom_offset
+                                        : 0.0;
+  double z_position               = -module_template.total_thickness / 2.0 + stack_start_offset;
+  double thickness_so_far         = stack_start_offset;
+  int component_id                = 0;
+  int sensor_id                   = 1;
   for (const auto& component : module_template.components) {
     double comp_x      = component.x_override > 0.0 ? component.x_override : x_size;
     double comp_y      = component.y_override > 0.0 ? component.y_override : y_size;
@@ -2093,13 +2096,13 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
       const double silicon_bottom_z = z_position - component.thickness / 2.0;
       const double active_center_z  = silicon_bottom_z + inactive_si + active_si / 2.0;
       // Cu is the outermost 2.5 um of the 50 um sensor (Step 11b).
-      const double copper_center_z  = z_position + component.thickness / 2.0 - copper / 2.0;
-      const double rsu_pitch_x      = comp_x / x_repeat;
-      const double half_rsu_x       = rsu_pitch_x / 2.0;
-      const double half_rsu_y       = comp_y / 2.0;
-      const double bias_width       = description.constant<double>("SiEndcapRSU_bias_width");
-      const double periphery_width  = description.constant<double>("SiEndcapRSU_periphery_width");
-      const double backbone_width   = description.constant<double>("SiEndcapRSU_backbone_width");
+      const double copper_center_z = z_position + component.thickness / 2.0 - copper / 2.0;
+      const double rsu_pitch_x     = comp_x / x_repeat;
+      const double half_rsu_x      = rsu_pitch_x / 2.0;
+      const double half_rsu_y      = comp_y / 2.0;
+      const double bias_width      = description.constant<double>("SiEndcapRSU_bias_width");
+      const double periphery_width = description.constant<double>("SiEndcapRSU_periphery_width");
+      const double backbone_width  = description.constant<double>("SiEndcapRSU_backbone_width");
       const double powerswitch_width =
           description.constant<double>("SiEndcapRSU_powerswitch_width");
       const double tile_x =
@@ -2347,7 +2350,8 @@ ModulePrototype build_module_prototype(Detector& description, SensitiveDetector&
             description.constant<double>("SiEndcapBridgeFPC_Aluminum_thickness");
         const double baseplate_bottom_z = tiling_baseplate_bottom_z(module_template);
         const double baseplate_top_z =
-            baseplate_bottom_z + description.constant<double>("SiEndcapTilingBaseplateCF_thickness");
+            baseplate_bottom_z +
+            description.constant<double>("SiEndcapTilingBaseplateCF_thickness");
 
         place_passive_box(name + "_kapton", box_x, box_y, kapton_thickness, pos_x, pos_y,
                           baseplate_top_z + kapton_thickness / 2.0, "Kapton", "SVTReadoutVis");
