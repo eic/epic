@@ -128,7 +128,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   std::map<std::string, Volume> volumes;
   std::map<std::string, std::vector<PlacedVolume>> sensitives;
   std::map<std::string, std::vector<VolPlane>> volplane_surfaces;
-  std::map<std::string, std::array<double, 2>> chip_thicknesses;
+  std::map<std::string, std::array<double, 3>> chip_dims; // width, length, thickness
   for (xml_coll_t i_chip(x_detector, _Unicode(chip)); i_chip; ++i_chip) {
     xml_comp_t x_chip     = i_chip;
     std::string chip_name = x_chip.nameStr();
@@ -139,12 +139,17 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       throw std::runtime_error("Logics error in building chips.");
     }
 
-    // Compute chip total thickness from components
+    // Compute chip total thickness (and its footprint) from components
     double total_thickness = 0;
+    double chip_width      = 0;
+    double chip_length     = 0;
     xml_coll_t ci(x_chip, _U(component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
       total_thickness += xml_comp_t(ci).thickness();
+      chip_width  = std::max(chip_width, xml_comp_t(ci).width());
+      chip_length = std::max(chip_length, xml_comp_t(ci).length());
     }
+    chip_dims[chip_name] = {chip_width, chip_length, total_thickness};
 
     // Create the chip assembly volume
     Assembly chip_volume(chip_name);
@@ -225,9 +230,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         component_physvol.addPhysVolID("sensor", sensor_number++);
         component_volume.setSensitiveDetector(sens);
         sensitives[chip_name].push_back(component_physvol);
-        chip_thicknesses[chip_name] = {thickness_so_far + x_component.thickness() / 2.0,
-                                       total_thickness - thickness_so_far -
-                                           x_component.thickness() / 2.0};
       }
 
       thickness_sum += x_component.thickness();
@@ -240,6 +242,67 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       }
     }
   }
+  // Build the modules: a row of identical chips along the stave length (local y), with a gap
+  // between neighbouring chips. Chip k is centred at y = -length/2 + (k + 1/2) chip length + k gap.
+  struct ModuleInfo {
+    Volume volume;
+    std::string chip;
+    int n_chips;
+    double width, length, thickness;
+    std::vector<PlacedVolume> chip_physvols;
+  };
+  std::map<std::string, ModuleInfo> modules;
+  for (xml_coll_t i_mod(x_detector, _U(module)); i_mod; ++i_mod) {
+    xml_comp_t x_mod      = i_mod;
+    std::string mod_name  = x_mod.nameStr();
+    std::string chip_name = x_mod.attr<std::string>(_Unicode(chip));
+    const int n_chips     = x_mod.attr<int>(_Unicode(chips));
+    const double chip_gap = x_mod.gap();
+    if (modules.count(mod_name) || !volumes.count(chip_name) || n_chips < 1 || chip_gap < 0.) {
+      printout(ERROR, "BarrelCalorimeterImaging",
+               "module %s: duplicate name, unknown chip %s, %d chips or chip gap %g",
+               mod_name.c_str(), chip_name.c_str(), n_chips, chip_gap);
+      throw std::runtime_error("Logics error in building modules.");
+    }
+    const auto [chip_w, chip_l, chip_t] = chip_dims[chip_name];
+    ModuleInfo& mod                     = modules[mod_name];
+    mod.chip                            = chip_name;
+    mod.n_chips                         = n_chips;
+    mod.width                           = chip_w;
+    mod.length                          = n_chips * chip_l + (n_chips - 1) * chip_gap;
+    mod.thickness                       = chip_t;
+    mod.volume =
+        Volume(mod_name, Box(mod.width / 2., mod.length / 2., mod.thickness / 2.), desc.air());
+    mod.volume.setAttributes(desc, x_mod.regionStr(), x_mod.limitsStr(), x_mod.visStr());
+    for (int k = 0; k < n_chips; ++k) {
+      const double y            = -mod.length / 2. + (k + 0.5) * chip_l + k * chip_gap;
+      PlacedVolume chip_physvol = mod.volume.placeVolume(volumes[chip_name], Position(0, y, 0));
+      chip_physvol.addPhysVolID("chip", k);
+      mod.chip_physvols.push_back(chip_physvol);
+    }
+  }
+
+  // Readout field ranges, to check that the stave, module and chip indices can be encoded
+  const IDDescriptor id_spec = sens.readout().idSpec();
+  auto check_id_range        = [&](int layer, const char* field, int max_index) {
+    const auto* f = id_spec.field(field);
+    // largest encodable value (BitFieldElement::maxValue() is 2^width for unsigned fields)
+    const long max_value = f->isSigned() ? f->maxValue() : (1L << f->width()) - 1;
+    if (max_index < 0 || max_index > max_value) {
+      printout(ERROR, "BarrelCalorimeterImaging",
+                      "layer %d: %s index %d exceeds the readout field %s (max %ld)", layer, field,
+                      max_index, f->name().c_str(), max_value);
+      throw std::runtime_error("Imaging layer indices do not fit the readout.");
+    }
+  };
+
+  // Half-stave volumes and their DetElement templates, shared between layers with identical staves
+  struct HalfStaveInfo {
+    Volume volume;
+    DetElement element; // template, cloned for each placement
+  };
+  std::map<std::string, HalfStaveInfo> half_staves;
+
   if (x_detector.hasChild(_Unicode(support))) {
     buildSupport(desc, sector1_volume, x_detector.child(_Unicode(support)),
                  {inner_r, layer_pos_z, x_dimensions.z(), half_dphi});
@@ -294,7 +357,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       layer_volume.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 
       // Loop over the staves for this layer, if the tray is enabled
-      int stave_num = 1;
+      int stave_index = 0; // readout index of the next half-stave
       for (xml_coll_t i_stave(x_layer, _U(stave)); i_stave; ++i_stave) {
         xml_comp_t x_stave = i_stave;
         // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
@@ -357,63 +420,73 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           }
         }
 
-        // Make one stave
-        std::string stave_name = Form("stave%d", stave_num);
-        auto stave_material    = desc.air();
-        Box stave_shape(stave_dim_x, stave_dim_y, stave_dim_z);
-        Volume stave_volume(stave_name, stave_shape, stave_material);
-        stave_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
-                                   x_stave.visStr());
-        // No parent, since it will be added on cloning and placement
-        DetElement stave_element(stave_name, detector_id);
+        // Each stave position holds n_halves identical half-length staves, back to back along the
+        // stave length (local y) and placed by translation only, so the chip-local frames are the
+        // same in all halves. Half h of stave position j (both from 0, h = 0 at -y) is
+        // readout stave index n_halves * j + h. A half-stave carries n_modules modules at a pitch
+        // of module length + module gap, centred in the half-stave: the gap at each of its ends is
+        // half of what remains, so with module_gap = (half-stave length) / n_modules - module
+        // length the pitch is uniform along the whole stave.
+        xml_comp_t x_halves          = x_stave.child(_Unicode(half_staves));
+        const int n_halves           = x_halves.number();
+        const int n_modules          = x_halves.attr<int>(_Unicode(modules));
+        const double module_gap      = x_halves.gap();
+        const std::string module_str = x_stave.moduleStr();
+        if (!modules.count(module_str) || n_halves < 1 || n_modules < 1) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: unknown module %s, or %d half-staves with %d modules", layer_num,
+                   module_str.c_str(), n_halves, n_modules);
+          throw std::runtime_error("Logics error in building staves.");
+        }
+        const ModuleInfo& mod     = modules[module_str];
+        const double half_dim_y   = stave_dim_y / n_halves;
+        const double module_span  = n_modules * mod.length + (n_modules - 1) * module_gap;
+        const double half_end_gap = (2. * half_dim_y - module_span) / 2.;
 
-        // Loop over the slices for this stave
-        double slice_pos_z = -(stave_thick / 2.);
+        // Check that the modules fit the half-stave and the indices fit the readout
+        if (module_gap < 0. || half_end_gap < 0. || mod.width > 2. * stave_dim_x ||
+            mod.thickness > stave_thick) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: %d modules of %g x %g x %g with gap %g do not fit a half-stave of "
+                   "%g x %g x %g (end gap %g)",
+                   layer_num, n_modules, mod.width, mod.length, mod.thickness, module_gap,
+                   2. * stave_dim_x, 2. * half_dim_y, stave_thick, half_end_gap);
+          throw std::runtime_error("Modules do not fit in the stave.");
+        }
+        check_id_range(layer_num, "stave", stave_index + n_halves * stave_repeat - 1);
+        check_id_range(layer_num, "module", n_modules - 1);
+        check_id_range(layer_num, "chip", mod.n_chips - 1);
+        printout(DEBUG, "BarrelCalorimeterImaging",
+                 "layer %d: %d x %d half-staves of %d modules, module gap %g, end gap %g",
+                 layer_num, stave_repeat, n_halves, n_modules, module_gap, half_end_gap);
 
-        // Place in xy_layout
-        if (x_stave.hasChild(_Unicode(xy_layout))) {
-          auto chip_str         = x_stave.attr<std::string>(_Unicode(chip));
-          auto& chip_volume     = volumes[chip_str];
-          auto& chip_sensitives = sensitives[chip_str];
-
-          // Get layout grid pitch
-          xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
-          auto dx                = x_xy_layout.attr<double>(_Unicode(dx));
-          auto dy                = x_xy_layout.attr<double>(_Unicode(dy));
-
-          // Default to filling
-          auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
-          auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d chips",
-                   stave_name.c_str(), nx, ny);
-
-          // Default to centered
-          auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
-          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(y0), -(ny - 1) * dy / 2.);
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s chips starting at x=%f, y=%f",
-                   stave_name.c_str(), x0, y0);
-
-          // Place chips
-          int i_chip = 0;
-          for (auto i_x = 0; i_x < nx; ++i_x) {
-            for (auto i_y = 0; i_y < ny; ++i_y) {
-
-              // Create chip
-              std::string chip_name = _toString(i_chip, "module%d");
-              DetElement chip_element(stave_element, chip_name, i_chip);
-
-              // Place chip
-              auto x = x0 + i_x * dx;
-              auto y = y0 + i_y * dy;
-              Position chip_pos(x, y, 0);
-              PlacedVolume chip_physvol = stave_volume.placeVolume(chip_volume, chip_pos);
-              chip_physvol.addPhysVolID("module", i_chip);
-              chip_element.setPlacement(chip_physvol);
-
+        // Make one half-stave (or reuse an identical one): modules with their chips, and the
+        // DetElement tree half-stave > module > chip > sensitive slice
+        const std::string half_key =
+            Form("%s|%.9g|%.9g|%.9g|%d|%.9g|%s|%s|%s", module_str.c_str(), 2. * stave_dim_x,
+                 2. * half_dim_y, stave_thick, n_modules, module_gap, x_stave.regionStr().c_str(),
+                 x_stave.limitsStr().c_str(), x_stave.visStr().c_str());
+        if (!half_staves.count(half_key)) {
+          HalfStaveInfo& half = half_staves[half_key];
+          half.volume         = Volume(Form("stave_half%zu", half_staves.size()),
+                                       Box(stave_dim_x, half_dim_y, stave_dim_z), desc.air());
+          half.volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
+                                    x_stave.visStr());
+          // No parent, since it will be added on cloning and placement
+          half.element = DetElement("stave", detector_id);
+          for (int i = 0; i < n_modules; ++i) {
+            const double y =
+                -half_dim_y + half_end_gap + mod.length / 2. + i * (mod.length + module_gap);
+            PlacedVolume module_physvol = half.volume.placeVolume(mod.volume, Position(0, y, 0));
+            module_physvol.addPhysVolID("module", i);
+            DetElement module_element(half.element, Form("module%d", i), i);
+            module_element.setPlacement(module_physvol);
+            for (int k = 0; k < mod.n_chips; ++k) {
+              DetElement chip_element(module_element, Form("chip%d", k), k);
+              chip_element.setPlacement(mod.chip_physvols[k]);
               // Add sensitive volumes
-              for (auto& sensitive_physvol : chip_sensitives) {
-                DetElement sensitive_element(chip_element, sensitive_physvol.volume().name(),
-                                             i_chip);
+              for (auto& sensitive_physvol : sensitives[mod.chip]) {
+                DetElement sensitive_element(chip_element, sensitive_physvol.volume().name(), k);
                 sensitive_element.setPlacement(sensitive_physvol);
 
                 auto& sensitive_element_params =
@@ -421,60 +494,29 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                         sensitive_element);
                 sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
               }
-
-              i_chip++;
             }
           }
-          slice_pos_z += chip_thicknesses[chip_str][0] + chip_thicknesses[chip_str][1];
         }
-
-        // Loop over the slices for this stave
-        int slice_num = 1;
-        for (xml_coll_t i_slice(x_stave, _U(slice)); i_slice; ++i_slice) {
-          xml_comp_t x_slice     = i_slice;
-          std::string slice_name = Form("slice%d", slice_num);
-          double slice_thick     = x_slice.thickness();
-          double slice_dim_x     = stave_dim_x;
-          double slice_dim_y     = stave_dim_y;
-          double slice_dim_z     = slice_thick / 2.;
-          Box slice_shape(slice_dim_x, slice_dim_y, slice_dim_z);
-          Volume slice_volume(slice_name, slice_shape, desc.material(x_slice.materialStr()));
-          slice_volume.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
-                                     x_slice.visStr());
-          DetElement slice_element(stave_element, slice_name, detector_id);
-
-          // Set sensitive
-          if (x_slice.isSensitive()) {
-            slice_volume.setSensitiveDetector(sens);
-          }
-
-          // Place slice
-          PlacedVolume slice_physvol =
-              stave_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
-          slice_physvol.addPhysVolID("slice", slice_num);
-          slice_element.setPlacement(slice_physvol);
-
-          // Increment Z position of slice
-          slice_pos_z += slice_thick;
-          ++slice_num;
-        }
+        const HalfStaveInfo& half = half_staves[half_key];
 
         // Loop over number of repeats for this stave
         for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
-
-          // Stave placement
-          Position stave_pos(stave_pos_x, 0, stave_pos_z(stave_j));
-          PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_pos);
-          stave_physvol.addPhysVolID("stave", stave_num + stave_j);
-          DetElement stave_j_element =
-              (stave_j == 0) ? stave_element
-                             : stave_element.clone(Form("stave%d", stave_num + stave_j));
-          stave_j_element.setPlacement(stave_physvol);
-          layer_element.add(stave_j_element);
+          for (int half_h = 0; half_h < n_halves; ++half_h) {
+            // Half-stave placement
+            const int stave_id = stave_index + n_halves * stave_j + half_h;
+            Position half_pos(stave_pos_x, -stave_dim_y + (2 * half_h + 1) * half_dim_y,
+                              stave_pos_z(stave_j));
+            PlacedVolume half_physvol = layer_volume.placeVolume(half.volume, half_pos);
+            half_physvol.addPhysVolID("stave", stave_id);
+            DetElement half_element = half.element.clone(Form("stave%d", stave_id), stave_id);
+            half_element.setPlacement(half_physvol);
+            layer_element.add(half_element);
+          }
 
           // Increment X position of stave
           stave_pos_x += stave_pitch;
         }
+        stave_index += n_halves * stave_repeat;
       }
 
       // Place frame if defined.
