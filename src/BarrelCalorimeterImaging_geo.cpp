@@ -157,10 +157,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     chip_volume.setVisAttributes(desc.visAttributes(x_chip.visStr()));
 
     // Add components
-    int sensor_number       = 1;
-    int ncomponents         = 0;
-    double thickness_so_far = 0.0;
-    double thickness_sum    = -total_thickness / 2.0;
+    int sensor_number    = 1;
+    int ncomponents      = 0;
+    double thickness_sum = -total_thickness / 2.0;
     for (xml_coll_t i_component(x_chip, _U(component)); i_component; ++i_component, ++ncomponents) {
       xml_comp_t x_component           = i_component;
       xml_comp_t x_component_pos       = x_component.position(false);
@@ -233,12 +232,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       }
 
       thickness_sum += x_component.thickness();
-      thickness_so_far += x_component.thickness();
 
       // apply relative offsets in z-position used to stack components side-by-side
       if (x_component_pos) {
         thickness_sum += x_component_pos.z(0);
-        thickness_so_far += x_component_pos.z(0);
       }
     }
   }
