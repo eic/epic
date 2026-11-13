@@ -286,9 +286,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   const IDDescriptor id_spec = sens.readout().idSpec();
   auto check_id_range        = [&](int layer, const char* field, int max_index) {
     const auto* f = id_spec.field(field);
-    // largest encodable value (BitFieldElement::maxValue() is 2^width for unsigned fields)
-    const long max_value = f->isSigned() ? f->maxValue() : (1L << f->width()) - 1;
-    if (max_index < 0 || max_index > max_value) {
+    // largest unsigned value (BitFieldElement::maxValue() returns 2^width for unsigned fields)
+    const long max_value = (1L << f->width()) - 1;
+    if (max_index > max_value) {
       printout(ERROR, "BarrelCalorimeterImaging",
                       "layer %d: %s index %d exceeds the readout field %s (max %ld)", layer, field,
                       max_index, f->name().c_str(), max_value);
@@ -424,9 +424,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         // stave length (local y) and placed by translation only, so the chip-local frames are the
         // same in all halves. Half h of stave position j (both from 0, h = 0 at -y) is
         // readout stave index n_halves * j + h. A half-stave carries n_modules modules at a pitch
-        // of module length + module gap, centred in the half-stave: the gap at each of its ends is
-        // half of what remains, so with module_gap = (half-stave length) / n_modules - module
-        // length the pitch is uniform along the whole stave.
+        // of module length + module gap, centred in the half-stave (see EcalBarrel_Module_gap).
         xml_comp_t x_halves          = x_stave.child(_Unicode(half_staves));
         const int n_halves           = x_halves.number();
         const int n_modules          = x_halves.attr<int>(_Unicode(modules));

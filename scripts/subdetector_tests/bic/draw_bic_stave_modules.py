@@ -69,13 +69,17 @@ def extract(args):
     if not layer:
         raise SystemExit('layer %d not found in %s' % (args.layer, args.sector))
     lv = layer[0].GetVolume()
-    halves = []
+    # stave positions: half-staves sharing an x-z footprint, in placement order
+    positions = {}
     for i in range(lv.GetNdaughters()):
         n = lv.GetNode(i)
-        if n.GetName().startswith(HALF) and n.GetNumber() // 2 == args.position:
-            halves.append(n)
-    if len(halves) != 2:
-        raise SystemExit('stave position %d: found %d half-staves, expected 2' % (args.position, len(halves)))
+        if n.GetName().startswith(HALF):
+            t = n.GetMatrix().GetTranslation()
+            positions.setdefault((round(t[0], 4), round(t[2], 4)), []).append(n)
+    positions = list(positions.values())
+    if not 0 <= args.position < len(positions) or len(positions[args.position]) != 2:
+        raise SystemExit('stave position %d: not found or not made of two half-staves' % args.position)
+    halves = positions[args.position]
     halves.sort(key=ty)
     y0 = sum(ty(h) for h in halves) / 2  # stave centre
     out = []
@@ -146,7 +150,6 @@ def table(halves):
             ('stave length (outer half-stave edges) [mm]', '%.3f' % (h1['y'] + h1['hy'] - (h0['y'] - h0['hy'])))]
     for k, v in rows:
         print('%-46s %s' % (k, v))
-    return mg, jg, eg
 
 
 def fig_stave(halves, args):
@@ -160,7 +163,8 @@ def fig_stave(halves, args):
     top.set_yticks([])
     top.set_xlabel('y along the beam, from the stave centre [mm] (x across the stave is stretched)')
     for h in halves:
-        top.text(h['y'], 12, 'half-stave copy %d (%s z), modules 0-11 towards +z' % (h['copy'], '-' if h['y'] < 0 else '+'),
+        top.text(h['y'], 12, 'half-stave copy %d (%s z), modules 0-%d towards +z' % (h['copy'], '-' if h['y'] < 0 else '+',
+                                                                       len(h['mods']) - 1),
                  ha='center', va='center', fontsize=10)
     # zoom targets: (title, y centre, annotations)
     m0 = h0['mods']
