@@ -30,7 +30,7 @@ ROOT.gROOT.SetBatch(True)
 
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 LAYER = 'layer'
-STAVE = 'stave'  # stave pieces (stave_half<N>_<copy>): several per stave position
+STAVE = 'stave'  # staves (staveN<position>, staveP<position>): several per stave position
 OUTER_PLATE = 'frame_outer'
 
 SS = 3  # supersampling

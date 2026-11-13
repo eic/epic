@@ -29,7 +29,7 @@ ROOT.gROOT.SetBatch(True)
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 SECTOR = 'sector'
 LAYER = 'layer'
-STAVE = 'stave'            # stave pieces (stave_half<N>_<copy>): several per stave position
+STAVE = 'stave'            # staves (staveN<position>, staveP<position>): several per stave position
 SLICE = 'slice1'           # sensitive Si slice inside the chip components
 PLATE = 'frame'            # inner/outer carbon plates (frame_inner<N>, frame_outer<N>)
 WALL = 'frame_side'        # carbon side walls, checked before PLATE
@@ -129,7 +129,7 @@ def extract(args):
                 elif name.startswith(PLATE):
                     d['plates'].append(xf([dn.GetMatrix()], shape_pts(sh), zoff))
                 elif name.startswith(STAVE):
-                    # a stave position consists of several half-stave pieces along y with the same
+                    # a stave position consists of several staves along y with the same
                     # x-z footprint: draw each position once, index = order of first appearance
                     box = xf([dn.GetMatrix()], box_pts(sh), zoff)
                     key = tuple(sorted((round(x, 3), round(z, 3)) for x, z in box))  # any corner order
