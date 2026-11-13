@@ -28,8 +28,8 @@ struct moduleParamsStrct {
       , mod_BWThick(0.)
       , mod_width(0.)
       , mod_height(0.)
-  	  , mod_arrX(1.)
-  	  , mod_arrY(1.)
+      , mod_arrX(1.)
+      , mod_arrY(1.)
       , mod_notchDepth(0.)
       , mod_notchHeight(0.)
       , mod_foilThick(0.)
@@ -37,15 +37,15 @@ struct moduleParamsStrct {
       , mod_pcbThick(0.)
       , mod_pcbWidth(0.)
       , mod_pcbOffset(0.)
-  	  , mod_FEEThick(0.)
+      , mod_FEEThick(0.)
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
-                    double FWThick, double BWThick, double width, double height, int arrX, int arrY, double notchDepth,
-                    double notchHeight, double foilThick, double pcbLegth, double pcbThick,
-                    double pcbWidth, double pcbOffset, double FEEThick, std::string visStr, std::string regStr,
-                    std::string limStr) {
+                    double FWThick, double BWThick, double width, double height, int arrX, int arrY,
+                    double notchDepth, double notchHeight, double foilThick, double pcbLegth,
+                    double pcbThick, double pcbWidth, double pcbOffset, double FEEThick,
+                    std::string visStr, std::string regStr, std::string limStr) {
     mod_BIwidth     = BIwidth;
     mod_BIheight    = BIheight;
     mod_SWThick     = SWThick;
@@ -55,8 +55,8 @@ struct moduleParamsStrct {
     mod_BWThick     = BWThick;
     mod_width       = width;
     mod_height      = height;
-    mod_arrX       = arrX;
-    mod_arrY      = arrY;
+    mod_arrX        = arrX;
+    mod_arrY        = arrY;
     mod_notchDepth  = notchDepth;
     mod_notchHeight = notchHeight;
     mod_foilThick   = foilThick;
@@ -64,7 +64,7 @@ struct moduleParamsStrct {
     mod_pcbThick    = pcbThick;
     mod_pcbWidth    = pcbWidth;
     mod_pcbOffset   = pcbOffset;
-    mod_FEEThick   = FEEThick;
+    mod_FEEThick    = FEEThick;
     mod_visStr      = visStr;
     mod_regStr      = regStr;
     mod_limStr      = limStr;
@@ -78,8 +78,8 @@ struct moduleParamsStrct {
   double mod_BWThick     = 0.;
   double mod_width       = 0.;
   double mod_height      = 0.;
-  int mod_arrX			= 0;
-  int mod_arrY			= 0;
+  int mod_arrX           = 0;
+  int mod_arrY           = 0;
   double mod_notchDepth  = 0.;
   double mod_notchHeight = 0.;
   double mod_foilThick   = 0.;
@@ -87,7 +87,7 @@ struct moduleParamsStrct {
   double mod_pcbThick    = 0.;
   double mod_pcbWidth    = 0.;
   double mod_pcbOffset   = 0.;
-  double mod_FEEThick   = 0.;
+  double mod_FEEThick    = 0.;
   std::string mod_visStr = "";
   std::string mod_regStr = "";
   std::string mod_limStr = "";
@@ -474,17 +474,16 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
   return modScintAssembly;
 }
 
-
 //************************************************************************************************************
 //************************** create scintillator plate with separations for 2M *******************************
 //************************************************************************************************************
 Assembly createScintillatorPlateTwoM(Detector& desc, std::string basename,
-                                      //                                         int modID,
-                                      int layerID, double h_mod, double w_mod, double t_mod_tp,
-                                      double t_mod_sp, double t_slice, double w_notch,
-                                      double t_foil, Material slice_mat, int roLayer,
-                                      std::string region, std::string limit, std::string vis,
-                                      SensitiveDetector sens, bool renderComp) {
+                                     //                                         int modID,
+                                     int layerID, double h_mod, double w_mod, double t_mod_tp,
+                                     double t_mod_sp, double t_slice, double w_notch, double t_foil,
+                                     Material slice_mat, int roLayer, std::string region,
+                                     std::string limit, std::string vis, SensitiveDetector sens,
+                                     bool renderComp) {
   // Tower placement in 2M module
   //--------------------------------
   //|              ||              |
@@ -503,19 +502,9 @@ Assembly createScintillatorPlateTwoM(Detector& desc, std::string basename,
 
   // foil separations
   // Internal foil separator for 2x1 arrangement
-  const std::vector<double> xCoordTi = {
-      -t_foil,
-       t_foil,
-       t_foil,
-      -t_foil
-  };
+  const std::vector<double> xCoordTi = {-t_foil, t_foil, t_foil, -t_foil};
 
-  const std::vector<double> yCoordTi = {
-      -h_plate / 2.,
-      -h_plate / 2.,
-       h_plate / 2.,
-       h_plate / 2.
-  };
+  const std::vector<double> yCoordTi = {-h_plate / 2., -h_plate / 2., h_plate / 2., h_plate / 2.};
 
   const std::vector<double> zStepTi      = {-t_slice / 2, t_slice / 2};
   const std::vector<double> zStepXTi     = {0., 0.};
@@ -547,8 +536,8 @@ Assembly createScintillatorPlateTwoM(Detector& desc, std::string basename,
     foil_r_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   pvm = modScintAssembly.placeVolume(foilgrid_vol, Position(0, 0, 0));
-  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow/2.0, 0));
-  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow/2.0), 0));
+  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow / 2.0, 0));
+  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow / 2.0), 0));
   pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(1.5 * t_foil + w_tow), 0, 0));
   pvm = modScintAssembly.placeVolume(foil_r_vol, Position((1.5 * t_foil + w_tow), 0, 0));
 
@@ -584,18 +573,16 @@ Assembly createScintillatorPlateTwoM(Detector& desc, std::string basename,
   return modScintAssembly;
 }
 
-
-
 //************************************************************************************************************
 //************************** create scintillator plate with separations for 1M *******************************
 //************************************************************************************************************
 Assembly createScintillatorPlateOneM(Detector& desc, std::string basename,
-                                      //                                         int modID,
-                                      int layerID, double h_mod, double w_mod, double t_mod_tp,
-                                      double t_mod_sp, double t_slice, double w_notch,
-                                      double t_foil, Material slice_mat, int roLayer,
-                                      std::string region, std::string limit, std::string vis,
-                                      SensitiveDetector sens, bool renderComp) {
+                                     //                                         int modID,
+                                     int layerID, double h_mod, double w_mod, double t_mod_tp,
+                                     double t_mod_sp, double t_slice, double w_notch, double t_foil,
+                                     Material slice_mat, int roLayer, std::string region,
+                                     std::string limit, std::string vis, SensitiveDetector sens,
+                                     bool renderComp) {
   // Tower placement in 1M module
   //-----------------
   //|              ||
@@ -614,19 +601,9 @@ Assembly createScintillatorPlateOneM(Detector& desc, std::string basename,
 
   // foil separations
   // Internal foil separator for 2x1 arrangement
-  const std::vector<double> xCoordTi = {
-      -t_foil,
-       t_foil,
-       t_foil,
-      -t_foil
-  };
+  const std::vector<double> xCoordTi = {-t_foil, t_foil, t_foil, -t_foil};
 
-  const std::vector<double> yCoordTi = {
-      -h_plate / 2.,
-      -h_plate / 2.,
-       h_plate / 2.,
-       h_plate / 2.
-  };
+  const std::vector<double> yCoordTi = {-h_plate / 2., -h_plate / 2., h_plate / 2., h_plate / 2.};
 
   const std::vector<double> zStepTi      = {-t_slice / 2, t_slice / 2};
   const std::vector<double> zStepXTi     = {0., 0.};
@@ -658,10 +635,10 @@ Assembly createScintillatorPlateOneM(Detector& desc, std::string basename,
     foil_r_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   //pvm = modScintAssembly.placeVolume(foilgrid_vol, Position(0, 0, 0));
-  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow/2.0, 0));
-  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow/2.0), 0));
-  pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(0.5 * t_foil + w_tow/2.0), 0, 0));
-  pvm = modScintAssembly.placeVolume(foil_r_vol, Position((0.5 * t_foil + w_tow/2.0), 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow / 2.0, 0));
+  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow / 2.0), 0));
+  pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(0.5 * t_foil + w_tow / 2.0), 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_r_vol, Position((0.5 * t_foil + w_tow / 2.0), 0, 0));
 
   // 1M module placement of scintillator for tower
   double rotZ[1] = {0};
@@ -694,7 +671,6 @@ Assembly createScintillatorPlateOneM(Detector& desc, std::string basename,
   }
   return modScintAssembly;
 }
-
 
 //************************************************************************************************************
 //************************** create 8M module assembly  ******************************************************
@@ -1212,9 +1188,9 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
 //************************** create 2M module assembly  ******************************************************
 //************************************************************************************************************
 Volume createTwoMModule(Detector& desc, moduleParamsStrct mod_params,
-                          std::vector<sliceParamsStrct> sl_params,
-                          //                               int modID,
-                          double length, SensitiveDetector sens, bool renderComp, bool allSen) {
+                        std::vector<sliceParamsStrct> sl_params,
+                        //                               int modID,
+                        double length, SensitiveDetector sens, bool renderComp, bool allSen) {
   std::string baseName = "LFHCAL_2M";
 
   // assembly definition
@@ -1326,7 +1302,8 @@ Volume createTwoMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick + mod_params.mod_FWThick -
+  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick -
                    mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
@@ -1474,9 +1451,9 @@ Volume createTwoMModule(Detector& desc, moduleParamsStrct mod_params,
 //************************** create 1M module assembly  ******************************************************
 //************************************************************************************************************
 Volume createOneMModule(Detector& desc, moduleParamsStrct mod_params,
-                         std::vector<sliceParamsStrct> sl_params,
-                         //                               int modID,
-                         double length, SensitiveDetector sens, bool renderComp, bool allSen) {
+                        std::vector<sliceParamsStrct> sl_params,
+                        //                               int modID,
+                        double length, SensitiveDetector sens, bool renderComp, bool allSen) {
 
   std::string baseName = "LFHCAL_1M";
 
@@ -1592,7 +1569,8 @@ Volume createOneMModule(Detector& desc, moduleParamsStrct mod_params,
 
   int layer_num = 0;
 
-  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick + mod_params.mod_FWThick -
+  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick -
                    mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
@@ -1875,12 +1853,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // create 8M modules
   Volume eightMassembly;
 
-  if(eightM_params.mod_arrX == 4 && eightM_params.mod_arrY == 2)
-	  eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive);
-  if(eightM_params.mod_arrX == 2 && eightM_params.mod_arrY == 1)
-	  eightMassembly = createTwoMModule(desc, eightM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive);
+  if (eightM_params.mod_arrX == 4 && eightM_params.mod_arrY == 2)
+    eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
+                                        renderComponents, allSensitive);
+  if (eightM_params.mod_arrX == 2 && eightM_params.mod_arrY == 1)
+    eightMassembly = createTwoMModule(desc, eightM_params, slice_Params, length, sens,
+                                      renderComponents, allSensitive);
   for (int e = 0; e < (int)pos8M.size(); e++) {
     if (e % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
@@ -1914,12 +1892,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // create 4M modules
   Volume fourMassembly;
-  if(fourM_params.mod_arrX == 2 && fourM_params.mod_arrY == 2)
-	  fourMassembly = createFourMModule(desc, fourM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive);
-  if(fourM_params.mod_arrX == 1 && fourM_params.mod_arrY == 1)
-	  fourMassembly = createOneMModule(desc, fourM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive);
+  if (fourM_params.mod_arrX == 2 && fourM_params.mod_arrY == 2)
+    fourMassembly = createFourMModule(desc, fourM_params, slice_Params, length, sens,
+                                      renderComponents, allSensitive);
+  if (fourM_params.mod_arrX == 1 && fourM_params.mod_arrY == 1)
+    fourMassembly = createOneMModule(desc, fourM_params, slice_Params, length, sens,
+                                     renderComponents, allSensitive);
   for (int f = 0; f < (int)pos4M.size(); f++) {
     if (f % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
