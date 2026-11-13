@@ -30,7 +30,7 @@ ROOT.gROOT.SetBatch(True)
 
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 LAYER = 'layer'
-STAVE = 'stave'
+STAVE = 'stave'  # stave pieces (stave_half<N>_<copy>): several per stave position
 OUTER_PLATE = 'frame_outer'
 
 SS = 3  # supersampling
@@ -59,7 +59,7 @@ def collect(vol, args, skip):
     zlo, zhi = args.z_range
     polys, fc, count = [], [], {}
     tier = [0]
-    stave_idx = [-1]
+    positions = {}
 
     def walk(v, mats, depth):
         for i in range(v.GetNdaughters()):
@@ -67,12 +67,14 @@ def collect(vol, args, skip):
             name = n.GetName()
             dv = n.GetVolume()
             mat = dv.GetMaterial().GetName()
-            # count staves before filtering so --skip does not shift rail parity
+            # stave position index = order of first appearance of the layer-local (x, z) of the
+            # stave pieces (several per position along y); done before filtering so --skip does
+            # not shift rail parity
             if depth == 0 and name.startswith(LAYER):
-                stave_idx[0] = -1
+                positions.clear()
             if depth == 1 and name.startswith(STAVE):
-                stave_idx[0] += 1
-                tier[0] = stave_idx[0] % 2  # even: low rail
+                t = n.GetMatrix().GetTranslation()
+                tier[0] = positions.setdefault((round(t[0], 4), round(t[2], 4)), len(positions)) % 2  # even: low rail
             if skip.search(name) or skip.search(mat) or name.startswith(OUTER_PLATE):
                 continue
             m = mats + [n.GetMatrix()]

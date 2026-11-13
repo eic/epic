@@ -29,7 +29,8 @@ ROOT.gROOT.SetBatch(True)
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 SECTOR = 'sector'
 LAYER = 'layer'
-STAVE = 'stave'
+STAVE = 'stave'            # stave pieces (stave_half<N>_<copy>): several per stave position
+SLICE = 'slice1'           # sensitive Si slice inside the chip components
 PLATE = 'frame'            # inner/outer carbon plates (frame_inner<N>, frame_outer<N>)
 WALL = 'frame_side'        # carbon side walls, checked before PLATE
 
@@ -84,6 +85,18 @@ def find_sectors(vol, names, depth=0):
     return found
 
 
+def find_slice(vol):
+    '''nodes from vol down to the first sensitive slice (module > chip > component > slice), or None'''
+    for i in range(vol.GetNdaughters()):
+        n = vol.GetNode(i)
+        if n.GetName().startswith(SLICE):
+            return [n]
+        sub = find_slice(n.GetVolume())
+        if sub:
+            return [n] + sub
+    return None
+
+
 def extract(args):
     det = dd4hep.Detector.getInstance()
     det.fromXML(args.compact)
@@ -106,6 +119,7 @@ def extract(args):
             trd = lv.GetShape()
             zoff = trd.GetDz()  # layer-local z measured from the inner face
             d = dict(outline=xf([], trd_pts(trd), zoff), plates=[], walls=[], staves=[])
+            seen = set()
             for j in range(lv.GetNdaughters()):
                 dn = lv.GetNode(j)
                 name = dn.GetName()
@@ -115,15 +129,19 @@ def extract(args):
                 elif name.startswith(PLATE):
                     d['plates'].append(xf([dn.GetMatrix()], shape_pts(sh), zoff))
                 elif name.startswith(STAVE):
-                    st = dn.GetVolume()
-                    mn = st.GetNode(0)
-                    cn = mn.GetVolume().GetNode(0)
-                    sn = cn.GetVolume().GetNode(0)  # sensitive slice
+                    # a stave position consists of several half-stave pieces along y with the same
+                    # x-z footprint: draw each position once, index = order of first appearance
+                    box = xf([dn.GetMatrix()], box_pts(sh), zoff)
+                    key = tuple(round(c, 3) for p in box for c in p)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    path = find_slice(dn.GetVolume())
                     d['staves'].append(dict(
                         idx=len(d['staves']),  # placement order = stave index within the layer
-                        box=xf([dn.GetMatrix()], box_pts(sh), zoff),
-                        si=xf([sn.GetMatrix(), cn.GetMatrix(), mn.GetMatrix(), dn.GetMatrix()],
-                              box_pts(sn.GetVolume().GetShape()), zoff)))
+                        box=box,
+                        si=xf([nd.GetMatrix() for nd in reversed(path)] + [dn.GetMatrix()],
+                              box_pts(path[-1].GetVolume().GetShape()), zoff)))
             if d['staves']:
                 layers[n] = d
     return layers
