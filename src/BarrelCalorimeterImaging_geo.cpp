@@ -287,8 +287,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     const long max_value = (1L << f->width()) - 1;
     if (max_index > max_value) {
       printout(ERROR, "BarrelCalorimeterImaging",
-                      "layer %d: %s index %d exceeds the readout field %s (max %ld)", layer, field,
-                      max_index, f->name().c_str(), max_value);
+               "layer %d: %s index %d exceeds the readout field %s (max %ld)", layer, field,
+               max_index, f->name().c_str(), max_value);
       throw std::runtime_error("Imaging layer indices do not fit the readout.");
     }
   };
@@ -393,9 +393,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         // Arrange staves symmetrically around center of layer. The wall inner face is slanted, so
         // the closest approach is the outer bottom corner of a low stave: place the outermost staves
         // such that the perpendicular distance from that corner to the inner face is wall_gap
-        const double wall_x_low = layer_dim_x +
-                                  (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
-                                  frame_side_dx; // |x| of the inner face at the low stave bottom
+        const double wall_x_low   = layer_dim_x +
+                                    (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
+                                    frame_side_dx; // |x| of the inner face at the low stave bottom
         const double layer_wall_x = wall_x_low - wall_gap / std::cos(half_dphi);
         double stave_pos_x        = -layer_wall_x + stave_dim_x;
         double stave_pitch        = 0.;
