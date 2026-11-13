@@ -355,11 +355,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
       // Loop over the staves for this layer, if the tray is enabled
       // The staves of a layer sit in a tray (an assembly, so it adds no material and cannot
-      // overlap the frame). The layer holds n_trays copies of the same tray end to end along the
-      // layer length (local y): tray 0 at -y and, for two, tray 1 at +y rotated by 180 degrees
-      // about the layer normal, so on both sides module 0 and chip 0 are at the outer end. The
-      // rotation mirrors x: stave k of the +y tray sits at -x of stave k of the -y tray, and its
-      // chip-local x and y point the other way.
+      // overlap the frame). The layer holds two copies of the same tray end to end along the
+      // layer length (local y): the -z tray (tray 0, at -y) and the +z tray (tray 1, at +y)
+      // rotated by 180 degrees about the layer normal, so on both sides module 0 and chip 0 are
+      // at the outer end. The rotation mirrors x: stave k of the +z tray sits at -x of stave k of
+      // the -z tray, and its chip-local x and y point the other way.
       Assembly tray_volume(Form("tray_layer%d", layer_num));
       DetElement tray_element("tray", detector_id); // template, cloned for each tray placement
       int n_trays       = 0;
@@ -428,23 +428,31 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
         // A stave carries n_modules modules at a pitch of module length + module gap, centred in
         // the stave (see EcalBarrel_Module_gap); modules and chips count from the stave's local -y
-        // end, which is the outer end of the tray at -y.
+        // end, which is the outer end of the -z tray.
         if (n_trays > 0) {
           printout(ERROR, "BarrelCalorimeterImaging",
                    "layer %d: only one enabled <stave> element per layer is supported", layer_num);
           throw std::runtime_error("Logics error in building staves.");
         }
-        n_trays                      = getAttrOrDefault<int>(x_stave, _Unicode(trays), 1);
+        n_trays                      = getAttrOrDefault<int>(x_stave, _Unicode(trays), 2);
         tray_dim_y                   = stave_dim_y;
         xml_comp_t x_modules         = x_stave.child(_Unicode(modules));
         const int n_modules          = x_modules.number();
         const double module_gap      = x_modules.gap();
         const std::string module_str = x_stave.moduleStr();
-        if (!modules.count(module_str) || n_trays < 1 || n_modules < 1) {
-          printout(ERROR, "BarrelCalorimeterImaging",
-                   "layer %d: unknown module %s, or %d trays with %d modules", layer_num,
-                   module_str.c_str(), n_trays, n_modules);
+        if (!modules.count(module_str) || n_modules < 1) {
+          printout(ERROR, "BarrelCalorimeterImaging", "layer %d: unknown module %s, or %d modules",
+                   layer_num, module_str.c_str(), n_modules);
           throw std::runtime_error("Logics error in building staves.");
+        }
+        // Exactly two trays: the readout tray field is one bit and the modules per stave are set
+        // for a stave of half the layer length.
+        if (n_trays != 2) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: %d trays, but exactly 2 are supported (the -z and the +z tray: the "
+                   "readout tray field and the modules per stave are defined for two)",
+                   layer_num, n_trays);
+          throw std::runtime_error("Tray count must be 2.");
         }
         const ModuleInfo& mod    = modules[module_str];
         const double module_span = n_modules * mod.length + (n_modules - 1) * module_gap;

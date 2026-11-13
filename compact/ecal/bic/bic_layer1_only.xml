@@ -83,10 +83,12 @@
     <constant name="EcalBarrel_StaveWall_gap"         value="0.5*mm"/>
     <constant name="EcalBarrel_StavesN_layer1"        value="6"/>
     <comment>
-      Silicon along the calorimeter: each imaging layer holds Trays_num identical trays end to end
-      along z, meeting at the centre of the calorimeter: the -z tray and the +z tray, which is the
-      same tray rotated by 180 degrees about the layer normal (so its x is mirrored). A tray holds
-      the StavesN_layerN staves of its z side and is Tray_length long; a stave runs the tray length.
+      Silicon along the calorimeter: each imaging layer holds two trays end to end along z,
+      meeting at the centre of the calorimeter: the -z tray and the +z tray, which is the same
+      tray rotated by 180 degrees about the layer normal (so its x is mirrored). Trays_num must
+      be 2: the readout tray field is one bit and Stave_ModulesN is set for a half-length stave;
+      the plugin throws otherwise. A tray holds the StavesN_layerN staves of its z side and is
+      Tray_length long; a stave runs the tray length.
       A stave carries Stave_ModulesN modules; a module is a row of Module_ChipsN AstroPix chips
       along z, Chip_gap apart. Module_gap is derived so that the modules fill the stave at a
       uniform pitch: half a module gap at each end of a stave, hence one module gap at the junction
