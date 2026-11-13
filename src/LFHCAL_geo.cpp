@@ -37,13 +37,14 @@ struct moduleParamsStrct {
       , mod_pcbThick(0.)
       , mod_pcbWidth(0.)
       , mod_pcbOffset(0.)
+  	  , mod_FEEThick(0.)
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
                     double FWThick, double BWThick, double width, double height, int arrX, int arrY, double notchDepth,
                     double notchHeight, double foilThick, double pcbLegth, double pcbThick,
-                    double pcbWidth, double pcbOffset, std::string visStr, std::string regStr,
+                    double pcbWidth, double pcbOffset, double FEEThick, std::string visStr, std::string regStr,
                     std::string limStr) {
     mod_BIwidth     = BIwidth;
     mod_BIheight    = BIheight;
@@ -63,6 +64,7 @@ struct moduleParamsStrct {
     mod_pcbThick    = pcbThick;
     mod_pcbWidth    = pcbWidth;
     mod_pcbOffset   = pcbOffset;
+    mod_FEEThick   = FEEThick;
     mod_visStr      = visStr;
     mod_regStr      = regStr;
     mod_limStr      = limStr;
@@ -85,6 +87,7 @@ struct moduleParamsStrct {
   double mod_pcbThick    = 0.;
   double mod_pcbWidth    = 0.;
   double mod_pcbOffset   = 0.;
+  double mod_FEEThick   = 0.;
   std::string mod_visStr = "";
   std::string mod_regStr = "";
   std::string mod_limStr = "";
@@ -1323,7 +1326,7 @@ Volume createTwoMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = length / 2 - 10.0 + mod_params.mod_MPThick + mod_params.mod_FWThick -
+  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick + mod_params.mod_FWThick -
                    mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
@@ -1589,7 +1592,7 @@ Volume createOneMModule(Detector& desc, moduleParamsStrct mod_params,
 
   int layer_num = 0;
 
-  double slice_z = length / 2 - 10.0 + mod_params.mod_MPThick + mod_params.mod_FWThick -
+  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick + mod_params.mod_FWThick -
                    mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
@@ -1646,17 +1649,7 @@ Volume createOneMModule(Detector& desc, moduleParamsStrct mod_params,
       // scintillator
       //*************************************************
     } else {
-      Assembly modScintAssembly;
-      	  if(mod_params.mod_arrX == 2 && mod_params.mod_arrY == 2)
-      		  modScintAssembly = createScintillatorPlateFourM(
-          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
-          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
-          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
-          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
-          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
-          renderComp);
-      	  if(mod_params.mod_arrX == 1 && mod_params.mod_arrY == 1)
-      		  modScintAssembly = createScintillatorPlateOneM(
+      Assembly modScintAssembly = createScintillatorPlateOneM(
           desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
           layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
           mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
@@ -1798,7 +1791,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.),
-      getAttrOrDefault(eightMmod_dim, _Unicode(pcbOffset), 0.), eightM_xml.visStr(),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbOffset), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(FEEThick), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
 
   // 4M module specific loading
@@ -1822,7 +1816,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbThick), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.),
-      getAttrOrDefault(fourMmod_dim, _Unicode(pcbOffset), 0.), fourM_xml.visStr(),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbOffset), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(FEEThick), 0.), fourM_xml.visStr(),
       fourM_xml.regionStr(), fourM_xml.limitsStr());
 
   std::vector<sliceParamsStrct> slice_Params;
