@@ -357,7 +357,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       layer_volume.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 
       // Loop over the staves for this layer, if the tray is enabled
-      int stave_index = 0; // readout index of the next stave
+      // The staves of a layer sit in a tray (an assembly, so it adds no material and cannot
+      // overlap the frame). The layer holds n_trays copies of the same tray end to end along the
+      // layer length (local y): tray 0 at -y and, for two, tray 1 at +y rotated by 180 degrees
+      // about the layer normal, so on both sides module 0 and chip 0 are at the outer end. The
+      // rotation mirrors x: stave k of the +y tray sits at -x of stave k of the -y tray, and its
+      // chip-local x and y point the other way.
+      Assembly tray_volume(Form("tray_layer%d", layer_num));
+      DetElement tray_element("tray", detector_id); // template, cloned for each tray placement
+      int n_trays       = 0;
+      double tray_dim_y = 0.;
       for (xml_coll_t i_stave(x_layer, _U(stave)); i_stave; ++i_stave) {
         xml_comp_t x_stave = i_stave;
         // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
@@ -420,23 +429,24 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           }
         }
 
-        // Each stave position holds n_sides identical staves (each of the given stave length) end to
-        // end along the layer length (local y): staveN at -y and staveP at +y for two. Side s of
-        // stave position j (both from 0, s = 0 at -y) is readout stave index n_sides * j + s. A
-        // stave carries n_modules modules at a pitch of module length + module gap, centred in the
-        // stave (see EcalBarrel_Module_gap). Modules and chips count from the stave's local -y end;
-        // staveP is rotated by 180 degrees about the layer normal, so on both sides module 0 and
-        // chip 0 are at the outer end (chip-local x and y point the other way in staveP).
-        const int n_sides            = getAttrOrDefault<int>(x_stave, _Unicode(per_position), 1);
+        // A stave carries n_modules modules at a pitch of module length + module gap, centred in
+        // the stave (see EcalBarrel_Module_gap); modules and chips count from the stave's local -y
+        // end, which is the outer end of the tray at -y.
+        if (n_trays > 0) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: only one enabled <stave> element per layer is supported", layer_num);
+          throw std::runtime_error("Logics error in building staves.");
+        }
+        n_trays                      = getAttrOrDefault<int>(x_stave, _Unicode(trays), 1);
+        tray_dim_y                   = stave_dim_y;
         xml_comp_t x_modules         = x_stave.child(_Unicode(modules));
         const int n_modules          = x_modules.number();
         const double module_gap      = x_modules.gap();
         const std::string module_str = x_stave.moduleStr();
-        if (!modules.count(module_str) || n_sides < 1 || n_sides > 2 || n_modules < 1) {
-          printout(
-              ERROR, "BarrelCalorimeterImaging",
-              "layer %d: unknown module %s, or %d staves per position (1 or 2) with %d modules",
-              layer_num, module_str.c_str(), n_sides, n_modules);
+        if (!modules.count(module_str) || n_trays < 1 || n_modules < 1) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: unknown module %s, or %d trays with %d modules", layer_num,
+                   module_str.c_str(), n_trays, n_modules);
           throw std::runtime_error("Logics error in building staves.");
         }
         const ModuleInfo& mod    = modules[module_str];
@@ -453,12 +463,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                    2. * stave_dim_x, 2. * stave_dim_y, stave_thick, end_gap);
           throw std::runtime_error("Modules do not fit in the stave.");
         }
-        check_id_range(layer_num, "stave", stave_index + n_sides * stave_repeat - 1);
+        check_id_range(layer_num, "tray", n_trays - 1);
+        check_id_range(layer_num, "stave", stave_repeat - 1);
         check_id_range(layer_num, "module", n_modules - 1);
         check_id_range(layer_num, "chip", mod.n_chips - 1);
         printout(DEBUG, "BarrelCalorimeterImaging",
-                 "layer %d: %d x %d staves of %d modules, module gap %g, end gap %g", layer_num,
-                 stave_repeat, n_sides, n_modules, module_gap, end_gap);
+                 "layer %d: %d trays of %d staves of %d modules, module gap %g, end gap %g",
+                 layer_num, n_trays, stave_repeat, n_modules, module_gap, end_gap);
 
         // Make one stave (or reuse an identical one): modules with their chips, and the
         // DetElement tree stave > module > chip > sensitive slice
@@ -501,30 +512,34 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         }
         const StaveInfo& stave = stave_types[stave_key];
 
-        // Loop over number of repeats for this stave
+        // Loop over number of repeats for this stave: stave<k> of the tray, readout stave = k
         for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
-          const int position = stave_index / n_sides + stave_j; // stave position in the layer
-          for (int side = 0; side < n_sides; ++side) {
-            // Stave placement: staveN<position> at -y, staveP<position> rotated at +y
-            const int stave_id     = stave_index + n_sides * stave_j + side;
-            const double stave_y   = (2 * side + 1 - n_sides) * stave_dim_y;
-            const std::string name = n_sides == 1 ? Form("stave%d", position)
-                                                  : Form("stave%s%d", side ? "P" : "N", position);
-            Position stave_pos(stave_pos_x, stave_y, stave_pos_z(stave_j));
-            RotationZ stave_rot(stave_y > 0. ? M_PI : 0.);
-            PlacedVolume stave_physvol =
-                layer_volume.placeVolume(stave.volume, Transform3D(stave_rot, stave_pos));
-            stave_physvol->SetName(name.c_str());
-            stave_physvol.addPhysVolID("stave", stave_id);
-            DetElement stave_element = stave.element.clone(name, stave_id);
-            stave_element.setPlacement(stave_physvol);
-            layer_element.add(stave_element);
-          }
+          const std::string name = Form("stave%d", stave_j);
+          Position stave_pos(stave_pos_x, 0., stave_pos_z(stave_j));
+          PlacedVolume stave_physvol = tray_volume.placeVolume(stave.volume, stave_pos);
+          stave_physvol->SetName(name.c_str());
+          stave_physvol.addPhysVolID("stave", stave_j);
+          DetElement stave_element = stave.element.clone(name, stave_j);
+          stave_element.setPlacement(stave_physvol);
+          tray_element.add(stave_element);
 
           // Increment X position of stave
           stave_pos_x += stave_pitch;
         }
-        stave_index += n_sides * stave_repeat;
+      }
+
+      // Place the trays: tray<t> at y = (2t + 1 - n_trays) * tray half-length, rotated at +y
+      for (int tray_t = 0; tray_t < n_trays; ++tray_t) {
+        const std::string name = Form("tray%d", tray_t);
+        const double tray_y    = (2 * tray_t + 1 - n_trays) * tray_dim_y;
+        RotationZ tray_rot(tray_y > 0. ? M_PI : 0.);
+        PlacedVolume tray_physvol =
+            layer_volume.placeVolume(tray_volume, Transform3D(tray_rot, Position(0., tray_y, 0.)));
+        tray_physvol->SetName(name.c_str());
+        tray_physvol.addPhysVolID("tray", tray_t);
+        DetElement tray_t_element = tray_element.clone(name, tray_t);
+        tray_t_element.setPlacement(tray_physvol);
+        layer_element.add(tray_t_element);
       }
 
       // Place frame if defined.
