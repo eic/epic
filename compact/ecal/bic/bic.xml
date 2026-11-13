@@ -58,7 +58,12 @@
 
     <constant name="EcalBarrel_AstroPix_width"        value="2*cm"/>
     <constant name="EcalBarrel_AstroPix_length"       value="2*cm"/>
-    <constant name="EcalBarrel_AstroPix_margin"       value="200*um"/>
+    <comment>
+      Chip_gap: gap between neighbouring AstroPix chips along the stave.
+      Stave_sideMargin: margin between the chip and each long side of the stave.
+    </comment>
+    <constant name="EcalBarrel_Chip_gap"              value="200*um"/>
+    <constant name="EcalBarrel_Stave_sideMargin"      value="200*um"/>
     <constant name="EcalBarrel_AstroPix_thickness"
       value="EcalBarrel_SiliconThickness
       + EcalBarrel_ElectronicsThickness
@@ -66,7 +71,7 @@
       + EcalBarrel_KaptonThickness
       + EcalBarrel_EpoxyThickness"/>
 
-    <constant name="EcalBarrel_Stave_width"           value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
+    <constant name="EcalBarrel_Stave_width"           value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_Stave_sideMargin"/>
     <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Calorimeter_length"/>
     <constant name="EcalBarrel_Stave_thickness"       value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonStaveThickness"/>
     <comment>
@@ -90,7 +95,7 @@
     <constant name="EcalBarrel_StavesN_layer4"        value="7"/>
     <constant name="EcalBarrel_StavesN_layer5"        value="7"/>
     <constant name="EcalBarrel_StavesN_layer6"        value="7"/>
-    <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+    <constant name="EcalBarrel_Stave_ChipsN"          value="floor(EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap))"/>
 
     <constant name="EcalBarrel_FiberRadius"           value="0.5*mm"/>
     <constant name="EcalBarrel_FiberXSpacing"         value="1.34*mm"/>
@@ -188,34 +193,34 @@
       <comment>
         The layer material for ACTS purposes is at the top level, since the entire BIC detector
         is treated as a single layer. The binning should likely be an integer multiple of the
-        number of sectors, and of the numer of modules.
+        number of sectors, and of the number of chips along a stave.
       </comment>
       <layer_material surface="inner"
                       binning="binPhi,binZ"
                       bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
-                      bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+                      bins1="2 * EcalBarrel_Stave_ChipsN"/>
       <layer_material surface="outer"
                       binning="binPhi,binZ"
                       bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
-                      bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+                      bins1="2 * EcalBarrel_Stave_ChipsN"/>
 
       <sectors vis="EcalBarrelSectorVis"/>
 
-      <module name="AstroPix_Module"
-              vis="EcalBarrelModuleVis">
-        <module_component name="AstroPix_Chip"
-                          material="Silicon"
-                          width="EcalBarrel_AstroPix_width"
-                          length="EcalBarrel_AstroPix_length"
-                          thickness="EcalBarrel_AstroPix_thickness"
-                          vis="EcalBarrelModuleVis">
+      <chip name="AstroPix_Chip"
+            vis="EcalBarrelModuleVis">
+        <component name="AstroPix_Sensor"
+                   material="Silicon"
+                   width="EcalBarrel_AstroPix_width"
+                   length="EcalBarrel_AstroPix_length"
+                   thickness="EcalBarrel_AstroPix_thickness"
+                   vis="EcalBarrelModuleVis">
           <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
           <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
           <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
           <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
           <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
-        </module_component>
-      </module>
+        </component>
+      </chip>
 
       <support thickness="EcalBarrel_FrontSupportThickness" material="Aluminum" vis="EcalBarrelSupportVis"/>
 
@@ -230,12 +235,12 @@
                rail_low="EcalBarrel_StaveRail_low"
                rail_high="EcalBarrel_StaveRail_high"
                wall_gap="EcalBarrel_StaveWall_gap"
-               module="AstroPix_Module"
+               chip="AstroPix_Chip"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_1">
           <xy_layout
-            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_Chip_gap"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap"
           />
         </stave>
       </layer>
@@ -251,12 +256,12 @@
                rail_low="EcalBarrel_StaveRail_low"
                rail_high="EcalBarrel_StaveRail_high"
                wall_gap="EcalBarrel_StaveWall_gap"
-               module="AstroPix_Module"
+               chip="AstroPix_Chip"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_2">
           <xy_layout
-            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_Chip_gap"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap"
           />
         </stave>
       </layer>
@@ -272,12 +277,12 @@
                rail_low="EcalBarrel_StaveRail_low"
                rail_high="EcalBarrel_StaveRail_high"
                wall_gap="EcalBarrel_StaveWall_gap"
-               module="AstroPix_Module"
+               chip="AstroPix_Chip"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_3">
           <xy_layout
-            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_Chip_gap"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap"
           />
         </stave>
       </layer>
@@ -293,12 +298,12 @@
                rail_low="EcalBarrel_StaveRail_low"
                rail_high="EcalBarrel_StaveRail_high"
                wall_gap="EcalBarrel_StaveWall_gap"
-               module="AstroPix_Module"
+               chip="AstroPix_Chip"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_4">
           <xy_layout
-            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_Chip_gap"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap"
           />
         </stave>
       </layer>
@@ -314,12 +319,12 @@
                rail_low="EcalBarrel_StaveRail_low"
                rail_high="EcalBarrel_StaveRail_high"
                wall_gap="EcalBarrel_StaveWall_gap"
-               module="AstroPix_Module"
+               chip="AstroPix_Chip"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_5">
           <xy_layout
-            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_Chip_gap"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap"
           />
         </stave>
       </layer>
@@ -336,12 +341,12 @@
                rail_low="EcalBarrel_StaveRail_low"
                rail_high="EcalBarrel_StaveRail_high"
                wall_gap="EcalBarrel_StaveWall_gap"
-               module="AstroPix_Module"
+               chip="AstroPix_Chip"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_6">
           <xy_layout
-            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_Chip_gap"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_Chip_gap"
           />
         </stave>
       </layer>

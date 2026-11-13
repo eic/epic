@@ -123,41 +123,40 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double tan_half_dphi = std::tan(half_dphi);
   double layer_dim_y   = x_dimensions.z() / 2.;
 
-  // Loop over the modules
+  // Build the chips (one AstroPix sensor with its slices)
   using dd4hep::rec::VolPlane;
   std::map<std::string, Volume> volumes;
   std::map<std::string, std::vector<PlacedVolume>> sensitives;
   std::map<std::string, std::vector<VolPlane>> volplane_surfaces;
-  std::map<std::string, std::array<double, 2>> module_thicknesses;
-  for (xml_coll_t i_module(x_detector, _U(module)); i_module; ++i_module) {
-    xml_comp_t x_module     = i_module;
-    std::string module_name = x_module.nameStr();
+  std::map<std::string, std::array<double, 2>> chip_thicknesses;
+  for (xml_coll_t i_chip(x_detector, _Unicode(chip)); i_chip; ++i_chip) {
+    xml_comp_t x_chip     = i_chip;
+    std::string chip_name = x_chip.nameStr();
 
-    if (volumes.find(module_name) != volumes.end()) {
-      printout(ERROR, "BarrelCalorimeterImaging", "Module with name %s already exists",
-               module_name.c_str());
-      throw std::runtime_error("Logics error in building modules.");
+    if (volumes.find(chip_name) != volumes.end()) {
+      printout(ERROR, "BarrelCalorimeterImaging", "Chip with name %s already exists",
+               chip_name.c_str());
+      throw std::runtime_error("Logics error in building chips.");
     }
 
-    // Compute module total thickness from components
+    // Compute chip total thickness from components
     double total_thickness = 0;
-    xml_coll_t ci(x_module, _U(module_component));
+    xml_coll_t ci(x_chip, _U(component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
       total_thickness += xml_comp_t(ci).thickness();
     }
 
-    // Create the module assembly volume
-    Assembly module_volume(module_name);
-    volumes[module_name] = module_volume;
-    module_volume.setVisAttributes(desc.visAttributes(x_module.visStr()));
+    // Create the chip assembly volume
+    Assembly chip_volume(chip_name);
+    volumes[chip_name] = chip_volume;
+    chip_volume.setVisAttributes(desc.visAttributes(x_chip.visStr()));
 
     // Add components
     int sensor_number       = 1;
     int ncomponents         = 0;
     double thickness_so_far = 0.0;
     double thickness_sum    = -total_thickness / 2.0;
-    for (xml_coll_t i_component(x_module, _U(module_component)); i_component;
-         ++i_component, ++ncomponents) {
+    for (xml_coll_t i_component(x_chip, _U(component)); i_component; ++i_component, ++ncomponents) {
       xml_comp_t x_component           = i_component;
       xml_comp_t x_component_pos       = x_component.position(false);
       xml_comp_t x_component_rot       = x_component.rotation(false);
@@ -191,7 +190,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         if (x_slice.isSensitive()) {
           slice_physvol.addPhysVolID("slice", slice_num);
           slice_volume.setSensitiveDetector(sens);
-          sensitives[module_name].push_back(slice_physvol);
+          sensitives[chip_name].push_back(slice_physvol);
         }
 
         // Increment Z position of slice
@@ -207,28 +206,28 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                                x_component_pos.z(0) + zoff);
         RotationZYX component_rot(x_component_rot.z(0), x_component_rot.y(0), x_component_rot.x(0));
         component_physvol =
-            module_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
+            chip_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
       } else if (x_component_rot) {
         Position component_pos(0, 0, zoff);
         RotationZYX component_rot(x_component_rot.z(0), x_component_rot.y(0), x_component_rot.x(0));
         component_physvol =
-            module_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
+            chip_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
       } else if (x_component_pos) {
         Position component_pos(x_component_pos.x(0), x_component_pos.y(0),
                                x_component_pos.z(0) + zoff);
-        component_physvol = module_volume.placeVolume(component_volume, component_pos);
+        component_physvol = chip_volume.placeVolume(component_volume, component_pos);
       } else {
         Position component_pos(0, 0, zoff);
-        component_physvol = module_volume.placeVolume(component_volume, component_pos);
+        component_physvol = chip_volume.placeVolume(component_volume, component_pos);
       }
 
       if (x_component.isSensitive()) {
         component_physvol.addPhysVolID("sensor", sensor_number++);
         component_volume.setSensitiveDetector(sens);
-        sensitives[module_name].push_back(component_physvol);
-        module_thicknesses[module_name] = {thickness_so_far + x_component.thickness() / 2.0,
-                                           total_thickness - thickness_so_far -
-                                               x_component.thickness() / 2.0};
+        sensitives[chip_name].push_back(component_physvol);
+        chip_thicknesses[chip_name] = {thickness_so_far + x_component.thickness() / 2.0,
+                                       total_thickness - thickness_so_far -
+                                           x_component.thickness() / 2.0};
       }
 
       thickness_sum += x_component.thickness();
@@ -325,9 +324,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         // Arrange staves symmetrically around center of layer. The wall inner face is slanted, so
         // the closest approach is the outer bottom corner of a low stave: place the outermost staves
         // such that the perpendicular distance from that corner to the inner face is wall_gap
-        const double wall_x_low   = layer_dim_x +
-                                    (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
-                                    frame_side_dx; // |x| of the inner face at the low stave bottom
+        const double wall_x_low = layer_dim_x +
+                                  (z_plate + rail_low + layer_thickness / 2.) * tan_half_dphi -
+                                  frame_side_dx; // |x| of the inner face at the low stave bottom
         const double layer_wall_x = wall_x_low - wall_gap / std::cos(half_dphi);
         double stave_pos_x        = -layer_wall_x + stave_dim_x;
         double stave_pitch        = 0.;
@@ -373,9 +372,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
         // Place in xy_layout
         if (x_stave.hasChild(_Unicode(xy_layout))) {
-          auto module_str         = x_stave.moduleStr();
-          auto& module_volume     = volumes[module_str];
-          auto& module_sensitives = sensitives[module_str];
+          auto chip_str         = x_stave.attr<std::string>(_Unicode(chip));
+          auto& chip_volume     = volumes[chip_str];
+          auto& chip_sensitives = sensitives[chip_str];
 
           // Get layout grid pitch
           xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
@@ -385,36 +384,36 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           // Default to filling
           auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
           auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules",
+          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d chips",
                    stave_name.c_str(), nx, ny);
 
           // Default to centered
           auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
           auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(y0), -(ny - 1) * dy / 2.);
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
+          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s chips starting at x=%f, y=%f",
                    stave_name.c_str(), x0, y0);
 
-          // Place modules
-          int i_module = 0;
+          // Place chips
+          int i_chip = 0;
           for (auto i_x = 0; i_x < nx; ++i_x) {
             for (auto i_y = 0; i_y < ny; ++i_y) {
 
-              // Create module
-              std::string module_name = _toString(i_module, "module%d");
-              DetElement module_element(stave_element, module_name, i_module);
+              // Create chip
+              std::string chip_name = _toString(i_chip, "module%d");
+              DetElement chip_element(stave_element, chip_name, i_chip);
 
-              // Place module
+              // Place chip
               auto x = x0 + i_x * dx;
               auto y = y0 + i_y * dy;
-              Position module_pos(x, y, 0);
-              PlacedVolume module_physvol = stave_volume.placeVolume(module_volume, module_pos);
-              module_physvol.addPhysVolID("module", i_module);
-              module_element.setPlacement(module_physvol);
+              Position chip_pos(x, y, 0);
+              PlacedVolume chip_physvol = stave_volume.placeVolume(chip_volume, chip_pos);
+              chip_physvol.addPhysVolID("module", i_chip);
+              chip_element.setPlacement(chip_physvol);
 
               // Add sensitive volumes
-              for (auto& sensitive_physvol : module_sensitives) {
-                DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                             i_module);
+              for (auto& sensitive_physvol : chip_sensitives) {
+                DetElement sensitive_element(chip_element, sensitive_physvol.volume().name(),
+                                             i_chip);
                 sensitive_element.setPlacement(sensitive_physvol);
 
                 auto& sensitive_element_params =
@@ -423,10 +422,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                 sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
               }
 
-              i_module++;
+              i_chip++;
             }
           }
-          slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
+          slice_pos_z += chip_thicknesses[chip_str][0] + chip_thicknesses[chip_str][1];
         }
 
         // Loop over the slices for this stave
