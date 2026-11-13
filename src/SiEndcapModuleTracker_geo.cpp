@@ -1251,7 +1251,8 @@ int place_corrugated_frame(Detector& description, Volume& layer_vol, const DiskB
       // spacing in the A region, but no flat widths. Assumption (Step 12, not
       // stated by the provider): every web keeps the 45 deg angle and is
       // centered halfway between adjacent row centers, so the flat on row i
-      // reaches (spacing - web y span)/2 toward each neighbour. On the regular
+      // reaches (spacing - web y span)/2 toward each neighbour. The flats thus
+      // absorb the irregular row spacing; web width and angle never change. On the regular
       // 33/36 mm lattice this reproduces the 10.65/12.15 mm sharp-corner widths
       // and the 17.25 mm A/B transition of the 20261001 reconstruction.
       for (size_t index = 0; index < flats.size(); ++index) {
@@ -2020,14 +2021,17 @@ ModuleRow module_row_in_layer_coordinates(Detector& description, const ModuleRow
 // later reuse this prototype volume rather than rebuilding the stack for every CSV row.
 ModulePrototype build_module_prototype(Detector& description, SensitiveDetector& sens,
                                        const ModuleTemplate& module_template,
-                                       bool upright_electronics_y) {
+                                       bool reverse_electronics_y) {
   ModulePrototype prototype;
   const double x_size = module_template.x_size;
   const double y_size = module_template.y_size;
-  // The placement rotation reverses local y for tiling rows at global y <= 0.
-  // Compensate only the asymmetric bridge-FPC/AncASIC y positions. Keep silicon
-  // tile positions and IDs in the source chirality convention.
-  const double electronics_y_sign = upright_electronics_y ? -1.0 : 1.0;
+  // The base layout puts the bridge FPCs toward local -y (FPC tail below the
+  // RSU, AncASIC near the RSU top edge). Tiling placements map local +y to
+  // sign(y_origin), i.e. away from the disk's y = 0 line, and the tiling convention
+  // (module_cad_export.py, Step 13) has every bridge FPC pointing away from y = 0.
+  // Tiling prototypes therefore reverse only the bridge-FPC/AncASIC y positions;
+  // silicon tile positions and IDs are unchanged.
+  const double electronics_y_sign = reverse_electronics_y ? -1.0 : 1.0;
   // Opposite-facing modules may have overlapping rectangular bounding boxes
   // even when none of their material components intersect. Use an assembly so
   // Geant4 navigates and checks the actual silicon/carbon/adhesive/electronics
@@ -2769,18 +2773,20 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         continue;
       }
 
-      const bool upright_electronics_y = row.tiling_coordinates && row.y_origin <= 0.0;
+      // Step 13: every tiling module (both halves) gets FPCs toward local +y = away
+      // from y = 0. Step 8j had reversed them for y <= 0 rows only.
+      const bool reverse_electronics_y = row.tiling_coordinates;
       string cache_key =
           row.handedness.empty() ? row.module_name : row.module_name + "_" + row.handedness;
-      if (upright_electronics_y) {
-        cache_key += "_upright_electronics_y";
+      if (reverse_electronics_y) {
+        cache_key += "_reverse_electronics_y";
       }
       auto cache_it = module_cache.find(cache_key);
       if (cache_it == module_cache.end()) {
         cache_it =
             module_cache
                 .emplace(cache_key, build_module_prototype(description, sens, module_template,
-                                                           upright_electronics_y))
+                                                           reverse_electronics_y))
                 .first;
       }
       ModulePrototype& prototype = cache_it->second;
