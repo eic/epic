@@ -23,7 +23,8 @@
     <constant name="HcalEndcapN_KaptonThickness"        value="0.08* cm"/>
     <constant name="HcalEndcapN_AirOffset"              value="0.05* cm"/>
     <constant name="HcalEndcapN_ElectronicsThickness"   value="10.0* cm"/>
-    <constant name="HcalEndcapN_offset"   value="23.94* cm"/>
+    <constant name="HcalEndcapN_offset"   value="0.11* cm"/>
+     <!--<constant name="HcalEndcapN_offset"   value="23.94* cm"/>-->
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
     </documentation>
