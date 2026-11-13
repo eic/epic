@@ -9,14 +9,17 @@
 
     Figure 1 (<prefix>.png): the full stave position plus four equal-scale zooms (outer stave end,
     module-to-module gap, chip-to-chip gap, half-stave junction at the calorimeter centre).
-    Figure 2 (<prefix>_module.png): one module with its 9 chips at true scale.
-    Colour = module index parity (blue even, orange odd); the same colours are used in all panels.
+    Figure 2 (<prefix>_module.png): module 0 of each half-stave with its 9 chips at true scale.
+    Module and chip labels are the readout ids (physVolIDs) of the placements; positions go through the
+    full node matrices (the +z half-stave is rotated by 180 degrees), ids count from the outer stave end.
+    Colour = module id parity (blue even, orange odd); the same colours are used in all panels.
 
     use case (writes <prefix>.png and <prefix>_module.png):
     python scripts/subdetector_tests/bic/draw_bic_stave_modules.py -c epic_craterlake_bic_6layers.xml \
         -o pr-material/figures/bic_stave_modules --sector sector26 --layer 2 --position 0
 '''
 import argparse
+import array
 import os
 
 import ROOT
@@ -30,9 +33,9 @@ ROOT.gROOT.SetBatch(True)
 
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 LAYER = 'layer'
-HALF = 'stave_half'        # half-stave envelope (air), copy number = 2 * stave position + half
-MODULE = 'AstroPix_Module'  # module envelope (air), numbered towards +z
-CHIP = 'AstroPix_Chip'     # chip assembly (numbered towards +z); its daughter is the Si box (component0)
+HALF = 'stave_half'        # half-stave envelope (air), readout id 'stave'; the +z half is rotated by 180 deg
+MODULE = 'AstroPix_Module'  # module envelope (air), readout id 'module', counted from the outer stave end
+CHIP = 'AstroPix_Chip'     # chip assembly, readout id 'chip', counted from the outer end; daughter is the Si box
 
 COLORS = ('#9ecae1', '#fdd0a2')  # even, odd module index
 EDGE, MARK = '#333333', '#b2182b'
@@ -50,9 +53,30 @@ def find_volume(vol, name, depth=0):
     return None
 
 
+def volid(node, field):
+    '''readout id (physVolID) of a placement, e.g. module or chip'''
+    return {k.decode() if isinstance(k, bytes) else k: v for k, v in dd4hep.PlacedVolume(node).volIDs()}[field]
+
+
 def ty(node):
-    '''y translation of a node in mm'''
+    '''y translation of a node in mm (only used to find the stave positions and order the half-staves)'''
     return 10 * node.GetMatrix().GetTranslation()[1]
+
+
+def footprint(chain, shape):
+    '''layer-local (y centre, y half-length, x half-width) in mm of a box shape placed through the node chain
+    (outermost node first), using the full node matrices (the +z half-stave is rotated by 180 degrees)'''
+    ys, xs = [], []
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            p = array.array('d', [sx * shape.GetDX(), sy * shape.GetDY(), 0.])
+            for n in reversed(chain):
+                q = array.array('d', [0., 0., 0.])
+                n.GetMatrix().LocalToMaster(p, q)
+                p = q
+            xs.append(10 * p[0])
+            ys.append(10 * p[1])
+    return dict(y=(max(ys) + min(ys)) / 2, hy=(max(ys) - min(ys)) / 2, hx=(max(xs) - min(xs)) / 2)
 
 
 def extract(args):
@@ -84,22 +108,25 @@ def extract(args):
     y0 = sum(ty(h) for h in halves) / 2  # stave centre
     out = []
     for h in halves:
-        sh = h.GetVolume().GetShape()
         hv = h.GetVolume()
-        d = dict(copy=h.GetNumber(), y=ty(h) - y0, hy=10 * sh.GetDY(), hx=10 * sh.GetDX(), mods=[])
+        d = dict(id=volid(h, 'stave'), mods=[], **footprint([h], hv.GetShape()))
+        d['y'] -= y0
         for i in range(hv.GetNdaughters()):
             m = hv.GetNode(i)
             if not m.GetName().startswith(MODULE):
                 continue
             mv = m.GetVolume()
-            mod = dict(i=len(d['mods']), y=d['y'] + ty(m), hy=10 * mv.GetShape().GetDY(),
-                       hx=10 * mv.GetShape().GetDX(), chips=[])
+            mod = dict(id=volid(m, 'module'), chips=[], **footprint([h, m], mv.GetShape()))
+            mod['y'] -= y0
             for j in range(mv.GetNdaughters()):
-                c = mv.GetNode(j).GetVolume().GetNode(0)  # Si box inside the chip assembly
-                sh = c.GetVolume().GetShape()
-                mod['chips'].append(dict(i=j, y=mod['y'] + ty(mv.GetNode(j)) + ty(c),
-                                         hy=10 * sh.GetDY(), hx=10 * sh.GetDX()))
+                cn = mv.GetNode(j)
+                c = cn.GetVolume().GetNode(0)  # Si box inside the chip assembly
+                chip = dict(id=volid(cn, 'chip'), **footprint([h, m, cn, c], c.GetVolume().GetShape()))
+                chip['y'] -= y0
+                mod['chips'].append(chip)
+            mod['chips'].sort(key=lambda c: c['y'])
             d['mods'].append(mod)
+        d['mods'].sort(key=lambda m: m['y'])  # ascending y; the ids follow from the geometry
         out.append(d)
     return out
 
@@ -113,10 +140,10 @@ def draw(ax, halves, labels=False, lw=0.6):
         box(ax, h['y'], h['hy'], h['hx'], fill=False, ec=EDGE, ls='--', lw=1.4, zorder=4)
         for m in h['mods']:
             for c in m['chips']:
-                box(ax, c['y'], c['hy'], c['hx'], fc=COLORS[m['i'] % 2], ec=EDGE, lw=lw, zorder=2)
+                box(ax, c['y'], c['hy'], c['hx'], fc=COLORS[m['id'] % 2], ec=EDGE, lw=lw, zorder=2)
             box(ax, m['y'], m['hy'], m['hx'], fill=False, ec=EDGE, lw=lw * 2, zorder=3)
             if labels:
-                ax.text(m['y'], 0, str(m['i']), ha='center', va='center', fontsize=8, zorder=5)
+                ax.text(m['y'], 0, str(m['id']), ha='center', va='center', fontsize=8, zorder=5)
 
 
 def dim(ax, y1, y2, x, text, tx=None, ha='center', off=0.5):
@@ -150,6 +177,10 @@ def table(halves):
             ('stave length (outer half-stave edges) [mm]', '%.3f' % (h1['y'] + h1['hy'] - (h0['y'] - h0['hy'])))]
     for k, v in rows:
         print('%-46s %s' % (k, v))
+    print('%-46s %s' % ('module ids from -z to +z', ' '.join(str(m['id']) for h in halves for m in h['mods'])))
+    print('%-46s %s' % ('chip ids in the first module of each half',
+                        ' | '.join('stave %d: ' % h['id'] + ' '.join(str(c['id']) for c in h['mods'][0]['chips'])
+                                   for h in halves)))
 
 
 def fig_stave(halves, args):
@@ -163,9 +194,9 @@ def fig_stave(halves, args):
     top.set_yticks([])
     top.set_xlabel('y along the beam, from the stave centre [mm] (x across the stave is stretched)')
     for h in halves:
-        top.text(h['y'], 12, 'half-stave copy %d (%s z), modules 0-%d towards +z' % (h['copy'], '-' if h['y'] < 0 else '+',
-                                                                       len(h['mods']) - 1),
-                 ha='center', va='center', fontsize=10)
+        ids = [m['id'] for m in (h['mods'] if h['y'] < 0 else h['mods'][::-1])]  # outer end first
+        top.text(h['y'], 12, 'half-stave stave=%d (%sz): modules %d-%d from the outer end' %
+                 (h['id'], '-' if h['y'] < 0 else '+', ids[0], ids[-1]), ha='center', va='center', fontsize=10)
     # zoom targets: (title, y centre, annotations)
     m0 = h0['mods']
     gaps = [(h0['y'] - h0['hy'], 'outer stave end'),
@@ -206,30 +237,37 @@ def fig_stave(halves, args):
     fig.suptitle('BIC %s layer %d, stave position %d: %d chips (%s) - boxes: AstroPix chip Si (component0) footprints, '
                  'solid outlines: module envelopes (air), dashed: half-stave envelopes (air)' %
                  (args.sector, args.layer, args.position, sum(len(m['chips']) for h in halves for m in h['mods']),
-                  'colour = module index parity'), fontsize=10.5, y=0.97)
+                  'colour = module id parity'), fontsize=10.5, y=0.97)
     fig.savefig(args.output + '.png', dpi=150)
 
 
 def fig_module(halves, args):
-    m = halves[0]['mods'][0]
-    fig, ax = plt.subplots(figsize=(14, 3.2))
-    for c in m['chips']:
-        box(ax, c['y'], c['hy'], c['hx'], fc=COLORS[0], ec=EDGE, lw=0.8)
-        ax.text(c['y'], 0, 'chip %d' % c['i'], ha='center', va='center', fontsize=9)
-    box(ax, m['y'], m['hy'], m['hx'], fill=False, ec=EDGE, lw=1.6)
-    c0 = m['chips'][0]
-    ax.annotate('', xy=(c0['y'] - c0['hy'], c0['hx'] + 3), xytext=(c0['y'] + c0['hy'], c0['hx'] + 3),
-                arrowprops=dict(arrowstyle='<->', color=MARK, lw=1.3, shrinkA=0, shrinkB=0))
-    ax.text(c0['y'], c0['hx'] + 3.5, 'chip %.3f mm' % (2 * c0['hy']), color=MARK, ha='center', fontsize=10)
-    ax.set_xlim(m['y'] - m['hy'] - 4, m['y'] + m['hy'] + 4)
-    ax.set_ylim(-c0['hx'] - 3, c0['hx'] + 8)
-    ax.set_aspect('equal')
-    ax.set_xlabel('y from the stave centre [mm]')
-    ax.set_ylabel('x [mm]')
-    ax.set_title('AstroPix module 0 of half-stave copy %d, true scale: %.3f mm long, %d chips, '
-                 '%.3f mm chip-to-chip gap (boxes: chip Si footprints, outline: module envelope)' %
-                 (halves[0]['copy'], 2 * m['hy'], len(m['chips']),
-                  m['chips'][1]['y'] - m['chips'][1]['hy'] - m['chips'][0]['y'] - m['chips'][0]['hy']), fontsize=10)
+    fig, axes = plt.subplots(2, 1, figsize=(14, 5.6))
+    for ax, h in zip(axes, halves):
+        m = next(m for m in h['mods'] if m['id'] == 0)
+        out = -1 if h['y'] < 0 else 1  # direction of the outer stave end along y, from the geometry
+        for c in m['chips']:
+            box(ax, c['y'], c['hy'], c['hx'], fc=COLORS[0], ec=EDGE, lw=0.8)
+            ax.text(c['y'], 0, 'chip %d' % c['id'], ha='center', va='center', fontsize=9)
+        box(ax, m['y'], m['hy'], m['hx'], fill=False, ec=EDGE, lw=1.6)
+        c0 = m['chips'][0]
+        ax.annotate('', xy=(c0['y'] - c0['hy'], c0['hx'] + 3), xytext=(c0['y'] + c0['hy'], c0['hx'] + 3),
+                    arrowprops=dict(arrowstyle='<->', color=MARK, lw=1.3, shrinkA=0, shrinkB=0))
+        ax.text(c0['y'], c0['hx'] + 4.5, 'chip %.3f mm' % (2 * c0['hy']), color=MARK, ha='center', fontsize=10)
+        yb = -c0['hx'] - 3
+        for sgn, txt in ((out, 'outer stave end'), (-out, 'towards junction (y = 0)')):
+            ax.annotate(txt, xy=(m['y'] + sgn * (m['hy'] + 3.5), yb), xytext=(m['y'] + sgn * 12, yb), color=MARK,
+                        ha='right' if sgn < 0 else 'left', va='center', fontsize=10,
+                        arrowprops=dict(arrowstyle='->', color=MARK, lw=1.3, shrinkA=0, shrinkB=0))
+        ax.set_xlim(m['y'] - m['hy'] - 4, m['y'] + m['hy'] + 4)
+        ax.set_ylim(-c0['hx'] - 6, c0['hx'] + 8)
+        ax.set_aspect('equal')
+        ax.set_ylabel('x [mm]')
+        ax.set_title('module %d of half-stave stave=%d (%sz side), true scale: %.3f mm long, %d chips, '
+                     '%.3f mm chip-to-chip gap (boxes: chip Si footprints, outline: module envelope)' %
+                     (m['id'], h['id'], '-' if h['y'] < 0 else '+', 2 * m['hy'], len(m['chips']),
+                      m['chips'][1]['y'] - m['chips'][1]['hy'] - m['chips'][0]['y'] - m['chips'][0]['hy']), fontsize=10)
+    axes[-1].set_xlabel('y from the stave centre [mm]')
     fig.tight_layout()
     fig.savefig(args.output + '_module.png', dpi=150)
 

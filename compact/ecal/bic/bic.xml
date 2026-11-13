@@ -469,7 +469,9 @@
       <comment>
         stave: half-stave, Stave_HalvesN * (stave position) + (half), both counted from 0 across
         the layer and from negative z; module: within the half-stave, chip: within the module,
-        both counted from 0 towards positive z; x, y: cell within the chip.
+        both counted from 0 at the outer end of the stave towards the half-stave junction (the
+        positive-z half is rotated by 180 degrees about the layer normal); x, y: cell within the
+        chip, in the chip-local frame.
       </comment>
       <id>system:8,sector:6,layer:4,stave:4,module:4,chip:4,slice:2,x:32:-16,y:-16</id>
     </readout>

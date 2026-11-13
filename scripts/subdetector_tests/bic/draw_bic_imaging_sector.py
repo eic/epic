@@ -132,7 +132,7 @@ def extract(args):
                     # a stave position consists of several half-stave pieces along y with the same
                     # x-z footprint: draw each position once, index = order of first appearance
                     box = xf([dn.GetMatrix()], box_pts(sh), zoff)
-                    key = tuple(round(c, 3) for p in box for c in p)
+                    key = tuple(sorted((round(x, 3), round(z, 3)) for x, z in box))  # any corner order
                     if key in seen:
                         continue
                     seen.add(key)

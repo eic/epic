@@ -421,10 +421,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         }
 
         // Each stave position holds n_halves identical half-length staves, back to back along the
-        // stave length (local y) and placed by translation only, so the chip-local frames are the
-        // same in all halves. Half h of stave position j (both from 0, h = 0 at -y) is
-        // readout stave index n_halves * j + h. A half-stave carries n_modules modules at a pitch
-        // of module length + module gap, centred in the half-stave (see EcalBarrel_Module_gap).
+        // stave length (local y). Half h of stave position j (both from 0, h = 0 at -y) is readout
+        // stave index n_halves * j + h. A half-stave carries n_modules modules at a pitch of module
+        // length + module gap, centred in the half-stave (see EcalBarrel_Module_gap). Modules and
+        // chips count from the half-stave's local -y end; halves in the +y half of the stave are
+        // rotated by 180 degrees about the layer normal, so in every half module 0 and chip 0 are
+        // on the outer side of the stave (chip-local x and y point the other way there).
         xml_comp_t x_halves          = x_stave.child(_Unicode(half_staves));
         const int n_halves           = x_halves.number();
         const int n_modules          = x_halves.attr<int>(_Unicode(modules));
@@ -501,10 +503,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
           for (int half_h = 0; half_h < n_halves; ++half_h) {
             // Half-stave placement
-            const int stave_id = stave_index + n_halves * stave_j + half_h;
-            Position half_pos(stave_pos_x, -stave_dim_y + (2 * half_h + 1) * half_dim_y,
-                              stave_pos_z(stave_j));
-            PlacedVolume half_physvol = layer_volume.placeVolume(half.volume, half_pos);
+            const int stave_id  = stave_index + n_halves * stave_j + half_h;
+            const double half_y = -stave_dim_y + (2 * half_h + 1) * half_dim_y;
+            Position half_pos(stave_pos_x, half_y, stave_pos_z(stave_j));
+            RotationZ half_rot(half_y > 0. ? M_PI : 0.);
+            PlacedVolume half_physvol =
+                layer_volume.placeVolume(half.volume, Transform3D(half_rot, half_pos));
             half_physvol.addPhysVolID("stave", stave_id);
             DetElement half_element = half.element.clone(Form("stave%d", stave_id), stave_id);
             half_element.setPlacement(half_physvol);
