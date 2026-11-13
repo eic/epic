@@ -28,19 +28,24 @@ struct moduleParamsStrct {
       , mod_BWThick(0.)
       , mod_width(0.)
       , mod_height(0.)
+      , mod_arrX(1.)
+      , mod_arrY(1.)
       , mod_notchDepth(0.)
       , mod_notchHeight(0.)
       , mod_foilThick(0.)
       , mod_pcbLength(0.)
       , mod_pcbThick(0.)
       , mod_pcbWidth(0.)
+      , mod_pcbOffset(0.)
+      , mod_FEEThick(0.)
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
-                    double FWThick, double BWThick, double width, double height, double notchDepth,
-                    double notchHeight, double foilThick, double pcbLegth, double pcbThick,
-                    double pcbWidth, std::string visStr, std::string regStr, std::string limStr) {
+                    double FWThick, double BWThick, double width, double height, int arrX, int arrY,
+                    double notchDepth, double notchHeight, double foilThick, double pcbLegth,
+                    double pcbThick, double pcbWidth, double pcbOffset, double FEEThick,
+                    std::string visStr, std::string regStr, std::string limStr) {
     mod_BIwidth     = BIwidth;
     mod_BIheight    = BIheight;
     mod_SWThick     = SWThick;
@@ -50,12 +55,16 @@ struct moduleParamsStrct {
     mod_BWThick     = BWThick;
     mod_width       = width;
     mod_height      = height;
+    mod_arrX        = arrX;
+    mod_arrY        = arrY;
     mod_notchDepth  = notchDepth;
     mod_notchHeight = notchHeight;
     mod_foilThick   = foilThick;
     mod_pcbLength   = pcbLegth;
     mod_pcbThick    = pcbThick;
     mod_pcbWidth    = pcbWidth;
+    mod_pcbOffset   = pcbOffset;
+    mod_FEEThick    = FEEThick;
     mod_visStr      = visStr;
     mod_regStr      = regStr;
     mod_limStr      = limStr;
@@ -69,12 +78,16 @@ struct moduleParamsStrct {
   double mod_BWThick     = 0.;
   double mod_width       = 0.;
   double mod_height      = 0.;
+  int mod_arrX           = 0;
+  int mod_arrY           = 0;
   double mod_notchDepth  = 0.;
   double mod_notchHeight = 0.;
   double mod_foilThick   = 0.;
   double mod_pcbLength   = 0.;
   double mod_pcbThick    = 0.;
   double mod_pcbWidth    = 0.;
+  double mod_pcbOffset   = 0.;
+  double mod_FEEThick    = 0.;
   std::string mod_visStr = "";
   std::string mod_regStr = "";
   std::string mod_limStr = "";
@@ -441,6 +454,204 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
   // loop over all towers within same module
 
   for (int i = 0; i < 4; i++) {
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    Volume modScintTowerAss =
+        createScintillatorTower(desc, basename + _toString(i, "_tower_%d"), w_tow, h_tow, t_slice,
+                                slice_mat, region, limit, vis, sens, renderComp);
+    pvm = modScintAssembly.placeVolume(
+        modScintTowerAss,
+        Transform3D(RotationZYX(rotZ[i], rotY[i], rotX[i]), Position(posX[i], posY[i], posZ[i])));
+    towerx = i % 2;
+    towery = 0;
+    if (i > 1)
+      towery = 1;
+    pvm.addPhysVolID("towerx", towerx)
+        .addPhysVolID("towery", towery)
+        .addPhysVolID("layerz", layerID)
+        .addPhysVolID("passive", 0)
+        .addPhysVolID("rlayerz", roLayer);
+  }
+  return modScintAssembly;
+}
+
+//************************************************************************************************************
+//************************** create scintillator plate with separations for 2M *******************************
+//************************************************************************************************************
+Assembly createScintillatorPlateTwoM(Detector& desc, std::string basename,
+                                     //                                         int modID,
+                                     int layerID, double h_mod, double w_mod, double t_mod_tp,
+                                     double t_mod_sp, double t_slice, double w_notch, double t_foil,
+                                     Material slice_mat, int roLayer, std::string region,
+                                     std::string limit, std::string vis, SensitiveDetector sens,
+                                     bool renderComp) {
+  // Tower placement in 2M module
+  //--------------------------------
+  //|              ||              |
+  //|      0       ||      1       |
+  //|              ||              |
+  //--------------------------------
+  Assembly modScintAssembly(basename);
+
+  double w_plate = w_mod - w_notch - 2 * t_mod_sp - 2 * t_foil;
+  double h_plate = h_mod - 2 * t_mod_tp - 2 * t_foil;
+  double w_tow   = (w_plate - 2 * t_foil) / 2;
+  double h_tow   = (h_plate - 2 * t_foil);
+
+  // placement volumes
+  PlacedVolume pvm;
+
+  // foil separations
+  // Internal foil separator for 2x1 arrangement
+  const std::vector<double> xCoordTi = {-t_foil, t_foil, t_foil, -t_foil};
+
+  const std::vector<double> yCoordTi = {-h_plate / 2., -h_plate / 2., h_plate / 2., h_plate / 2.};
+
+  const std::vector<double> zStepTi      = {-t_slice / 2, t_slice / 2};
+  const std::vector<double> zStepXTi     = {0., 0.};
+  const std::vector<double> zStepYTi     = {0., 0.};
+  const std::vector<double> zStepScaleTi = {1., 1.};
+
+  ExtrudedPolygon foilgrid =
+      ExtrudedPolygon(xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
+  Box foil_t((w_plate + 2 * t_foil) / 2., t_foil / 2., t_slice / 2.);
+  Box foil_s(t_foil / 2., h_plate / 2., t_slice / 2.);
+  Volume foilgrid_vol(basename + "_ESRFoil_" + _toString(layerID, "_layer_%d"), foilgrid,
+                      slice_mat);
+  Volume foil_t_vol(basename + "_ESRFoilT_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_b_vol(basename + "_ESRFoilB_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_l_vol(basename + "_ESRFoilL_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  Volume foil_r_vol(basename + "_ESRFoilR_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  // Setting slice attributes
+  if (renderComp) {
+    foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_t_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_b_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_l_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_r_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+  } else {
+    foilgrid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_t_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_b_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_l_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_r_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+  }
+  pvm = modScintAssembly.placeVolume(foilgrid_vol, Position(0, 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow / 2.0, 0));
+  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow / 2.0), 0));
+  pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(1.5 * t_foil + w_tow), 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_r_vol, Position((1.5 * t_foil + w_tow), 0, 0));
+
+  // 2M module placement of scintillator for tower
+  double rotZ[2] = {0, 0};
+  double rotY[2] = {0, 0};
+  double rotX[2] = {0, 0};
+  double posX[2] = {(w_tow * 0.5 + t_foil), -(w_tow * 0.5 + t_foil)};
+  double posY[2] = {0, 0};
+  double posZ[2] = {0, 0};
+  int towerx     = 0;
+  int towery     = 0;
+  // loop over all towers within same module
+
+  for (int i = 0; i < 2; i++) {
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    Volume modScintTowerAss =
+        createScintillatorTower(desc, basename + _toString(i, "_tower_%d"), w_tow, h_tow, t_slice,
+                                slice_mat, region, limit, vis, sens, renderComp);
+    pvm = modScintAssembly.placeVolume(
+        modScintTowerAss,
+        Transform3D(RotationZYX(rotZ[i], rotY[i], rotX[i]), Position(posX[i], posY[i], posZ[i])));
+    towerx = i % 2;
+    towery = 0;
+    if (i > 1)
+      towery = 1;
+    pvm.addPhysVolID("towerx", towerx)
+        .addPhysVolID("towery", towery)
+        .addPhysVolID("layerz", layerID)
+        .addPhysVolID("passive", 0)
+        .addPhysVolID("rlayerz", roLayer);
+  }
+  return modScintAssembly;
+}
+
+//************************************************************************************************************
+//************************** create scintillator plate with separations for 1M *******************************
+//************************************************************************************************************
+Assembly createScintillatorPlateOneM(Detector& desc, std::string basename,
+                                     //                                         int modID,
+                                     int layerID, double h_mod, double w_mod, double t_mod_tp,
+                                     double t_mod_sp, double t_slice, double w_notch, double t_foil,
+                                     Material slice_mat, int roLayer, std::string region,
+                                     std::string limit, std::string vis, SensitiveDetector sens,
+                                     bool renderComp) {
+  // Tower placement in 1M module
+  //-----------------
+  //|              ||
+  //|      0       ||
+  //|              ||
+  //-----------------
+  Assembly modScintAssembly(basename);
+
+  double w_plate = w_mod - w_notch - 2 * t_mod_sp - 2 * t_foil;
+  double h_plate = h_mod - 2 * t_mod_tp - 2 * t_foil;
+  double w_tow   = (w_plate - 2 * t_foil);
+  double h_tow   = (h_plate - 2 * t_foil);
+
+  // placement volumes
+  PlacedVolume pvm;
+
+  // foil separations
+  // Internal foil separator for 2x1 arrangement
+  const std::vector<double> xCoordTi = {-t_foil, t_foil, t_foil, -t_foil};
+
+  const std::vector<double> yCoordTi = {-h_plate / 2., -h_plate / 2., h_plate / 2., h_plate / 2.};
+
+  const std::vector<double> zStepTi      = {-t_slice / 2, t_slice / 2};
+  const std::vector<double> zStepXTi     = {0., 0.};
+  const std::vector<double> zStepYTi     = {0., 0.};
+  const std::vector<double> zStepScaleTi = {1., 1.};
+
+  //ExtrudedPolygon foilgrid =
+  //    ExtrudedPolygon(xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
+  Box foil_t((w_plate + 2 * t_foil) / 2., t_foil / 2., t_slice / 2.);
+  Box foil_s(t_foil / 2., h_plate / 2., t_slice / 2.);
+  //Volume foilgrid_vol(basename + "_ESRFoil_" + _toString(layerID, "_layer_%d"), foilgrid,
+  //                    slice_mat);
+  Volume foil_t_vol(basename + "_ESRFoilT_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_b_vol(basename + "_ESRFoilB_" + _toString(layerID, "_layer_%d"), foil_t, slice_mat);
+  Volume foil_l_vol(basename + "_ESRFoilL_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  Volume foil_r_vol(basename + "_ESRFoilR_" + _toString(layerID, "_layer_%d"), foil_s, slice_mat);
+  // Setting slice attributes
+  if (renderComp) {
+    //foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_t_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_b_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_l_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foil_r_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+  } else {
+    //foilgrid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_t_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_b_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_l_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+    foil_r_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
+  }
+  //pvm = modScintAssembly.placeVolume(foilgrid_vol, Position(0, 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_t_vol, Position(0, 0.5 * t_foil + h_tow / 2.0, 0));
+  pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(0.5 * t_foil + h_tow / 2.0), 0));
+  pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(0.5 * t_foil + w_tow / 2.0), 0, 0));
+  pvm = modScintAssembly.placeVolume(foil_r_vol, Position((0.5 * t_foil + w_tow / 2.0), 0, 0));
+
+  // 1M module placement of scintillator for tower
+  double rotZ[1] = {0};
+  double rotY[1] = {0};
+  double rotX[1] = {0};
+  double posX[1] = {0};
+  double posY[1] = {0};
+  double posZ[1] = {0};
+  int towerx     = 0;
+  int towery     = 0;
+  // loop over all towers within same module
+
+  for (int i = 0; i < 1; i++) {
     // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
     Volume modScintTowerAss =
         createScintillatorTower(desc, basename + _toString(i, "_tower_%d"), w_tow, h_tow, t_slice,
@@ -973,6 +1184,533 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   return vol_mod;
 }
 
+//************************************************************************************************************
+//************************** create 2M module assembly  ******************************************************
+//************************************************************************************************************
+Volume createTwoMModule(Detector& desc, moduleParamsStrct mod_params,
+                        std::vector<sliceParamsStrct> sl_params,
+                        //                               int modID,
+                        double length, SensitiveDetector sens, bool renderComp, bool allSen) {
+  std::string baseName = "LFHCAL_2M";
+
+  // assembly definition
+  Box modBox(mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
+  Volume vol_mod(baseName, modBox, desc.material("Air"));
+  vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
+
+  // placement operator
+  PlacedVolume pvm;
+  // ********************************************************************************
+  // Casing definition
+  // ********************************************************************************
+  // geom definition 2M module casing
+  Box MountingPlate(mod_params.mod_width / 2., mod_params.mod_height / 2.,
+                    mod_params.mod_MPThick / 2.);
+  Box modFrontPlate(mod_params.mod_width / 2., mod_params.mod_height / 2.,
+                    mod_params.mod_FWThick / 2.);
+  Box modSidePlateL(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modSidePlateR(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modTopPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modBottomPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modBackCutOut(mod_params.mod_BIwidth / 2., mod_params.mod_BIheight / 2.,
+                    mod_params.mod_BWThick / 2.);
+  Box modBackPlateFull(mod_params.mod_width / 2., mod_params.mod_height / 2.,
+                       mod_params.mod_BWThick / 2.);
+  SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
+
+  // volume definition 2M module casing
+  Material plates_mat;
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+    if (sl_params[i].slice_partID == 1)
+      plates_mat = desc.material(sl_params[i].slice_matStr);
+  }
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, plates_mat);
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, plates_mat);
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, plates_mat);
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, plates_mat);
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, plates_mat);
+
+  if (allSen) {
+    sens.setType("calorimeter");
+    vol_mountingPlate.setSensitiveDetector(sens);
+    vol_modFrontPlate.setSensitiveDetector(sens);
+    vol_modBackPlate.setSensitiveDetector(sens);
+    vol_modSidePlateL.setSensitiveDetector(sens);
+    vol_modSidePlateR.setSensitiveDetector(sens);
+    vol_modTopPlate.setSensitiveDetector(sens);
+    vol_modBottomPlate.setSensitiveDetector(sens);
+  }
+
+  if (renderComp) {
+    vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    // mod_params.mod_visStr);
+                                    "LFHCALLayerTungstenVis");
+    vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    // mod_params.mod_visStr);
+                                    "LFHCALLayerSteelVis");
+    vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                   //  mod_params.mod_visStr);
+                                   "LFHCALLayerSteelVis");
+    vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    mod_params.mod_visStr);
+    vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    mod_params.mod_visStr);
+    vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                  // mod_params.mod_visStr);
+                                  "LFHCALLayerSteelVis");
+    vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                     //  mod_params.mod_visStr);
+                                     "LFHCALLayerSteelVis");
+  } else {
+    vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                   "InvisibleNoDaughters");
+    vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                  "InvisibleNoDaughters");
+    vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                     "InvisibleNoDaughters");
+  }
+
+  // ********************************************************************************
+  // long PCB
+  // ********************************************************************************
+  Box modPCB(mod_params.mod_pcbThick / 2., mod_params.mod_pcbWidth / 2.,
+             (mod_params.mod_pcbLength) / 2.);
+  Volume vol_modPCB(baseName + "_PCB", modPCB, desc.material("Fr4"));
+  if (renderComp) {
+    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "LFHCALModPCB");
+  } else {
+    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                             "InvisibleNoDaughters");
+  }
+
+  int layer_num  = 0;
+  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick -
+                   mod_params.mod_BWThick; // Keeps track of layers' local z locations
+  // Looping through the number of repeated layers & slices in each section
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+    //    slice_z += sl_params[i].slice_offset +
+    //               sl_params[i].slice_thick / 2.; // Going to halfway point in layer
+    slice_z -= sl_params[i].slice_offset +
+               sl_params[i].slice_thick / 2.; // Going to halfway point in layer
+    layer_num = sl_params[i].layer_ID;
+    //*************************************************
+    // absorber plates
+    //*************************************************
+    Material slice_mat = desc.material(sl_params[i].slice_matStr);
+    if (sl_params[i].slice_partID == 1) {
+      Volume modAbsAssembly = createAbsorberPlate(
+          desc, baseName + "_Abs" + _toString(sl_params[i].layer_ID, "_layer_%d"),
+          mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
+          mod_params.mod_notchHeight, slice_mat, sl_params[i].slice_regStr,
+          sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      // Placing slice within layer
+      if (allSen)
+        modAbsAssembly.setSensitiveDetector(sens);
+      pvm = vol_mod.placeVolume(modAbsAssembly,
+                                Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
+      if (allSen)
+        pvm.addPhysVolID("towerx", 0)
+            .addPhysVolID("towery", 0)
+            .addPhysVolID("rlayerz", sl_params[i].slice_readoutLayer)
+            .addPhysVolID("layerz", layer_num)
+            .addPhysVolID("passive", 1);
+      //*************************************************
+      // air & kapton & PCB & ESR
+      //*************************************************
+    } else if (sl_params[i].slice_partID == 2) {
+      Volume modFillAssembly =
+          createFillerPlate(desc,
+                            baseName + "_Fill" + _toString(sl_params[i].layer_ID, "_layer_%d") +
+                                _toString(sl_params[i].slice_ID, "slice_%d"),
+                            mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+                            mod_params.mod_SWThick, sl_params[i].slice_thick,
+                            mod_params.mod_notchDepth, slice_mat, sl_params[i].slice_regStr,
+                            sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      // Placing slice within layer
+      if (allSen)
+        modFillAssembly.setSensitiveDetector(sens);
+      pvm = vol_mod.placeVolume(
+          modFillAssembly, Transform3D(RotationZYX(0, 0, 0),
+                                       Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
+      if (allSen)
+        pvm.addPhysVolID("towerx", 1)
+            .addPhysVolID("towery", 0)
+            .addPhysVolID("rlayerz", sl_params[i].slice_readoutLayer)
+            .addPhysVolID("layerz", layer_num)
+            .addPhysVolID("passive", 1);
+      //*************************************************
+      // scintillator
+      //*************************************************
+    } else {
+      Assembly modScintAssembly = createScintillatorPlateTwoM(
+          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
+          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
+          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
+          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
+          renderComp);
+      // Placing slice within layer
+      pvm = vol_mod.placeVolume(
+          modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
+                                        Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+    }
+    slice_z -= sl_params[i].slice_thick / 2.;
+  }
+
+  // placement 2M module casing
+  pvm = vol_mod.placeVolume(vol_mountingPlate,
+                            Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
+  pvm = vol_mod.placeVolume(
+      vol_modFrontPlate,
+      Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 2)
+        .addPhysVolID("towery", 0)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm =
+      vol_mod.placeVolume(vol_modBackPlate, Position(0, 0, (length - mod_params.mod_BWThick) / 2.));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 2)
+        .addPhysVolID("towery", 0)
+        .addPhysVolID("layerz", layer_num)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateL,
+      Position(-(mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 3)
+        .addPhysVolID("towery", 0)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateR,
+      Position((mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 0)
+        .addPhysVolID("towery", 1)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modTopPlate,
+      Position(0, (mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 1)
+        .addPhysVolID("towery", 1)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modBottomPlate,
+      Position(0, -(mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 2)
+        .addPhysVolID("towery", 1)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+
+  double lengthA =
+      length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
+  double z_offSetPCB =
+      (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
+      (lengthA - mod_params.mod_pcbLength) / 2. - mod_params.mod_pcbOffset;
+
+  pvm = vol_mod.placeVolume(
+      vol_modPCB,
+      Position(-(mod_params.mod_width - 2 * mod_params.mod_SWThick - mod_params.mod_notchDepth) /
+                   2.,
+               0, z_offSetPCB));
+
+  return vol_mod;
+}
+
+//************************************************************************************************************
+//************************** create 1M module assembly  ******************************************************
+//************************************************************************************************************
+Volume createOneMModule(Detector& desc, moduleParamsStrct mod_params,
+                        std::vector<sliceParamsStrct> sl_params,
+                        //                               int modID,
+                        double length, SensitiveDetector sens, bool renderComp, bool allSen) {
+
+  std::string baseName = "LFHCAL_1M";
+
+  // assembly definition
+  Box modBox(mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
+  Volume vol_mod(baseName, modBox, desc.material("Air"));
+  printout(DEBUG, "LFHCAL_geo", "visualization string module: " + mod_params.mod_visStr);
+  vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
+
+  // placement operator
+  PlacedVolume pvm;
+  // ********************************************************************************
+  // Casing definition
+  // ********************************************************************************
+  // geom definition 1M module casing
+  Box MountingPlate(mod_params.mod_width / 2., mod_params.mod_height / 2.,
+                    mod_params.mod_MPThick / 2.);
+  Box modFrontPlate(mod_params.mod_width / 2., mod_params.mod_height / 2.,
+                    mod_params.mod_FWThick / 2.);
+  Box modSidePlateL(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modSidePlateR(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modTopPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modBottomPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modBackCutOut(mod_params.mod_BIwidth / 2., mod_params.mod_BIheight / 2.,
+                    mod_params.mod_BWThick / 2.);
+  Box modBackPlateFull(mod_params.mod_width / 2., mod_params.mod_height / 2.,
+                       mod_params.mod_BWThick / 2.);
+  SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
+
+  // volume definition 8M module casing
+  // Looping through the number of repeated layers & slices in each section
+  Material plates_mat;
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+    if (sl_params[i].slice_partID == 1)
+      plates_mat = desc.material(sl_params[i].slice_matStr);
+  }
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, plates_mat);
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, plates_mat);
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, plates_mat);
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, plates_mat);
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, plates_mat);
+
+  if (allSen) {
+    sens.setType("calorimeter");
+    vol_mountingPlate.setSensitiveDetector(sens);
+    vol_modFrontPlate.setSensitiveDetector(sens);
+    vol_modBackPlate.setSensitiveDetector(sens);
+    vol_modSidePlateL.setSensitiveDetector(sens);
+    vol_modSidePlateR.setSensitiveDetector(sens);
+    vol_modTopPlate.setSensitiveDetector(sens);
+    vol_modBottomPlate.setSensitiveDetector(sens);
+  }
+
+  if (renderComp) {
+    vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    // mod_params.mod_visStr);
+                                    "LFHCALLayerTungstenVis");
+    vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    // mod_params.mod_visStr);
+                                    "LFHCALLayerSteelVis");
+    vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                   // mod_params.mod_visStr);
+                                   "LFHCALLayerSteelVis");
+    vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    mod_params.mod_visStr);
+    vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    mod_params.mod_visStr);
+    vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                  // mod_params.mod_visStr);
+                                  "LFHCALLayerSteelVis");
+    vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                     // mod_params.mod_visStr);
+                                     "LFHCALLayerSteelVis");
+  } else {
+    vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                   "InvisibleNoDaughters");
+    vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                    "InvisibleNoDaughters");
+    vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                  "InvisibleNoDaughters");
+    vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                     "InvisibleNoDaughters");
+  }
+
+  // ********************************************************************************
+  // long PCB
+  // ********************************************************************************
+  Box modPCB(mod_params.mod_pcbThick / 2., mod_params.mod_pcbWidth / 2.,
+             (mod_params.mod_pcbLength) / 2.);
+  Volume vol_modPCB(baseName + "_PCB", modPCB, desc.material("Fr4"));
+  if (renderComp) {
+    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "LFHCALModPCB");
+  } else {
+    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                             "InvisibleNoDaughters");
+  }
+
+  int layer_num = 0;
+
+  double slice_z = length / 2 - mod_params.mod_FEEThick + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick -
+                   mod_params.mod_BWThick; // Keeps track of layers' local z locations
+  // Looping through the number of repeated layers & slices in each section
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+    slice_z -= sl_params[i].slice_offset +
+               sl_params[i].slice_thick / 2.; // Going to halfway point in layer
+    layer_num = sl_params[i].layer_ID;
+    //*************************************************
+    // absorber plates
+    //*************************************************
+    Material slice_mat = desc.material(sl_params[i].slice_matStr);
+    if (sl_params[i].slice_partID == 1) {
+      Volume modAbsAssembly = createAbsorberPlate(
+          desc, baseName + "_Abs" + _toString(sl_params[i].layer_ID, "_layer_%d"),
+          mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
+          mod_params.mod_notchHeight, slice_mat, sl_params[i].slice_regStr,
+          sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      // Placing slice within layer
+      if (allSen)
+        modAbsAssembly.setSensitiveDetector(sens);
+      pvm = vol_mod.placeVolume(modAbsAssembly,
+                                Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
+      if (allSen)
+        pvm.addPhysVolID("towerx", 0)
+            .addPhysVolID("towery", 0)
+            .addPhysVolID("rlayerz", sl_params[i].slice_readoutLayer)
+            .addPhysVolID("layerz", layer_num)
+            .addPhysVolID("passive", 1);
+      //*************************************************
+      // air & kapton & PCB & ESR
+      //*************************************************
+    } else if (sl_params[i].slice_partID == 2) {
+      Volume modFillAssembly =
+          createFillerPlate(desc,
+                            baseName + "_Fill" + _toString(sl_params[i].layer_ID, "_layer_%d") +
+                                _toString(sl_params[i].slice_ID, "slice_%d"),
+                            mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+                            mod_params.mod_SWThick, sl_params[i].slice_thick,
+                            mod_params.mod_notchDepth, slice_mat, sl_params[i].slice_regStr,
+                            sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
+      // Placing slice within layer
+      if (allSen)
+        modFillAssembly.setSensitiveDetector(sens);
+      pvm = vol_mod.placeVolume(
+          modFillAssembly, Transform3D(RotationZYX(0, 0, 0),
+                                       Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
+      if (allSen)
+        pvm.addPhysVolID("towerx", 1)
+            .addPhysVolID("towery", 0)
+            .addPhysVolID("rlayerz", sl_params[i].slice_readoutLayer)
+            .addPhysVolID("layerz", layer_num)
+            .addPhysVolID("passive", 1);
+      //*************************************************
+      // scintillator
+      //*************************************************
+    } else {
+      Assembly modScintAssembly = createScintillatorPlateOneM(
+          desc, baseName + "_ScintAssembly" + _toString(sl_params[i].layer_ID, "_layer_%d"),
+          layer_num, mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick,
+          mod_params.mod_SWThick, sl_params[i].slice_thick, mod_params.mod_notchDepth,
+          mod_params.mod_foilThick, slice_mat, sl_params[i].slice_readoutLayer,
+          sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
+          renderComp);
+      // Placing slice within layer
+      pvm = vol_mod.placeVolume(
+          modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
+                                        Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+    }
+    slice_z -= sl_params[i].slice_thick / 2.;
+  }
+
+  // placement 1M module casing
+  pvm = vol_mod.placeVolume(vol_mountingPlate,
+                            Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
+  pvm = vol_mod.placeVolume(
+      vol_modFrontPlate,
+      Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 2)
+        .addPhysVolID("towery", 0)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm =
+      vol_mod.placeVolume(vol_modBackPlate, Position(0, 0, (length - mod_params.mod_BWThick) / 2.));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 2)
+        .addPhysVolID("towery", 0)
+        .addPhysVolID("layerz", layer_num)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateL,
+      Position(-(mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 3)
+        .addPhysVolID("towery", 0)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateR,
+      Position((mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 0)
+        .addPhysVolID("towery", 1)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modTopPlate,
+      Position(0, (mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 1)
+        .addPhysVolID("towery", 1)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+  pvm = vol_mod.placeVolume(
+      vol_modBottomPlate,
+      Position(0, -(mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  if (allSen)
+    pvm.addPhysVolID("towerx", 2)
+        .addPhysVolID("towery", 1)
+        .addPhysVolID("layerz", 0)
+        .addPhysVolID("passive", 1);
+
+  double lengthA =
+      length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
+  double z_offSetPCB =
+      (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
+      (lengthA - mod_params.mod_pcbLength) / 2. - mod_params.mod_pcbOffset;
+
+  pvm = vol_mod.placeVolume(
+      vol_modPCB,
+      Position(-(mod_params.mod_width - 2 * mod_params.mod_SWThick - mod_params.mod_notchDepth) /
+                   2.,
+               0, z_offSetPCB));
+  return vol_mod;
+}
+
 //********************************************************************************************
 //*                                                                                          *
 //*                              Create detector                                             *
@@ -1023,12 +1761,16 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(thicknessBackWall), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(width), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(arrayX), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(arrayY), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(notchDepth), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(notchHeight), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
-      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbOffset), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(FEEThick), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
 
   // 4M module specific loading
@@ -1044,12 +1786,16 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(fourMmod_dim, _Unicode(thicknessBackWall), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(width), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(arrayX), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(arrayY), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(notchDepth), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(notchHeight), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(foilThick), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbThick), 0.),
-      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.), fourM_xml.visStr(),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbOffset), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(FEEThick), 0.), fourM_xml.visStr(),
       fourM_xml.regionStr(), fourM_xml.limitsStr());
 
   std::vector<sliceParamsStrct> slice_Params;
@@ -1105,8 +1851,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   }
 
   // create 8M modules
-  Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive);
+  Volume eightMassembly;
+
+  if (eightM_params.mod_arrX == 4 && eightM_params.mod_arrY == 2)
+    eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
+                                        renderComponents, allSensitive);
+  if (eightM_params.mod_arrX == 2 && eightM_params.mod_arrY == 1)
+    eightMassembly = createTwoMModule(desc, eightM_params, slice_Params, length, sens,
+                                      renderComponents, allSensitive);
   for (int e = 0; e < (int)pos8M.size(); e++) {
     if (e % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
@@ -1139,8 +1891,13 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   }
 
   // create 4M modules
-  Volume fourMassembly = createFourMModule(desc, fourM_params, slice_Params, length, sens,
-                                           renderComponents, allSensitive);
+  Volume fourMassembly;
+  if (fourM_params.mod_arrX == 2 && fourM_params.mod_arrY == 2)
+    fourMassembly = createFourMModule(desc, fourM_params, slice_Params, length, sens,
+                                      renderComponents, allSensitive);
+  if (fourM_params.mod_arrX == 1 && fourM_params.mod_arrY == 1)
+    fourMassembly = createOneMModule(desc, fourM_params, slice_Params, length, sens,
+                                     renderComponents, allSensitive);
   for (int f = 0; f < (int)pos4M.size(); f++) {
     if (f % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
