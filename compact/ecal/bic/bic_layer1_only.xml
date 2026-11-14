@@ -87,7 +87,7 @@
       meeting at the centre of the calorimeter (the default): the -z tray and the +z tray, which is
       the same tray rotated by 180 degrees about the layer normal (so its x is mirrored); or one
       tray the full calorimeter length (Trays_num = 1), centred and not rotated. Trays_num must be
-      1 or 2: the readout tray field is one bit; the plugin throws otherwise. Stave_Modules_num
+      1 or 2; the plugin throws otherwise. Stave_Modules_num
       is the number of modules per stave and is set for the two-tray (half-length) stave. A tray
       holds the Staves_num_layerN staves of its z side and is Tray_length long; a stave runs the
       tray length.
@@ -266,12 +266,15 @@
     <readout name="EcalBarrelImagingHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5 * mm" grid_size_y="0.5 * mm"/>
       <comment>
-        tray: 0 = -z tray, 1 = +z tray (the same tray rotated by 180 degrees about the layer
-        normal); stave: within the tray, from 0 (the +z tray mirrors x); module: within the stave,
-        chip: within the module, both counted from 0 at the outer end of the tray towards the
-        junction of the two trays; x, y: cell within the chip, in the chip-local frame.
+        tray: 0 is the -z tray, and with two trays 1 is the +z tray (the same tray rotated by 180
+        degrees about the layer normal); a single tray is tray 0; stave: within the tray, from 0
+        (the +z tray mirrors x); module: within the stave, chip: within the module, both counted
+        from 0 at the outer end of the tray (the -z end, for the +z tray the +z end); x, y: cell
+        within the chip, in the chip-local frame. The field widths leave room beyond the current
+        design (more layers, staves, modules and chips; the tray field has a spare bit); x and y
+        need far fewer than their 8 bits.
       </comment>
-      <id>system:8,sector:6,layer:4,tray:1,stave:3,module:4,chip:4,slice:2,x:32:-16,y:-16</id>
+      <id>system:8,sector:6,layer:8,tray:2,stave:8,module:8,chip:8,x:48:-8,y:-8</id>
     </readout>
     <readout name="EcalBarrelScFiHits">
       <segmentation type="CartesianStripZ" strip_size_x="1.0*cm" identifier_x="z"/>

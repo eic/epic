@@ -192,7 +192,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
         // Set sensitive
         if (x_slice.isSensitive()) {
-          slice_physvol.addPhysVolID("slice", slice_num);
           slice_volume.setSensitiveDetector(sens);
           sensitives[chip_name].push_back(slice_physvol);
         }
@@ -445,12 +444,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                    layer_num, module_str.c_str(), n_modules);
           throw std::runtime_error("Logics error in building staves.");
         }
-        // One tray (full layer length) or two (the -z and the +z half): the readout tray field is
-        // one bit.
+        // One tray (full layer length) or two (the -z and the +z half), as in the design
         if (n_trays != 1 && n_trays != 2) {
           printout(ERROR, "BarrelCalorimeterImaging",
                    "layer %d: %d trays, but only 1 (one full-length tray) or 2 (a -z and a +z half "
-                   "tray) are supported (the readout tray field is one bit)",
+                   "tray) are supported",
                    layer_num, n_trays);
           throw std::runtime_error("Tray count must be 1 or 2.");
         }
