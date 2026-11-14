@@ -355,9 +355,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
       // Loop over the staves for this layer, if the tray is enabled
       // The staves of a layer sit in a tray (an assembly, so it adds no material and cannot
-      // overlap the frame). The layer holds two copies of the same tray end to end along the
-      // layer length (local y): the -z tray (tray 0, at -y) and the +z tray (tray 1, at +y)
-      // rotated by 180 degrees about the layer normal, so on both sides module 0 and chip 0 are
+      // overlap the frame). The layer holds one full-length tray, or two copies of the same
+      // half-length tray end to end along the layer length (local y): the -z tray (tray 0, at -y)
+      // and the +z tray (tray 1, at +y) rotated by 180 degrees about the layer normal, so on both sides module 0 and chip 0 are
       // at the outer end. The rotation mirrors x: stave k of the +z tray sits at -x of stave k of
       // the -z tray, and its chip-local x and y point the other way.
       Assembly tray_volume(Form("tray_layer%d", layer_num));
@@ -445,14 +445,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                    layer_num, module_str.c_str(), n_modules);
           throw std::runtime_error("Logics error in building staves.");
         }
-        // Exactly two trays: the readout tray field is one bit and the modules per stave are set
-        // for a stave of half the layer length.
-        if (n_trays != 2) {
+        // One tray (full layer length) or two (the -z and the +z half): the readout tray field is
+        // one bit.
+        if (n_trays != 1 && n_trays != 2) {
           printout(ERROR, "BarrelCalorimeterImaging",
-                   "layer %d: %d trays, but exactly 2 are supported (the -z and the +z tray: the "
-                   "readout tray field and the modules per stave are defined for two)",
+                   "layer %d: %d trays, but only 1 (one full-length tray) or 2 (a -z and a +z half "
+                   "tray) are supported (the readout tray field is one bit)",
                    layer_num, n_trays);
-          throw std::runtime_error("Tray count must be 2.");
+          throw std::runtime_error("Tray count must be 1 or 2.");
         }
         const ModuleInfo& mod    = modules[module_str];
         const double module_span = n_modules * mod.length + (n_modules - 1) * module_gap;
