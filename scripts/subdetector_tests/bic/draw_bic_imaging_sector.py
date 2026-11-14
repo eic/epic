@@ -5,17 +5,27 @@
     Draw x-radial cross-sections of the BIC imaging layers (staves, carbon plates and side walls)
     from the loaded DD4hep/TGeo geometry. x runs across the sector, z radially outward from the
     inner face of the layer; layer 1 is the bottom panel of the combined figure.
-    Staves are blue (even index, low rail) or orange (odd, high rail), the sensitive Si slice red,
+    Staves are blue (even stave id, low rail) or orange (odd, high rail), the sensitive Si slice red,
     carbon plates and walls grey, the layer trapezoid black.
+    Each layer holds two trays along the beam (tray0 at -z, tray1 at +z; tray1 is tray0 rotated by
+    180 degrees about the radial axis, so for an even number of staves its layout is mirrored in x).
+    --tray selects the tray drawn (default 0, the -z tray); --trays-side-by-side instead writes one
+    figure comparing both trays of the first drawn layer. Geometry with the staves directly in the
+    layer (no trays) is drawn as before.
 
     use case (writes <prefix>_layer<N>.png, <prefix>_all.png and <prefix>_zoom.png):
     python scripts/subdetector_tests/bic/draw_bic_imaging_sector.py -c epic_craterlake_bic_6layers.xml \
         -o figures/after --label After --layers 1-6
+
+    use case (both trays of layer 1 side by side, writes bic_trays_layer1.png):
+    python scripts/subdetector_tests/bic/draw_bic_imaging_sector.py -c epic_craterlake_bic_6layers.xml \
+        -o pr-material/figures/bic --layers 1 --trays-side-by-side
 '''
 import argparse
 import array
 import math
 import os
+import re
 
 import ROOT
 import dd4hep
@@ -29,7 +39,9 @@ ROOT.gROOT.SetBatch(True)
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 SECTOR = 'sector'
 LAYER = 'layer'
-STAVE = 'stave'
+TRAY = 'tray'              # trays (tray0 at -z, tray1 at +z), layer daughters holding the staves
+STAVE = 'stave'            # staves (stave<id>) in a tray; older geometry: staves directly in the layer
+SLICE = 'slice1'           # sensitive Si slice inside the chip components
 PLATE = 'frame'            # inner/outer carbon plates (frame_inner<N>, frame_outer<N>)
 WALL = 'frame_side'        # carbon side walls, checked before PLATE
 
@@ -84,6 +96,32 @@ def find_sectors(vol, names, depth=0):
     return found
 
 
+def find_slice(vol):
+    '''nodes from vol down to the first sensitive slice (module > chip > component > slice), or None'''
+    for i in range(vol.GetNdaughters()):
+        n = vol.GetNode(i)
+        if n.GetName().startswith(SLICE):
+            return [n]
+        sub = find_slice(n.GetVolume())
+        if sub:
+            return [n] + sub
+    return None
+
+
+def x_ordered(pts):
+    '''corners with the left edge first (a 180 degree rotation about the radial axis swaps them pairwise)'''
+    return [pts[1], pts[0], pts[3], pts[2]] if pts[0][0] > pts[1][0] else pts
+
+
+def make_stave(idx, dn, outer, zoff):
+    '''stave at placement dn below the nodes outer (innermost first): envelope and first sensitive slice'''
+    box = xf([dn.GetMatrix()] + outer, box_pts(dn.GetVolume().GetShape()), zoff)
+    path = find_slice(dn.GetVolume())
+    si = xf([nd.GetMatrix() for nd in reversed(path)] + [dn.GetMatrix()] + outer,
+            box_pts(path[-1].GetVolume().GetShape()), zoff)
+    return dict(idx=idx, box=x_ordered(box), si=x_ordered(si))
+
+
 def extract(args):
     det = dd4hep.Detector.getInstance()
     det.fromXML(args.compact)
@@ -105,7 +143,8 @@ def extract(args):
             lv = ln.GetVolume()
             trd = lv.GetShape()
             zoff = trd.GetDz()  # layer-local z measured from the inner face
-            d = dict(outline=xf([], trd_pts(trd), zoff), plates=[], walls=[], staves=[])
+            d = dict(outline=xf([], trd_pts(trd), zoff), plates=[], walls=[], staves=[], trays={})
+            seen = set()
             for j in range(lv.GetNdaughters()):
                 dn = lv.GetNode(j)
                 name = dn.GetName()
@@ -115,15 +154,28 @@ def extract(args):
                 elif name.startswith(PLATE):
                     d['plates'].append(xf([dn.GetMatrix()], shape_pts(sh), zoff))
                 elif name.startswith(STAVE):
-                    st = dn.GetVolume()
-                    mn = st.GetNode(0)
-                    cn = mn.GetVolume().GetNode(0)
-                    sn = cn.GetVolume().GetNode(0)  # sensitive slice
-                    d['staves'].append(dict(
-                        idx=len(d['staves']),  # placement order = stave index within the layer
-                        box=xf([dn.GetMatrix()], box_pts(sh), zoff),
-                        si=xf([sn.GetMatrix(), cn.GetMatrix(), mn.GetMatrix(), dn.GetMatrix()],
-                              box_pts(sn.GetVolume().GetShape()), zoff)))
+                    # a stave position consists of several staves along y with the same
+                    # x-z footprint: draw each position once, index = order of first appearance
+                    box = xf([dn.GetMatrix()], box_pts(sh), zoff)
+                    key = tuple(sorted((round(x, 3), round(z, 3)) for x, z in box))  # any corner order
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    # placement order = stave index within the layer
+                    d['staves'].append(make_stave(len(d['staves']), dn, [], zoff))
+                elif name.startswith(TRAY) and name[len(TRAY):].isdigit():
+                    tv = dn.GetVolume()
+                    sts = []
+                    for k in range(tv.GetNdaughters()):
+                        sn = tv.GetNode(k)
+                        mt = re.fullmatch(STAVE + r'(\d+)', sn.GetName())
+                        if mt:  # idx = readout stave id; the stave matrix is tray-local
+                            sts.append(make_stave(int(mt.group(1)), sn, [dn.GetMatrix()], zoff))
+                    d['trays'][int(name[len(TRAY):])] = sorted(sts, key=lambda s: s['box'][0][0])
+            if d['trays']:
+                if args.tray not in d['trays']:
+                    raise SystemExit('layer %d has trays %s, no tray %d' % (n, sorted(d['trays']), args.tray))
+                d['staves'] = d['trays'][args.tray]
             if d['staves']:
                 layers[n] = d
     return layers
@@ -135,7 +187,7 @@ def wall_slope(d):
     return math.atan2(abs(xb - xa), zb - za)
 
 
-def draw_layer(ax, d, n, label, stretch=True):
+def draw_layer(ax, d, n, label, stretch=True, tray_label='', ids=False):
     ax.add_patch(Polygon(d['outline'], closed=True, fill=False, ec='k', lw=1.2))
     for pl in d['plates']:
         ax.add_patch(Polygon(pl, closed=True, fc=GREY, ec=GREY, alpha=0.6))
@@ -145,6 +197,9 @@ def draw_layer(ax, d, n, label, stretch=True):
         col = LOW if s['idx'] % 2 == 0 else HIGH
         ax.add_patch(Polygon(s['box'], closed=True, fc=col, ec=col, alpha=0.35, lw=0.8))
         ax.add_patch(Polygon(s['si'], closed=True, fc=SI, ec=SI, alpha=0.9))
+        if ids:
+            ax.text(sum(x for x, _ in s['box']) / 4, max(z for _, z in s['box']) + 0.5, str(s['idx']),
+                    ha='center', va='bottom', fontsize=11, fontweight='bold', color=col)
     xs = [x for x, _ in d['outline']]
     zs = [z for _, z in d['outline']]
     ax.set_xlim(min(xs) - 3, max(xs) + 3)
@@ -152,8 +207,8 @@ def draw_layer(ax, d, n, label, stretch=True):
     st = d['staves']
     pitch = st[1]['box'][0][0] - st[0]['box'][0][0] if len(st) > 1 else 0
     w = st[0]['box'][1][0] - st[0]['box'][0][0]
-    ax.set_title('%slayer %d: %d staves, pitch %.2f mm, stave overlap %.2f mm'
-                 % (label + ', ' if label else '', n, len(st), pitch, w - pitch), fontsize=10)
+    ax.set_title('%slayer %d%s: %d staves, pitch %.2f mm, stave overlap %.2f mm'
+                 % (label + ', ' if label else '', n, tray_label, len(st), pitch, w - pitch), fontsize=10)
     ax.set_ylabel('radial z [mm] (up = outward)')
     ax.set_xlabel('x across the sector [mm]' + ('  (vertical axis stretched)' if stretch else ''))
 
@@ -213,6 +268,27 @@ def zoom(d, n, label, out):
     plt.close(fig)
 
 
+def trays_side_by_side(d, n, out):
+    '''both trays of one layer next to each other, same view, stave ids in the boxes'''
+    names = {0: '-z tray (tray0)', 1: '+z tray (tray1)'}
+    fig, axs = plt.subplots(1, 2, figsize=(14, 4.6), sharey=True)
+    for ax, t in zip(axs, (0, 1)):
+        draw_layer(ax, dict(d, staves=d['trays'][t]), n, '', tray_label=', ' + names[t], ids=True)
+        ax.title.set_fontsize(9)
+    axs[1].set_ylabel('')
+    fig.suptitle('BIC imaging layer %d, stave envelopes (blue: even id, low rail; orange: odd id, high rail; '
+                 'numbers: stave id) and sensitive Si (red)' % n, fontsize=10)
+    fig.text(0.5, 0.01,
+             'Cross-section in the layer frame, inner plate down, radial direction up (vertical axis stretched); both panels '
+             'viewed along +z (from the -z end towards +z, into the page).\n'
+             'The +z tray is the -z tray rotated by 180 degrees about the radial axis, so with an even number of staves '
+             'its layout is mirrored in x and the rail tier at a given x is swapped.',
+             ha='center', va='bottom', fontsize=8)
+    fig.tight_layout(rect=(0, 0.08, 1, 0.95))
+    fig.savefig(out, dpi=130)
+    plt.close(fig)
+
+
 def parse_layers(text):
     '''"1,3-5" -> [1, 3, 4, 5]'''
     out = []
@@ -233,6 +309,10 @@ if __name__ == '__main__':
     parser.add_argument('--sector', nargs='+', default=['sector1', 'sector26'],
                         help='sector volumes to take layers from (layer 1 lives in sector1, layers 2-6 in sector26)')
     parser.add_argument('--layers', default='1', help='layers to draw, e.g. 1 or 1-6 or 1,3')
+    parser.add_argument('--tray', type=int, choices=(0, 1), default=0,
+                        help='tray to draw: 0 = -z tray (default), 1 = +z tray (the -z tray rotated by 180 deg about the radial axis)')
+    parser.add_argument('--trays-side-by-side', action='store_true',
+                        help='only write <output>_trays_layer<N>.png comparing both trays of the first drawn layer')
     parser.add_argument('--zoom-layer', type=int, help='layer for the zoom figure (default: first drawn layer)')
     parser.add_argument('--label', default='', help='label for the figure titles')
     args = parser.parse_args()
@@ -243,6 +323,13 @@ if __name__ == '__main__':
     layers = extract(args)
     if not layers:
         raise SystemExit('no layers %s with staves found' % sorted(args.layers))
+    if args.trays_side_by_side:
+        n = min(layers)
+        if len(layers[n]['trays']) < 2:
+            raise SystemExit('layer %d has no two trays' % n)
+        trays_side_by_side(layers[n], n, '%s_trays_layer%d.png' % (args.output, n))
+        print('wrote %s_trays_layer%d.png' % (args.output, n))
+        raise SystemExit(0)
     for n in sorted(layers):
         fig, ax = plt.subplots(figsize=(14, 3.4))
         draw_layer(ax, layers[n], n, args.label)

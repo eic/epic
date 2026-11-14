@@ -123,41 +123,44 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double tan_half_dphi = std::tan(half_dphi);
   double layer_dim_y   = x_dimensions.z() / 2.;
 
-  // Loop over the modules
+  // Build the chips (one AstroPix sensor with its slices)
   using dd4hep::rec::VolPlane;
   std::map<std::string, Volume> volumes;
   std::map<std::string, std::vector<PlacedVolume>> sensitives;
   std::map<std::string, std::vector<VolPlane>> volplane_surfaces;
-  std::map<std::string, std::array<double, 2>> module_thicknesses;
-  for (xml_coll_t i_module(x_detector, _U(module)); i_module; ++i_module) {
-    xml_comp_t x_module     = i_module;
-    std::string module_name = x_module.nameStr();
+  std::map<std::string, std::array<double, 3>> chip_dims; // width, length, thickness
+  for (xml_coll_t i_chip(x_detector, _Unicode(chip)); i_chip; ++i_chip) {
+    xml_comp_t x_chip     = i_chip;
+    std::string chip_name = x_chip.nameStr();
 
-    if (volumes.find(module_name) != volumes.end()) {
-      printout(ERROR, "BarrelCalorimeterImaging", "Module with name %s already exists",
-               module_name.c_str());
-      throw std::runtime_error("Logics error in building modules.");
+    if (volumes.find(chip_name) != volumes.end()) {
+      printout(ERROR, "BarrelCalorimeterImaging", "Chip with name %s already exists",
+               chip_name.c_str());
+      throw std::runtime_error("Logics error in building chips.");
     }
 
-    // Compute module total thickness from components
+    // Compute chip total thickness (and its footprint) from components
     double total_thickness = 0;
-    xml_coll_t ci(x_module, _U(module_component));
+    double chip_width      = 0;
+    double chip_length     = 0;
+    xml_coll_t ci(x_chip, _U(component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
       total_thickness += xml_comp_t(ci).thickness();
+      chip_width  = std::max(chip_width, xml_comp_t(ci).width());
+      chip_length = std::max(chip_length, xml_comp_t(ci).length());
     }
+    chip_dims[chip_name] = {chip_width, chip_length, total_thickness};
 
-    // Create the module assembly volume
-    Assembly module_volume(module_name);
-    volumes[module_name] = module_volume;
-    module_volume.setVisAttributes(desc.visAttributes(x_module.visStr()));
+    // Create the chip assembly volume
+    Assembly chip_volume(chip_name);
+    volumes[chip_name] = chip_volume;
+    chip_volume.setVisAttributes(desc.visAttributes(x_chip.visStr()));
 
     // Add components
-    int sensor_number       = 1;
-    int ncomponents         = 0;
-    double thickness_so_far = 0.0;
-    double thickness_sum    = -total_thickness / 2.0;
-    for (xml_coll_t i_component(x_module, _U(module_component)); i_component;
-         ++i_component, ++ncomponents) {
+    int sensor_number    = 1;
+    int ncomponents      = 0;
+    double thickness_sum = -total_thickness / 2.0;
+    for (xml_coll_t i_component(x_chip, _U(component)); i_component; ++i_component, ++ncomponents) {
       xml_comp_t x_component           = i_component;
       xml_comp_t x_component_pos       = x_component.position(false);
       xml_comp_t x_component_rot       = x_component.rotation(false);
@@ -191,7 +194,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         if (x_slice.isSensitive()) {
           slice_physvol.addPhysVolID("slice", slice_num);
           slice_volume.setSensitiveDetector(sens);
-          sensitives[module_name].push_back(slice_physvol);
+          sensitives[chip_name].push_back(slice_physvol);
         }
 
         // Increment Z position of slice
@@ -207,40 +210,96 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                                x_component_pos.z(0) + zoff);
         RotationZYX component_rot(x_component_rot.z(0), x_component_rot.y(0), x_component_rot.x(0));
         component_physvol =
-            module_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
+            chip_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
       } else if (x_component_rot) {
         Position component_pos(0, 0, zoff);
         RotationZYX component_rot(x_component_rot.z(0), x_component_rot.y(0), x_component_rot.x(0));
         component_physvol =
-            module_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
+            chip_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
       } else if (x_component_pos) {
         Position component_pos(x_component_pos.x(0), x_component_pos.y(0),
                                x_component_pos.z(0) + zoff);
-        component_physvol = module_volume.placeVolume(component_volume, component_pos);
+        component_physvol = chip_volume.placeVolume(component_volume, component_pos);
       } else {
         Position component_pos(0, 0, zoff);
-        component_physvol = module_volume.placeVolume(component_volume, component_pos);
+        component_physvol = chip_volume.placeVolume(component_volume, component_pos);
       }
 
       if (x_component.isSensitive()) {
         component_physvol.addPhysVolID("sensor", sensor_number++);
         component_volume.setSensitiveDetector(sens);
-        sensitives[module_name].push_back(component_physvol);
-        module_thicknesses[module_name] = {thickness_so_far + x_component.thickness() / 2.0,
-                                           total_thickness - thickness_so_far -
-                                               x_component.thickness() / 2.0};
+        sensitives[chip_name].push_back(component_physvol);
       }
 
       thickness_sum += x_component.thickness();
-      thickness_so_far += x_component.thickness();
 
       // apply relative offsets in z-position used to stack components side-by-side
       if (x_component_pos) {
         thickness_sum += x_component_pos.z(0);
-        thickness_so_far += x_component_pos.z(0);
       }
     }
   }
+  // Build the modules: a row of identical chips along the stave length (local y), with a gap
+  // between neighbouring chips. Chip k is centred at y = -length/2 + (k + 1/2) chip length + k gap.
+  struct ModuleInfo {
+    Volume volume;
+    std::string chip;
+    int n_chips;
+    double width, length, thickness;
+    std::vector<PlacedVolume> chip_physvols;
+  };
+  std::map<std::string, ModuleInfo> modules;
+  for (xml_coll_t i_mod(x_detector, _U(module)); i_mod; ++i_mod) {
+    xml_comp_t x_mod      = i_mod;
+    std::string mod_name  = x_mod.nameStr();
+    std::string chip_name = x_mod.attr<std::string>(_Unicode(chip));
+    const int n_chips     = x_mod.attr<int>(_Unicode(chips));
+    const double chip_gap = x_mod.gap();
+    if (modules.count(mod_name) || !volumes.count(chip_name) || n_chips < 1 || chip_gap < 0.) {
+      printout(ERROR, "BarrelCalorimeterImaging",
+               "module %s: duplicate name, unknown chip %s, %d chips or chip gap %g",
+               mod_name.c_str(), chip_name.c_str(), n_chips, chip_gap);
+      throw std::runtime_error("Logics error in building modules.");
+    }
+    const auto [chip_w, chip_l, chip_t] = chip_dims[chip_name];
+    ModuleInfo& mod                     = modules[mod_name];
+    mod.chip                            = chip_name;
+    mod.n_chips                         = n_chips;
+    mod.width                           = chip_w;
+    mod.length                          = n_chips * chip_l + (n_chips - 1) * chip_gap;
+    mod.thickness                       = chip_t;
+    mod.volume =
+        Volume(mod_name, Box(mod.width / 2., mod.length / 2., mod.thickness / 2.), desc.air());
+    mod.volume.setAttributes(desc, x_mod.regionStr(), x_mod.limitsStr(), x_mod.visStr());
+    for (int k = 0; k < n_chips; ++k) {
+      const double y            = -mod.length / 2. + (k + 0.5) * chip_l + k * chip_gap;
+      PlacedVolume chip_physvol = mod.volume.placeVolume(volumes[chip_name], Position(0, y, 0));
+      chip_physvol.addPhysVolID("chip", k);
+      mod.chip_physvols.push_back(chip_physvol);
+    }
+  }
+
+  // Readout field ranges, to check that the stave, module and chip indices can be encoded
+  const IDDescriptor id_spec = sens.readout().idSpec();
+  auto check_id_range        = [&](int layer, const char* field, int max_index) {
+    const auto* f = id_spec.field(field);
+    // largest unsigned value (BitFieldElement::maxValue() returns 2^width for unsigned fields)
+    const long max_value = (1L << f->width()) - 1;
+    if (max_index > max_value) {
+      printout(ERROR, "BarrelCalorimeterImaging",
+               "layer %d: %s index %d exceeds the readout field %s (max %ld)", layer, field,
+               max_index, f->name().c_str(), max_value);
+      throw std::runtime_error("Imaging layer indices do not fit the readout.");
+    }
+  };
+
+  // Stave volumes and their DetElement templates, shared between layers with identical staves
+  struct StaveInfo {
+    Volume volume;
+    DetElement element; // template, cloned for each placement
+  };
+  std::map<std::string, StaveInfo> stave_types;
+
   if (x_detector.hasChild(_Unicode(support))) {
     buildSupport(desc, sector1_volume, x_detector.child(_Unicode(support)),
                  {inner_r, layer_pos_z, x_dimensions.z(), half_dphi});
@@ -295,7 +354,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       layer_volume.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 
       // Loop over the staves for this layer, if the tray is enabled
-      int stave_num = 1;
+      // The staves of a layer sit in a tray (an assembly, so it adds no material and cannot
+      // overlap the frame). The layer holds two copies of the same tray end to end along the
+      // layer length (local y): the -z tray (tray 0, at -y) and the +z tray (tray 1, at +y)
+      // rotated by 180 degrees about the layer normal, so on both sides module 0 and chip 0 are
+      // at the outer end. The rotation mirrors x: stave k of the +z tray sits at -x of stave k of
+      // the -z tray, and its chip-local x and y point the other way.
+      Assembly tray_volume(Form("tray_layer%d", layer_num));
+      DetElement tray_element("tray", detector_id); // template, cloned for each tray placement
+      int n_trays       = 0;
+      double tray_dim_y = 0.;
       for (xml_coll_t i_stave(x_layer, _U(stave)); i_stave; ++i_stave) {
         xml_comp_t x_stave = i_stave;
         // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
@@ -358,63 +426,85 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           }
         }
 
-        // Make one stave
-        std::string stave_name = Form("stave%d", stave_num);
-        auto stave_material    = desc.air();
-        Box stave_shape(stave_dim_x, stave_dim_y, stave_dim_z);
-        Volume stave_volume(stave_name, stave_shape, stave_material);
-        stave_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
-                                   x_stave.visStr());
-        // No parent, since it will be added on cloning and placement
-        DetElement stave_element(stave_name, detector_id);
+        // A stave carries n_modules modules at a pitch of module length + module gap, centred in
+        // the stave (see EcalBarrel_Module_gap); modules and chips count from the stave's local -y
+        // end, which is the outer end of the -z tray.
+        if (n_trays > 0) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: only one enabled <stave> element per layer is supported", layer_num);
+          throw std::runtime_error("Logics error in building staves.");
+        }
+        n_trays                      = getAttrOrDefault<int>(x_stave, _Unicode(trays), 2);
+        tray_dim_y                   = stave_dim_y;
+        xml_comp_t x_modules         = x_stave.child(_Unicode(modules));
+        const int n_modules          = x_modules.number();
+        const double module_gap      = x_modules.gap();
+        const std::string module_str = x_stave.moduleStr();
+        if (!modules.count(module_str) || n_modules < 1) {
+          printout(ERROR, "BarrelCalorimeterImaging", "layer %d: unknown module %s, or %d modules",
+                   layer_num, module_str.c_str(), n_modules);
+          throw std::runtime_error("Logics error in building staves.");
+        }
+        // Exactly two trays: the readout tray field is one bit and the modules per stave are set
+        // for a stave of half the layer length.
+        if (n_trays != 2) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: %d trays, but exactly 2 are supported (the -z and the +z tray: the "
+                   "readout tray field and the modules per stave are defined for two)",
+                   layer_num, n_trays);
+          throw std::runtime_error("Tray count must be 2.");
+        }
+        const ModuleInfo& mod    = modules[module_str];
+        const double module_span = n_modules * mod.length + (n_modules - 1) * module_gap;
+        const double end_gap     = (2. * stave_dim_y - module_span) / 2.;
 
-        // Loop over the slices for this stave
-        double slice_pos_z = -(stave_thick / 2.);
+        // Check that the modules fit the stave and the indices fit the readout
+        if (module_gap < 0. || end_gap < 0. || mod.width > 2. * stave_dim_x ||
+            mod.thickness > stave_thick) {
+          printout(ERROR, "BarrelCalorimeterImaging",
+                   "layer %d: %d modules of %g x %g x %g with gap %g do not fit a stave of "
+                   "%g x %g x %g (end gap %g)",
+                   layer_num, n_modules, mod.width, mod.length, mod.thickness, module_gap,
+                   2. * stave_dim_x, 2. * stave_dim_y, stave_thick, end_gap);
+          throw std::runtime_error("Modules do not fit in the stave.");
+        }
+        check_id_range(layer_num, "tray", n_trays - 1);
+        check_id_range(layer_num, "stave", stave_repeat - 1);
+        check_id_range(layer_num, "module", n_modules - 1);
+        check_id_range(layer_num, "chip", mod.n_chips - 1);
+        printout(DEBUG, "BarrelCalorimeterImaging",
+                 "layer %d: %d trays of %d staves of %d modules, module gap %g, end gap %g",
+                 layer_num, n_trays, stave_repeat, n_modules, module_gap, end_gap);
 
-        // Place in xy_layout
-        if (x_stave.hasChild(_Unicode(xy_layout))) {
-          auto module_str         = x_stave.moduleStr();
-          auto& module_volume     = volumes[module_str];
-          auto& module_sensitives = sensitives[module_str];
-
-          // Get layout grid pitch
-          xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
-          auto dx                = x_xy_layout.attr<double>(_Unicode(dx));
-          auto dy                = x_xy_layout.attr<double>(_Unicode(dy));
-
-          // Default to filling
-          auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
-          auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules",
-                   stave_name.c_str(), nx, ny);
-
-          // Default to centered
-          auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
-          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(y0), -(ny - 1) * dy / 2.);
-          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
-                   stave_name.c_str(), x0, y0);
-
-          // Place modules
-          int i_module = 0;
-          for (auto i_x = 0; i_x < nx; ++i_x) {
-            for (auto i_y = 0; i_y < ny; ++i_y) {
-
-              // Create module
-              std::string module_name = _toString(i_module, "module%d");
-              DetElement module_element(stave_element, module_name, i_module);
-
-              // Place module
-              auto x = x0 + i_x * dx;
-              auto y = y0 + i_y * dy;
-              Position module_pos(x, y, 0);
-              PlacedVolume module_physvol = stave_volume.placeVolume(module_volume, module_pos);
-              module_physvol.addPhysVolID("module", i_module);
-              module_element.setPlacement(module_physvol);
-
+        // Make one stave (or reuse an identical one): modules with their chips, and the
+        // DetElement tree stave > module > chip > sensitive slice
+        const std::string stave_key =
+            Form("%s|%.9g|%.9g|%.9g|%d|%.9g|%s|%s|%s", module_str.c_str(), 2. * stave_dim_x,
+                 2. * stave_dim_y, stave_thick, n_modules, module_gap, x_stave.regionStr().c_str(),
+                 x_stave.limitsStr().c_str(), x_stave.visStr().c_str());
+        if (!stave_types.count(stave_key)) {
+          StaveInfo& stave = stave_types[stave_key];
+          stave.volume =
+              Volume(stave_types.size() == 1 ? std::string("stave")
+                                             : std::string(Form("stave_%zu", stave_types.size())),
+                     Box(stave_dim_x, stave_dim_y, stave_dim_z), desc.air());
+          stave.volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
+                                     x_stave.visStr());
+          // No parent, since it will be added on cloning and placement
+          stave.element = DetElement("stave", detector_id);
+          for (int i = 0; i < n_modules; ++i) {
+            const double y =
+                -stave_dim_y + end_gap + mod.length / 2. + i * (mod.length + module_gap);
+            PlacedVolume module_physvol = stave.volume.placeVolume(mod.volume, Position(0, y, 0));
+            module_physvol.addPhysVolID("module", i);
+            DetElement module_element(stave.element, Form("module%d", i), i);
+            module_element.setPlacement(module_physvol);
+            for (int k = 0; k < mod.n_chips; ++k) {
+              DetElement chip_element(module_element, Form("chip%d", k), k);
+              chip_element.setPlacement(mod.chip_physvols[k]);
               // Add sensitive volumes
-              for (auto& sensitive_physvol : module_sensitives) {
-                DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                             i_module);
+              for (auto& sensitive_physvol : sensitives[mod.chip]) {
+                DetElement sensitive_element(chip_element, sensitive_physvol.volume().name(), k);
                 sensitive_element.setPlacement(sensitive_physvol);
 
                 auto& sensitive_element_params =
@@ -422,60 +512,39 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                         sensitive_element);
                 sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
               }
-
-              i_module++;
             }
           }
-          slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
         }
+        const StaveInfo& stave = stave_types[stave_key];
 
-        // Loop over the slices for this stave
-        int slice_num = 1;
-        for (xml_coll_t i_slice(x_stave, _U(slice)); i_slice; ++i_slice) {
-          xml_comp_t x_slice     = i_slice;
-          std::string slice_name = Form("slice%d", slice_num);
-          double slice_thick     = x_slice.thickness();
-          double slice_dim_x     = stave_dim_x;
-          double slice_dim_y     = stave_dim_y;
-          double slice_dim_z     = slice_thick / 2.;
-          Box slice_shape(slice_dim_x, slice_dim_y, slice_dim_z);
-          Volume slice_volume(slice_name, slice_shape, desc.material(x_slice.materialStr()));
-          slice_volume.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
-                                     x_slice.visStr());
-          DetElement slice_element(stave_element, slice_name, detector_id);
-
-          // Set sensitive
-          if (x_slice.isSensitive()) {
-            slice_volume.setSensitiveDetector(sens);
-          }
-
-          // Place slice
-          PlacedVolume slice_physvol =
-              stave_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
-          slice_physvol.addPhysVolID("slice", slice_num);
-          slice_element.setPlacement(slice_physvol);
-
-          // Increment Z position of slice
-          slice_pos_z += slice_thick;
-          ++slice_num;
-        }
-
-        // Loop over number of repeats for this stave
+        // Loop over number of repeats for this stave: stave<k> of the tray, readout stave = k
         for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
-
-          // Stave placement
-          Position stave_pos(stave_pos_x, 0, stave_pos_z(stave_j));
-          PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_pos);
-          stave_physvol.addPhysVolID("stave", stave_num + stave_j);
-          DetElement stave_j_element =
-              (stave_j == 0) ? stave_element
-                             : stave_element.clone(Form("stave%d", stave_num + stave_j));
-          stave_j_element.setPlacement(stave_physvol);
-          layer_element.add(stave_j_element);
+          const std::string name = Form("stave%d", stave_j);
+          Position stave_pos(stave_pos_x, 0., stave_pos_z(stave_j));
+          PlacedVolume stave_physvol = tray_volume.placeVolume(stave.volume, stave_pos);
+          stave_physvol->SetName(name.c_str());
+          stave_physvol.addPhysVolID("stave", stave_j);
+          DetElement stave_element = stave.element.clone(name, stave_j);
+          stave_element.setPlacement(stave_physvol);
+          tray_element.add(stave_element);
 
           // Increment X position of stave
           stave_pos_x += stave_pitch;
         }
+      }
+
+      // Place the trays: tray<t> at y = (2t + 1 - n_trays) * tray half-length, rotated at +y
+      for (int tray_t = 0; tray_t < n_trays; ++tray_t) {
+        const std::string name = Form("tray%d", tray_t);
+        const double tray_y    = (2 * tray_t + 1 - n_trays) * tray_dim_y;
+        RotationZ tray_rot(tray_y > 0. ? M_PI : 0.);
+        PlacedVolume tray_physvol =
+            layer_volume.placeVolume(tray_volume, Transform3D(tray_rot, Position(0., tray_y, 0.)));
+        tray_physvol->SetName(name.c_str());
+        tray_physvol.addPhysVolID("tray", tray_t);
+        DetElement tray_t_element = tray_element.clone(name, tray_t);
+        tray_t_element.setPlacement(tray_physvol);
+        layer_element.add(tray_t_element);
       }
 
       // Place frame if defined.

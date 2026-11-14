@@ -5,8 +5,11 @@
     3D render (orthographic z-buffer) of a few BIC imaging layers from the loaded DD4hep/TGeo geometry.
     Walks the TGeo nodes of a sector volume, clips them to a window along the beam (y) and radially (z,
     sector frame), skips the outer carbon plates and the ScFi/Pb volumes (--skip, a safety net when a sector holding them is selected), and draws every leaf box/trd/trap
-    as shaded faces: stave tops in the stave tier colour (blue even index, orange odd), red Si, yellow
+    as shaded faces: stave tops in the stave tier colour (blue even stave id, orange odd), red Si, yellow
     Kapton, orange Cu underneath, dark grey carbon plates and side walls.
+
+    The staves sit in the two trays of each layer; the tier follows the stave id, so the rotated +z tray
+    is coloured correctly (the default +-3 cm window straddles the junction of the two trays).
 
     use case (layers 2 and 3 of sector26, +-3 cm along the beam, radial direction up):
     python scripts/subdetector_tests/bic/render_bic_imaging_3d.py -c epic_craterlake_bic_6layers.xml \
@@ -30,12 +33,13 @@ ROOT.gROOT.SetBatch(True)
 
 # volume-name prefixes defined by src/BarrelCalorimeterImaging_geo.cpp
 LAYER = 'layer'
-STAVE = 'stave'
+TRAY = 'tray'    # trays (tray0 at -z, tray1 at +z), layer daughters holding the staves
+STAVE = 'stave'  # staves (stave<id>) in a tray; older geometry: staves directly in the layer
 OUTER_PLATE = 'frame_outer'
 
 SS = 3  # supersampling
 COLS = {'Silicon': '#c0392b', 'CarbonFiber': '#555555', 'Copper': '#e67e22', 'Kapton': '#f1c40f', 'Epoxy': '#27ae60'}
-TIER = ('#2166ac', '#e08214')  # even stave index: low rail, odd: high rail (as in draw_bic_imaging_sector.py)
+TIER = ('#2166ac', '#e08214')  # even stave id: low rail, odd: high rail (as in draw_bic_imaging_sector.py)
 FACES = [[0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]]
 
 
@@ -59,27 +63,33 @@ def collect(vol, args, skip):
     zlo, zhi = args.z_range
     polys, fc, count = [], [], {}
     tier = [0]
-    stave_idx = [-1]
+    positions = {}
 
-    def walk(v, mats, depth):
+    def walk(v, mats, depth, in_stave=False):
         for i in range(v.GetNdaughters()):
             n = v.GetNode(i)
             name = n.GetName()
             dv = n.GetVolume()
             mat = dv.GetMaterial().GetName()
-            # count staves before filtering so --skip does not shift rail parity
+            # rail tier = parity of the stave id (stave<id> in a tray); older geometry with the stave
+            # pieces directly in the layer: order of first appearance of the layer-local (x, z);
+            # done before filtering so --skip does not shift rail parity
             if depth == 0 and name.startswith(LAYER):
-                stave_idx[0] = -1
-            if depth == 1 and name.startswith(STAVE):
-                stave_idx[0] += 1
-                tier[0] = stave_idx[0] % 2  # even: low rail
+                positions.clear()
+            if name.startswith(STAVE):
+                sid = re.fullmatch(STAVE + r'(\d+)', name)
+                if sid:
+                    tier[0] = int(sid.group(1)) % 2  # even: low rail
+                else:
+                    t = n.GetMatrix().GetTranslation()
+                    tier[0] = positions.setdefault((round(t[0], 4), round(t[2], 4)), len(positions)) % 2
             if skip.search(name) or skip.search(mat) or name.startswith(OUTER_PLATE):
                 continue
             m = mats + [n.GetMatrix()]
             o = to_master(m, [0., 0., 0.])
             if not (zlo - 3 < o[2] < zhi + 3 or depth < 1):
                 continue
-            if depth >= 2 and (o[1] > yhi + 12 or o[1] < ylo - 12):
+            if in_stave and (o[1] > yhi + 12 or o[1] < ylo - 12):
                 continue
             sh = dv.GetShape()
             if mat in COLS and dv.GetNdaughters() == 0 and (
@@ -94,7 +104,7 @@ def collect(vol, args, skip):
                         for f in FACES:
                             polys.append(P[f])
                             fc.append(matplotlib.colors.to_rgb(c))
-            walk(dv, m, depth + 1)
+            walk(dv, m, depth + 1, in_stave or name.startswith(STAVE))
     walk(vol, [], 0)
     print('boxes:', count, 'faces', len(polys))
     return polys, fc
@@ -191,7 +201,7 @@ if __name__ == '__main__':
     ax.imshow(im)
     ax.axis('off')
     leg = [Patch(fc=c, label=l) for l, c in (
-        ('stave top, low rail (even index)', TIER[0]), ('stave top, high rail (odd index)', TIER[1]),
+        ('stave top, low rail (even id)', TIER[0]), ('stave top, high rail (odd id)', TIER[1]),
         ('Si sensor, Cu, Kapton underneath (facing the inner plate)', COLS['Silicon']),
         ('carbon: inner plate and side walls', COLS['CarbonFiber']))]
     ax.legend(handles=leg, loc='upper left', fontsize=11, frameon=False)
