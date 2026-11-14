@@ -86,18 +86,18 @@
     <constant name="EcalBarrel_StaveRail_high"        value="EcalBarrel_StaveRail_low + EcalBarrel_Stave_thickness + EcalBarrel_StaveRail_gap"/>
     <constant name="EcalBarrel_CarbonWallThickness"   value="1.0*mm"/>
     <constant name="EcalBarrel_StaveWall_gap"         value="0.5*mm"/>
-    <constant name="EcalBarrel_StavesN_layer1"        value="6"/>
-    <constant name="EcalBarrel_StavesN_layer2"        value="6"/>
-    <constant name="EcalBarrel_StavesN_layer3"        value="6"/>
-    <constant name="EcalBarrel_StavesN_layer4"        value="7"/>
-    <constant name="EcalBarrel_StavesN_layer5"        value="7"/>
-    <constant name="EcalBarrel_StavesN_layer6"        value="7"/>
+    <constant name="EcalBarrel_Staves_num_layer1"     value="6"/>
+    <constant name="EcalBarrel_Staves_num_layer2"     value="6"/>
+    <constant name="EcalBarrel_Staves_num_layer3"     value="6"/>
+    <constant name="EcalBarrel_Staves_num_layer4"     value="7"/>
+    <constant name="EcalBarrel_Staves_num_layer5"     value="7"/>
+    <constant name="EcalBarrel_Staves_num_layer6"     value="7"/>
     <comment>
       Silicon along the calorimeter: each imaging layer holds two trays end to end along z,
       meeting at the centre of the calorimeter: the -z tray and the +z tray, which is the same
       tray rotated by 180 degrees about the layer normal (so its x is mirrored). Trays_num must
       be 2: the readout tray field is one bit and Stave_Modules_num is set for a half-length stave;
-      the plugin throws otherwise. A tray holds the StavesN_layerN staves of its z side and is
+      the plugin throws otherwise. A tray holds the Staves_num_layerN staves of its z side and is
       Tray_length long; a stave runs the tray length.
       A stave carries Stave_Modules_num modules; a module is a row of Module_Chips_num AstroPix chips
       along z, Chip_gap apart. Module_gap is derived so that the modules fill the stave at a
@@ -216,11 +216,11 @@
       </comment>
       <layer_material surface="inner"
                       binning="binPhi,binZ"
-                      bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
+                      bins0="EcalBarrel_Staves_num_layer1 * EcalBarrel_SectorRepeat"
                       bins1="2 * EcalBarrel_Trays_num * EcalBarrel_Stave_Chips_num"/>
       <layer_material surface="outer"
                       binning="binPhi,binZ"
-                      bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
+                      bins0="EcalBarrel_Staves_num_layer1 * EcalBarrel_SectorRepeat"
                       bins1="2 * EcalBarrel_Trays_num * EcalBarrel_Stave_Chips_num"/>
 
       <sectors vis="EcalBarrelSectorVis"/>
@@ -253,7 +253,7 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_FrontSupportThickness">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="EcalBarrel_StavesN_layer1"
+        <stave repeat="EcalBarrel_Staves_num_layer1"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
@@ -273,7 +273,7 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="EcalBarrel_StavesN_layer2"
+        <stave repeat="EcalBarrel_Staves_num_layer2"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
@@ -293,7 +293,7 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="EcalBarrel_StavesN_layer3"
+        <stave repeat="EcalBarrel_Staves_num_layer3"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
@@ -313,7 +313,7 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="EcalBarrel_StavesN_layer4"
+        <stave repeat="EcalBarrel_Staves_num_layer4"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
@@ -333,7 +333,7 @@
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="EcalBarrel_StavesN_layer5"
+        <stave repeat="EcalBarrel_Staves_num_layer5"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
@@ -354,7 +354,7 @@
              space_between="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" side_thickness="EcalBarrel_CarbonWallThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
-        <stave repeat="EcalBarrel_StavesN_layer6"
+        <stave repeat="EcalBarrel_Staves_num_layer6"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
