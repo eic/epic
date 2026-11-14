@@ -96,10 +96,10 @@
       Silicon along the calorimeter: each imaging layer holds two trays end to end along z,
       meeting at the centre of the calorimeter: the -z tray and the +z tray, which is the same
       tray rotated by 180 degrees about the layer normal (so its x is mirrored). Trays_num must
-      be 2: the readout tray field is one bit and Stave_ModulesN is set for a half-length stave;
+      be 2: the readout tray field is one bit and Stave_Modules_num is set for a half-length stave;
       the plugin throws otherwise. A tray holds the StavesN_layerN staves of its z side and is
       Tray_length long; a stave runs the tray length.
-      A stave carries Stave_ModulesN modules; a module is a row of Module_ChipsN AstroPix chips
+      A stave carries Stave_Modules_num modules; a module is a row of Module_Chips_num AstroPix chips
       along z, Chip_gap apart. Module_gap is derived so that the modules fill the stave at a
       uniform pitch: half a module gap at each end of a stave, hence one module gap at the junction
       of the two trays and half a gap at each outer end. The plugin centres the modules in each
@@ -107,14 +107,14 @@
       stave ends.
     </comment>
     <constant name="EcalBarrel_Chip_gap"              value="100*um"/>
-    <constant name="EcalBarrel_Module_ChipsN"         value="9"/>
-    <constant name="EcalBarrel_Stave_ModulesN"        value="12"/>
+    <constant name="EcalBarrel_Module_Chips_num"      value="9"/>
+    <constant name="EcalBarrel_Stave_Modules_num"     value="12"/>
     <constant name="EcalBarrel_Trays_num"             value="2"/>
-    <constant name="EcalBarrel_Module_length"         value="EcalBarrel_Module_ChipsN * EcalBarrel_AstroPix_length + (EcalBarrel_Module_ChipsN - 1) * EcalBarrel_Chip_gap"/>
+    <constant name="EcalBarrel_Module_length"         value="EcalBarrel_Module_Chips_num * EcalBarrel_AstroPix_length + (EcalBarrel_Module_Chips_num - 1) * EcalBarrel_Chip_gap"/>
     <constant name="EcalBarrel_Tray_length"           value="EcalBarrel_Calorimeter_length / EcalBarrel_Trays_num"/>
     <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Tray_length"/>
-    <constant name="EcalBarrel_Module_gap"            value="EcalBarrel_Stave_length / EcalBarrel_Stave_ModulesN - EcalBarrel_Module_length"/>
-    <constant name="EcalBarrel_Stave_ChipsN"          value="EcalBarrel_Stave_ModulesN * EcalBarrel_Module_ChipsN"/>
+    <constant name="EcalBarrel_Module_gap"            value="EcalBarrel_Stave_length / EcalBarrel_Stave_Modules_num - EcalBarrel_Module_length"/>
+    <constant name="EcalBarrel_Stave_Chips_num"       value="EcalBarrel_Stave_Modules_num * EcalBarrel_Module_Chips_num"/>
 
     <constant name="EcalBarrel_FiberRadius"           value="0.5*mm"/>
     <constant name="EcalBarrel_FiberXSpacing"         value="1.34*mm"/>
@@ -217,11 +217,11 @@
       <layer_material surface="inner"
                       binning="binPhi,binZ"
                       bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
-                      bins1="2 * EcalBarrel_Trays_num * EcalBarrel_Stave_ChipsN"/>
+                      bins1="2 * EcalBarrel_Trays_num * EcalBarrel_Stave_Chips_num"/>
       <layer_material surface="outer"
                       binning="binPhi,binZ"
                       bins0="EcalBarrel_StavesN_layer1 * EcalBarrel_SectorRepeat"
-                      bins1="2 * EcalBarrel_Trays_num * EcalBarrel_Stave_ChipsN"/>
+                      bins1="2 * EcalBarrel_Trays_num * EcalBarrel_Stave_Chips_num"/>
 
       <sectors vis="EcalBarrelSectorVis"/>
 
@@ -243,7 +243,7 @@
 
       <module name="AstroPix_Module"
               chip="AstroPix_Chip"
-              chips="EcalBarrel_Module_ChipsN"
+              chips="EcalBarrel_Module_Chips_num"
               gap="EcalBarrel_Chip_gap"
               vis="EcalBarrelModuleVis"/>
 
@@ -264,7 +264,7 @@
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_1">
-          <modules number="EcalBarrel_Stave_ModulesN"
+          <modules number="EcalBarrel_Stave_Modules_num"
                    gap="EcalBarrel_Module_gap"/>
         </stave>
       </layer>
@@ -284,7 +284,7 @@
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_2">
-          <modules number="EcalBarrel_Stave_ModulesN"
+          <modules number="EcalBarrel_Stave_Modules_num"
                    gap="EcalBarrel_Module_gap"/>
         </stave>
       </layer>
@@ -304,7 +304,7 @@
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_3">
-          <modules number="EcalBarrel_Stave_ModulesN"
+          <modules number="EcalBarrel_Stave_Modules_num"
                    gap="EcalBarrel_Module_gap"/>
         </stave>
       </layer>
@@ -324,7 +324,7 @@
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_4">
-          <modules number="EcalBarrel_Stave_ModulesN"
+          <modules number="EcalBarrel_Stave_Modules_num"
                    gap="EcalBarrel_Module_gap"/>
         </stave>
       </layer>
@@ -344,7 +344,7 @@
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_5">
-          <modules number="EcalBarrel_Stave_ModulesN"
+          <modules number="EcalBarrel_Stave_Modules_num"
                    gap="EcalBarrel_Module_gap"/>
         </stave>
       </layer>
@@ -365,7 +365,7 @@
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis"
                enable="EcalBarrel_enable_staves_6">
-          <modules number="EcalBarrel_Stave_ModulesN"
+          <modules number="EcalBarrel_Stave_Modules_num"
                    gap="EcalBarrel_Module_gap"/>
         </stave>
       </layer>
