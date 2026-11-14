@@ -87,10 +87,11 @@
       meeting at the centre of the calorimeter (the default): the -z tray and the +z tray, which is
       the same tray rotated by 180 degrees about the layer normal (so its x is mirrored); or one
       tray the full calorimeter length (Trays_num = 1), centred and not rotated. Trays_num must be
-      1 or 2; the plugin throws otherwise. Stave_Modules_num
-      is the number of modules per stave and is set for the two-tray (half-length) stave. A tray
-      holds the Staves_num_layerN staves of its z side and is Tray_length long; a stave runs the
-      tray length.
+      1 or 2; the plugin throws otherwise. A tray holds the Staves_num_layerN staves of its z side
+      and is Tray_length long; a stave runs the tray length.
+      The Calorimeter_Modules_num modules along the calorimeter are shared among the trays, so a
+      stave carries Stave_Modules_num = Calorimeter_Modules_num / Trays_num modules (12 for two
+      trays, 24 for one) and the module pitch does not depend on the tray count.
       A stave carries Stave_Modules_num modules; a module is a row of Module_Chips_num AstroPix chips
       along z, Chip_gap apart. Module_gap is derived so that the modules fill the stave at a
       uniform pitch: half a module gap at each end of a stave, hence one module gap at the junction
@@ -100,8 +101,9 @@
     </comment>
     <constant name="EcalBarrel_Chip_gap"              value="100*um"/>
     <constant name="EcalBarrel_Module_Chips_num"      value="9"/>
-    <constant name="EcalBarrel_Stave_Modules_num"     value="12"/>
+    <constant name="EcalBarrel_Calorimeter_Modules_num" value="24"/>
     <constant name="EcalBarrel_Trays_num"             value="2"/>
+    <constant name="EcalBarrel_Stave_Modules_num"     value="EcalBarrel_Calorimeter_Modules_num / EcalBarrel_Trays_num"/>
     <constant name="EcalBarrel_Module_length"         value="EcalBarrel_Module_Chips_num * EcalBarrel_AstroPix_length + (EcalBarrel_Module_Chips_num - 1) * EcalBarrel_Chip_gap"/>
     <constant name="EcalBarrel_Tray_length"           value="EcalBarrel_Calorimeter_length / EcalBarrel_Trays_num"/>
     <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Tray_length"/>
