@@ -49,9 +49,6 @@ jobs:
         echo "configs_csv=${CONFIGS_CSV}" | tee -a $GITHUB_OUTPUT
         echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
-  list-open-prs:
-    uses: eic/actions/.github/workflows/list-open-prs.yml@main
-
   build:
     runs-on: ubuntu-latest
     needs: xmllint-before-build
@@ -873,63 +870,34 @@ jobs:
   get-docs-from-open-prs:
     runs-on: ubuntu-latest
     needs:
-      - list-open-prs
       - merge-npsim-capybara
       - validate-material-map
-    strategy:
-      matrix: ${{ fromJSON(needs.list-open-prs.outputs.json) }}
-      fail-fast: false
-      max-parallel: 4
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
     steps:
-      - name: Download capybara artifact (other PRs)
-        id: download_capybara
-        uses: dawidd6/action-download-artifact@v28
-        if: github.event.pull_request.number != matrix.pr
+      - name: Download artifacts from open PRs
+        uses: eic/actions/get-artifacts-from-open-prs@main
         with:
-          commit: ${{ matrix.head_sha }}
-          path: publishing_docs/pr/${{ matrix.pr }}/capybara/
-          name: capybara-report
-          workflow: ".github/workflows/linux-eic-shell.yml"
-          workflow_conclusion: "completed"
-          if_no_artifact_found: ignore
-      - name: Download capybara artifact (this PR)
-        uses: actions/download-artifact@v8
-        if: github.event.pull_request.number == matrix.pr
-        with:
-          name: capybara-report
-          path: publishing_docs/pr/${{ matrix.pr }}/capybara/
-      - name: Download material_map artifact (other PRs)
-        id: download_material_map
-        uses: dawidd6/action-download-artifact@v28
-        if: github.event.pull_request.number != matrix.pr
-        with:
-          commit: ${{ matrix.head_sha }}
-          path: publishing_docs/pr/${{ matrix.pr }}/material-map/
-          name: material_map
-          workflow: ".github/workflows/linux-eic-shell.yml"
-          workflow_conclusion: "completed"
-          if_no_artifact_found: ignore
-      - name: Download material_map artifact (this PR)
-        uses: actions/download-artifact@v8
-        if: github.event.pull_request.number == matrix.pr
-        with:
-          name: material_map
-          path: publishing_docs/pr/${{ matrix.pr }}/material-map/
-      - name: Generate material-map validation index
-        if: github.event.pull_request.number == matrix.pr || steps.download_material_map.outputs.found_artifact == 'true'
+          artifacts: |
+            capybara-report:capybara
+            material_map:material-map
+          path: publishing_docs/pr
+      - name: Generate material-map validation indices
         run: |
-          VALDIR="publishing_docs/pr/${{ matrix.pr }}/material-map/Validation"
-          if [ -d "$VALDIR" ]; then
+          for VALDIR in publishing_docs/pr/*/material-map/Validation; do
+            [ -d "$VALDIR" ] || continue
             echo '<html><body><h1>Material map validation plots</h1><ul>' > "$VALDIR/index.html"
             find "$VALDIR" -name '*.pdf' | sort | while read f; do
               rel="${f#$VALDIR/}"
               echo "<li><a href=\"$rel\">$rel</a></li>"
             done >> "$VALDIR/index.html"
             echo '</ul></body></html>' >> "$VALDIR/index.html"
-          fi
+          done
       - uses: actions/upload-artifact@v7
         with:
-          name: github-pages-staging-pr-${{ matrix.pr }}
+          name: github-pages-staging-prs
           path: publishing_docs/
           if-no-files-found: ignore
 
