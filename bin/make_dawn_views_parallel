@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Run make_dawn_views for several views (and slices) in parallel on one runner.
+#
+# Usage: bin/make_dawn_views_parallel -i <prim file> [-o <output dir>] [-j <jobs>] <spec>...
+#
+# Each <spec> is either <view> or <view>:<slice>, e.g. view1 or view14:1900.
+# Each spec runs in its own copy of scripts/<view>, since the view scripts
+# write intermediate files and DAWN settings into their working directory.
+# Specs are started in the order given, so list the slowest ones first.
+# Exits non-zero if any spec fails or produces no PNG image.
+
+set -uo pipefail
+
+prim=""
+outdir="images"
+jobs=$(getconf _NPROCESSORS_ONLN)
+while getopts "i:o:j:" opt; do
+  case "${opt}" in
+    i) prim="${OPTARG}" ;;
+    o) outdir="${OPTARG}" ;;
+    j) jobs="${OPTARG}" ;;
+    *) echo "Usage: $0 -i <prim file> [-o <output dir>] [-j <jobs>] <spec>..." >&2 ; exit 2 ;;
+  esac
+done
+shift $((OPTIND - 1))
+if [ -z "${prim}" ] || [ $# -eq 0 ]; then
+  echo "Usage: $0 -i <prim file> [-o <output dir>] [-j <jobs>] <spec>..." >&2
+  exit 2
+fi
+
+mkdir -p "${outdir}" logs
+failed=$(mktemp)
+
+run_spec() {
+  local spec=$1 view slice work
+  view=${spec%%:*}
+  slice=""
+  [[ "${spec}" == *:* ]] && slice=${spec#*:}
+  # Keep the copy two levels deep, since view scripts call ../../bin/dawn_tweak
+  work="scripts/${view}.work${slice:+.${slice}}"
+  rm -rf "${work}"
+  cp -r "scripts/${view}" "${work}"
+  if bin/make_dawn_views -i "${prim}" -o "${outdir}" -t "${view}" -d "${work}" -D ${slice:+-- "${slice}"} \
+      > "logs/${spec//:/_}.log" 2>&1 \
+     && compgen -G "${work}/*.png" > /dev/null; then
+    echo "Done: ${spec}"
+  else
+    echo "::error::DAWN view ${spec} failed or produced no image"
+    echo "${spec}" >> "${failed}"
+  fi
+  rm -rf "${work}"
+}
+
+for spec in "$@"; do
+  while [ "$(jobs -rp | wc -l)" -ge "${jobs}" ]; do
+    wait -n
+  done
+  echo "Starting: ${spec}"
+  run_spec "${spec}" &
+done
+wait
+
+for log in logs/*.log; do
+  echo "::group::${log}"
+  cat "${log}"
+  echo "::endgroup::"
+done
+
+if [ -s "${failed}" ]; then
+  echo "Failed specs: $(xargs < "${failed}")"
+  exit 1
+fi

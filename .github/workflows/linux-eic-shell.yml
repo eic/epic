@@ -221,7 +221,7 @@ jobs:
     uses: ./.github/workflows/convert-to-step.yml
     with:
       # NOTE: This list of detector configurations must be kept in sync with the configurations linked in README.md.
-      detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
+      detector_configs: "epic_craterlake_no_bhcal,epic_imaging_only,epic_drich_only,epic_dirc_only,epic_craterlake_tracking_only,epic_ip6"
 
   convert-to-dot:
     needs:
@@ -502,7 +502,6 @@ jobs:
     needs: generate-prim-file
     strategy:
       matrix:
-        view: [view1, view2, view3, view6, view7, view11, view13, view50]
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
@@ -516,11 +515,11 @@ jobs:
       with:
         platform-release: "eic_xl:nightly"
         run: |
-          mkdir -p images
-          bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
+          bin/make_dawn_views_parallel -i prim/${{ matrix.detector_config }}.prim -o images \
+            view1 view2 view3 view6 view7 view11 view13 view50
     - uses: actions/upload-artifact@v7
       with:
-        name: ${{ matrix.detector_config }}_views_${{ matrix.view }}
+        name: ${{ matrix.detector_config }}_views_detector
         path: images/
         if-no-files-found: error
 
@@ -530,8 +529,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
-        view: [view12, view14, view15]
-        slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
@@ -545,11 +542,17 @@ jobs:
       with:
         platform-release: "eic_xl:nightly"
         run: |
-          mkdir -p images
-          bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
+          slices="100 300 500 700 900 1100 1300 1500 1700 1900"
+          # Start the slowest views first: view14 slices and view12 at 100 take
+          # 10-25 min each, all others take less than a minute.
+          bin/make_dawn_views_parallel -i prim/${{ matrix.detector_config }}.prim -o images \
+            view12:100 \
+            $(for s in ${slices}; do echo view14:${s}; done) \
+            $(for s in ${slices}; do [ ${s} = 100 ] || echo view12:${s}; done) \
+            $(for s in ${slices}; do echo view15:${s}; done)
     - uses: actions/upload-artifact@v7
       with:
-        name: ${{ matrix.detector_config }}_views_${{ matrix.view }}_${{ matrix.slice }}
+        name: ${{ matrix.detector_config }}_views_slices
         path: images/
         if-no-files-found: error
 
@@ -1016,6 +1019,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
     - convert-to-gdml
+    - convert-to-step
     - convert-to-tgeo
     - convert-to-dot
     - merge-constants
