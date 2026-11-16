@@ -500,26 +500,22 @@ jobs:
   dawn-view:
     runs-on: ubuntu-latest
     needs: generate-prim-file
-    strategy:
-      matrix:
-        detector_config: [epic_craterlake]
-      fail-fast: false
     steps:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
-        name: ${{ matrix.detector_config }}.prim
+        name: epic_craterlake.prim
         path: prim/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
         run: |
-          bin/make_dawn_views_parallel -i prim/${{ matrix.detector_config }}.prim -o images \
+          bin/make_dawn_views_parallel -i prim/epic_craterlake.prim -o images \
             view1 view2 view3 view6 view7 view11 view13 view50
     - uses: actions/upload-artifact@v7
       with:
-        name: ${{ matrix.detector_config }}_views_detector
+        name: epic_craterlake_views_detector
         path: images/
         if-no-files-found: error
 
@@ -527,15 +523,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: generate-prim-file
     if: github.ref == 'refs/heads/main'
-    strategy:
-      matrix:
-        detector_config: [epic_craterlake]
-      fail-fast: false
     steps:
     - uses: actions/checkout@v7
     - uses: actions/download-artifact@v8
       with:
-        name: ${{ matrix.detector_config }}.prim
+        name: epic_craterlake.prim
         path: prim/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -545,14 +537,14 @@ jobs:
           slices="100 300 500 700 900 1100 1300 1500 1700 1900"
           # Start the slowest views first: view14 slices and view12 at 100 take
           # 10-25 min each, all others take less than a minute.
-          bin/make_dawn_views_parallel -i prim/${{ matrix.detector_config }}.prim -o images \
+          bin/make_dawn_views_parallel -i prim/epic_craterlake.prim -o images \
             view12:100 \
             $(for s in ${slices}; do echo view14:${s}; done) \
             $(for s in ${slices}; do [ ${s} = 100 ] || echo view12:${s}; done) \
             $(for s in ${slices}; do echo view15:${s}; done)
     - uses: actions/upload-artifact@v7
       with:
-        name: ${{ matrix.detector_config }}_views_slices
+        name: epic_craterlake_views_slices
         path: images/
         if-no-files-found: error
 
