@@ -435,7 +435,11 @@ jobs:
 
   trigger-container:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && github.ref != 'refs/heads/main'
+    # Not in the merge queue: the PR run has already triggered eicweb for this change
+    if: |
+      github.actor != 'dependabot[bot]' &&
+      github.ref != 'refs/heads/main' &&
+      github.event_name != 'merge_group'
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     outputs:
       json: ${{ steps.trigger.outputs.json }}
@@ -1140,7 +1144,7 @@ jobs:
         edit-mode: replace
 
   cancel-container:
-    if: cancelled() || failure()
+    if: (cancelled() || failure()) && github.event_name != 'merge_group'
     needs:
     - trigger-container
     - deploy-artifacts-page
