@@ -13,38 +13,16 @@
     <constant name="SiBarrelSensorInactiveSi_thickness" value="36*um" />
     <constant name="SiBarrelSensor_thickness" value="SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness + SiBarrelSensorInactiveSi_thickness" />
     <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness" />
-    <constant name="SiBarrelSiliconGap_width" value="1*mm" />
-    <constant name="SiBarrelStave1_width" value="3.848*cm" />
-    <constant name="SiBarrelStave2_width" value="3.848*cm" />
     <constant name="SiBarrelStave1_length" value="51.3*cm"/>
     <constant name="SiBarrelStave2_length" value="80.3*cm" />
-    <constant name="SiBarrelSingleModule1_length" value="12.9996*cm"/>
-    <constant name="SiBarrelSingleModule2_length" value="10.833*cm" />
-    <constant name="SiBarrel1_PassiveSi_Length" value="4.5*mm"/>
-    <constant name="SiBarrel2_PassiveSi_Length" value="4.5*mm"/>
     <constant name="SiBarrelStave1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
-     <constant name="SiBarrelStave2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
-   <constant name="SiBarrelStave1_count" value="44" />
+    <constant name="SiBarrelStave2_rc" value="42*cm" /> <!-- 42 cm, inner/outer 417mm, 423mm -->
+    <constant name="SiBarrelStave1_count" value="44" />
     <constant name="SiBarrelStave2_count" value="70" />
     <constant name="SiBarrel1_radius_castellation" value="6*mm" />
     <constant name="SiBarrel2_radius_castellation" value="6*mm" />
     <constant name="SiBarrelStave1Lower_rc"         value="SiBarrelStave1_rc-SiBarrel1_radius_castellation/2" /> <!--get rmin of the lower modules -->
     <constant name="SiBarrelStave2Lower_rc"         value="SiBarrelStave2_rc-SiBarrel2_radius_castellation/2"/>
-
-   <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
-   <constant name="SiBarrelSiliconCurveRadius" value="90.075*mm" />
-   <constant name="SiBarrelSiliconHeightFromStaveCentre1" value="4.35*mm"/>
-   <constant name="SiBarrelSiliconHeightFromStaveCentre2" value="4.35*mm"/>
-   <constant name="SiBarrelLowerCurveAxis1" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconHeightFromStaveCentre1" />
-   <constant name="SiBarrelLowerCurveAxis2" value="SiBarrelSiliconCurveRadius - SiBarrelSiliconHeightFromStaveCentre2" />
-   <constant name="SiBarrelUpperCurveAxis1" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconHeightFromStaveCentre1" />
-   <constant name="SiBarrelUpperCurveAxis2" value=" - SiBarrelSiliconCurveRadius + SiBarrelSiliconHeightFromStaveCentre2" />
-   <constant name="SiBarrelSiliconCurveHalfAngle1" value="asin(0.5*SiBarrelStave1_width / SiBarrelSiliconCurveRadius)" />
-   <constant name="SiBarrelSiliconCurveHalfAngle2" value="asin(0.5*SiBarrelStave2_width / SiBarrelSiliconCurveRadius)" />
-   <constant name="SiBarrelSiliconGapHalfAngle" value="atan(0.5*SiBarrelSiliconGap_width / SiBarrelSiliconCurveRadius)" />
-   <constant name="SiBarrel_ShortThickness" value="0.5*SiBarrelSensorMod_thickness" />
-   <constant name="SiBarrel1_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelSiliconHeightFromStaveCentre1"  />
-   <constant name="SiBarrel2_LongThickness" value="1.5*SiBarrelSensorMod_thickness + SiBarrelSiliconHeightFromStaveCentre2"  />
 
    <constant name="SiBarrel1_Module0_Position" value="-187.126*mm" />
    <constant name="SiBarrel1_Module1_Position" value="-62.7931*mm" />
@@ -60,20 +38,6 @@
    <constant name="SiBarrel2_Module6_Position" value="245.0257*mm" />
    <constant name="SiBarrel2_Module7_Position" value="342.8342*mm" />
 
-   <constant name="SiBarrel1_Passive0_Position" value="SiBarrel1_Module0_Position - SiBarrelSingleModule1_length/2 - SiBarrel1_PassiveSi_Length/2" />
-   <constant name="SiBarrel1_Passive1_Position" value="SiBarrel1_Module1_Position - SiBarrelSingleModule1_length/2 - SiBarrel1_PassiveSi_Length/2" />
-   <constant name="SiBarrel1_Passive2_Position" value="SiBarrel1_Module2_Position + SiBarrelSingleModule1_length/2 + SiBarrel1_PassiveSi_Length/2" />
-   <constant name="SiBarrel1_Passive3_Position" value="SiBarrel1_Module3_Position + SiBarrelSingleModule1_length/2 + SiBarrel1_PassiveSi_Length/2" />
-
-   <constant name="SiBarrel2_Passive0_Position" value="SiBarrel2_Module0_Position - SiBarrelSingleModule2_length/2 - SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive1_Position" value="SiBarrel2_Module1_Position - SiBarrelSingleModule2_length/2 - SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive2_Position" value="SiBarrel2_Module2_Position - SiBarrelSingleModule2_length/2 - SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive3_Position" value="SiBarrel2_Module3_Position - SiBarrelSingleModule2_length/2 - SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive4_Position" value="SiBarrel2_Module4_Position + SiBarrelSingleModule2_length/2 + SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive5_Position" value="SiBarrel2_Module5_Position + SiBarrelSingleModule2_length/2 + SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive6_Position" value="SiBarrel2_Module6_Position + SiBarrelSingleModule2_length/2 + SiBarrel2_PassiveSi_Length/2" />
-   <constant name="SiBarrel2_Passive7_Position" value="SiBarrel2_Module7_Position + SiBarrelSingleModule2_length/2 + SiBarrel2_PassiveSi_Length/2" />
-
     <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
@@ -83,11 +47,12 @@
     <constant name="SiBarrelLayer2_rmin" value="SiBarrelStave2_rc -  SiBarrelLayer_thickness / 2 " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
-
+   <constant name="SiBarrelSiliconCurveNoSegments" value="5" />
+   <constant name="SiBarrelSiliconHeightFromStaveCentre" value="4.35*mm"/>
     <constant name="HalfRSUwidth" value="19.564*mm" />
     <constant name="RSUcurvatureRadius" value="90.125*mm" />
     <constant name="RSUhalfAngle" value="HalfRSUwidth / RSUcurvatureRadius" />
-    <constant name="RSUaxis" value="-RSUcurvatureRadius + SiBarrelSiliconHeightFromStaveCentre1"/>
+    <constant name="RSUaxis" value="-RSUcurvatureRadius + SiBarrelSiliconHeightFromStaveCentre"/>
     <constant name="LEClength" value="4.5*mm" />
     <constant name="REClength" value="1.5*mm" />
     <constant name="TileWidth" value="9.324*mm" />
