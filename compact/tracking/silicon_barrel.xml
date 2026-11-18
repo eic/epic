@@ -118,7 +118,7 @@
              length="RSUlength - LeftGap - RightGap"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-        <position x="0" y="RSUlength/2 - (RSUlength - LeftGap - RightGap)/2" z="0.0" />
+        <position x="0" y="-RSUlength/2 + LeftGap + (RSUlength - LeftGap - RightGap)/2" z="0.0" />
         </rsu_component>
          <rsu_component name="MiddleSpace"
              material="Silicon"
@@ -130,7 +130,7 @@
              length="RSUlength - LeftGap - RightGap"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-        <position x="0" y="RSUlength/2 - (RSUlength - LeftGap - RightGap)/2" z="0.0" />
+        <position x="0" y="-RSUlength/2 + LeftGap +(RSUlength - LeftGap - RightGap)/2" z="0.0" />
         </rsu_component>
          <rsu_component name="BottonSpace"
              material="Silicon"
@@ -142,7 +142,7 @@
              length="RSUlength - LeftGap - RightGap"
              thickness="SiBarrelSensorMod_thickness"
              vis="TrackerLayerVis">
-        <position x="0" y="RSUlength/2 - (RSUlength - LeftGap - RightGap)/2" z="0.0" />
+        <position x="0" y="-RSUlength/2 + LeftGap + (RSUlength - LeftGap - RightGap)/2" z="0.0" />
         </rsu_component>
        <rsu_component name="Gap1"
              material="Silicon"
