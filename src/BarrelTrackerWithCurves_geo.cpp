@@ -65,6 +65,8 @@ using namespace dd4hep::detail;
     double copper = 0.0;
     double activeSi = 0.0;
     double inactiveSi = 0.0;
+    double inner_thickness = 0.0;
+    double outer_thickness = 0.0;
 
     double totalThickness() const {
         return copper + activeSi + inactiveSi;
@@ -259,11 +261,9 @@ void placeCurvedComponent(
                 pv.addPhysVolID("sensor", sensor_number++);
                 segment.setSensitiveDetector(sens);
 		sensitive_placements.push_back(pv);
-                const double inner = getAttrOrDefault<double>(x_comp, _Unicode(innerthickness), 0.5 * mm);
-                const double outer = getAttrOrDefault<double>(x_comp, _Unicode(outerthickness), 0.5 * mm);
                 SurfaceType type(SurfaceType::Sensitive);
                 VolPlane surface(
-                    segment, type, inner, outer,
+                    segment, type, stack.inner_thickness, stack.outer_thickness,
                     Vector3D(-1, 0, 0),
                     Vector3D(0, -1, 0),
                     Vector3D(0, 0, 1)
@@ -313,6 +313,9 @@ BuiltAssembly buildLAS(
     stack.copper = getAttrOrDefault<double>( x_las, _Unicode(sensor_cu_thickness), 0.0);
     stack.activeSi = getAttrOrDefault<double>( x_las, _Unicode(sensor_active_si_thickness), 0.0);
     stack.inactiveSi = getAttrOrDefault<double>( x_las, _Unicode(sensor_inactive_si_thickness), 0.0);
+    stack.inner_thickness = getAttrOrDefault<double>( x_las, _Unicode(inner_thickness), 0.0);
+    stack.outer_thickness = getAttrOrDefault<double>( x_las, _Unicode(outer_thickness), 0.0);
+
 
     int halfIndex = 0;
     int sensor_number = 1;
@@ -399,6 +402,9 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e,
       stack.copper = getAttrOrDefault<double>(x_half, _Unicode(sensor_cu_thickness), 0.0);
       stack.activeSi = getAttrOrDefault<double>( x_half, _Unicode(sensor_active_si_thickness), 0.0);
       stack.inactiveSi = getAttrOrDefault<double>( x_half, _Unicode(sensor_inactive_si_thickness), 0.0);
+      stack.inner_thickness = getAttrOrDefault<double>( x_half, _Unicode(inner_thickness), 0.0);
+      stack.outer_thickness = getAttrOrDefault<double>( x_half, _Unicode(outer_thickness), 0.0);
+
       if (stack.enabled &&  (stack.copper <= 0 ||  stack.activeSi <= 0 ||  stack.inactiveSi <= 0)) {
           throw std::runtime_error(  "Invalid sensor stack thicknesses in HalfRSU " +  halfName);
       }

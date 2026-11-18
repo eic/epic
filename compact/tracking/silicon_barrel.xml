@@ -13,6 +13,8 @@
     <constant name="SiBarrelSensorInactiveSi_thickness" value="36*um" />
     <constant name="SiBarrelSensor_thickness" value="SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness + SiBarrelSensorInactiveSi_thickness" />
     <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness" />
+    <constant name="PassiveStaveThickness" value="8.0*mm" />
+    
     <constant name="SiBarrelStave1_length" value="51.3*cm"/>
     <constant name="SiBarrelStave2_length" value="80.3*cm" />
     <constant name="SiBarrelStave1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
@@ -78,7 +80,9 @@
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
         sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
-        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
+        sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness"
+        outer_thickness = "SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness/2"
+        inner_thickness = "PassiveStaveThickness" >
         
          <rsu_component name="CurvedLeftEnd"
              material="Silicon"
