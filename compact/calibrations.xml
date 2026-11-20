@@ -67,22 +67,22 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/irt2/drich-calibration.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/3f923c099e323ef19c6ec1641a87e4fdd14b2a6a/irt2/drich-calibration.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/drich-calibration.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
-      <arg value="file:calibrations/irt2/drich-reco_v3.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/3f923c099e323ef19c6ec1641a87e4fdd14b2a6a/irt2/drich-reco.json"/>
+      <arg value="file:calibrations/irt2/drich-reco_v2.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/drich-reco.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/irt2/pfrich-calibration.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/3f923c099e323ef19c6ec1641a87e4fdd14b2a6a/irt2/pfrich-calibration.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/pfrich-calibration.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
-      <arg value="file:calibrations/irt2/pfrich-reco_v3.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/3f923c099e323ef19c6ec1641a87e4fdd14b2a6a/irt2/pfrich-reco.json"/>
+      <arg value="file:calibrations/irt2/pfrich-reco_v2.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/pfrich-reco.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
