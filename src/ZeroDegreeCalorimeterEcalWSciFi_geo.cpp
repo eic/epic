@@ -110,7 +110,11 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   // std::cout << "mNTowers: " << mNTowers << std::endl;
 
   int k = 0;
-  // Place Modules
+  // Place Modules: explicit 2-D placement loop.
+  // modVol is already shared (built once above), so all mNTowers×mNTowers
+  // placements reuse the same TGeoVolume.  A future improvement could replace
+  // the inner column loop with paramVolume1D (requires verifying physVolID
+  // encoding with non-zero base copy numbers).
   for (int j = 0; j < mNTowers; j++) {
     if (j == 0)
       mod_y_pos = width * 0.5 - (sy + mgap) * 0.5;
