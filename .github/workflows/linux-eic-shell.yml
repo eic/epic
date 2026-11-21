@@ -233,6 +233,14 @@ jobs:
     with:
       detector_configs: ${{needs.list-detector-configs.outputs.configs_csv}}
 
+  celeritas:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/celeritas.yml
+    with:
+      detector_configs: '["epic_craterlake_no_bhcal"]'
+
   dump-constants:
     # Documentation only; skipped in the merge queue
     if: github.event_name != 'merge_group'
