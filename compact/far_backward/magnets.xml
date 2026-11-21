@@ -49,6 +49,30 @@
     <constant name="Q2PR_Coil_Center_posY" value="0*cm"/>
     <constant name="Q2PR_Coil_Center_posZ" value="-1274.73*cm"/>
 
+    <!-- B2AeR Solid Parameters-->
+    <constant name="B2AeR_OuterWidth"  value="412.55*mm"/>
+    <constant name="B2AeR_OuterHeight" value="298.48*mm"/>
+    <constant name="B2AeR_InnerWidth"  value="332.55*mm"/>
+    <constant name="B2AeR_InnerHeight" value="218.48*mm"/>
+    <constant name="B2AeR_PoleGap"     value="120*mm"/>
+    <constant name="B2AeR_YokeOuterWidth"  value="221.15*mm"/>
+    <constant name="B2AeR_YokeInnerWidth"  value="191.45*mm"/>
+
+    <!-- B2BeR Solid Parameters-->
+    <constant name="B2BeR_OuterWidth"  value="825.21*mm"/>
+    <constant name="B2BeR_OuterHeight" value="966.83*mm"/>
+    <constant name="B2BeR_InnerWidth"  value="585.21*mm"/>
+    <constant name="B2BeR_InnerHeight" value="676.83*mm"/>
+    <constant name="B2BeR_PoleGap"     value="120*mm"/>
+    <constant name="B2BeR_YokeOuterWidth"  value="305.21*mm"/>
+    <constant name="B2BeR_YokeInnerWidth"  value="245.56*mm"/>
+
+    <constant name="B2BeR_Coil_Width"  value="18.0*mm"/>
+    <constant name="B2BeR_Coil_Height" value="250.0*mm"/>
+    <constant name="B2BeR_Coil_Xpos1"  value="168.605*mm"/>
+    <constant name="B2BeR_Coil_Xpos2"  value="190.605*mm"/>
+    <constant name="B2BeR_Coil_Ypos"   value="206.415*mm"/>
+
   </define>
 
     <comment> Electron side magnets </comment>
@@ -59,13 +83,11 @@
     <detector name="Q1ER_BeamlineMagnet" type="ip6_CryostatMagnet">
       <coil name="Q1ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
-        <!-- dimensions rmin1="6.748780*cm" rmax1="7.040880*cm" rmin2="5.938520*cm" rmax2="6.230620*cm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin1="(67.5+5.0)*mm+5*mm" rmax1="(67.5+5.0)*mm+12*mm" rmin2="(67.5+5.0)*mm+5*mm" rmax2="(67.5+5.0)*mm+12*mm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/>
+        <dimensions rmin1="6.748780*cm" rmax1="7.040880*cm" rmin2="5.938520*cm" rmax2="6.230620*cm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/>
       </coil>
       <tube name="Q1ER_InnerSupport_Tube" vis="MagnetSupportTubeVis" shape="Cone">
         <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle"/>
-        <!-- dimensions rmin1="12.809257*cm/2." rmax1="6.6*cm" rmin2="10.994364*cm/2." rmax2="5.8*cm" dz="201.592038*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin1="(67.5+5.0)*mm" rmax1="(67.5+5.0)*mm+2*mm" rmin2="(67.5+5.0)*mm" rmax2="(67.5+5.0)*mm+2*mm" dz="201.592038*cm/2."/>
+        <dimensions rmin1="12.809257*cm/2." rmax1="6.6*cm" rmin2="10.994364*cm/2." rmax2="5.8*cm" dz="201.592038*cm/2."/>
       </tube>
     </detector>
 
@@ -73,31 +95,69 @@
     <detector name="Q2ER_BeamlineMagnet" type="ip6_CryostatMagnet">
       <coil name="Q2ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
-        <!-- dimensions rmin1="7.810500*cm" rmax1="8.176260*cm" rmin2="7.810500*cm" rmax2="8.176260*cm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin1="(78.0+5.0)*mm+5.0*mm" rmax1="(78.0+5.0)*mm+8.0*mm" rmin2="(78.0+5.0)*mm+5.0*mm" rmax2="(78.0+5.0)*mm+8.0*mm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/>
+        <dimensions rmin1="7.810500*cm" rmax1="8.176260*cm" rmin2="7.810500*cm" rmax2="8.176260*cm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/>
       </coil>
       <tube name="Q2ER_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle"/>
-        <!-- dimensions rmin="14.361160*cm/2." rmax="15.362000*cm/2." half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin="(78.0+5.0)*mm" rmax="(78.0+5.0)*mm+2.0*mm" half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+        <dimensions rmin="14.361160*cm/2." rmax="15.362000*cm/2." half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
     </detector>
 
     <comment> Electron side beam magnet volumes </comment>
 
     <detector
+    name="Magnets_B2AeR"
+    type="BeamlineDipoleMagnet"
+    vis="BeamPipeVis"
+    pole_gap="B2AeR_PoleGap"
+    yoke_outer_width="B2AeR_YokeOuterWidth"
+    yoke_inner_width="B2AeR_YokeInnerWidth">
+      <position   x="B2AeR_CenterX" y="0" z="B2AeR_CenterZ" />
+      <rotation   x="0*rad" y="B2AeR_Theta" z="0*rad" />
+      <dimensions_mainbody_outer x="B2AeR_OuterWidth" y="B2AeR_OuterHeight" z="B2AeR_Length" />
+      <dimensions_mainbody_inner x="B2AeR_InnerWidth" y="B2AeR_InnerHeight" z="B2AeR_Length" />
+      <dimensions_leg_outer x="10*cm" y="10*cm" z="10*cm" />
+      <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
+    </detector>
+
+    <detector
+    name="Magnets_B2BeR"
+    type="BeamlineDipoleMagnet"
+    vis="BeamPipeVis"
+    pole_gap="B2BeR_PoleGap"
+    yoke_outer_width="B2BeR_YokeOuterWidth"
+    yoke_inner_width="B2BeR_YokeInnerWidth">
+      <position   x="B2BeR_CenterX" y="0" z="B2BeR_CenterZ" />
+      <rotation   x="0*rad" y="B2BeR_Theta" z="0*rad" />
+      <dimensions_mainbody_outer x="B2BeR_OuterWidth" y="B2BeR_OuterHeight" z="B2BeR_Length" />
+      <dimensions_mainbody_inner x="B2BeR_InnerWidth" y="B2BeR_InnerHeight" z="B2BeR_Length" />
+      <dimensions_leg_outer x="10*cm" y="10*cm" z="10*cm" />
+      <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
+      <coil width="B2BeR_Coil_Width" height="B2BeR_Coil_Height"  length="B2BeR_Length">
+        <position x="B2BeR_Coil_Xpos1" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="B2BeR_Coil_Xpos2" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="B2BeR_Coil_Xpos1" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="B2BeR_Coil_Xpos2" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos1" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos2" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos1" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos2" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+      </coil>
+    </detector>
+
+
+    <detector
     name="Magnets_Q3eR"
     type="CylindricalMagnetChain"
     vis="RedVis">
-      <magnet id="0" name="Magnet_Q3eR"
-        x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition" theta="Q3eR_Theta"
-        length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
+      <magnet id="0" name="Magnet_SQ3eR"
+        x="SQ3eR_CenterX" y="0" z="SQ3eR_CenterZ" theta="SQ3eR_Theta"
+        length="SQ3eR_Length" rin="SQ3eR_InnerRadius" rout="4*SQ3eR_InnerRadius">
       </magnet>
     </detector>
 
 
     <comment> Hadron side magnets </comment>
-
     <!-- Q1ApR magnet -->
     <detector name="Q1APR_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q1APR_Yoke" vis="MagnetVis">
@@ -110,8 +170,7 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin1="0*cm" rmax1="7.6*cm" rmin2="0*cm" rmax2="6.8*cm" dz="181.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="181.0*cm/2."/>
+          <dimensions rmin1="0*cm" rmax1="7.6*cm" rmin2="0*cm" rmax2="6.8*cm" dz="181.0*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
@@ -139,8 +198,7 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
@@ -160,8 +218,7 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
@@ -181,8 +238,7 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
@@ -202,8 +258,7 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
@@ -255,8 +310,7 @@
         </cut>
         <cut>
           <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="17.157*cm/2." half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="17.157*cm/2." half_length="400.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
@@ -299,8 +353,7 @@
         </cut>
         <cut>
           <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="9.050020*cm" half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="9.050020*cm" half_length="400.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
@@ -315,8 +368,7 @@
         </cut>
         <cut>
           <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
@@ -331,8 +383,7 @@
         </cut>
         <cut>
           <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
@@ -362,8 +413,7 @@
         </cut>
         <cut>
           <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="25.0*cm/2." half_length="4000.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="40.0*cm/2." half_length="4000.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="25.0*cm/2." half_length="4000.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </yoke>
@@ -386,8 +436,7 @@
         </cut>
         <cut>
           <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="40*cm/2." half_length="800.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
@@ -402,8 +451,7 @@
         </cut>
         <cut>
           <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="10*cm" half_length="800.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
@@ -418,8 +466,7 @@
         </cut>
         <cut>
           <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="40*cm/2." half_length="800.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
@@ -463,13 +510,11 @@
         </cut>
         <cut>
           <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <!-- dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0*cm" rmax="45*cm/2." half_length="800.*cm/2."/>
+          <dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </cryoend>
     </detector>
-
   </detectors>
 
   <fields>
@@ -478,21 +523,23 @@
 
     <field name="Magnet_Q1eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q1eR_InnerRadius" dz="Q1eR_Length/2"/>
-      <position x="0" y="0" z="Q1eR_CenterPosition"/>
+      <position x="Q1eR_CenterX" y="0" z="Q1eR_CenterZ"/>
+      <rotation x="0" y="Q1eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q1eR_Gradient"/>
     </field>
 
     <field name="Magnet_Q2eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q2eR_InnerRadius" dz="Q2eR_Length/2"/>
-      <position x="0" y="0" z="Q2eR_CenterPosition"/>
+      <position x="Q2eR_CenterX" y="0" z="Q2eR_CenterZ"/>
+      <rotation x="0" y="Q2eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q2eR_Gradient"/>
     </field>
 
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
-      <position x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition"/>
+      <position x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ"/>
       <rotation x="0" y="Q3eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
@@ -500,13 +547,15 @@
 
     <field name="Magnet_B2AeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2AeR_InnerRadius" dz="B2AeR_Length/2"/>
-      <position x="0" y="0" z="B2AeR_CenterPosition"/>
+      <position x="B2AeR_CenterX" y="0" z="B2AeR_CenterZ"/>
+      <rotation x="0" y="B2AeR_Theta" z="0"/>
       <coefficient coefficient="B2AeR_B"/>
     </field>
 
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2BeR_InnerRadius" dz="B2BeR_Length/2"/>
-      <position x="0" y="0" z="B2BeR_CenterPosition"/>
+      <position x="B2BeR_CenterX" y="0" z="B2BeR_CenterZ"/>
+      <rotation x="0" y="B2BeR_Theta" z="0"/>
       <coefficient coefficient="B2BeR_B"/>
     </field>
 

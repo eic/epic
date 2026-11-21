@@ -3,16 +3,57 @@
 
 //==========================================================================
 //
-// Places a chain of beam pipe segments within and between the beamline magnets.
+// BEAMPIPECHAIN DETECTOR GEOMETRY FACTORY
 //
-// Approximation used for beam pipes in between magnets.
+// Builds aluminium walls and vacuum bores, with torus joins at changes of direction.
+// Pipes follow XML order; their lengths/centres are adjusted to leave room for bends.
+// Lengths accept XML unit expressions (e.g. 2*mm); angles are in radians.
+//
+// <detector>:
+//   name, id        Detector identity.
+//   wall_thickness Radial wall thickness, shared by all pipes and branches (default 0).
+//   vis            Wall visualisation attributes (default BeamPipeVis).
+//
+// <pipe>:
+//   name, id         Component identity; id selects combine membership and vacuum tracking.
+//   xcenter, zcenter Centre before bend shortening, in detector coordinates; y is always 0.
+//   length           Full length before bend shortening. If omitted/non-positive on an
+//                    internal pipe, infer position, length, angle and radii from neighbours.
+//   theta            Absolute rotation about Y (default 0), not a relative bend angle.
+//                    Downstream follows local -Z: direction (-sin(theta), 0, -cos(theta)).
+//   rout1, rout2     Outer radii at local +Z (upstream) and -Z (downstream); taper is linear.
+//
+// <combine>:
+//   start_id, end_id Inclusive pipe/branch id range; reversed limits are swapped.
+//   name             Group/vacuum-element name (default combined_<start_id>_<end_id>).
+//   Resolve overlaps within the range, including bends whose two neighbours are in it.
+//   Ownership order is branches, straight pipes, then bends. Each wall subtracts earlier
+//   outer envelopes and later vacuums; each vacuum subtracts earlier vacuums.
+//   Disjoint cuts are omitted; downstream terminal cuts are retained. No unions are built.
+//
+// <split>:
+//   from_id          Source pipe id; attach at its downstream end after bend shortening.
+//   name, id         Branch identity (default name split_<id>); id selects combine membership.
+//   length           Distance from source end to branch free end; must be positive.
+//   theta            Absolute rotation about Y (default 0), not relative to the source.
+//   rout1, rout2     Outer radii at source/free ends. If omitted/non-positive, rout1 uses
+//                    the source pipe's rout1, and rout2 uses the resolved branch rout1.
+//   junction_overlap Extend the source-facing end upstream along the branch axis;
+//                    positive = overlap, zero = touching, negative = gap (default 0).
+//                    Positive overlap is capped at 45% of length; the free end stays fixed.
+//   wall_end_length  Length of a separate wall section measured from the free end (default 0:
+//                    one wall section). Must be >= 0 and less than length + applied overlap.
+//                    Reduces mesh complexity without changing material, vacuum or tracking.
 //
 //==========================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMath.h"
+#include "TGeoBBox.h"
 #include <XML/Helper.h>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 using namespace dd4hep;
@@ -39,6 +80,103 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<double> rOuters1;
   vector<double> rOuters2;
   vector<double> bendLengths;
+  vector<int> splitFromIds;
+  vector<int> splitIds;
+  vector<string> splitNames;
+  vector<double> splitLengths;
+  vector<double> splitThetas;
+  vector<double> splitROuters1;
+  vector<double> splitROuters2;
+  vector<double> splitJunctionOverlaps;
+  vector<double> splitWallEndLengths;
+
+  // Optional boolean-combine groups, configured via XML:
+  //   <combine name="..." start_id="..." end_id="..."/>
+  // Pieces in a range are placed separately with overlap ownership resolved by subtraction.
+  vector<int> combineStartIds;
+  vector<int> combineEndIds;
+  vector<std::string> combineNames;
+
+  for (xml_coll_t combine_coll(x_det, _Unicode(combine)); combine_coll; ++combine_coll) {
+    xml_comp_t combine(combine_coll);
+    int start_id = getAttrOrDefault<int>(combine, _Unicode(start_id), 0);
+    int end_id   = getAttrOrDefault<int>(combine, _Unicode(end_id), 0);
+    if (end_id < start_id) {
+      std::swap(start_id, end_id);
+    }
+    std::string name = getAttrOrDefault<std::string>(combine, _Unicode(name),
+                                                     "combined_" + std::to_string(start_id) + "_" +
+                                                         std::to_string(end_id));
+
+    combineStartIds.push_back(start_id);
+    combineEndIds.push_back(end_id);
+    combineNames.push_back(name);
+  }
+
+  // Read optional branches; parameter meanings and defaults are listed above.
+  for (xml_coll_t split_coll(x_det, _Unicode(split)); split_coll; ++split_coll) {
+    xml_comp_t split(split_coll);
+
+    int from_id   = getAttrOrDefault<int>(split, _Unicode(from_id), -1);
+    int id        = getAttrOrDefault<int>(split, _Unicode(id), -1);
+    string name   = getAttrOrDefault<string>(split, _Unicode(name), "split_" + std::to_string(id));
+    double length = getAttrOrDefault<double>(split, _Unicode(length), 0.0);
+    double theta  = getAttrOrDefault<double>(split, _Unicode(theta), 0.0);
+    double rout1  = getAttrOrDefault<double>(split, _Unicode(rout1), 0.0);
+    double rout2  = getAttrOrDefault<double>(split, _Unicode(rout2), 0.0);
+    double junction_overlap = getAttrOrDefault<double>(split, _Unicode(junction_overlap), 0.0);
+
+    splitFromIds.push_back(from_id);
+    splitIds.push_back(id);
+    splitNames.push_back(name);
+    splitLengths.push_back(length);
+    splitThetas.push_back(theta);
+    splitROuters1.push_back(rout1);
+    splitROuters2.push_back(rout2);
+    splitJunctionOverlaps.push_back(junction_overlap);
+    splitWallEndLengths.push_back(getAttrOrDefault<double>(split, _Unicode(wall_end_length), 0.0));
+  }
+
+  // Return the combine-range index for a pipe id, or -1 if not in a combine group.
+  auto find_range_index = [&](int pipe_id) {
+    for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
+      if (pipe_id >= combineStartIds[range_n] && pipe_id <= combineEndIds[range_n]) {
+        return static_cast<int>(range_n);
+      }
+    }
+    return -1;
+  };
+
+  // Parallel vectors storing prebuilt solids and transforms for straight segments.
+  // We keep these separate from placement so combined and non-combined paths can
+  // share the same geometry source without duplication.
+  vector<std::string> straightNames;
+  vector<int> straightIds;
+  vector<int> straightRangeIndices;
+  struct WallSection {
+    Solid solid;
+    Transform3D transform;
+  };
+  vector<vector<WallSection>> straightWalls;
+  vector<Solid> straightOuters;
+  vector<Solid> straightVacuums;
+  vector<Transform3D> straightTransforms;
+  vector<double> straightXCenters;
+  vector<double> straightZCenters;
+  vector<double> straightLengthsPlaced;
+  vector<double> straightThetasPlaced;
+  vector<double> straightOuterRadiiMax;
+  vector<size_t> clipPieceIndices;
+  vector<int> clipEndSigns;
+
+  // Parallel vectors for bend-join torus pieces between neighboring straight pipes.
+  vector<std::string> bendNames;
+  vector<int> bendIds;
+  vector<int> bendRangeIndices;
+  vector<Solid> bendTubes;
+  vector<Solid> bendOuters;
+  vector<Solid> bendVacuums;
+  vector<Transform3D> bendTransforms;
 
   // Grab info for beamline magnets
   for (xml_coll_t pipe_coll(x_det, _Unicode(pipe)); pipe_coll; pipe_coll++) { // pipes
@@ -106,7 +244,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     }
   }
 
-  // Add all pipes to the assembly
+  // Build all straight and bend pieces first, then decide later whether each piece
+  // needs overlap subtraction within a combine group.
   for (uint pipeN = 0; pipeN < xCenters.size(); pipeN++) {
 
     double length  = lengths[pipeN];
@@ -130,18 +269,21 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
     ConeSegment s_tube(length / 2.0, rOuter2 - thickness, rOuter2, rOuter1 - thickness, rOuter1);
     ConeSegment s_vacuum(length / 2.0, 0, rOuter2 - thickness, 0, rOuter1 - thickness);
+    ConeSegment s_outer(length / 2.0, 0, rOuter2, 0, rOuter1);
 
-    Volume v_tube("v_tube_" + names[pipeN], s_tube, m_Al);
-    Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
-
-    v_tube.setVisAttributes(description.visAttributes(vis_name));
-
-    assembly.placeVolume(v_tube, Transform3D(RotationY(theta), Position(xCenter, 0, zCenter)));
-    auto placed_vacuum = assembly.placeVolume(
-        v_vacuum, Transform3D(RotationY(theta), Position(xCenter, 0, zCenter)));
-
-    DetElement vacuum_element(sdet, names[pipeN] + "_vacuum", ids[pipeN]);
-    vacuum_element.setPlacement(placed_vacuum);
+    Transform3D straightTransform(RotationY(theta), Position(xCenter, 0, zCenter));
+    straightNames.push_back(names[pipeN]);
+    straightIds.push_back(ids[pipeN]);
+    straightRangeIndices.push_back(find_range_index(ids[pipeN]));
+    straightWalls.push_back({{Solid(s_tube), Transform3D()}});
+    straightOuters.push_back(Solid(s_outer));
+    straightVacuums.push_back(Solid(s_vacuum));
+    straightTransforms.push_back(straightTransform);
+    straightXCenters.push_back(xCenter);
+    straightZCenters.push_back(zCenter);
+    straightLengthsPlaced.push_back(length);
+    straightThetasPlaced.push_back(theta);
+    straightOuterRadiiMax.push_back(std::max(rOuter1, rOuter2));
 
     // // Add joining bend to next pipe
     if (pipeN != xCenters.size() - 1 && bendLengths[pipeN] != 0) {
@@ -154,10 +296,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
       //Create a vacuum torus to place inside the solid segment
       Torus s_bend_vac(rOuter2 + bendRadius, 0, rOuter2 - thickness, 0, abs(bendAngle));
-
-      // //Create the volumes
-      Volume v_bend_soild("v_bend_solid_" + names[pipeN], s_bend_solid, m_Al);
-      Volume v_bend_vac("v_bend_vac_" + names[pipeN], s_bend_vac, m_Vacuum);
+      Torus s_bend_outer(rOuter2 + bendRadius, 0, rOuter2, 0, abs(bendAngle));
 
       // Calculate the position and rotation to place bend at the joint
       double bendCenterX = xCenter + rOuter2 * cos(theta) - (length / 2) * sin(theta);
@@ -169,15 +308,335 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
         rotation    = -bendAngle - theta;
       }
 
-      // Place the bend in the assembly
-      assembly.placeVolume(v_bend_soild, Transform3D(RotationZYX(rotation, 0, pi / 2),
-                                                     Position(bendCenterX, 0, bendCenterZ)));
-      assembly.placeVolume(v_bend_vac, Transform3D(RotationZYX(rotation, 0, pi / 2),
-                                                   Position(bendCenterX, 0, bendCenterZ)));
+      Transform3D bendTransform(RotationZYX(rotation, 0, pi / 2),
+                                Position(bendCenterX, 0, bendCenterZ));
 
-      // Set vis attributes
-      v_bend_soild.setVisAttributes(description.visAttributes(vis_name));
+      // A bend belongs to a combine group only if BOTH neighboring straight
+      // segments are in the same range. This keeps range boundaries clean.
+      int bend_range_index = -1;
+      int this_range       = find_range_index(ids[pipeN]);
+      int next_range       = find_range_index(ids[pipeN + 1]);
+      if (this_range >= 0 && this_range == next_range) {
+        bend_range_index = this_range;
+      }
+
+      bendNames.push_back(names[pipeN] + "_to_" + names[pipeN + 1]);
+      bendIds.push_back(ids[pipeN]);
+      bendRangeIndices.push_back(bend_range_index);
+      bendTubes.push_back(Solid(s_bend_solid));
+      bendOuters.push_back(Solid(s_bend_outer));
+      bendVacuums.push_back(Solid(s_bend_vac));
+      bendTransforms.push_back(bendTransform);
     }
+  }
+
+  // Build optional split branches from downstream ends of configured source ids.
+  // Split branches are created as simple conical segments extending from the source pipe.
+  for (size_t split_n = 0; split_n < splitIds.size(); ++split_n) {
+    int source_index = -1;
+    for (size_t piece_n = 0; piece_n < straightIds.size(); ++piece_n) {
+      if (straightIds[piece_n] == splitFromIds[split_n]) {
+        source_index = static_cast<int>(piece_n);
+        break;
+      }
+    }
+
+    if (source_index < 0) {
+      printout(WARNING, "BeamPipeChain", "Split '%s' references unknown from_id=%d. Skipping.",
+               splitNames[split_n].c_str(), splitFromIds[split_n]);
+      continue;
+    }
+
+    double branch_length = splitLengths[split_n];
+    if (branch_length <= 0) {
+      printout(WARNING, "BeamPipeChain", "Split '%s' has non-positive length. Skipping.",
+               splitNames[split_n].c_str());
+      continue;
+    }
+
+    double source_theta    = straightThetasPlaced[source_index];
+    double source_x_center = straightXCenters[source_index];
+    double source_z_center = straightZCenters[source_index];
+    double source_length   = straightLengthsPlaced[source_index];
+    double branch_theta    = splitThetas[split_n];
+    double branch_r1 = splitROuters1[split_n] > 0 ? splitROuters1[split_n] : rOuters1[source_index];
+    double branch_r2 = splitROuters2[split_n] > 0 ? splitROuters2[split_n] : branch_r1;
+
+    // Calculate position at downstream end of source pipe
+    double source_end_x = source_x_center - 0.5 * source_length * sin(source_theta);
+    double source_end_z = source_z_center - 0.5 * source_length * cos(source_theta);
+
+    // Move only the source-facing end; preserve the free-end position.
+    double junction_overlap = splitJunctionOverlaps[split_n];
+    if (junction_overlap > 0 && junction_overlap > 0.45 * branch_length) {
+      junction_overlap = 0.45 * branch_length;
+    }
+    double branch_length_effective = branch_length + junction_overlap;
+    double source_attach_x         = source_end_x + junction_overlap * sin(branch_theta);
+    double source_attach_z         = source_end_z + junction_overlap * cos(branch_theta);
+
+    // Position split branch center: halfway along its length from source endpoint
+    double branch_center_x = source_attach_x - 0.5 * branch_length_effective * sin(branch_theta);
+    double branch_center_z = source_attach_z - 0.5 * branch_length_effective * cos(branch_theta);
+
+    // Create split tube and vacuum solids
+    double wall_end_length = splitWallEndLengths[split_n];
+    if (!std::isfinite(wall_end_length) || wall_end_length < 0 ||
+        wall_end_length >= branch_length_effective) {
+      except("BeamPipeChain", "Split '%s' requires 0 <= wall_end_length < effective length.",
+             splitNames[split_n].c_str());
+    }
+    vector<WallSection> walls;
+    if (wall_end_length > 0) {
+      double radius_at_split =
+          branch_r2 + (branch_r1 - branch_r2) * wall_end_length / branch_length_effective;
+      walls.push_back(
+          {ConeSegment(wall_end_length / 2, branch_r2 - thickness, branch_r2,
+                       radius_at_split - thickness, radius_at_split),
+           Transform3D(Translation3D(0, 0, (wall_end_length - branch_length_effective) / 2))});
+      walls.push_back(
+          {ConeSegment((branch_length_effective - wall_end_length) / 2, radius_at_split - thickness,
+                       radius_at_split, branch_r1 - thickness, branch_r1),
+           Transform3D(Translation3D(0, 0, wall_end_length / 2))});
+    } else {
+      walls.push_back({ConeSegment(branch_length_effective / 2, branch_r2 - thickness, branch_r2,
+                                   branch_r1 - thickness, branch_r1),
+                       Transform3D()});
+    }
+    ConeSegment s_split_vac(branch_length_effective / 2.0, 0, branch_r2 - thickness, 0,
+                            branch_r1 - thickness);
+    ConeSegment s_split_outer(branch_length_effective / 2.0, 0, branch_r2, 0, branch_r1);
+    Transform3D split_transform(RotationY(branch_theta),
+                                Position(branch_center_x, 0, branch_center_z));
+
+    // Add split branch to straight piece vectors
+    straightNames.push_back(splitNames[split_n]);
+    straightIds.push_back(splitIds[split_n]);
+    straightRangeIndices.push_back(find_range_index(splitIds[split_n]));
+    straightWalls.push_back(walls);
+    straightOuters.push_back(Solid(s_split_outer));
+    straightVacuums.push_back(Solid(s_split_vac));
+    straightTransforms.push_back(split_transform);
+    straightXCenters.push_back(branch_center_x);
+    straightZCenters.push_back(branch_center_z);
+    straightLengthsPlaced.push_back(branch_length_effective);
+    straightThetasPlaced.push_back(branch_theta);
+    straightOuterRadiiMax.push_back(std::max(branch_r1, branch_r2));
+
+    size_t branch_index = straightNames.size() - 1;
+    int branch_range    = straightRangeIndices[branch_index];
+    if (branch_range >= 0) {
+      clipPieceIndices.push_back(branch_index);
+      clipEndSigns.push_back(-1);
+    }
+  }
+
+  // Clip the terminal downstream end of the original straight chain for each combine
+  // range. This is the last non-split piece in that range.
+  size_t base_straight_count = names.size();
+  for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
+    int last_piece = -1;
+    for (size_t piece_n = 0; piece_n < base_straight_count; ++piece_n) {
+      if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
+        last_piece = static_cast<int>(piece_n);
+      }
+    }
+    if (last_piece >= 0) {
+      clipPieceIndices.push_back(static_cast<size_t>(last_piece));
+      clipEndSigns.push_back(-1);
+    }
+  }
+
+  // Place non-combined straight segments
+  for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
+    if (straightRangeIndices[piece_n] >= 0) {
+      continue;
+    }
+
+    Volume v_vacuum("v_vacuum_" + straightNames[piece_n], straightVacuums[piece_n], m_Vacuum);
+    for (size_t wall_n = 0; wall_n < straightWalls[piece_n].size(); ++wall_n) {
+      const auto& wall = straightWalls[piece_n][wall_n];
+      string suffix    = straightWalls[piece_n].size() > 1 ? "_" + std::to_string(wall_n) : "";
+      Volume v_tube("v_tube_" + straightNames[piece_n] + suffix, wall.solid, m_Al);
+      v_tube.setVisAttributes(description.visAttributes(vis_name));
+      assembly.placeVolume(v_tube, straightTransforms[piece_n] * wall.transform);
+    }
+    auto placed_vacuum = assembly.placeVolume(v_vacuum, straightTransforms[piece_n]);
+
+    DetElement vacuum_element(sdet, straightNames[piece_n] + "_vacuum", straightIds[piece_n]);
+    vacuum_element.setPlacement(placed_vacuum);
+  }
+
+  // Place non-combined bends
+  for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
+    if (bendRangeIndices[piece_n] >= 0) {
+      continue;
+    }
+
+    Volume v_bend_soild("v_bend_solid_" + bendNames[piece_n], bendTubes[piece_n], m_Al);
+    Volume v_bend_vac("v_bend_vac_" + bendNames[piece_n], bendVacuums[piece_n], m_Vacuum);
+    v_bend_soild.setVisAttributes(description.visAttributes(vis_name));
+
+    assembly.placeVolume(v_bend_soild, bendTransforms[piece_n]);
+    assembly.placeVolume(v_bend_vac, bendTransforms[piece_n]);
+  }
+
+  // Partition each range without unions. Cutters always remain original primitives.
+  // Split vacuums own junction overlaps, keeping the luminosity bore shallow.
+  struct RangePiece {
+    string name;
+    int id;
+    vector<WallSection> walls;
+    Solid outer;
+    Solid vacuum;
+    Transform3D transform;
+  };
+  for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
+    vector<RangePiece> pieces;
+    auto append_straight = [&](size_t begin, size_t end) {
+      for (size_t piece_n = begin; piece_n < end; ++piece_n) {
+        if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
+          pieces.push_back({straightNames[piece_n], straightIds[piece_n], straightWalls[piece_n],
+                            straightOuters[piece_n], straightVacuums[piece_n],
+                            straightTransforms[piece_n]});
+        }
+      }
+    };
+    append_straight(base_straight_count, straightNames.size());
+    append_straight(0, base_straight_count);
+    for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
+      if (bendRangeIndices[piece_n] == static_cast<int>(range_n)) {
+        pieces.push_back({bendNames[piece_n],
+                          bendIds[piece_n],
+                          {{bendTubes[piece_n], Transform3D()}},
+                          bendOuters[piece_n],
+                          bendVacuums[piece_n],
+                          bendTransforms[piece_n]});
+      }
+    }
+    if (pieces.empty()) {
+      printout(WARNING, "BeamPipeChain", "Combine range '%s' (%d-%d) did not match any segments.",
+               combineNames[range_n].c_str(), combineStartIds[range_n], combineEndIds[range_n]);
+      continue;
+    }
+
+    const Transform3D& base_transform = pieces.front().transform;
+    Transform3D inv_base              = base_transform.Inverse();
+    Assembly range_pipe("v_pipe_combined_" + combineNames[range_n]);
+    Assembly range_vacuum("v_vacuum_combined_" + combineNames[range_n]);
+    DetElement vacuum_element(sdet, combineNames[range_n] + "_vacuum", combineStartIds[range_n]);
+
+    vector<Solid> cuts;
+    vector<Transform3D> cut_transforms;
+    vector<string> cut_names;
+    for (size_t cut_n = 0; cut_n < clipPieceIndices.size(); ++cut_n) {
+      size_t piece_n = clipPieceIndices[cut_n];
+      if (straightRangeIndices[piece_n] != static_cast<int>(range_n)) {
+        continue;
+      }
+
+      double theta  = straightThetasPlaced[piece_n];
+      double halfL  = 0.5 * straightLengthsPlaced[piece_n];
+      double rOuter = straightOuterRadiiMax[piece_n];
+      double sign   = static_cast<double>(clipEndSigns[cut_n]);
+      double axis_x = sign * sin(theta);
+      double axis_z = sign * cos(theta);
+
+      Position end_pos(straightXCenters[piece_n] + sign * halfL * sin(theta), 0.0,
+                       straightZCenters[piece_n] + sign * halfL * cos(theta));
+      Position cut_center(end_pos.x() + halfL * axis_x, 0.0, end_pos.z() + halfL * axis_z);
+
+      Tube cut_tube(0.0, rOuter, halfL);
+      cuts.push_back(Solid(cut_tube));
+      cut_transforms.emplace_back(RotationY(theta), cut_center);
+      cut_names.push_back(straightNames[piece_n]);
+    }
+
+    for (size_t piece_n = 0; piece_n < pieces.size(); ++piece_n) {
+      const auto& piece     = pieces[piece_n];
+      Transform3D inv_piece = piece.transform.Inverse();
+      auto walls            = piece.walls;
+      Solid vacuum          = piece.vacuum;
+      auto subtract         = [](Solid left, Solid right, const Transform3D& transform) -> Solid {
+        auto left_box  = dynamic_cast<TGeoBBox*>(left.ptr());
+        auto right_box = dynamic_cast<TGeoBBox*>(right.ptr());
+        if (!left_box || !right_box) {
+          except("BeamPipeChain", "Cannot bound a subtraction operand.");
+        }
+        double low[3]  = {TGeoShape::Big(), TGeoShape::Big(), TGeoShape::Big()};
+        double high[3] = {-TGeoShape::Big(), -TGeoShape::Big(), -TGeoShape::Big()};
+        for (int ix : {-1, 1}) {
+          for (int iy : {-1, 1}) {
+            for (int iz : {-1, 1}) {
+              XYZPoint corner(right_box->GetOrigin()[0] + ix * right_box->GetDX(),
+                              right_box->GetOrigin()[1] + iy * right_box->GetDY(),
+                              right_box->GetOrigin()[2] + iz * right_box->GetDZ());
+              XYZPoint point              = transform * corner;
+              const double coordinates[3] = {point.x(), point.y(), point.z()};
+              for (int axis = 0; axis < 3; ++axis) {
+                low[axis]  = std::min(low[axis], coordinates[axis]);
+                high[axis] = std::max(high[axis], coordinates[axis]);
+              }
+            }
+          }
+        }
+        const double half_lengths[3] = {left_box->GetDX(), left_box->GetDY(), left_box->GetDZ()};
+        // Retain touching or numerically ambiguous cuts.
+        const double margin = 1.e-7 * mm;
+        for (int axis = 0; axis < 3; ++axis) {
+          if (high[axis] < left_box->GetOrigin()[axis] - half_lengths[axis] - margin ||
+              low[axis] > left_box->GetOrigin()[axis] + half_lengths[axis] + margin) {
+            return left;
+          }
+        }
+        return SubtractionSolid(left, right, transform);
+      };
+      for (size_t other_n = 0; other_n < pieces.size(); ++other_n) {
+        if (other_n == piece_n) {
+          continue;
+        }
+        const auto& other = pieces[other_n];
+        Transform3D rel   = inv_piece * other.transform;
+        if (other_n < piece_n) {
+          for (auto& wall : walls) {
+            wall.solid = subtract(wall.solid, other.outer, wall.transform.Inverse() * rel);
+          }
+          vacuum = subtract(vacuum, other.vacuum, rel);
+        } else {
+          for (auto& wall : walls) {
+            wall.solid = subtract(wall.solid, other.vacuum, wall.transform.Inverse() * rel);
+          }
+        }
+      }
+      // Distribute the former group-wide terminal cuts over every component.
+      for (size_t cut_n = 0; cut_n < cuts.size(); ++cut_n) {
+        // A finite primitive already ends at its own terminal clipping plane.
+        if (piece.name == cut_names[cut_n]) {
+          continue;
+        }
+        Transform3D rel_cut = inv_piece * cut_transforms[cut_n];
+        for (auto& wall : walls) {
+          wall.solid = subtract(wall.solid, cuts[cut_n], wall.transform.Inverse() * rel_cut);
+        }
+        vacuum = subtract(vacuum, cuts[cut_n], rel_cut);
+      }
+      Volume v_vacuum("v_vacuum_" + piece.name, vacuum, m_Vacuum);
+      Transform3D rel = inv_base * piece.transform;
+      for (size_t wall_n = 0; wall_n < walls.size(); ++wall_n) {
+        string suffix = walls.size() > 1 ? "_" + std::to_string(wall_n) : "";
+        Volume v_tube("v_tube_" + piece.name + suffix, walls[wall_n].solid, m_Al);
+        v_tube.setVisAttributes(description.visAttributes(vis_name));
+        range_pipe.placeVolume(v_tube, rel * walls[wall_n].transform);
+      }
+      auto placed_vacuum = range_vacuum.placeVolume(v_vacuum, rel);
+      DetElement piece_element(vacuum_element, piece.name + "_vacuum", piece.id);
+      piece_element.setPlacement(placed_vacuum);
+    }
+
+    assembly.placeVolume(range_pipe, base_transform);
+    auto placed_vacuum = assembly.placeVolume(range_vacuum, base_transform);
+
+    vacuum_element.setPlacement(placed_vacuum);
   }
 
   // Final placement
