@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-License-Identifier: LGPL-3.0-or-later
+  Minimal compact XML that tests the Python geometry plugin trampoline.
+  Replicates one layer of SolenoidEndcapP using the Python port of
+  SimpleDiskDetector_geo.cpp instead of the C++ plugin.
+
+  Usage:
+    python -c "
+      import sys, dd4hep
+      d = dd4hep.Detector.getInstance()
+      d.fromXML('compact/tests/python_disk.xml')
+      print('Detector loaded:', d.detectors().size(), 'sub-detectors')
+    "
+-->
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="python_disk_test"
+        title="Python geometry plugin smoke test"
+        author="ePIC"
+        url=""
+        status="test"
+        version="1.0">
+    <comment>Trivial endcap disk built from Python via epic_PythonDetector trampoline.</comment>
+  </info>
+
+  <define>
+    <include ref="${DETECTOR_PATH}/compact/definitions.xml"/>
+  </define>
+
+  <includes>
+    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
+    <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
+  </includes>
+
+  <world material="Air">
+    <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
+  </world>
+
+  <display/>
+
+  <detectors>
+    <detector
+      id="1"
+      name="PythonDisk"
+      type="epic_PythonDetector"
+      module="SimpleDisk_python_geo"
+      function="create_detector"
+      reflect="false"
+      pythonpath="${DETECTOR_PATH}/python">
+      <position x="0" y="0" z="0*mm"/>
+      <layer id="1" name="Layer1"
+        inner_z="100*mm"
+        inner_r="300*mm"
+        outer_r="1500*mm">
+        <slice material="Aluminum" thickness="5*mm"/>
+      </layer>
+    </detector>
+  </detectors>
+
+</lccdd>
