@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# generate_svg — dusk/duskcut equivalent of generate_eps for view11
+# Slightly tilted XZ section along the beamline (x = ±200mm with small z tilt).
+
+function print_the_help {
+  echo "USAGE: $0 -i <STEP_FILE> [-t <tag>]"
+  exit 0
+}
+
+FILE_TAG="view11"
+INPUT_FILE=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)  print_the_help ;;
+    -i|--input) INPUT_FILE="$2"; shift; shift ;;
+    -t|--tag)   FILE_TAG="$2";   shift; shift ;;
+    *) echo "unknown option $1"; print_the_help ;;
+  esac
+done
+
+[[ -z "${INPUT_FILE}" ]] && { echo "Error: no input file."; print_the_help; }
+
+# Slightly tilted slice near x=0 along the beam axis
+# dawncut  1  0 -0.01666 200 → plane x - 0.01666*z + 200 = 0, keeps x - 0.01666*z >= -200
+# dawncut -1  0  0.01666 200 → plane -x + 0.01666*z + 200 = 0, keeps -x + 0.01666*z <= -200
+duskcut  1  0 -0.01666 200 "${INPUT_FILE}"       "${FILE_TAG}_t0.stp"
+duskcut -1  0  0.01666 200 "${FILE_TAG}_t0.stp"  "${FILE_TAG}.stp"
+dusk --mesh-deflection 5 -d "${FILE_TAG}.stp" --draw 2 -o "${FILE_TAG}.svg"
+
+rm -f "${FILE_TAG}_t0.stp" "${FILE_TAG}.stp"
+echo "[generate_svg] Done: ${FILE_TAG}.svg"
