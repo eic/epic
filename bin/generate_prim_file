@@ -114,7 +114,7 @@ while elapse.seconds < args.timeout:
         print('{} === TIMEOUT ===: Terminating in {:d} seconds'.format(time_str, time_left))
 
     if line:
-        decoded_line = line.decode('utf-8').strip()
+        decoded_line = line.decode('utf-8', errors='replace').strip()
         print('{} {}'.format(time_str, decoded_line))
         # what we are looking for
         if decoded_line == 'File  {}  is generated.'.format(prim_file):
@@ -144,7 +144,7 @@ except ProcessLookupError:
 
 line = b'stderr outputs:\n'
 while line:
-    print(line.decode('utf-8'), end='')
+    print(line.decode('utf-8', errors='replace'), end='')
     line = readline_nonblocking(p.stderr)
 
 if finished:
