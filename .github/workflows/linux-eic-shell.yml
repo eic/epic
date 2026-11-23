@@ -50,6 +50,8 @@ jobs:
         echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
   list-open-prs:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     uses: eic/actions/.github/workflows/list-open-prs.yml@main
 
   build:
@@ -232,6 +234,8 @@ jobs:
       detector_configs: ${{needs.list-detector-configs.outputs.configs_csv}}
 
   dump-constants:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs: build
     strategy:
@@ -259,6 +263,8 @@ jobs:
         if-no-files-found: error
 
   dump-parameter-table:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs: build
     strategy:
@@ -302,6 +308,8 @@ jobs:
         if-no-files-found: error
 
   merge-constants:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs:
     - dump-constants
@@ -314,6 +322,8 @@ jobs:
         delete-merged: true
 
   merge-parameter-table:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs:
     - dump-parameter-table
@@ -413,7 +423,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_inner_detector, epic_craterlake]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v7
@@ -470,6 +480,8 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   generate-prim-file:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs: build
     strategy:
@@ -498,6 +510,8 @@ jobs:
         retention-days: 1
 
   dawn-view:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs: generate-prim-file
     strategy:
@@ -871,6 +885,8 @@ jobs:
         delete-merged: true
 
   get-docs-from-open-prs:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs:
       - list-open-prs
@@ -934,6 +950,8 @@ jobs:
           if-no-files-found: ignore
 
   get-docs-from-main:
+    # Documentation only; skipped in the merge queue
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-latest
     needs:
       - merge-npsim-capybara
@@ -1023,10 +1041,12 @@ jobs:
     - merge-dawn-view
     - get-docs-from-open-prs
     - get-docs-from-main
+    # Documentation only; skipped in the merge queue
     if: |
       always() &&
       !cancelled() &&
-      !failure()
+      !failure() &&
+      github.event_name != 'merge_group'
     steps:
     - name: Checkout jekyll page
       uses: actions/checkout@v7
@@ -1093,10 +1113,12 @@ jobs:
   deploy-artifacts-page:
     needs:
     - build-artifacts-page
+    # Documentation only; skipped in the merge queue
     if: |
       always() &&
       !cancelled() &&
-      !failure()
+      !failure() &&
+      github.event_name != 'merge_group'
     permissions:
       pages: write
       id-token: write
