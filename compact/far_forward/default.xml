@@ -10,7 +10,7 @@
   <include ref="B0_ECal.xml"/>
   <include ref="offM_tracker.xml"/>
   <include ref="ZDC_SiPMonTile.xml"/>
-  <include ref="ZDC_Crystal_LYSO.xml"/>
+  <include ref="ZDC_Crystal_PbWO4_TDR.xml"/>
   <include ref="roman_pots_eRD24_design.xml"/>
   <include ref="vacuum.xml"/>
   <include ref="magnets.xml"/>
