@@ -38,7 +38,7 @@
       <module name="tower" nx="ZDC_Crystal_nx" ny="ZDC_Crystal_ny">
         <tower name="crystal"
                cellx="ZDC_Crystal_cell_width" celly="ZDC_Crystal_cell_height" thickness="ZDC_Crystal_cell_length"
-               material="PbWO4" vis="AnlGold" sensitive="true"/>
+               material="LYSO" vis="AnlGold" sensitive="true"/>
         <socket name="socket"
                 cellx="ZDC_Crystal_cell_width" celly="ZDC_Crystal_cell_height" thickness="ZDC_Crystal_APD_socket_z"
                 material="ZDC_Polyethylene" vis="AnlTeal" />
