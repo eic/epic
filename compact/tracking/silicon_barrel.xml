@@ -26,19 +26,19 @@
     <constant name="SiBarrelStave1Lower_rc"         value="SiBarrelStave1_rc-SiBarrel1_radius_castellation/2" /> <!--get rmin of the lower modules -->
     <constant name="SiBarrelStave2Lower_rc"         value="SiBarrelStave2_rc-SiBarrel2_radius_castellation/2"/>
 
-   <constant name="SiBarrel1_Module0_Position" value="-185.696*mm" />
-   <constant name="SiBarrel1_Module1_Position" value="-61.3531*mm" />
-   <constant name="SiBarrel1_Module2_Position" value="63.9736*mm" />
-   <constant name="SiBarrel1_Module3_Position" value="188.3164*mm" />
+   <constant name="SiBarrel1_Module0_Position" value="-188.556*mm" />
+   <constant name="SiBarrel1_Module1_Position" value="-64.2331*mm" />
+   <constant name="SiBarrel1_Module2_Position" value="61.1136*mm" />
+   <constant name="SiBarrel1_Module3_Position" value="185.4364*mm" />
 
-   <constant name="SiBarrel2_Module0_Position" value="-341.66*mm" />
-   <constant name="SiBarrel2_Module1_Position" value="-243.856*mm" />
-   <constant name="SiBarrel2_Module2_Position" value="-146.046*mm" />
-   <constant name="SiBarrel2_Module3_Position" value="-48.2374*mm" />
-   <constant name="SiBarrel2_Module4_Position" value="50.5772*mm" />
-   <constant name="SiBarrel2_Module5_Position" value="148.3864*mm" />
-   <constant name="SiBarrel2_Module6_Position" value="246.1957*mm" />
-   <constant name="SiBarrel2_Module7_Position" value="344.0042*mm" />
+   <constant name="SiBarrel2_Module0_Position" value="-344*mm" />
+   <constant name="SiBarrel2_Module1_Position" value="-246.196*mm" />
+   <constant name="SiBarrel2_Module2_Position" value="-148.386*mm" />
+   <constant name="SiBarrel2_Module3_Position" value="-50.5771*mm" />
+   <constant name="SiBarrel2_Module4_Position" value="48.2372*mm" />
+   <constant name="SiBarrel2_Module5_Position" value="146.0464*mm" />
+   <constant name="SiBarrel2_Module6_Position" value="243.8557*mm" />
+   <constant name="SiBarrel2_Module7_Position" value="341.6642*mm" />
 
     <constant name="SiBarrelLayer1_length" value="SiBarrelStave1_length + 0.3*cm" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelStave2_length + 2*mm" />
