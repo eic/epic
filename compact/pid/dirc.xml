@@ -26,8 +26,15 @@
       - Use "surface" field (1 bit) to distinguish:
         * surface=0: MCP photon detection surface (negative z face of prism)
         * surface=1: Quartz bar charged particles (many hits per track with step limit)
-      - Bar step limit (0.5mm) provides continuous position sampling along track
+      - Bar step limit (0.5mm, DIRCBarLimits, applied to bar_vol only) provides
+        continuous position sampling along track
       - To enable per-step hits, run npsim with CollectSingleDeposits=True
+
+    Limits:
+      - DIRCLimits (whole detector): optical-photon time and track-length limits
+      - DIRCBarLimits (bars only): the same optical-photon limits plus the 0.5mm
+        step limit. A volume's own limitset replaces the inherited one, so the
+        optical-photon limits are repeated here.
 
   </comment>
 
@@ -88,6 +95,10 @@
     <limitset name="DIRCLimits">
       <limit name="time_max" particles="opticalphoton" value="150.0" unit="ns"/>
       <limit name="track_length_max" particles="opticalphoton" value="30000.0" unit="mm"/>
+    </limitset>
+    <limitset name="DIRCBarLimits">
+      <limit name="time_max" particles="opticalphoton" value="150.0" unit="ns"/>
+      <limit name="track_length_max" particles="opticalphoton" value="30000.0" unit="mm"/>
       <limit name="step_length_max" particles="*" value="0.5" unit="mm"/>
     </limitset>
   </limits>
@@ -133,7 +144,7 @@
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="QuartzOptical"
-          limits="DIRCLimits"
+          limits="DIRCBarLimits"
           vis="DIRCBar"
         />
 
