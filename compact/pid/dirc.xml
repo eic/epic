@@ -70,6 +70,7 @@
     <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
     <constant name="DIRCMCP_width"           value="DIRCPrism_width"/>
     <constant name="DIRCMCP_thickness"       value="1*mm"/>
+    <constant name="DIRCMCP_pixel_size"      value="3.3*mm" comment="readout pixel pitch; cell (0,0) is centred on the MCP plane"/>
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
@@ -207,7 +208,7 @@
   <readouts>
     <comment>
       DIRCHits: Combined readout for MCP surface and quartz bars.
-      - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3mm grid)
+      - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3.3mm grid)
       - surface=1: Bar charged particle hits (requires tracker action, no optical filter, 0.5mm grid)
 
       npsim configuration (VolumeDispatchAction in eic/npsim):
@@ -220,7 +221,7 @@
     <readout name="DIRCHits">
       <segmentation type="MultiSegmentation" key="surface">
         <segmentation name="mcp" type="CartesianGridXY" key_value="0"
-          grid_size_x="3.0*mm" grid_size_y="3.0*mm"
+          grid_size_x="DIRCMCP_pixel_size" grid_size_y="DIRCMCP_pixel_size"
           offset_x="0.0*mm" offset_y="0.0*mm" />
         <segmentation name="bar" type="CartesianGridXY" key_value="1"
           grid_size_x="0.5*mm" grid_size_y="0.5*mm"
