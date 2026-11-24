@@ -288,8 +288,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   printout(DEBUG, "DIRC_geo", "lens_position_x LAB = %12.4f ", lens_position_x + det_ravg);
   printout(DEBUG, "DIRC_geo", "lens_position_z LAB = %12.4f ", lens_position_z + dirc_pos_z);
   //
+  // one lens per bar, centred on the bar (same y as the bar placement above)
   for (int y_index = 0; y_index < bar_repeat_y; y_index++) {
-    double lens_position_y = y_index * lens_width - 0.5 * (prism_width - lens_width);
+    double lens_position_y = 0.5 * bar_assm_width - 0.5 * bar_width - (bar_width + bar_gap) * y_index;
     Position lens_position(lens_position_x, lens_position_y, lens_position_z);
     dirc_module.placeVolume(Envelope_lens_vol, lens_position);
   }
