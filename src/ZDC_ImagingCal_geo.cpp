@@ -40,7 +40,7 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   // envelope
   Box envShape(xwidth * 0.5, ywidth * 0.5, length * 0.5);
   Volume env(detName + "_envelope", envShape, desc.material("Air"));
-  env.setVisAttributes(desc.visAttributes(detElem.visStr()));
+  env.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
 
   int layerid   = 0;
   double zpos_0 = -length / 2.;
