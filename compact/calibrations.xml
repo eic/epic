@@ -95,57 +95,57 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar0.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar0.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar0.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar1.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar1.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar1.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar2.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar2.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar2.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar3.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar3.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar3.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar4.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar4.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar4.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar5.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar5.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar5.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar6.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar6.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar6.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar7.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar7.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar7.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar8.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar8.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar8.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/lut_bar9.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/lut_bar9.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar9.root"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/dircgr/chrcorr.root"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/ba63a6ccb0a4a2787f43aa5fa325f89d834bd5dd/dircgr/chrcorr.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/chrcorr.root"/>
     </plugin>
    </plugins>
 
