@@ -64,7 +64,6 @@
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
     <constant name="DIRCLens_shift"         value="0 * mm" comment="Shift of optical axis compared to bar center"/>
-    <constant name="DIRCLens_width"         value="35.0 * mm"/>
 
     <!-- MCP -->
     <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
@@ -78,6 +77,7 @@
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17.25 * mm"/>
     <constant name="DIRCBar_width"          value="35.0 * mm"/>
+    <constant name="DIRCLens_width"         value="DIRCBar_width + DIRCBar_gap" comment="one lens per bar, centred on it; neighbouring lenses touch (no gaps)"/>
     <constant name="DIRCGlue_thickness"     value="0.025 * mm"/>
     <constant name="DIRCBar_length"         value="114.00 * cm"/>
     <constant name="DIRCBar_center"         value="76.5875 * cm" comment="Radial position of center of bar"/>
