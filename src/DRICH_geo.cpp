@@ -465,9 +465,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       printout(ERROR, "DRICH_geo", "Square segmentation requires num_tiles >= 2");
       return det;
     }
-    
-    double tileSize     = 2.0 * radiatorRmax / nTiles; // Equal square pitch across the outer diameter.
-    double ribThickness = coronasThickness;            // Carbon-fiber rib thickness.
+
+    double tileSize = 2.0 * radiatorRmax / nTiles; // Equal square pitch across the outer diameter.
+    double ribThickness = coronasThickness;        // Carbon-fiber rib thickness.
 
     Box squareRibX(ribThickness / 2.0, radiatorRmax, structureThickness / 2.0); // Vertical ribs
     Box squareRibY(radiatorRmax, ribThickness / 2.0, structureThickness / 2.0); // Horizontal ribs
@@ -479,10 +479,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     for (int i = 1; i < nTiles; ++i) {
       double xPos = -radiatorRmax + i * tileSize;
       Transform3D trX(Translation3D(xPos, 0.0, 0.0));
-      
+
       if (firstRib) {
         ribUnionSolid = UnionSolid(squareRibX, squareRibX, trX);
-        firstRib = false;
+        firstRib      = false;
       } else {
         ribUnionSolid = UnionSolid(ribUnionSolid, squareRibX, trX);
       }
@@ -492,20 +492,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     for (int j = 1; j < nTiles; ++j) {
       double yPos = -radiatorRmax + j * tileSize;
       Transform3D trY(Translation3D(0.0, yPos, 0.0));
-    
-      if (firstRib) { 
+
+      if (firstRib) {
         ribUnionSolid = UnionSolid(squareRibY, squareRibY, trY);
-        firstRib = false;
+        firstRib      = false;
       } else {
         ribUnionSolid = UnionSolid(ribUnionSolid, squareRibY, trY);
       }
     }
 
-    IntersectionSolid squareRibStructure(ribUnionSolid, aerogelSolid); // Clip grid to actual aerogel shape
-    Volume squareRibVol(detName + "_aerogel_square_ribs", squareRibStructure, coronasMat);  
-    squareRibVol.setVisAttributes(coronasVis);                    // Carbon-fiber square ribs
-    aerogelVol.placeVolume(squareRibVol, Position(0., 0., 0.));  // Place rib structure inside aerogel
-    
+    IntersectionSolid squareRibStructure(ribUnionSolid,
+                                         aerogelSolid); // Clip grid to actual aerogel shape
+    Volume squareRibVol(detName + "_aerogel_square_ribs", squareRibStructure, coronasMat);
+    squareRibVol.setVisAttributes(coronasVis); // Carbon-fiber square ribs
+    aerogelVol.placeVolume(squareRibVol,
+                           Position(0., 0., 0.)); // Place rib structure inside aerogel
+
   } //Square
 
   Cone airgapSolid(airgapThickness / 2.0,
