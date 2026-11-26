@@ -444,8 +444,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   } //trapezoidal
 
   else if (segmentationType == "square") {
-    printout(WARNING, "DRICH_geo", "Square segmentation requested but not implemented yet.");
-
     // ------------------------------------------------------------------------
     // Square tiling of the aerogel
     // The square grid is defined in the XY plane over the full outer
