@@ -62,7 +62,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // Sensitive volumes and associated surfaces
   // - There can be either one or five.
   int sensitiveVolumeSet = 5; // 1: single volume, 5: 5 volumes, -1: error
-  vector<PlacedVolume> sensitives;
+  // Placements of the sensitive volumes in the backward [0] and forward [1] module assemblies
+  array<vector<PlacedVolume>, 2> sensitives;
   vector<VolPlane> volplane_surfaces;
 
   PlacedVolume pv;
@@ -199,9 +200,17 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   }
   printout(DEBUG, "MPGDCylinderBarrelTracker", " => total_thickness %.4f cm", total_thickness / cm);
 
-  // ***** ASSEMBLY VOLUME: A UNIQUE ONE
+  // ***** ASSEMBLY VOLUMES: ONE PER Z SIDE
+  // The outward frame must face outwards on both sides. The forward modules
+  // are therefore built as the mirror image along z of the backward ones,
+  // rather than placed with a reflection: DDG4 does not handle sensitive
+  // volumes placed with a reflection (det = -1) correctly (cellIDs encoded with
+  // local z flipped, or no hits at all when running multi-threaded).
   Assembly m_vol(m_nam);
-  m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
+  Assembly m_vol_fwd(m_nam + "_fwd");
+  array<Assembly, 2> m_vols{m_vol, m_vol_fwd};
+  for (auto& vol : m_vols)
+    vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
   // ***** BUILD FRAMES
   double zthickness, mod_rmax = mod_rmin + total_thickness;
@@ -213,22 +222,26 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   Tube frame_tube_O(mod_rmin, mod_rmax, zthickness / 2, phi_start, phi_end);
   Volume frame_vol_O(out_frame.name, frame_tube_O, description.material(out_frame.material));
   m_vol.placeVolume(frame_vol_O, Position(0, 0, -(total_length - zthickness) / 2));
+  m_vol_fwd.placeVolume(frame_vol_O, Position(0, 0, (total_length - zthickness) / 2));
   // Inward frame
   zthickness = frame.width; // Update "zthickness"
   Tube frame_tube_I(mod_rmin, mod_rmax, zthickness / 2, phi_start, phi_end);
   Volume frame_vol_I(frame.name, frame_tube_I, description.material(frame.material));
   m_vol.placeVolume(frame_vol_I, Position(0, 0, (total_length - zthickness) / 2));
+  m_vol_fwd.placeVolume(frame_vol_I, Position(0, 0, -(total_length - zthickness) / 2));
   // Start/stop frames
   double frame_dphi =
       zthickness / mod_r0; //converting the thickness of the frame to angular radians.
   Tube frame_tube_3(mod_rmin, mod_rmax, total_length / 2, phi_start - frame_dphi, phi_start);
   const string start_frame_nam("StartFrame");
   Volume frame_vol_3(start_frame_nam, frame_tube_3, description.material(frame.material));
-  m_vol.placeVolume(frame_vol_3);
+  for (auto& vol : m_vols)
+    vol.placeVolume(frame_vol_3);
   Tube frame_tube_4(mod_rmin, mod_rmax, total_length / 2, phi_end, phi_end + frame_dphi);
   const string stop_frame_nam("StopFrame");
   Volume frame_vol_4(stop_frame_nam, frame_tube_4, description.material(frame.material));
-  m_vol.placeVolume(frame_vol_4);
+  for (auto& vol : m_vols)
+    vol.placeVolume(frame_vol_4);
 
   frame_vol_O.setVisAttributes(description, out_frame.vis);
   frame_vol_I.setVisAttributes(description, frame.vis);
@@ -250,7 +263,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double comp_thickness = x_comp.thickness();
     Tube c_tube(comp_rmin, comp_rmin + comp_thickness, mod_length / 2, phi_start, phi_end);
     Volume c_vol(c_nam, c_tube, description.material(x_comp.materialStr()));
-    pv = m_vol.placeVolume(c_vol, Position(0, 0, (out_frame.width - frame.width) / 2));
+    // Active area is shifted away from the outward frame
+    double zCorr = (out_frame.width - frame.width) / 2;
+    array<PlacedVolume, 2> c_pvs{m_vol.placeVolume(c_vol, Position(0, 0, zCorr)),
+                                 m_vol_fwd.placeVolume(c_vol, Position(0, 0, -zCorr))};
     c_vol.setRegion(description, x_comp.regionStr());
     c_vol.setLimitSet(description, x_comp.limitsStr());
     c_vol.setVisAttributes(description, x_comp.visStr());
@@ -260,7 +276,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         sensitiveVolumeSet = -1;
         break;
       }
-      pv.addPhysVolID("sensor", 0);
+      for (auto& c_pv : c_pvs)
+        c_pv.addPhysVolID("sensor", 0);
       // StripID. Single Sensitive Volume?
       if (c_nam == "DriftGap") {
         if (nSensitives != 0) {
@@ -270,9 +287,11 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         sensitiveVolumeSet = 1;
       }
       int strip_id = x_comp.key();
-      pv.addPhysVolID("strip", strip_id);
+      for (int side = 0; side < 2; side++) {
+        c_pvs[side].addPhysVolID("strip", strip_id);
+        sensitives[side].push_back(c_pvs[side]);
+      }
       c_vol.setSensitiveDetector(sens);
-      sensitives.push_back(pv);
 
       // -------- create a measurement plane for the tracking surface attached to the sensitive volume -----
       Vector3D u(-1., 0., 0.);
@@ -378,24 +397,19 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       Translation3D origin2Centre(Xc, Yc, Zc);
       RotationZYX tilt(phi_tilt, 0, 0);
       RotationZYX rot(phi, 0, 0);
-      Transform3D tr;
-      if (isBackward)
-        tr = rot * origin2Centre * tilt;
-      else {
-        // Reflection, so that outward-frame faces outwards.
-        // Note: we need a reflection, as opposed to a rotation, so that fish
-        // scales keep being oriented the same. This in turn, so that the set
-        // of all four sections can be moved out in one go for maintenance.
-        Translation3D restoreZ(0, 0, 2 * Zc);
-        tr = restoreZ * Rotation3D(1, 0, 0, 0, 1, 0, 0, 0, -1) * rot * origin2Centre * tilt;
-      }
-      Volume& module_vol = m_vol;
-      pv                 = lay_vol.placeVolume(module_vol, tr);
+      // Forward modules use the z-mirrored assembly, so that the outward
+      // frame faces outwards while fish scales keep being oriented the same
+      // (this, so that the set of all four sections can be moved out in one go
+      // for maintenance). This is equivalent to reflecting the backward
+      // assembly about its centre, without a reflected placement.
+      int side = isBackward ? 0 : 1;
+      Transform3D tr(rot * origin2Centre * tilt);
+      pv = lay_vol.placeVolume(m_vols[side], tr);
       pv.addPhysVolID("module", moduleIdx);
       mod_elt.setPlacement(pv);
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
         // ***** SENSITIVE COMPONENTS
-        PlacedVolume& sens_pv = sensitives[iSensitive];
+        PlacedVolume& sens_pv = sensitives[side][iSensitive];
         int de_id             = nphi * 4 * iSensitive + moduleIdx;
         DetElement comp_de(mod_elt,
                            std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
