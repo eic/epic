@@ -445,6 +445,69 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   else if (segmentationType == "square") {
     printout(WARNING, "DRICH_geo", "Square segmentation requested but not implemented yet.");
+
+    // ------------------------------------------------------------------------
+    // Square tiling of the aerogel
+    // The square grid is defined in the XY plane over the full outer
+    // diameter of the aerogel. The grid is subsequently intersected
+    // with aerogelSolid.
+    // ------------------------------------------------------------------------
+
+    if (!coronasElem.hasAttr(_Unicode(num_tiles))) {
+      printout(ERROR, "DRICH_geo", "DRICH square segmentation requires the 'num_tiles' attribute.");
+    }
+
+    int nTiles = coronasElem.attr<int>(_Unicode(num_tiles));
+
+    if (coronasElem.hasAttr(_Unicode(num_tiles))) {
+      nTiles = coronasElem.attr<int>(_Unicode(num_tiles));
+    }
+
+    if (nTiles < 2) {
+      printout(ERROR, "DRICH_geo", "Square segmentation requires num_tiles >= 2");
+      return det;
+    }
+    
+    double tileSize     = 2.0 * radiatorRmax / nTiles; // Equal square pitch across the outer diameter.
+    double ribThickness = coronasThickness;            // Carbon-fiber rib thickness.
+
+    Box squareRibX(ribThickness / 2.0, radiatorRmax, structureThickness / 2.0); // Vertical ribs
+    Box squareRibY(radiatorRmax, ribThickness / 2.0, structureThickness / 2.0); // Horizontal ribs
+
+    Solid ribUnionSolid;
+    bool firstRib = true;
+
+    // Vertical ribs
+    for (int i = 1; i < nTiles; ++i) {
+      double xPos = -radiatorRmax + i * tileSize;
+      Transform3D trX(Translation3D(xPos, 0.0, 0.0));
+      
+      if (firstRib) {
+        ribUnionSolid = UnionSolid(squareRibX, squareRibX, trX);
+        firstRib = false;
+      } else {
+        ribUnionSolid = UnionSolid(ribUnionSolid, squareRibX, trX);
+      }
+    }
+
+    // Horizontal ribs
+    for (int j = 1; j < nTiles; ++j) {
+      double yPos = -radiatorRmax + j * tileSize;
+      Transform3D trY(Translation3D(0.0, yPos, 0.0));
+    
+      if (firstRib) { 
+        ribUnionSolid = UnionSolid(squareRibY, squareRibY, trY);
+        firstRib = false;
+      } else {
+        ribUnionSolid = UnionSolid(ribUnionSolid, squareRibY, trY);
+      }
+    }
+
+    IntersectionSolid squareRibStructure(ribUnionSolid, aerogelSolid); // Clip grid to actual aerogel shape
+    Volume squareRibVol(detName + "_aerogel_square_ribs", squareRibStructure, coronasMat);  
+    squareRibVol.setVisAttributes(coronasVis);                    // Carbon-fiber square ribs
+    aerogelVol.placeVolume(squareRibVol, Position(0., 0., 0.));  // Place rib structure inside aerogel
+    
   } //Square
 
   Cone airgapSolid(airgapThickness / 2.0,
