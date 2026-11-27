@@ -132,14 +132,10 @@
   - `thickness`: radiator thickness, defined separately for aerogel and filter
   - `pitch`: controls the angle of the radiator (0=vertical)
   - `segmentation`: controls aerogel radiator tiling method. It can be "trapezoidal",
-        "squareFixNumTiles", "squareFixTileSize" or "unique".
-    - `num_tiles`: number of square tiles across the outer diameter of the aerogel when
-        `segmentation="squareFixNumTiles"`, irrelevant otherwise.
-    - `tile_size`: size of the square tile when `segmentation="squareFixTileSize"`,
-        irrelevant otherwise
-    - 'crown radius and num_tilesCrown': radii values for different crwons and
-        number of tiles inside each crown when `segmentation = "trapezoidal",
-        irrelevant otherwise.
+        "square", or "unique".
+    - `tile_size`: size of the square tile when `segmentation="square"`, irrelevant otherwise
+    - 'crown radius and num_tilesCrown': radii values for different crwons and number of tiles 
+        inside each crown when `segmentation = "trapezoidal", irrelevant otherwise.
     - A `unique` segmentation means, no tiling of aerogel.
 
 </documentation>
@@ -157,7 +153,6 @@
   <coronas
     segmentation="squareFixTileSize"
     tile_size="20.0*cm"
-    num_tiles="10"
     thickness="DRICH_corona_thickness"
     material="CarbonFiber_15percent"
     vis="DRICH_Corona_vis"
