@@ -4,7 +4,7 @@
 <lccdd>
   <define>
     <comment>
-         This version builds the silicon layers with a structure of LAS, HalfRSU, and curved segments. 
+         This version builds the silicon layers with a structure of LAS, HalfRSU, and curved segments.
          The passive materal is modelled as tessellated solids imported from .gdml files.
     </comment>
 
@@ -14,7 +14,7 @@
     <constant name="SiBarrelSensor_thickness" value="SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness + SiBarrelSensorInactiveSi_thickness" />
     <constant name="SiBarrelSensorMod_thickness" value="SiBarrelSensor_thickness" />
     <constant name="PassiveStaveThickness" value="8.0*mm" />
-    
+
     <constant name="SiBarrelStave1_length" value="51.3*cm"/>
     <constant name="SiBarrelStave2_length" value="80.3*cm" />
     <constant name="SiBarrelStave1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
@@ -75,15 +75,15 @@
         <documentation level="5">
           ### Actual detectors
         </documentation>
-        
-           <HalfRSU name="HalfRepeatedSensorUnit"         
+
+           <HalfRSU name="HalfRepeatedSensorUnit"
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
         sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
         sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness"
         outer_thickness = "SiBarrelSensorCu_thickness + SiBarrelSensorActiveSi_thickness/2"
         inner_thickness = "PassiveStaveThickness" >
-        
+
          <rsu_component name="CurvedLeftEnd"
              material="Silicon"
              sensitive="false"
@@ -264,7 +264,7 @@
              vis="TrackerLayerVis">
         <position x="0" y="-RSUlength/2 + (LeftGap + 5*TileLength + 3*InterTileGap + CentralTileGap) + InterTileGap/2" z="0.0" />
         </rsu_component>
-   
+
          <rsu_component name="Tile1"
              material="Silicon"
              sensitive="true"
@@ -409,10 +409,10 @@
              vis="TrackerLayerVis">
         <position x="0" y="-RSUlength/2 + LeftGap + 5*TileLength + 4*InterTileGap + CentralTileGap + TileLength/2" z="0.0" />
         </rsu_component>
-        
-        </HalfRSU> 
 
-        
+        </HalfRSU>
+
+
        <detector
       id="TrackerBarrel_0_ID"
       name="SagittaSiBarrel"
@@ -424,8 +424,8 @@
         rmin="SiBarrelLayer1_rmin"
         rmax="SiBarrelLayer1_rmax"
         length="SiBarrelLayer1_length" />
-        
-        
+
+
       <LAS name="LAS_6RSU"
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
@@ -433,7 +433,7 @@
         sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
       <comment> 6-RSU LAS for L3 </comment>
       <LAS_component name="CurvedLeftEndcap"
-        material="Silicon" 
+        material="Silicon"
         sensitive="false"
         nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
         radius="RSUcurvatureRadius"
@@ -442,59 +442,59 @@
         length= "LEClength"
         thickness="SiBarrelSensorMod_thickness"
         vis="TrackerLayerVis">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength/2" z="RSUaxis" />
       </LAS_component>
-      
+
       <LAS_component name="TopHalfRSU0" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU0" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
       <LAS_component name="TopHalfRSU1" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU1" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength +  RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
       <LAS_component name="TopHalfRSU2" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + 2*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 2*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU2" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength +  2*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  2*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
       <LAS_component name="TopHalfRSU3" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + 3*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 3*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU3" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength +  3*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  3*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
-      
+
       <LAS_component name="TopHalfRSU4" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + 4*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 4*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU4" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength +  4*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  4*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
-      
+
       <LAS_component name="TopHalfRSU5" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength + 5*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength + 5*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU5" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_6RSU/2 + LEClength +  5*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_6RSU/2 + LEClength +  5*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
      <LAS_component name="CurvedRightEndcap"
-        material="Silicon" 
+        material="Silicon"
         sensitive="false"
         nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
         radius="RSUcurvatureRadius"
@@ -503,29 +503,29 @@
         length= "REClength"
         thickness="SiBarrelSensorMod_thickness"
         vis="TrackerLayerVis">
-        <position x="0" y="LASlength_6RSU/2 - REClength/2" z="RSUaxis" />   
+        <position x="0" y="LASlength_6RSU/2 - REClength/2" z="RSUaxis" />
       </LAS_component>
-      
-      </LAS> 
 
-        
+      </LAS>
+
+
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis"
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
         sensor_active_si_thickness="SiBarrelSensorActiveSi_thickness"
         sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
-        
+
         <module_component name="LAS_0" ref="LAS_6RSU">
           <position x="0" y="SiBarrel1_Module0_Position" z= "0"/>
-  	  <rotation x="0.0" y="180*degree" z="0.0"/>
+          <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
         <module_component name="LAS_1" ref="LAS_6RSU">
           <position x="0" y="SiBarrel1_Module1_Position" z= "0"/>
         </module_component>
         <module_component name="LAS_2" ref="LAS_6RSU">
           <position x="0" y="SiBarrel1_Module2_Position" z= "0"/>
-  	  <rotation x="0.0" y="180*degree" z="0.0"/>
+          <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
         <module_component name="LAS_3" ref="LAS_6RSU">
           <position x="0" y="SiBarrel1_Module3_Position" z= "0"/>
@@ -577,7 +577,7 @@
         rmin="SiBarrelLayer2_rmin"
         rmax="SiBarrelLayer2_rmax"
         length="SiBarrelLayer2_length" />
-        
+
         <LAS name="LAS_5RSU"
         sensor_stack="true"
         sensor_cu_thickness="SiBarrelSensorCu_thickness"
@@ -585,7 +585,7 @@
         sensor_inactive_si_thickness="SiBarrelSensorInactiveSi_thickness">
       <comment> 5-RSU LAS for L4 </comment>
       <LAS_component name="CurvedLeftEndcap"
-        material="Silicon" 
+        material="Silicon"
         sensitive="false"
         nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
         radius="RSUcurvatureRadius"
@@ -594,51 +594,51 @@
         length= "LEClength"
         thickness="SiBarrelSensorMod_thickness"
         vis="TrackerLayerVis">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength/2" z="RSUaxis" />
       </LAS_component>
-      
+
       <LAS_component name="TopHalfRSU0" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU0" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
       <LAS_component name="TopHalfRSU1" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU1" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength +  RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
       <LAS_component name="TopHalfRSU2" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength + 2*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + 2*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU2" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength +  2*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  2*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
       <LAS_component name="TopHalfRSU3" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength + 3*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + 3*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU3" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength +  3*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  3*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
-      
+
       <LAS_component name="TopHalfRSU4" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength + 4*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength + 4*RSUlength + RSUlength/2" z="RSUaxis" />
       </LAS_component>
       <LAS_component name="BottomHalfRSU4" ref="HalfRepeatedSensorUnit">
-        <position x="0" y="-LASlength_5RSU/2 + LEClength +  4*RSUlength + RSUlength/2" z="RSUaxis" />   
+        <position x="0" y="-LASlength_5RSU/2 + LEClength +  4*RSUlength + RSUlength/2" z="RSUaxis" />
         <rotation x="0.0" y="RSUhalfAngle" z="0.0"/>
       </LAS_component>
 
      <LAS_component name="CurvedRightEndcap"
-        material="Silicon" 
+        material="Silicon"
         sensitive="false"
         nsegments="2*SiBarrelSiliconCurveNoSegments + 1"
         radius="RSUcurvatureRadius"
@@ -647,11 +647,11 @@
         length= "REClength"
         thickness="SiBarrelSensorMod_thickness"
         vis="TrackerLayerVis">
-        <position x="0" y="LASlength_5RSU/2 - REClength/2" z="RSUaxis" />   
+        <position x="0" y="LASlength_5RSU/2 - REClength/2" z="RSUaxis" />
       </LAS_component>
-      
-      </LAS> 
-        
+
+      </LAS>
+
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis"
         sensor_stack="true"
@@ -661,28 +661,28 @@
 
         <module_component name="LAS_0" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module0_Position" z= "0"/>
-  	  <rotation x="0.0" y="180*degree" z="0.0"/>
+          <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
         <module_component name="LAS_1" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module1_Position" z= "0"/>
         </module_component>
         <module_component name="LAS_2" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module2_Position" z= "0"/>
-  	  <rotation x="0.0" y="180*degree" z="0.0"/>
+          <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
         <module_component name="LAS_3" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module3_Position" z= "0"/>
         </module_component>
         <module_component name="LAS_4" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module4_Position" z= "0"/>
-  	  <rotation x="0.0" y="180*degree" z="0.0"/>
+          <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
         <module_component name="LAS_5" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module5_Position" z= "0"/>
         </module_component>
         <module_component name="LAS_6" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module6_Position" z= "0"/>
-  	  <rotation x="0.0" y="180*degree" z="0.0"/>
+          <rotation x="0.0" y="180*degree" z="0.0"/>
         </module_component>
         <module_component name="LAS_7" ref="LAS_5RSU">
           <position x="0" y="SiBarrel2_Module7_Position" z= "0"/>
