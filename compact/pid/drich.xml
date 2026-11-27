@@ -151,7 +151,7 @@
     thickness="DRICH_aerogel_thickness"
     />
   <coronas
-    segmentation="squareFixTileSize"
+    segmentation="square"
     tile_size="20.0*cm"
     thickness="DRICH_corona_thickness"
     material="CarbonFiber_15percent"
