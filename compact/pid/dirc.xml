@@ -26,8 +26,15 @@
       - Use "surface" field (1 bit) to distinguish:
         * surface=0: MCP photon detection surface (negative z face of prism)
         * surface=1: Quartz bar charged particles (many hits per track with step limit)
-      - Bar step limit (0.5mm) provides continuous position sampling along track
+      - Bar step limit (0.5mm, DIRCBarLimits, applied to bar_vol only) provides
+        continuous position sampling along track
       - To enable per-step hits, run npsim with CollectSingleDeposits=True
+
+    Limits:
+      - DIRCLimits (whole detector): optical-photon time and track-length limits
+      - DIRCBarLimits (bars only): the same optical-photon limits plus the 0.5mm
+        step limit. A volume's own limitset replaces the inherited one, so the
+        optical-photon limits are repeated here.
 
   </comment>
 
@@ -57,12 +64,12 @@
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
     <constant name="DIRCLens_shift"         value="0 * mm" comment="Shift of optical axis compared to bar center"/>
-    <constant name="DIRCLens_width"         value="35.0 * mm"/>
 
     <!-- MCP -->
     <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
     <constant name="DIRCMCP_width"           value="DIRCPrism_width"/>
     <constant name="DIRCMCP_thickness"       value="1*mm"/>
+    <constant name="DIRCMCP_pixel_size"      value="3.3*mm" comment="readout pixel pitch; cell (0,0) is centred on the MCP plane"/>
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
@@ -70,6 +77,7 @@
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17.25 * mm"/>
     <constant name="DIRCBar_width"          value="35.0 * mm"/>
+    <constant name="DIRCLens_width"         value="DIRCBar_width + DIRCBar_gap" comment="one lens per bar, centred on it; neighbouring lenses touch (no gaps)"/>
     <constant name="DIRCGlue_thickness"     value="0.025 * mm"/>
     <constant name="DIRCBar_length"         value="114.00 * cm"/>
     <constant name="DIRCBar_center"         value="76.5875 * cm" comment="Radial position of center of bar"/>
@@ -85,7 +93,13 @@
   </materials>
 
   <limits>
-    <limitset name="dirc_bar_limits">
+    <limitset name="DIRCLimits">
+      <limit name="time_max" particles="opticalphoton" value="150.0" unit="ns"/>
+      <limit name="track_length_max" particles="opticalphoton" value="30000.0" unit="mm"/>
+    </limitset>
+    <limitset name="DIRCBarLimits">
+      <limit name="time_max" particles="opticalphoton" value="150.0" unit="ns"/>
+      <limit name="track_length_max" particles="opticalphoton" value="30000.0" unit="mm"/>
       <limit name="step_length_max" particles="*" value="0.5" unit="mm"/>
     </limitset>
   </limits>
@@ -108,7 +122,7 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCHits" vis="DIRCTube" region="DIRCRegion">
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCHits" vis="DIRCTube" region="DIRCRegion" limits="DIRCLimits">
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
@@ -131,7 +145,7 @@
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="QuartzOptical"
-          limits="dirc_bar_limits"
+          limits="DIRCBarLimits"
           vis="DIRCBar"
         />
 
@@ -194,7 +208,7 @@
   <readouts>
     <comment>
       DIRCHits: Combined readout for MCP surface and quartz bars.
-      - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3mm grid)
+      - surface=0: MCP optical photon hits (Geant4OpticalTrackerAction, 3.3mm grid)
       - surface=1: Bar charged particle hits (requires tracker action, no optical filter, 0.5mm grid)
 
       npsim configuration (VolumeDispatchAction in eic/npsim):
@@ -207,7 +221,7 @@
     <readout name="DIRCHits">
       <segmentation type="MultiSegmentation" key="surface">
         <segmentation name="mcp" type="CartesianGridXY" key_value="0"
-          grid_size_x="3.0*mm" grid_size_y="3.0*mm"
+          grid_size_x="DIRCMCP_pixel_size" grid_size_y="DIRCMCP_pixel_size"
           offset_x="0.0*mm" offset_y="0.0*mm" />
         <segmentation name="bar" type="CartesianGridXY" key_value="1"
           grid_size_x="0.5*mm" grid_size_y="0.5*mm"

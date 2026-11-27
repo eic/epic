@@ -67,27 +67,84 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/irt2/drich-calibration.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/f8860f469d240c807b11a244defaaaed96b76137/irt2/drich-calibration.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/drich-calibration.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/irt2/drich-reco_v2.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/03b9594f743be82d05176d662b93a499b6362e2e/irt2/drich-reco.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/drich-reco.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/irt2/pfrich-calibration.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/f8860f469d240c807b11a244defaaaed96b76137/irt2/pfrich-calibration.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/pfrich-calibration.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/irt2/pfrich-reco_v2.json"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/03b9594f743be82d05176d662b93a499b6362e2e/irt2/pfrich-reco.json"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4bc996e468f3696878ae114358938dd37a32976e/irt2/pfrich-reco.json"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
       <arg value="file:calibrations/bic_edepToNpe_layer.lut"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/700fa7f92568311408137b2002b513346b66277d/bic_edepToNpe_layer.lut"/>
+    </plugin>
+    <!-- hpDIRC geometric reconstruction (EICrecon DircGR): LUTs + chromatic
+         correction, from eic/epic-data#55. -->
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar0.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar0.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar1.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar1.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar2.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar2.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar3.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar3.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar4.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar4.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar5.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar5.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar6.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar6.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar7.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar7.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar8.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar8.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/lut_bar9.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/lut_bar9.root"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_CACHE:/opt/detector"/>
+      <arg value="file:calibrations/dircgr/chrcorr.root"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/06256962e623b394c4bef8bc290247ea18f93c45/dircgr/chrcorr.root"/>
     </plugin>
    </plugins>
 
