@@ -480,7 +480,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // ----> N >= (2 * radiatorRmax + ribThickness) / tilePitch
 
     const int nTiles = static_cast<int>(std::ceil((2.0 * radiatorRmax + ribThickness) / tilePitch));
-    const int nRibs  = nTiles -1;
+    const int nRibs  = nTiles - 1;
 
     if (nTiles < 1) {
       printout(ERROR, "DRICH_geo", "Invalid number of tiles calculated for square segmentation.");
