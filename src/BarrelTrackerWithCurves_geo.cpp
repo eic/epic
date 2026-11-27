@@ -22,9 +22,9 @@
 
 /*
 This version is an adaptation of BarrelTrackerWithFrame_geo.cpp to handle the curved silicon surfaces of the outer barrels, and import
-passive components from GDML files.
+passive components from GDML files. The silicon surface is now build with a structure of LAS modules, made from 5 or 6 RSUs.
 
-A curved component (identified by the word "Curved" in the name) is a segment of a cylinder. This is constructed by a series of flat segments
+The curved components are constructed by a series of flat segments
 The number of segments is set in the xml file, together with the radius, anglular range, length, thickness, and the inner and outer thicknesses
 used to set the sensitive surface. This approach is taken as it is not possibe to use the DD4HEP CylindricalGridPhiZ readout for a cylindrical surface
 where the axis is displaced from the beam line. Therefore the curved surface is modelled as a series of flat segments.
@@ -32,7 +32,7 @@ Unlike in BarrelTrackerWithFrame, the position of components (related to the cen
 
 Passive components are modelled as a tessellated solid, imported from a .gdml file, with the filename given in the xml file.
 
-8 September 2026. Sam Henry
+27 November 2026. Sam Henry
 */
 
 using namespace std;
