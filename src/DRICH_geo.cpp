@@ -92,8 +92,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   for (xml::Collection_t crownIt(coronasElem, _Unicode(crown)); crownIt; ++crownIt) {
     xml::Component crownElem = crownIt;
     radii.push_back(crownElem.attr<double>(_Unicode(radius)));
-    if (crownElem.hasAttr(_Unicode(num_segments)))
-      numSegments.push_back(crownElem.attr<int>(_Unicode(num_segments)));
+    if (crownElem.hasAttr(_Unicode(num_tilesCrown)))
+      numSegments.push_back(crownElem.attr<int>(_Unicode(num_tilesCrown)));
   }
   int numCrowns = radii.size();
   // - filter
@@ -443,7 +443,123 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     } //crown
   } //trapezoidal
 
-  else if (segmentationType == "square") {
+
+  else if (segmentationType == "squareFixTileSize") {
+
+    // ----------------------------------------------------------------------
+    // Square tiling of the aerogel with a FIXED clear tile size.
+    //
+    // tileSize  : aerogel tile width (excluding carbon-fibre ribs)
+    // ribThickness : carbon-fibre rib thickness
+    // tilePitch : centre-to-centre distance between adjacent ribs
+    //
+    // The grid is centred on the aerogel axis. Its number of tiles is
+    // calculated automatically from the aerogel outer diameter.
+    //
+    // The complete rib structure is intersected with aerogelSolid to
+    // account for the circular outer boundary and conical central bore.
+    // ----------------------------------------------------------------------
+
+    if (!coronasElem.hasAttr(_Unicode(tile_size))) { // tile_size to be read from the XML
+      printout(ERROR, "DRICH_geo", "DRICH square segmentation requires the 'tile_size' attribute."); 
+      return det;
+    }
+
+    const double tileSize = coronasElem.attr<double>(_Unicode(tile_size));
+    const double ribThickness = coronasThickness;
+
+    if (!(tileSize > 0.0) || !(ribThickness > 0.0)) {
+      printout(ERROR, "DRICH_geo", "Square segmentation requires positive tile_size and rib thickness.");
+      return det;
+    }
+
+    const double tilePitch = tileSize + ribThickness;
+
+    // Calculate minimum number of tiles required to cover the full aerogel outer diameter.
+    // N tiles have an overall grid width:  N * tileSize + (N - 1) * ribThickness
+    // ----> N >= (2 * radiatorRmax + ribThickness) / tilePitch
+
+    const int nTiles = static_cast<int>(std::ceil((2.0 * radiatorRmax + ribThickness) / tilePitch));
+
+    if (nTiles < 1) {
+      printout(ERROR, "DRICH_geo", "Invalid number of tiles calculated for square segmentation.");
+      return det;
+    }
+
+    printout(INFO, "DRICH_geo",
+             "Square aerogel tiling: tile size = %.2f mm, "
+             "rib thickness = %.2f mm, pitch = %.2f mm, "
+             "tiles across diameter = %d",
+             tileSize, ribThickness, tilePitch, nTiles);
+
+    if (nTiles == 1) {
+
+      printout(INFO, "DRICH_geo", "Only one aerogel tile is required; no internal square ribs created.");
+
+    } else {
+
+      // Centre the tile grid.
+      // Odd number of tiles:  A complete tile is centred on the beam axis.
+      // Even number of tiles: A grid boundary passes through the beam axis.
+
+      const double gridOffset = (nTiles % 2 != 0) ? 0.5 * tilePitch : 0.0;
+
+      // The Boolean clipping operation uses the aerogel translated by
+      // -gridOffset. Extend the ribs enough to cover that complete shape.
+      const double ribHalfLength = radiatorRmax + std::abs(gridOffset) + ribThickness;
+
+      Box squareRibX(ribThickness / 2.0, ribHalfLength,      structureThickness / 2.0); // Initial Ver. ribs
+      Box squareRibY(ribHalfLength,      ribThickness / 2.0, structureThickness / 2.0); // Initial Hor. ribs
+
+      Solid ribUnionSolid = UnionSolid(squareRibX, squareRibY); // Rib Union (Cross)
+
+      const int centralBoundaryIndex = (nTiles + 1) / 2;
+
+      for (int i = 1; i < nTiles; ++i) { // to construct all remaining ribs
+
+        if (i == centralBoundaryIndex) continue;  // initial rib cross is already included
+
+        // Rib position in the construction coordinate system. After placement by 
+	// gridOffset, the physical position is: (i - nTiles / 2) * tilePitch
+	 
+        const double ribPosition = (static_cast<double>(i) - 0.5 * nTiles) * tilePitch - gridOffset;
+
+        Transform3D trX(Translation3D(ribPosition, 0.0, 0.0)); // Verical ribs
+        ribUnionSolid = UnionSolid(ribUnionSolid, squareRibX, trX);
+
+        Transform3D trY(Translation3D(0.0, ribPosition, 0.0)); // Horizontal ribs
+        ribUnionSolid = UnionSolid(ribUnionSolid, squareRibY, trY);
+      }
+
+      // --------------------------------------------------------------------
+      // Clip the square rib grid to the actual aerogel geometry.
+      //
+      // DD4hep applies clipTransform to the second solid (aerogelSolid).
+      // Translate the aerogel by -gridOffset for this Boolean operation.
+      // The resulting rib volume is subsequently placed by +gridOffset.
+      //
+      // This ensures that the final physical geometry is:
+      // (square rib grid + gridOffset) INTERSECTION aerogelSolid
+      // --------------------------------------------------------------------
+
+      Transform3D clipTransform(Translation3D(-gridOffset, -gridOffset, 0.0));
+      IntersectionSolid squareRibStructure(ribUnionSolid, aerogelSolid, clipTransform);
+
+      // Create the carbon-fibre square rib volume.
+      Volume squareRibVol(detName + "_aerogel_square_ribs", squareRibStructure, coronasMat);
+      squareRibVol.setVisAttributes(coronasVis);
+
+      // Place the complete rib structure inside the aerogel.
+      aerogelVol.placeVolume(squareRibVol, Position(gridOffset, gridOffset, 0.0));
+
+    } // nTiles > 1
+
+  } // Square Tiling with Fixed Tile Size
+
+
+
+  else if (segmentationType == "squareFixNumTiles") {
+
     // ------------------------------------------------------------------------
     // Square tiling of the aerogel
     // The square grid is defined in the XY plane over the full outer
@@ -465,9 +581,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       printout(ERROR, "DRICH_geo", "Square segmentation requires num_tiles >= 2");
       return det;
     }
-
-    double tileSize = 2.0 * radiatorRmax / nTiles; // Equal square pitch across the outer diameter.
-    double ribThickness = coronasThickness;        // Carbon-fiber rib thickness.
+    
+    double tileSize     = 2.0 * radiatorRmax / nTiles; // Equal square pitch across the outer diameter.
+    double ribThickness = coronasThickness;            // Carbon-fiber rib thickness.
 
     Box squareRibX(ribThickness / 2.0, radiatorRmax, structureThickness / 2.0); // Vertical ribs
     Box squareRibY(radiatorRmax, ribThickness / 2.0, structureThickness / 2.0); // Horizontal ribs
@@ -479,10 +595,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     for (int i = 1; i < nTiles; ++i) {
       double xPos = -radiatorRmax + i * tileSize;
       Transform3D trX(Translation3D(xPos, 0.0, 0.0));
-
+      
       if (firstRib) {
         ribUnionSolid = UnionSolid(squareRibX, squareRibX, trX);
-        firstRib      = false;
+        firstRib = false;
       } else {
         ribUnionSolid = UnionSolid(ribUnionSolid, squareRibX, trX);
       }
@@ -492,23 +608,25 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     for (int j = 1; j < nTiles; ++j) {
       double yPos = -radiatorRmax + j * tileSize;
       Transform3D trY(Translation3D(0.0, yPos, 0.0));
-
-      if (firstRib) {
+    
+      if (firstRib) { 
         ribUnionSolid = UnionSolid(squareRibY, squareRibY, trY);
-        firstRib      = false;
+        firstRib = false;
       } else {
         ribUnionSolid = UnionSolid(ribUnionSolid, squareRibY, trY);
       }
     }
 
-    IntersectionSolid squareRibStructure(ribUnionSolid,
-                                         aerogelSolid); // Clip grid to actual aerogel shape
-    Volume squareRibVol(detName + "_aerogel_square_ribs", squareRibStructure, coronasMat);
-    squareRibVol.setVisAttributes(coronasVis); // Carbon-fiber square ribs
-    aerogelVol.placeVolume(squareRibVol,
-                           Position(0., 0., 0.)); // Place rib structure inside aerogel
-
-  } //Square
+    IntersectionSolid squareRibStructure(ribUnionSolid, aerogelSolid); // Clip grid to actual aerogel shape
+    Volume squareRibVol(detName + "_aerogel_square_ribs", squareRibStructure, coronasMat);  
+    squareRibVol.setVisAttributes(coronasVis);                    // Carbon-fiber square ribs
+    aerogelVol.placeVolume(squareRibVol, Position(0., 0., 0.));  // Place rib structure inside aerogel
+    
+  } //Square Tiling with fixed number of tiles
+    
+  else {
+    printout(ERROR, "DRICH_geo", "Wrong DRICH Aerogel Segmentation");
+  }
 
   Cone airgapSolid(airgapThickness / 2.0,
                    radiatorRmin + boreDelta * structureThickness / vesselLength, radiatorRmax,
