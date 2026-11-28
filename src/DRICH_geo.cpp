@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 - 2026 Christopher Dilks, Junhuai Xu, Luisa Occhiuto
+// Copyright (C) 2022 - 2026 Christopher Dilks, Junhuai Xu, Luisa Occhiuto, Ramandeep Kumar, Deepak Sammuel
 
 // - Design Adapted from Standalone Fun4all and GEMC implementations
 //   [ Evaristo Cisbani, Cristiano Fanelli, Alessio Del Dotto, et al. ]
