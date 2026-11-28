@@ -487,7 +487,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       return det;
     }
 
-    printout(INFO, "DRICH_geo",
+    printout(DEBUG, "DRICH_geo",
              "Square aerogel tiling: tile size = %.2f mm, "
              "rib thickness = %.2f mm, pitch = %.2f mm, "
              "tiles across diameter = %d",
@@ -495,7 +495,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     if (nTiles == 1) {
 
-      printout(INFO, "DRICH_geo",
+      printout(DEBUG, "DRICH_geo",
                "Only one aerogel tile is required; no internal square ribs created.");
 
     } else {
